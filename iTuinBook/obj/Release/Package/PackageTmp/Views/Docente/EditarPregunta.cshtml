@@ -1,0 +1,150 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{  
+    ViewBag.Title = "EditarPregunta";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Editar Pregunta</h2>
+<hr />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Pregunta</legend>
+
+        @Html.HiddenFor(model => model.PreguntaID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Enunciado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Enunciado)
+            @Html.ValidationMessageFor(model => model.Enunciado)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Claves)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Claves)
+            @Html.ValidationMessageFor(model => model.Claves)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Dificultad)
+        </div>
+        <div class="editor-field" style="padding-bottom: 15px">
+            @Html.DropDownListFor(m => m.Dificultad, new SelectList(ViewBag.Dificultad))            
+            @Html.ValidationMessageFor(model => model.Dificultad)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TipoPreguntaID)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(m => m.TipoPreguntaID, new SelectList(ViewBag.Tipos, "TipoPreguntaID", "Tipo"), new { id = "tipoPreg" })
+            @Html.ValidationMessageFor(model => model.TipoPreguntaID)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FDBK_Correcto)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.FDBK_Correcto)
+            @Html.ValidationMessageFor(model => model.FDBK_Correcto)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FDBK_Incorrecto)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.FDBK_Incorrecto)
+            @Html.ValidationMessageFor(model => model.FDBK_Incorrecto)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Pertinente)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Pertinente)
+            @Html.ValidationMessageFor(model => model.Pertinente)
+        </div>
+
+        <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
+        
+        <hr />
+        
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+
+
+@{
+    Texto mainText = ViewBag.Texto;
+    <iframe id="window" src="@Url.Action("VisualizarPagina", new { TextoID = mainText.TextoID })" width="800" height="320" ></iframe>
+}
+
+<div>
+    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = mainText.TextoID })
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var window = $("#window"),
+                    undo = $("#undo")
+                            .bind("click", function () {
+                                window.data("kendoWindow").open();
+                                undo.hide();
+                            });
+
+            var onClose = function () {
+                undo.show();
+            }
+
+            window.kendoWindow({
+                title: "Pertinente",
+                close: onClose,
+                visible: false
+            });
+
+            undo.show();
+
+            $(document).ready(function () {
+                $("#menuCategorias").kendoMenu({
+                    orientation: "vertical"
+                }).css({
+                    width: auto,
+                    marginRight: "220px"
+                });
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,154 @@
+﻿@model List<Seguimientos>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Seguimientos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Seguimientos</h2>
+<hr />
+
+<table id="grid">
+    <colgroup>
+        <col style="width:40px" />
+        <col style="width:40px" />
+        <col style="width:150px"/>
+        <col style="width:40px"/>
+        <col style="width:40px"/>
+    </colgroup>
+    <tr>
+        <th style="text-align:center;">
+            Nombre
+        </th>       
+        <th style="text-align:center;">
+            Usuario
+        </th>     
+        <th style="text-align:center;">
+            Progreso
+        </th>  
+        <th style="text-align:center;">
+            Avisos
+        </th>        
+    </tr>
+    
+    @foreach(Seguimientos seg in Model)
+    {
+        string vel = "vel" + seg.UserName;
+        string err = "err" + seg.UserName;
+        
+        <tr>
+            <td>
+                @seg.Nombre
+            </td>
+            <td>
+                @seg.UserName
+            </td>
+            <td>
+                <div class="container"><div id="@seg.UserName" class="progressbar"></div></div>
+            </td>
+            <td>
+                <img id="@vel"  width="24" height="24" src="~/Content/images/prof_velocidad2.png" style="padding-left:5px; visibility: hidden;" />
+                <img id="@err" width="24" height="24" src="~/Content/images/prof_error2.jpg" style="padding-left:5px; visibility: hidden;" />
+            </td>           
+        </tr>            
+    }
+</table>
+<hr />
+<br />
+
+<b>@Html.ActionLink("Volver", "SeguimientosModulos", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null)</b> 
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        function setProgress(progress) {
+            var progressBarWidth = progress * $(".container").width() / 100;
+            $(".progressbar").width(progressBarWidth).html(progress + "% ");
+        }
+
+        function ActualizarDatos() {
+            $.ajax({
+                url: "/Docente/ActualizarSeguimiento", //url: '/iTuinBook/Validar',
+                type: 'POST',
+                data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID' },
+                success: function (result) {
+                    if ($('.progressbar').length == result.datos.length) {
+                        for (var i = 0; i < result.datos.length; i++) {
+                            var progressBarWidth = parseFloat(result.datos[i].AccionActual) * $(".container").width() / 100;
+                            $("#" + result.datos[i].UserName).width(progressBarWidth).html(parseFloat(result.datos[i].AccionActual).toFixed(2).toString() + "%");
+                            
+                            if (result.datos[i].AvisoVel == true) {
+                                $("#vel" + result.datos[i].UserName).css("visibility", "visible")
+                            }
+                            else {
+                                $("#vel" + result.datos[i].UserName).css("visibility", "hidden")
+                            }
+                        }
+
+                        ////alert(result.datos[0].AccionActual);
+                        setTimeout('ActualizarDatos()', 1000);
+                    }
+                    else {
+                        window.location.href = result.redirect;
+                    }
+                    },
+                    error: function () {
+                        alert("Error al actualizar datos.");
+                    }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+                        
+            @{
+                foreach (Seguimientos seg in Model)
+                {
+                    <text>
+                        var progressBarWidth = parseFloat('@seg.AccionActual') * $(".container").width() / 100;
+                        $("#" + "@seg.UserName").width(progressBarWidth).html(parseFloat("@seg.AccionActual").toFixed(2).toString() + "%");
+
+                        if ("@seg.AvisoVel" == "True") {
+                            $("#vel" + "@seg.UserName").css("visibility", "visible");
+                        }
+                        else {
+                            $("#vel" + "@seg.UserName").css("visibility", "hidden")
+                        }
+                    </text>
+                }
+            }
+            /*$("progressbar").each(function () {
+
+                $(this).attr("id");
+            });*/
+            
+            setTimeout('ActualizarDatos()', 5000);
+
+            $("#grid").kendoGrid({                
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

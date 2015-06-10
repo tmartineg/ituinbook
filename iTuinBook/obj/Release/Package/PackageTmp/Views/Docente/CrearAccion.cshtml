@@ -1,0 +1,278 @@
+﻿@model iTuinBook.Models.Accion
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Crear Accion";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    Modulo modulo = (Modulo)ViewBag.Modulo;
+}
+
+<h2>
+    @{
+        Escena escena = ViewBag.Escena;
+        int cont = 0;
+        
+        if (escena != null)
+        {
+            <b>@Html.ActionLink(escena.Nombre + " > " , "AdministrarEscena", "Docente", new { EscenaID = escena.EscenaID }, null)</b>
+        }    
+    }
+Crear Acción</h2>
+<hr />
+<h3>Secuencia de acciones</h3>
+
+
+<table>
+    <tr>
+        <th>Pos.</th>
+        <th></th>
+        <th>
+            Acción
+        </th>
+        <th>
+            Mensaje
+        </th>    
+    </tr>
+@{
+    IList<iTuinBook.Controllers.DocenteController.TipoOperacion> lista = ViewBag.Tipos;
+    
+    var acciones = escena.Acciones;
+         
+    if(acciones != null)    
+    {   
+        foreach (Accion acc in acciones.OrderBy(c => c.Orden))
+        {
+            <tr>
+                <td>
+                    @acc.Orden
+                </td>
+                <td>        
+                    <b>@Html.ActionLink("Editar", "EditarAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID, Origen = 1 }, null)</b>    
+                    <b>@Html.ActionLink("Eliminar", "EliminarAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID, Origen = 1 }, null)</b>   
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => lista[acc.CodeOP - 1].Operacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => acc.Mensaje)
+                </td>    
+            </tr>
+        }
+    }
+}
+</table>
+
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Accion</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CodeOP)
+        </div>
+        <div class="editor-field">           
+            @Html.DropDownListFor(m => m.CodeOP, new SelectList(ViewBag.Tipos, "TipoOperacionID", "Operacion"), new { id = "list-acc" })            
+        </div>
+
+        <div id="mensaje">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Mensaje)
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Mensaje)                
+            </div>
+        </div>
+
+        <div id="texto">
+            <div class="editor-label">
+                @Html.Label("Texto")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(m => m.TextoID, new SelectList(ViewBag.Textos, "TextoID", "Nombre"), new { id = "list-text" })                
+            </div>
+        </div>
+
+        <div id="pagina">
+            <div class="editor-label">
+                @Html.Label("Página")
+            </div>
+            <div class="editor-field">                              
+                @Html.DropDownListFor(m => m.PaginaID, new SelectList(ViewBag.Paginas, "PaginaID", "Contenido"), new { id = "list-pag" })                
+            </div>
+        </div>
+
+        <div id="pregunta">
+            <div class="editor-label">
+                @Html.Label("Pregunta")
+            </div>
+            <div class="editor-field">                              
+                @Html.DropDownListFor(m => m.PreguntaID, new SelectList(ViewBag.Preguntas, "PreguntaID", "Enunciado"), new { id = "list-preg" })                
+            </div>
+        </div>
+        
+        <div id="posicion">
+            <div class="editor-label">
+                @if (escena.Acciones != null)
+                {
+                    @Html.Label("Posición - Número entero de 1 a " + (escena.Acciones.ToList().Count + 1).ToString());
+                }
+                else
+                {
+                    @Html.Label("Posición - Número entero de 1 a 1");
+                }
+            </div>
+            <div class="editor-field">                              
+                @if (escena.Acciones != null)
+                {
+                    @Html.TextBoxFor(model => model.Orden, new { @Value = escena.Acciones.ToList().Count + 1 });
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.Orden, new { @Value = "1" });
+                }
+            </div>
+        </div>
+
+        <p>
+            <input type="submit" value="Agregar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "AdministrarEscena", new { EscenaID = escena.EscenaID })    
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#texto").hide();
+            $("#pagina").hide();
+            $("#pregunta").hide();
+
+            $.ajax({
+                url: '/Docente/GetPaginas',
+                type: 'POST',
+                data: { TextoID: $("#list-text").val() },
+                success: function (result) {
+                    var lista = result.redirect;
+                    var i = 1;
+
+                    $('#list-pag').empty();
+
+                    $.each(lista, function (val) {
+                        $('#list-pag').append(new Option("Página " + i.toString(), val));
+                        i = i + 1;
+                    });
+                },
+                error: function () {
+                    alert("Error: Texto sin páginas.");
+                }
+            });
+
+            $('#btnReordenar').click(function () {
+                $.ajax({
+                    url: '/Docente/ReordenarAcciones',
+                    type: 'POST',
+                    data: { EscenaID: '@escena.EscenaID' }
+                });
+            });
+            
+            $('#list-text').change(function () {
+                $.ajax({
+                    url: '/Docente/GetPaginas',
+                    type: 'POST',
+                    data: { TextoID: $("#list-text").val() },
+                    success: function (result) {
+                        var lista = result.redirect;
+                        var i = 1;
+
+                        $('#list-pag').empty();
+
+                        $.each(lista, function(val) {
+                            $('#list-pag').append(new Option("Página " + i.toString(), val));
+                            i = i + 1;
+                        });
+                    },
+                    error: function () {
+                        alert("Error: Texto sin páginas.");
+                    }
+                });
+                return false;
+            });
+
+            $('#list-acc').change(function () {
+                switch ($(this).val())
+                {
+                    case "1": case "2": case "3": case "4": case "5": case "6":
+                        $('mensaje').show();
+                        $('#texto').hide();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                    case "7":
+                        $('mensaje').show();
+                        $('#texto').show();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                    case "8":
+                        $('mensaje').show();
+                        $('#texto').hide();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                    case "9":
+                        $('mensaje').show();
+                        $('#texto').show();
+                        $('#pagina').show();
+                        $('#pregunta').hide();
+                        break;
+                    case "10":
+                        $('mensaje').show();
+                        $('#texto').hide();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                    case "11":
+                        $('mensaje').show();
+                        $('#texto').show();
+                        $('#pagina').hide();
+                        $('#pregunta').show();
+                        break;
+                    case "12":
+                        $('mensaje').show();
+                        $('#texto').hide();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                    default:
+                        $('#mensaje').hide();
+                        $('#texto').hide();
+                        $('#pagina').hide();
+                        $('#pregunta').hide();
+                        break;
+                }                
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

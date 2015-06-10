@@ -1,0 +1,503 @@
+﻿@model iTuinBook.Models.ReglaCompleja
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Agregar Regla Compleja";
+    List<SelectListItem> Operadores = ViewBag.Operadores;
+    List<SelectListItem> Reglas = ViewBag.Reglas;
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    List<ReglaSimple> ReglasSimples = ViewBag.ReglasSimples;
+    List<ReglaCompleja> ReglasComplejas = ViewBag.ReglasComplejas;
+    List<SelectListItem> VariablesSimples = ViewBag.VariablesSimples;
+    List<SelectListItem> OperadoresSimples = ViewBag.OperadoresSimples;
+}
+
+<h2>Agregar Regla Compleja</h2>
+<hr />
+<br />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Regla Compleja</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Nom)
+            @Html.ValidationMessageFor(model => model.Nom)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descripcio)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Descripcio)
+            @Html.ValidationMessageFor(model => model.Descripcio)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.OpCode)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.OpCode, Reglas, "Selecciona combinación", new { @id = "OpCodeID"})    
+            @Html.ValidationMessageFor(model => model.OpCode)
+        </div>
+
+        <div id="regla1">
+        <div class="editor-label">
+            @Html.Label("Regla 1")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Regla_1, new List<SelectListItem> () , "Selecciona un regla", new{ @id = "Regla1ID"})
+            @Html.ValidationMessageFor(model => model.Regla_1)
+        </div>
+        </div>
+
+        <div id="operador">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Operador)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Operador, Operadores, "Selecciona un operador", new { @id = "OperadorID"})            
+            @Html.ValidationMessageFor(model => model.Operador)
+        </div>
+        </div>
+
+        <div id="regla2">
+        <div class="editor-label">
+            @Html.Label("Regla 2")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Regla_2, new List<SelectListItem> () , "Selecciona un regla", new{ @id = "Regla2ID"})
+            @Html.ValidationMessageFor(model => model.Regla_2)
+        </div>
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Feedback)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Feedback)
+            @Html.ValidationMessageFor(model => model.Feedback)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Feedback")
+</div>
+<div id="ReglaC">
+<hr />
+<h3>Reglas Complejas</h3>
+<hr />
+<table id="grid">
+    <tr>          
+        <th>
+            Identificador
+        </th>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>  
+        <th>
+            Feedback
+        </th>                  
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (ReglasComplejas != null)
+    {
+        foreach (ReglaCompleja rc in ReglasComplejas)                    
+        {   
+            <tr>   
+                <td>
+                    @Html.DisplayFor(modelItem => rc.ReglaComplejaID)
+                </td>                 
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Descripcio)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Feedback)
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "ModificarReglaCompleja", "Docente", new { ReglaCompleja = rc.ReglaComplejaID }, null)</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarReglaCompleja", "Docente", new { ReglaCompleja = rc.ReglaComplejaID }, null)</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+<hr />
+    @Html.ActionLink("Agregar Regla", "AgregarReglaCompleja")
+<hr />
+</div>
+
+<div id="ReglaS">
+<h3>Reglas Simples</h3>
+<hr />
+<table id="grid2">
+    <tr>            
+        <th>
+            Identificador
+        </th>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>                          
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (ReglasSimples != null)
+    {
+        foreach (ReglaSimple rs in ReglasSimples)                    
+        {   
+            <tr>      
+                <td>
+                    @Html.DisplayFor(modelItem => rs.ReglaSimpleID)
+                </td>              
+                <td>
+                    @Html.DisplayFor(modelItem => VariablesSimples[rs.Variable - 1].Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => OperadoresSimples[rs.Operador - 1].Text)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => rs.Param)
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "ModificarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, null)</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, null)</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+<hr />
+    @Html.ActionLink("Agregar Regla", "AgregarReglaSimple")
+<hr />
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () { 
+            $("#OpCodeID").change(function () {
+                if ($(this).val() == "1" || $(this).val() == "3") {
+                    $("#regla2").hide();
+                    $("#Regla2ID").val("0");
+                    
+                    $("#operador").hide();
+                    $("#OperadorID").val("0");
+
+                    $("#regla1").show();
+                    $("#Regla1ID").val("");
+
+                    if ($(this).val() == "1") {
+                        $("#ReglaS").show();
+                        $("#ReglaC").hide();
+
+                        var ddl = $('#Regla2ID');
+                        ddl.empty();
+
+                        $.ajax({
+                            url: "/Docente/GetSimples", //url: '/iTuinBook/Validar',
+                            type: 'POST',
+                            success: function (result) {
+                                var ddl = $('#Regla1ID');
+
+                                ddl.empty();
+
+                                $(result.Reglas).each(function () {
+                                    $(document.createElement('option'))
+                                        .attr('value', this)
+                                        .text(this)
+                                        .appendTo(ddl);
+                                });
+                            },
+                            error: function () {
+                                alert("Error al cargar las reglas simples");
+                            }
+                        });
+                    }
+                    else {
+                        var ddl = $('#Regla2ID');
+
+                        ddl.empty();
+
+                        $.ajax({
+                            url: "/Docente/GetComplejas", //url: '/iTuinBook/Validar',
+                            type: 'POST',
+                            success: function (result) {
+                                var ddl = $('#Regla1ID');
+
+                                ddl.empty();
+
+                                $(result.Reglas).each(function () {
+                                    $(document.createElement('option'))
+                                        .attr('value', this)
+                                        .text(this)
+                                        .appendTo(ddl);
+                                });
+                            },
+                            error: function () {
+                                alert("Error al cargar las reglas complejas");
+                            }
+                        });
+                    }
+                }
+                else {
+                    $("#regla2").show();
+                    $("#Regla2ID").val("");
+
+                    if ($(this).val() == "2" || $(this).val() == "4") {
+                        $("#operador").hide();
+                        $("#OperadorID").val("0");
+
+                        $("#regla1").hide();
+                        $("#Regla1ID").val("");
+
+                        if ($(this).val() == "2") {
+                            var ddl = $('#Regla1ID');
+
+                            ddl.empty();
+
+                            $.ajax({
+                                url: "/Docente/GetSimples", //url: '/iTuinBook/Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla2ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas complejas");
+                                }
+                            });
+                        }
+                        else {
+                            var ddl = $('#Regla1ID');
+
+                            ddl.empty();
+
+                            $.ajax({
+                                url: "/Docente/GetComplejas", //url: '/iTuinBook/Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla2ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas complejas");
+                                }
+                            });
+                        }
+                    }
+                    else {
+
+                        $("#regla1").show();
+                        $("#Regla1ID").val("");
+
+                        $("#regla2").show();
+                        $("#Regla2ID").val("");
+
+                        $("#operador").show();
+                        $("#OperadorID").val("");
+
+                        if ($(this).val() == "5" || $(this).val() == "6") {
+                            $.ajax({
+                                url: "/Docente/GetSimples", //url: '/iTuinBook/Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla1ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas simples");
+                                }
+                            });
+
+                            if ($(this).val() == "5") {
+                                $.ajax({
+                                    url: "/Docente/GetSimples", //url: '/iTuinBook/Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas simples");
+                                    }
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: "/Docente/GetComplejas", //url: '/iTuinBook/Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas complejas");
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            $.ajax({
+                                url: "/Docente/GetComplejas", //url: '/iTuinBook/Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla1ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas complejas");
+                                }
+                            });
+
+                            if ($(this).val() == "7") {
+                                $.ajax({
+                                    url: "/Docente/GetSimples", //url: '/iTuinBook/Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas simples");
+                                    }
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: "/Docente/GetComplejas", //url: '/iTuinBook/Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas complejas");
+                                    }
+                                });
+                            }
+
+                        }
+
+                        
+                    }
+                }
+
+
+            });
+
+            $("#grid").kendoGrid({
+                height: 440
+            });
+
+            $("#grid2").kendoGrid({
+                height: 440
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });        
+    </script>
+}

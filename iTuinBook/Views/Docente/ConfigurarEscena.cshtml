@@ -1,0 +1,46 @@
+﻿@model iTuinBook.Models.ConfigEscena
+
+@{
+    ViewBag.Title = "ConfigurarEscena";
+}
+
+<h2>ConfigurarEscena</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ConfigEscena</legend>
+
+        @Html.HiddenFor(model => model.ConfigEscenaID)
+
+        <div class="editor-label">
+            @Html.Label("Avanzar acciones automáticamente:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Autopase)
+            @Html.ValidationMessageFor(model => model.Autopase)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Permitir volver atrás en las acciones:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Atras)
+            @Html.ValidationMessageFor(model => model.Atras)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

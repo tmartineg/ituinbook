@@ -1,0 +1,91 @@
+﻿@using iTuinBook.Models;
+
+@{    
+    ViewBag.Title = "Grupo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Grupo</h2>
+<hr />
+
+<table id="grid">
+    <tr>            
+        <th>
+            Título
+        </th>
+        <th>
+            Descripción
+        </th>        
+        <th>
+            Nº Alumnos
+        </th>  
+        <th>
+            Comandos
+        </th>
+    </tr>
+
+    @{var grupos = ViewBag.Grupos;
+
+        if (grupos != null)
+        {
+            foreach (Grupo gr in grupos)
+            {
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => gr.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => gr.Descripcion)
+                </td>          
+                <td>
+                    @Html.DisplayFor(modelItem => gr.Inscripciones.Count)
+                </td> 
+                <td>
+                    <b> @Html.ActionLink("Administrar", "AdministrarGrupo", "Docente", new { GrupoID = gr.GrupoID }, null)</b>
+                    <b>@Html.ActionLink("Eliminar", "EliminarGrupo", "Docente", new { GrupoID = gr.GrupoID }, null)</b>  
+                </td>      
+            </tr>
+            } 
+        }
+             
+    }     
+
+</table>
+
+             
+                  
+    
+@Html.ActionLink("Crear Grupo", "CrearGrupo", "Docente")
+
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                dataSource: {                  
+                    pageSize: 10
+                },
+                pageable: true,
+                height: 430
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+            
+        });
+    </script>
+}

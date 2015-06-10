@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "AgregarRegionImagen";
+    Layout = "~/Views/Shared/_LayoutVacio.cshtml";
+}
+
+<h2>Agregar Region Imagen</h2>
+
+<img class="target" width="110" src="data:image/jpg;base64,@ViewBag.file" />  
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Content/Jcrop/css/jquery.Jcrop.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet"/>
+    <link href="~/Content/Jcrop/js/jquery.Jcrop.min.js" rel="stylesheet"/>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('reg').addClass("difuminado");
+        
+            $('.target').Jcrop();
+            
+            var listImg;
+
+            $('img').each(function (index, item) {
+                item.Jcrop();
+            });
+            
+
+
+            alert(listImg);
+
+            $('reg').click(function () {
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                $(this).removeClass("difuminado").addClass("no_difuminado");
+            });
+        });
+    </script>
+}

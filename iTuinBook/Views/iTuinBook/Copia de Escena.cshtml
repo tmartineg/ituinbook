@@ -1,0 +1,199 @@
+﻿@model iTuinBook.Models.Escena
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Escena";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    int num = 0;
+}
+
+<img width="200" src="~/Content/images/Ramiro.png" style="float:left;margin-top:15px" />
+<img width="200" src="~/Content/images/Lue.png" style="float:right;margin-top:15px" />
+<div class="speech_bubble"><text id="textbox"></text>
+ <div id="arrow" class="arrow_border_right"></div>
+ <div id="arrow2" class="bubble_arrow_right"></div>
+</div>
+<input id="contador" value="0" />
+<button id="btnAnterior">Anterior</button>
+<button id="btnSiguiente">Siguiente</button>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  
+    <script type="text/javascript">
+        $(document).ready(function () { 
+            var num = 0;
+
+            @{       
+                ViewBag.Num = 0;
+                
+                
+                
+                Session["num"] = 0;
+                Escena escena = Model;
+                string msg = escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).Mensaje;
+                switch (escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).CodeOP)
+                {
+                    case 1:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                        </text>
+                        break;
+                    default:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+            </text>
+                        break;
+                }                
+            }
+
+            $('#textbox').text("");
+
+            $('#textbox').teletype({
+                text: [
+                  '@msg'
+                ]
+            });
+            
+
+        });
+
+        $("#btnAnterior").click(function () {
+            @{
+                if (Convert.ToInt32(Session["num"]) != 0)
+                {
+                    Session["num"] = Convert.ToInt32(Session["num"]) - 1;
+                }
+
+                switch (escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).CodeOP)
+                {
+                    case 1:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                        </text>
+                        break;
+                    case 7:
+                    
+                        break;                        
+                    default:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+                        </text>
+                        break;
+                }                
+            }
+           
+            $('#textbox').text("");
+
+            $('#textbox').teletype({
+                text: [
+                    '@escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).Mensaje'
+                    ]
+                });
+            
+        });
+
+        $("#btnSiguiente").click(function () {
+            @{  
+                num = num + 1;
+                
+                <text>
+                    alert(@num)
+                </text>                
+                
+                switch (escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).CodeOP)
+                {
+                    case 1:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                        </text>
+                        break;
+                    default:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+            </text>
+                        break;
+                }      
+                
+                }
+           
+            $('#textbox').text("");
+
+            
+
+            $('#textbox').teletype({
+                text: [
+                    '@escena.Acciones.ElementAt(Convert.ToInt32(Session["num"])).Mensaje'
+                ]
+            });
+        });
+        alert("sdfdfsdf");
+        (function ($) {            
+            function typeString($target, str, cursor, delay, cb) {
+                $target.html(function (_, html) {
+                    return html + str[cursor];
+                });
+
+                if (cursor < str.length - 1) {
+                    setTimeout(function () {
+                        typeString($target, str, cursor + 1, delay, cb);
+                    }, delay);
+                }
+                else {
+                    cb();
+                }
+            }
+            
+            // jQuery hook
+            $.fn.extend({
+                teletype: function (opts) {
+                    var settings = $.extend({}, $.teletype.defaults, opts);
+
+                    return $(this).each(function () {
+                        (function loop($tar, idx) {
+                            // type
+                            typeString($tar, settings.text[idx], 0, settings.delay, function () {
+                                // delete
+                                setTimeout(function () {
+                                    
+                                }, settings.pause);
+                            });
+
+                        }($(this), 0));
+                    });
+                }
+            });
+
+            // plugin defaults  
+            $.extend({
+                teletype: {
+                    defaults: {
+                        delay: 100,
+                        pause: 5000,
+                        text: []
+                    }
+                }
+            });
+        }(jQuery));
+
+    </script>
+
+}

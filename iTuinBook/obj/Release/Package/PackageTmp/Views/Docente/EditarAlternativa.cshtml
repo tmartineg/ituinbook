@@ -1,0 +1,76 @@
+﻿@model iTuinBook.Models.Alternativa
+
+@{
+    ViewBag.Title = "EditarAlternativa";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";     
+}
+
+<h2>Editar Alternativa</h2>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Alternativa</legend>
+
+        @Html.HiddenFor(model => model.AlternativaID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Opcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Opcion)
+            @Html.ValidationMessageFor(model => model.Opcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Valor)
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FeedbackContenido)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FeedbackContenido)
+            @Html.ValidationMessageFor(model => model.FeedbackContenido)
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "AdministrarPregunta", "Docente", new { PreguntaID = ViewBag.PreguntaID }, null)               
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {         
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+            alert("va");
+        });
+    </script>
+}
+

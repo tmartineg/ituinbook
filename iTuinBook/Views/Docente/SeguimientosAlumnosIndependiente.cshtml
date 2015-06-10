@@ -1,0 +1,139 @@
+﻿@model List<SeguimientosIndependiente>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Seguimientos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Seguimientos</h2>
+<hr />
+
+<table id="grid">
+    <colgroup>
+        <col style="width:40px" />
+        <col style="width:40px" />
+        <col style="width:150px"/>
+        <col style="width:40px"/>
+        <col style="width:40px"/>
+    </colgroup>
+    <tr>
+        <th style="text-align:center;">
+            Nombre
+        </th>       
+        <th style="text-align:center;">
+            Usuario
+        </th>     
+        <th style="text-align:center;">
+            Progreso
+        </th>  
+        <th style="text-align:center;">
+            Aciertos
+        </th>        
+    </tr>
+    
+    @foreach (SeguimientosIndependiente seg in Model)
+    {
+        string graf = "graf" + seg.UserName;
+        
+        <tr>
+            <td>
+                @seg.Nombre
+            </td>
+            <td>
+                @seg.UserName
+            </td>
+            <td>
+                <div class="container"><div id="@seg.UserName" class="progressbar"></div></div>
+            </td>
+            <td>
+                <div id="@graf" style="width:100%; height:75px;"></div>
+            </td>           
+        </tr>            
+    }
+</table>
+<hr />
+<br />
+
+<b>@Html.ActionLink("Volver", "SeguimientosModulos", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null)</b> 
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    <script src="~/Content/Highcharts/highcharts.js"></script>
+
+    <script type="text/javascript">
+        function setProgress(progress) {
+            var progressBarWidth = progress * $(".container").width() / 100;
+            $(".progressbar").width(progressBarWidth).html(progress + "% ");
+        }
+
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+                        
+            @{
+                foreach (SeguimientosIndependiente seg in Model)
+                {
+                    <text>
+                        var progressBarWidth = parseFloat('@seg.EstadoActual') * $(".container").width() / 100;
+                        $("#" + "@seg.UserName").width(progressBarWidth).html(parseFloat("@seg.EstadoActual").toFixed(2).toString() + "%");                        
+                    </text>
+                }
+            }
+            /*$("progressbar").each(function () {
+
+                $(this).attr("id");
+            });*/
+            
+            setTimeout('ActualizarDatos()', 5000);
+
+            $("#grid").kendoGrid({                
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $('#graf21052014').highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                    max: 14,                    
+                },
+                
+                series: [{
+                    showInLegend: false,
+                    data: [3],
+                    color: '#FF0000'
+                }, {
+                    showInLegend: false,
+                    data: [7],
+                    color: '#00FF00'
+                }]
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

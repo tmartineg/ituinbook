@@ -1,0 +1,101 @@
+﻿@model iTuinBook.Models.ConfigModulo
+
+@{
+    ViewBag.Title = "ConfigurarModulo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Configurar Modulo</h2>
+<hr />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ConfigModulo</legend>
+
+        @Html.HiddenFor(model => model.ConfigModuloID)
+
+        <div class="editor-label">
+            @Html.Label("¿Quieres usar avatares?")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Avatares, new [] { 
+                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
+                new SelectListItem { Text = "No", Value = bool.FalseString } })            
+            @Html.ValidationMessageFor(model => model.Avatares)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("¿Quieres usar sistema de puntos?")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Puntos, new [] { 
+                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
+                new SelectListItem { Text = "No", Value = bool.FalseString } })   
+            @Html.ValidationMessageFor(model => model.Puntos)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("¿Quieres usar feedback definido por reglas? ('No' implica usar feedback automático)")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Feedback , new [] { 
+                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
+                new SelectListItem { Text = "No", Value = bool.FalseString } })   
+            @Html.ValidationMessageFor(model => model.Feedback)
+        @*</div>*@
+
+        <div class="editor-label">
+            @Html.Label("¿Quieres usar ayudas?")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Ayudas , new [] { 
+                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
+                new SelectListItem { Text = "No", Value = bool.FalseString } })  
+            @Html.ValidationMessageFor(model => model.Ayudas)
+        </div>
+        
+        <div class="editor-label">
+            @Html.Label("¿Qué plantilla quieres usar?")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Plantilla , new [] { 
+                new SelectListItem { Text = "Texto y preguntas en páginas distintas", Value = "0" }, 
+                new SelectListItem { Text = "Texto y pregunta en la misma página (Pregunta en mitad superior)", Value = "1" },
+                new SelectListItem { Text = "Texto y pregunta en la misma página (Pregunta en mitad inferior)", Value = "2" },
+                new SelectListItem { Text = "Texto y pregunta en la misma página (Preguntas flotantes)", Value = "3" },
+            })  
+            @Html.ValidationMessageFor(model => model.Ayudas)
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>    
+    <b>@Html.ActionLink("Volver", "AdministrarModulo", "Docente", new { ModuloID = Model.ModuloID }, null)</b>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

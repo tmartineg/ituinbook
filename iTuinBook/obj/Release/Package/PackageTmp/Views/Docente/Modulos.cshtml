@@ -1,0 +1,161 @@
+﻿@model IEnumerable<Modulo>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Modulos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Modulos</h2>
+<hr />
+
+<h3>Tus Módulos</h3>   
+<hr />
+
+<table id="grid">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>
+        <th>
+            Usado
+        </th>                              
+        <th>
+            Comandos
+        </th>              
+    </tr>
+    @{     
+        IEnumerable<Modulo> adquiridos = ViewBag.Adquiridos;
+
+        if (Model.Count() != 0)
+        {
+            foreach (Modulo mod in Model)
+            {
+                var num = mod.Grupos.Count();
+                
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Descripcion)
+                    </td>                        
+                    <td>
+                        @Html.DisplayFor(modelItem => num)
+                    </td>                            
+                    <td>
+                        <b>@Html.ActionLink("Administrar", "AdministrarModulo", "Docente", new { ModuloID = mod.ModuloID }, null)</b>
+                        <b>@Html.ActionLink("Eliminar", "EliminarModulo", "Docente", new { ModuloID = mod.ModuloID, id = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar el módulo?');"})</b>  
+                    </td>      
+                </tr>
+            }
+        }
+
+        if (adquiridos != null)
+        {
+            foreach (Modulo mod in adquiridos)
+            {
+                var num = mod.Grupos.Count();
+                
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Descripcion)
+                    </td>                        
+                    <td>
+                        @Html.DisplayFor(modelItem => num)
+                    </td>                            
+                    <td>
+                        <b>No eres propietario</b>
+                        <b>@Html.ActionLink("Desvincularme", "DesvincularmeDeModulo", "Docente", new { ModuloID = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincularte de este módulo?');"})</b>  
+                    </td>      
+                </tr>
+            }
+        }
+    }
+</table> 
+<hr />
+@Html.ActionLink("Crear Módulo", "CrearModulo", "Docente")     
+<hr />
+
+<h3>Módulos Públicos</h3>   
+<hr />
+
+<table id="todos">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>
+        <th>
+            Usado
+        </th>                              
+        <th>
+            Comandos
+        </th>              
+    </tr>
+    @{      
+        IEnumerable<Modulo> todos = ViewBag.TodosModulos;
+
+        if (todos.Count() != 0)
+        {
+            foreach (Modulo mod in todos)
+            {
+                var num = mod.Grupos.Count();
+                
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => mod.Descripcion)
+                    </td>                        
+                    <td>
+                        @Html.DisplayFor(modelItem => num)
+                    </td>                            
+                    <td>
+                        <b>@Html.ActionLink("Adquirir", "AdquirirModulo", "Docente", new { ModuloID = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de querer adquirir este módulo?');"})</b>
+                        <b>@Html.ActionLink("Ver", "VerModulo", "Docente", new { ModuloID = mod.ModuloID }, null)</b>
+                    </td>      
+                </tr>
+            }
+        }
+    }
+</table>  
+<hr />
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 220
+            });
+
+            $("#todos").kendoGrid({
+                height: 220
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

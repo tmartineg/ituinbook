@@ -1,0 +1,95 @@
+﻿@using iTuinBook.Models;
+@model iTuinBook.Models.Pregunta
+
+@{
+    ViewBag.Title = "PL0_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+}
+
+<div id="pregunta" style="padding: 20px;">
+    <div id="tools" style="display:inline;">
+        <div>
+            @Html.ActionLink("Texto", "PL0_Texto_Busca", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual, id = "btnTexto" }, new { @style="padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+        </div>
+
+        <div id="ayudas" style="position:absolute; right: 20px; top: 20px;">
+            <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
+            <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
+            <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+        </div>
+    </div>
+
+
+    <br />
+    <div id="enunciado">
+        @Html.Raw(Model.Enunciado)                        
+    </div>
+     
+    <div id="abierta">
+        <textarea id="respuesta" style="width:100%;"></textarea>     
+    </div>
+
+    <button id="btnValidarAbierta" style="float:left;">Validar</button>                       
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var timeStart = new Date();
+            var timeFinish = new Date();
+            
+            $("#btnValidarAbierta").click(function () {
+                $.ajax({
+                    url: "/PL0_Experimentos/PL0_Pregunta_Abierta_Validar", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@ViewBag.TextoID', PreguntaID: '@Model.PreguntaID', respuesta: "Hola" },
+                    success: function (result) {
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                        // Corregir Pregunta.
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+
+            if ('@configPregunta.EnmascararEnunciado' == 'True') {
+                $('#enunciado').addClass("difuminado");
+
+                $('#enunciado').click(function () {
+                    if ($('#enunciado').hasClass("difuminado")) {
+                        $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+                    }
+                });
+
+                $('#respuesta').focusin(function () {
+                    if ($('#enunciado').hasClass("no_difuminado")) {
+                        $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+
+                        // Calcular tiempo de alternativa y enviar al servidor
+                        timeFinish = jQuery.now();
+
+                        var diff = timeFinish - timeStart;
+
+                        $.ajax({
+                            url: "/PL0_Experimentos/RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() },
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
+
+                        timeStart = jQuery.now();
+                    }
+                });
+            }
+        });
+    </script>
+}

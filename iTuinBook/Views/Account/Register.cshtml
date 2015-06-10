@@ -1,0 +1,83 @@
+﻿@model iTuinBook.Models.RegisterModel
+@{
+    ViewBag.Title = "Registrarse";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>Cree una cuenta nueva.</h2>
+</hgroup>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Formulario de registro</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword)
+            </li>           
+            <li>
+                @Html.LabelFor(m => m.TypePerson)
+                @Html.DropDownListFor(m => m.TypePerson, new SelectList(new string [] {"Alumno", "Docente","Invitado"}))
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Nombre)
+                @Html.TextBoxFor(m => m.Nombre)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.Apellido1)
+                @Html.TextBoxFor(m => m.Apellido1)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.Apellido2)
+                @Html.TextBoxFor(m => m.Apellido2)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.Nacimiento)
+                @Html.TextBoxFor(m => m.Nacimiento)
+            </li> 
+             <li>
+                @Html.LabelFor(m => m.Sexo)
+                @Html.DropDownListFor(m => m.Sexo, new SelectList(new string [] {"Varón", "Mujer"}))
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Centro)
+                @Html.TextBoxFor(m => m.Centro)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.Curso)
+                @Html.TextBoxFor(m => m.Curso)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.Poblacion)
+                @Html.TextBoxFor(m => m.Poblacion)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.LenguaMaterna)
+                @Html.TextBoxFor(m => m.LenguaMaterna)
+            </li> 
+            <li>
+                @Html.LabelFor(m => m.LenguaEscola)
+                @Html.TextBoxFor(m => m.LenguaEscola)
+            </li> 
+            
+
+        </ol>
+        <input type="submit" value="Registrarse" />
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}      

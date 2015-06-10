@@ -1,0 +1,778 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+@using System.Text.RegularExpressions;
+ 
+@{
+    ViewBag.Title = "Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+    Pagina pag = ViewBag.Pagina;
+    DatosUsuario du = ViewBag.du;
+}
+
+<div id="pregunta" style="background-color: beige; width:100%; top: -10px; border-bottom-color:black; position: fixed; overflow-x: hidden; overflow-y: auto;">
+    <div id=enunciado style="margin-left: 20px; margin-top: 20px;">
+        @{
+            var code = "";
+            string[] strs = "".Split('/');
+            
+            if(Model.Enunciado != null)
+            {
+                strs = Model.Enunciado.Replace("USUARIO", ViewBag.Nombre).Split('/');
+            }
+            
+            
+            
+            if (config.SeleccionarClaves)
+            {
+                // Si hay que realizar la tarea de seleccionar palabras claves, desactivamos cualquier otra posible tarea.
+
+                if (config.ResaltarClaves)
+                {
+                    var palsM = Regex.Split(Model.Claves, "//");
+                    var s = 1;
+                    var palActual = 0;
+                    var numClavesCompuestas = -1;
+                    var indiceClave = -1;
+                    
+                    foreach (string str in strs)
+                    {
+                        var word = str.Split(' ');
+
+                        if (strs.Length == s)
+                        {
+                            code = code + "<p style=\"text-align: justify;\"><b>";
+
+                            foreach (string pal in word)
+                            {
+                                bool flag_marcado = false;
+                                
+                                foreach(string tmp in palsM[0].Split('/'))
+                                {
+                                    if(tmp.IndexOf(pal) > -1)
+                                    {
+                                        int palAntes = 0;
+                                        int palDespues = 0;
+                                        
+                                        indiceClave = 0;
+                                        numClavesCompuestas = tmp.Split(' ').Length;
+                                        
+                                        foreach(string palFind in tmp.Split(' '))
+                                        {
+                                            if(palFind == pal)
+                                            {
+                                                break;
+                                            }
+                                            indiceClave++;
+                                        }
+                                        
+                                        if(indiceClave < numClavesCompuestas)
+                                        {
+                                            palDespues = numClavesCompuestas - indiceClave;
+                                            palAntes = indiceClave;
+
+                                            bool flag_clave = true;
+
+                                            for (int i = 0; i < palDespues; i++)
+                                            {
+                                                if (word.ToList()[palActual + i] != tmp.Split(' ')[indiceClave + i])
+                                                {
+                                                    flag_clave = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            for (int i = 0; i < indiceClave; i++)
+                                            {
+                                                if (word.ToList()[palActual - i] != tmp.Split(' ')[indiceClave - i])
+                                                {
+                                                    flag_clave = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (flag_clave)
+                                            {
+                                                flag_marcado = true;
+                                                code = code + "<span class=\"word\" style=\"background-color: Yellow;\">" + pal + " </span>";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if(flag_marcado == false)                                
+                                {
+                                    if (palsM[1].IndexOf(pal) > -1)
+                                    {
+                                        Boolean flag_clave = false;
+                                        
+                                        var claves = palsM[1].Split('/');
+
+                                        foreach (string cl in claves)
+                                        {
+                                            var atom = cl.Split(' ');
+                                            
+                                            foreach(string final in atom)
+                                            {
+                                                if(final == pal)
+                                                {
+                                                    flag_clave = true;
+
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        
+                                        if (flag_clave)
+                                        {
+                                            code = code + "<span class=\"word solucion\">" + pal + " </span>";
+                                        }
+                                        else
+                                        {
+                                            code = code + "<span class=\"word\">" + pal + " </span>";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        code = code + "<span class=\"word\">" + pal + " </span>";
+                                    }
+                                }
+
+                                palActual++;
+                            }
+
+                            code = code + "</b></p>";
+                        }
+                        else
+                        {
+                            code = code + "<p style=\"text-align: justify;\">";
+
+                            foreach (string pal in word)
+                            {
+                                if (palsM[0].IndexOf(pal) > -1)
+                                {
+                                    code = code + "<span class=\"word\" style=\"background-color: Yellow;\">" + pal + " </span>";
+                                }
+                                else
+                                {  
+                                    code = code + "<span class=\"word\">" + pal + " </span>";
+                                }
+                            }
+
+                            code = code + "</p>";
+                        }
+
+                        s++;
+                    }
+                }
+                else
+                {
+                    var s = 1;
+
+                    foreach (string str in strs)
+                    {
+                        var word = str.Split(' ');
+
+                        if (strs.Count() == s)
+                        {
+                            code = code + "<p style=\"text-align: justify;\"><b>";
+
+                            foreach (string pal in word)
+                            {
+                                code = code + "<span class=\"word\">" + pal + " </span>";
+                            }
+
+                            code = code + "</b></p>";
+                        }
+                        else
+                        {
+                            code = code + "<p style=\"text-align: justify;\">";
+
+                            foreach (string pal in word)
+                            {
+                                code = code + "<span class=\"word\">" + pal + " </span>";
+                            }
+
+                            code = code + "</p>";
+                        }
+
+                        s++;
+                    }
+                }
+            }
+            else
+            {
+                code = code + "<p style=\"text-align: justify;\">";
+
+                foreach (string str in strs)
+                {
+                    code = code + "<span>" + str + " </span>";
+                }
+
+                code = code + "</p>";
+            }
+        }
+
+        @Html.Raw(code)
+    </div>
+
+    <div id=tarea style="margin-left: 20px; margin-top: 20px;">
+    @{
+        switch (Model.TipoPreguntaID)
+        {
+            case 1:
+                <text>
+                    <div id=alternativas style="margin-left: 20px; margin-top: 20px;">
+                        @foreach (Alternativa alt in Model.Alternativas)
+                        {
+                            
+                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;" })
+                            
+                            if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                            { 
+                            <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                            }
+
+                            if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                            {
+                            <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                            }
+
+                            if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                            {
+                            <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                            }
+                            
+                            @alt.Opcion <br />
+                        }
+                    </div>
+                    
+                    <div id="seleccion" style="margin-left: 20px; margin-top: 20px;"> 
+                        <hr style="margin-left: -20px;"/>                       
+                        <b>Mi Selección</b> <br /> <br />
+                        <textarea id="pertinente" style="width: 95%; padding-right: 20px;"></textarea>
+                        <b><div id="selCorreccion" style="color:red;"></div></b>
+                    </div>
+
+                    <button id="btnValidarTest" style="margin-left: 20px; margin-top: 15px;">Validar</button>
+                    <button id="btnValidarClaves" style="margin-left: 20px; margin-top: 15px;">Validar</button>
+                    <button id="btnValidarSeleccion" style="margin-left: 20px; margin-top: 15px;">Validar</button>
+                    <button id="btnBorrarSeleccion" style="margin-top: 15px;">Borrar</button>
+                </text>
+                        break;
+            case 2:
+                <text>
+                    <textarea id="resp" style="margin-left: 20px; margin-top: 20px;"></textarea>
+
+                    <button id="btnValidarAbierta" style="margin-left: 20px; margin-top: 20px;">Validar</button>
+                </text>
+                        break;
+            case 3:
+            <text>
+                <button id="btnValidarPreguntaClaves" style="margin-left: 20px; margin-top: 20px;">Validar</button>
+            </text>
+                        break;
+            case 4:
+            
+                    <table id="izqParejas">
+                        @foreach (Emparejado emp in Model.Emparejados)
+                        {
+                            if (emp.ColIzq != null)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="celdaIzqParejas" ondrop="drop(event)" ondragover="allowDrop(event)" style="width: 600px; text-align:justify;"><hr /> @emp.ColIzq </div>                                
+                                    </td>                            
+                                </tr>
+                            }
+                        }          
+                    </table>
+                    
+                    <div style="width:300px; z-index: 10; position: fixed; right: 10px; top: 40px;">
+                       <table>
+                           <tr>
+                               <td id="inicial" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:300px; padding-top:20px; padding-bottom:20px; background-color:snow;">
+                                    @{
+                        int i = 1;
+                        string id;
+                        var Lista = ViewBag.Lista;
+                        foreach (string emp in Lista)
+                        {
+                            if (emp != null)
+                            {
+                                id = "drag" + i;
+                                            <div id=@id.ToString() + draggable="true" ondragstart="drag(event)" style="margin-left:4px; border: 1px solid; width: 300px; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                                i++;
+                            }
+                        }
+                                }
+                               </td>
+                           </tr>
+                           <tr>
+                               <td>
+                                   <button id="btnValidarParejas">Validar</button>
+                               </td>
+                           </tr>
+
+                       </table>
+                        
+
+                        
+                    </div>
+                     
+                        break;
+            default:
+                        break;
+        }    
+    
+    }
+    </div>
+    
+    <hr />
+</div>
+
+@{  
+    <div id="pag" style="padding: 10px;">
+        @Html.Raw(pag.Contenido) 
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {            
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {            
+            ev.preventDefault();            
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.indexOf("drag") == -1) 
+                ev.target.appendChild(document.getElementById(data));
+        }
+
+        $(document).ready(function () {
+            //////////////////////////////////
+            // Configuración de la pantalla //
+            //////////////////////////////////
+            @{  
+                if (Model.TipoPreguntaID == 4)
+                {
+                    <text>
+                        $("#pregunta").removeAttr("style");
+                    </text>
+                }
+
+                if (config.SeleccionarClaves) // Tiene que hacer la tarea de selección de claves.
+                {
+                    if (config.SeleccionarPertinente) // Tiene que hacer la tarea de seleccionar pertinente
+                    {
+                    <text>
+                        $("#btnValidarTest").hide();
+                        $("#btnValidarClaves").show();
+                        $("#seleccion").hide();
+                        $("#btnValidarSeleccion").hide();
+                        $('#btnBorrarSeleccion').hide();
+                    </text>
+                    }
+                    else // No tiene que hacer la tarea de seleccionar pertinente
+                    {
+                    <text>
+                        $("#btnValidarTest").hide();
+                        $("#btnValidarClaves").show();
+                        $("#seleccion").hide();
+                        $("#btnValidarSeleccion").hide();
+                        $('#btnBorrarSeleccion').hide();
+                    </text>
+                    }
+                }
+                else // No tiene que hacer la tarea de selección de claves.
+                {
+                    if (config.SeleccionarPertinente) // Tiene que hacer la tarea de seleccionar pertinente
+                    {
+                    <text>
+                        $("#btnValidarTest").hide();
+                        $("#btnValidarClaves").hide();
+                        $("#seleccion").show();
+                        jQuery("#btnValidarSeleccion").attr('disabled', true);
+                        $(":radio").attr('disabled', true);
+                        $("#btnValidarSeleccion").show();
+                    </text>
+                    }
+                    else // No tiene que hacer la tarea de seleccionar pertinente
+                    {   
+                    <text>
+                        $("#btnValidarTest").show();
+                        $("#btnValidarClaves").hide();
+                        $("#seleccion").hide();
+                        $("#btnValidarSeleccion").hide();
+                        $('#btnBorrarSeleccion').hide();
+                    </text>
+                    }
+                }                
+            }
+            //////////////////////////////////
+            
+            ///////////////////////////////////
+            // Comportamiento de los botones //
+            ///////////////////////////////////
+            $("#btnValidarParejas").click(function () {
+                var respuesta = "1-";
+                var cont = 2;
+                
+                $("#izqParejas").find('.celdaIzqParejas').each(function () {
+                    $(this).find('div').each(function () {
+                        respuesta = respuesta + $(this).text().toString() + "-"
+                    });
+
+                    respuesta = respuesta + "/" + cont.toString() + "-";
+
+                    cont = cont + 1;
+                });
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaParejas", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respuesta },
+                    success: function (result) {
+                        var input = result.Mensaje;
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+
+                        window.parent.$("#btnAnterior").hide();
+                        window.parent.$("#btnSiguiente").hide();
+                        window.parent.$("#btnAntFDBK").show();
+                        window.parent.$("#btnSigFDBK").show();
+                        
+                        window.parent.feedback(result.Mensaje);
+
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+            $('#btnBorrarSeleccion').click(function () {
+                jQuery("#btnValidarSeleccion").attr('disabled', true);
+                $("#pertinente").val("");
+            });
+
+            $("#btnValidarPreguntaClaves").click(function () {
+                var palabras = "";
+                
+                $(".word_marcada").each(function () {
+                    palabras = palabras + $(this).html() + ":" + $(this).attr("indice") + "/";
+                });
+
+                /*$(".word_marcada").each(function () {
+                    palabras = palabras + $(this).html() + "/";
+                });*/
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaClaves", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras },
+                    success: function (result) {
+                        var aciertos = result.Results.split('/');
+                        var fallos = result.Errores.split('/');
+                        var palActual = 0;
+                      
+                        var input = result.Mensaje;
+                        
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+                        
+                        $(".word").each(function () {
+                            if (jQuery.inArray($(this).text() + ":" + palActual, aciertos) > -1) // Encontrado
+                            {   
+                                if (result.Results.split('/')[jQuery.inArray($(this).text() + ":" + palActual, aciertos)].split(':')[1] == palActual) {
+                                    $(this).addClass("word_marcada_bien");
+                                }
+                            }
+
+                            if (jQuery.inArray($(this).text() + ":" + palActual, fallos) > -1) // Encontrado
+                            {   
+                                if (result.Errores.split('/')[jQuery.inArray($(this).text() + ":" + palActual, fallos)].split(':')[1] == palActual) {
+                                    $(this).addClass("word_marcada_mal");
+                                }
+                            }
+
+                            palActual = palActual + 1;
+                        });
+
+                        $(".solucion").each(function () {
+                            if ($(this).hasClass("word_marcada_bien") == false) {
+                                $(this).addClass("word_marcada");
+                            }
+                        })
+
+                        window.parent.feedback(result.Mensaje);
+
+                        $("#btnValidarPreguntaClaves").hide();
+
+                        window.parent.$("#btnAnterior").show();
+                        window.parent.$("#btnSiguiente").show();
+
+                        $("#pag").attr("style", "padding: 10px; padding-top: " + $("#pregunta").height() + "px;");
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+            $("#btnValidarClaves").click(function () {
+                var palabras = "";
+
+                $(".word_marcada").each(function () {
+                    palabras = palabras + $(this).html() + ":" + $(this).attr("indice") + "/";
+                });
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaClaves", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras },
+                    success: function (result) {
+                        var aciertos = result.Results.split('/');
+                        var fallos = result.Errores.split('/');
+                        var palActual = 0;
+
+                        var input = result.Mensaje;
+                        
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+
+                        $(".word").each(function () {
+                            if (jQuery.inArray($(this).text() + ":" + palActual, aciertos) > -1) // Encontrado
+                            {
+                                if (result.Results.split('/')[jQuery.inArray($(this).text() + ":" + palActual, aciertos)].split(':')[1] == palActual) {
+                                    $(this).addClass("word_marcada_bien");
+                                }
+                            }
+
+                            if (jQuery.inArray($(this).text() + ":" + palActual, fallos) > -1) // Encontrado
+                            {
+                                if (result.Errores.split('/')[jQuery.inArray($(this).text() + ":" + palActual, fallos)].split(':')[1] == palActual) {
+                                    $(this).addClass("word_marcada_mal");
+                                }
+                            }
+
+                            palActual = palActual + 1;
+                        });
+                        
+                        $(".solucion").each(function () {
+                            if ($(this).hasClass("word_marcada_bien") == false)
+                            {
+                                $(this).addClass("word_marcada");
+                            }
+                        })
+
+                        $("#btnValidarClaves").hide();
+
+                        window.parent.feedback(result.Mensaje);
+
+                        if ('@Model.Alternativas.Count' == '0') {
+                            window.parent.$("#btnAnterior").show();
+                            window.parent.$("#btnSiguiente").show();
+                        }
+                        else {
+                            if ('@config.SeleccionarPertinente' == "True") {
+                                $("#btnValidarTest").hide();
+                                $("#btnValidarClaves").hide();
+                                $("#seleccion").show();
+                                $("#btnValidarSeleccion").show();
+                                $('#btnBorrarSeleccion').show();
+                            }
+                            else // No tiene que hacer la tarea de seleccionar pertinente
+                            {
+                                $("#btnValidarTest").show();
+                                $("#btnValidarClaves").hide();
+                                $("#seleccion").hide();
+                                $("#btnValidarSeleccion").hide();
+                                $('#btnBorrarSeleccion').hide();
+                            }
+                        }
+
+                        $("#pag").attr("style", "padding: 10px; padding-top: " + $("#pregunta").height() + "px;");
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+            
+            $("#btnValidarTest").click(function () {
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaTest", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest },
+                    success: function (result) {
+                        var input = result.mensaje;
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+
+                        // Si procede, cargar pregunta corregida. Activar botones de mini dialogo en parent y desactivar los de siguientes/anterior acción
+                        //var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                        window.parent.$("#btnAnterior").hide();
+                        window.parent.$("#btnSiguiente").hide();
+                        window.parent.$("#btnAntFDBK").show();
+                        window.parent.$("#btnSigFDBK").show();
+
+                        if(result.mensaje != null)
+                            window.parent.feedback(result.mensaje);
+
+                        window.parent.$("#puntos").text(result.Puntos);
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+            $("#btnValidarSeleccion").click(function () {
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaSeleccion", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val() },
+                    success: function (result) {
+                        var input = result.Mensaje;
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+                        
+                        //$("#selCorreccion").append(result.Correccion);
+
+                        window.parent.feedback(result.Mensaje);
+                        @{
+                            if (config.Responder) // Tiene que hacer la tarea de seleccionar pertinente
+                            {
+                                <text>
+                                    $("#btnValidarTest").show();
+                                    $("#btnValidarClaves").hide();
+                                    $("#pertinente").hide();
+                                    $('#selCorreccion').html($('#selCorreccion').html(result.Correccion.toString().replace(/\\/g, '')).text()).text();
+                                    $('#selCorreccion').show();
+                                    $(":radio").attr('disabled', false);
+                                    $("#btnValidarSeleccion").hide();
+                                    $('#btnBorrarSeleccion').hide();
+                                </text>
+                            
+                                if (config.ResaltarPertinenteTexto)
+                                {
+                                    if (Model.Pertinente != null && Model.Pertinente != "")
+                                    {               
+                                        string[] param = Model.Pertinente.Split('/');
+                                        
+                                        foreach(string sng in param)
+                                        {                                        
+                                        <text>
+                                            var str = unescape(decodeURI("@Uri.EscapeDataString(sng)"));                            
+                                            $("#pag").html($("#pag").html().replace(str, "<span class=\"word\" style=\"background-color: Yellow;\">" + str + "</span>"));
+                                        </text>
+                                        }
+                                    }
+                                }
+                            }
+                            else // No tiene que hacer la tarea de seleccionar pertinente
+                            {
+                                // Continuar
+                            }
+                        }
+
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+            ///////////////////////////////////
+            
+            $("#pag").attr("style", "padding: 10px; padding-top: " + $("#pregunta").height() + "px;");
+            
+
+            var respTest = ""
+
+            $(":radio").change(function () {
+                respTest = $(this).attr("value");
+            });
+
+            $('.word').click(function () {
+                $(this).attr("indice", $(this).index());
+
+                if ($(this).hasClass("word_marcada")) {
+                    $(this).removeClass("word_marcada");
+                }
+                else {
+                    $(this).addClass("word_marcada");
+                }
+            });
+
+            if ('@config.Responder' == 'True')
+            {
+                window.parent.$('#btnSiguiente').hide();
+                window.parent.$('#btnAnterior').hide();
+            }
+
+            var sel1 = "";
+
+            $('#pertinente').focus(function () {
+                $(this).blur();
+            });
+
+            $("#pertinente").bind("drop", function (event, ui) {
+                if (event.stopPropagation) event.stopPropagation();
+
+                $.ajax({
+                    url: '/iTuinBook/Algoritmo',
+                    type: 'POST',
+                    data: { Pertinente: $('#pertinente').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
+                    success: function (result) {
+                        $('#pertinente').val(result.result);
+
+                        if (result.result == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
+                            jQuery("#btnValidarSeleccion").attr('disabled', true);
+                        }
+                        else {
+                            jQuery("#btnValidarSeleccion").attr('disabled', false);
+                        }
+                    },
+                    error: function () {
+                        alert("No selecciones espacios entre párrafos. Haz dos selecciones.");
+                    }
+                });
+            });
+
+            if ('@ViewBag.SolucionClaves' != "") {
+                var sol = '@ViewBag.SolucionClaves';
+                var cor = '@Model.Claves'.split("//");
+
+                $(".solucion").each(function () {
+                    $(this).addClass("word_marcada");
+                })
+               
+                $('#btnValidarClaves').hide();
+                $('#btnValidarPreguntaClaves').hide();
+
+                window.parent.$('#btnSiguiente').show();
+                window.parent.$('#btnAnterior').show();
+
+                window.parent.feedback("Aquí puedes ver la solución correcta.");
+            }
+
+        });
+    </script>
+}

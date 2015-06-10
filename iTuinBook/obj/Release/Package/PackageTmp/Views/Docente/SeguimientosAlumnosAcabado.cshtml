@@ -1,0 +1,219 @@
+﻿@model List<Datos>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Seguimientos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    Double puntTot = 0;
+    Double tiemTot = 0;        
+}
+
+<h2>Seguimientos - (@Html.ActionLink("Ver Todos", "DetallesTodos", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null))</h2>
+<hr />
+
+<table id="grid">
+    @{
+        Modulo mod = ViewBag.Modulo;
+
+        if (mod.Escenas != null && mod.Escenas.Count() > 0)
+        {
+            <colgroup>
+                <col style="width:40px" />
+                <col style="width:40px" />
+                <col style="width:40px"/>
+                <col style="width:40px"/>
+                <col style="width:40px"/>
+                <col style="width:40px"/>
+            </colgroup>
+        
+            <tr>
+                <th style="text-align:center;">
+                    Nombre
+                </th>       
+                <th style="text-align:center;">
+                    Usuario
+                </th>     
+                <th style="text-align:center;">
+                    Puntos
+                </th>  
+                <th style="text-align:center;">
+                    Inicio
+                </th>      
+                <th style="text-align:center;">
+                    Acciones
+                </th>     
+                <th style="text-align:center;">
+                    Tiempo
+                </th>     
+            </tr>
+    
+            foreach (Datos dat in Model)
+            {
+                puntTot += Convert.ToDouble(dat.Puntos);
+                tiemTot += Convert.ToDouble(dat.TiempoTotal);
+        
+                <tr>
+                    <td>
+                        @Html.ActionLink(dat.Nombre, "DetallesAlumno", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID, UserId = dat.UserId }, null)    
+                    </td>
+                    <td>
+                        @dat.Usuario
+                    </td>
+                    <td>
+                        @dat.Puntos                
+                    </td>
+                    <td>
+                        @dat.Fecha
+                    </td>           
+                    <td>
+                        @dat.Acciones
+                    </td>           
+                    <td>
+                        @dat.TiempoTotal
+                    </td>           
+                </tr>            
+            }
+
+            Double puntMed = puntTot / Model.Count;
+            Double tiemMed = tiemTot / Model.Count;
+            
+            <tr>
+                <td>
+                    MEDIA
+                </td>
+                <td>
+            
+                </td>
+                <td>
+                    @puntMed
+                </td>
+                <td>
+            
+                </td>           
+                <td>
+            
+                </td>   
+                <td>
+                    @tiemMed
+                </td>           
+            </tr> 
+        }
+        else
+        {
+            <colgroup>
+                <col style="width:40px" />
+                <col style="width:40px" />
+                <col style="width:30px"/>
+                <col style="width:40px"/>
+                <col style="width:40px"/>
+                <col style="width:30px"/>                
+                <col style="width:30px" />                
+                <col style="width:30px"/>                
+                <col style="width:30px"/>                
+            </colgroup>
+            
+            <tr>
+                <th style="text-align:center;">
+                    Nombre
+                </th>       
+                <th style="text-align:center;">
+                    Usuario
+                </th>     
+                <th style="text-align:center;">
+                    Puntos
+                </th>  
+                <th style="text-align:center;">
+                    Inicio
+                </th>                  
+                <th style="text-align:center;">
+                    Tiempo
+                </th>     
+                <th style="text-align:center;">
+                    BUSCA
+                </th>                     
+                <th style="text-align:center;">
+                    AYUDA
+                </th>                          
+                <th style="text-align:center;">
+                    REVISA
+                </th>                     
+                <th style="text-align:center;">
+                    Resp. Bien
+                </th>     
+                
+            </tr>
+        
+            foreach (Datos dat in Model)
+            {
+                puntTot += Convert.ToDouble(dat.Puntos);
+                tiemTot += Convert.ToDouble(dat.TiempoTotal);
+        
+                    <tr>
+                        <td>
+                            @Html.ActionLink(dat.Nombre, "DetallesAlumno", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID, UserId = dat.UserId }, null)                            
+                        </td>
+                        <td>
+                            @dat.Usuario
+                        </td>
+                        <td>
+                            @dat.Puntos                
+                        </td>
+                        <td>
+                            @dat.Fecha
+                        </td>                                
+                        <td>
+                            @dat.TiempoTotal
+                        </td>  
+                        <td>
+                            @dat.BuscaPos
+                        </td>                              
+                        <td>
+                            @dat.AyudaPos
+                        </td>                                 
+                        <td>
+                            @dat.RevisaPos
+                        </td>                                
+                        <td>
+                            @dat.RespuestaPos
+                        </td>                            
+                    </tr>            
+            }
+        }
+    }
+</table>
+<hr />
+<br />
+
+<b>@Html.ActionLink("Volver", "SeguimientosModulos", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null)</b> 
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            $("#grid").kendoGrid({                
+                groupable: false,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,25 @@
+﻿@using iTuinBook.Models;
+@model List<List<DatosSecuencia>>
+
+@{
+    ViewBag.Title = "Secuencia";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Secuencias</h2>
+
+@foreach (List<DatosSecuencia> lista in Model)
+{ 
+    @:<h1>Secuencia</h1>
+
+    <table>
+
+        <thead><tr><th>Acción</th></tr></thead>
+        <tbody>
+            @foreach(DatosSecuencia ds in lista)
+            {
+                <tr><th>@ds.Cadena</th></tr>
+            }
+        </tbody>
+    </table>
+}

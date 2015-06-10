@@ -1,0 +1,206 @@
+﻿@model iTuinBook.Models.Criterio
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AgregarCriterioCorreccion";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Agregar Criterio de Correccion</h2>
+<hr />
+
+@{
+    Pregunta preg = ViewBag.Pregunta;
+                        
+    <div class="editor-label">
+        @Html.Label("Enunciado")
+    </div>
+    <div class="editor-field">
+        @preg.Enunciado            
+    </div>
+
+    if (@preg.Pertinente != null)
+    {
+    <div class="editor-label">
+        @Html.Label("Pertinente")
+    </div>
+    <div class="editor-field">
+        @preg.Pertinente            
+    </div>
+    }
+}   
+<hr />
+
+@{
+            var criterio = preg.Criterios;
+            if (criterio != null && preg.Criterios.Count != 0)
+            {
+                <legend>Criterios</legend>
+
+                <table id="alternativas">
+                    <tr>
+                        <th>
+                            
+                        </th>
+                        <th>
+                            Criterio
+                        </th>
+                        <th>
+                            Valor
+                        </th>
+                        <th>
+                            Feedback
+                        </th>                        
+                    </tr>
+                    @{ 
+                int i = 0;
+
+                foreach (Criterio cri in criterio)
+                {
+                    i = i + 1;
+                    
+                            <tr>
+                                <td>            
+                                    <b>@Html.ActionLink("Eliminar", "EliminarCriterioCorreccion", "Docente", new { TextoID = ViewBag.TextoID, PreguntaID = preg.PreguntaID, CriterioID = cri.CriterioID }, null)</b>                              
+                                </td>                  
+                                <td>
+                                    @cri.Opcion                   
+                                </td>   
+                                <td style="text-align:center">
+                                    @cri.Valor
+                                </td>         
+                                <td>
+                                    @cri.FeedbackCriterio
+                                </td>  
+                            </tr>
+                } 
+                    }  
+                </table>
+            
+                <hr />        
+            }
+        }   
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <legend>Nuevo Criterio</legend>
+    
+    <div class="editor-label">
+        @Html.Label("Palabra o Criterio de Corrección")
+    </div>
+    <div class="editor-field">
+        @Html.TextAreaFor(model => model.Opcion, new { style = "width:100%;" })
+        @Html.ValidationMessageFor(model => model.Opcion)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Valor)
+    </div>
+    <div class="editor-field" style="padding-bottom: 15px">
+        @Html.DropDownListFor(model => model.Valor, new SelectList(new double[] { -1.0, -0.5, 0, 0.5, 1.0 }))            
+        
+    </div>
+        
+    <div class="editor-label">
+        @Html.Label("Feedback de Contenido")
+    </div>
+    <div class="editor-field">
+        @Html.TextAreaFor(model => model.FeedbackCriterio, new { style = "width:100%;" })
+        @Html.ValidationMessageFor(model => model.FeedbackCriterio)
+    </div>
+    
+    <p>
+        <input type="submit" value="Agregar" name="txt" />
+            
+        @Html.ActionLink("Finalizar", "AdministrarPregunta", "Docente", new { PreguntaID = preg.PreguntaID }, null)           
+    </p>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var items = [];
+            
+            var window = $("#window"),
+                        undo = $("#undo")
+                                .bind("click", function () {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+            var onClose = function () {
+                undo.show();
+            }
+
+            window.kendoWindow({               
+                title: "Pertinente",                
+                close: onClose,
+                visible: false
+            });
+
+            undo.show();            
+
+            $("#optional").kendoMultiSelect({                
+                dataSource: items
+            });
+
+            $("#tipoPreg").kendoDropDownList({
+                dataTextField: "ProductName",
+                dataValueField: "ProductID"
+            });
+
+            //create AutoComplete UI component
+            $("#enunciado").kendoAutoComplete({              
+                placeholder: "Introduce el enunciado..."                
+            });
+
+            $("#enunciado").focusout(function () {
+                var enun = $("#enunciado").val();
+                var palabras = enun.split(' ');
+
+                items = [];
+                
+                $.each( palabras, function(index, value) {
+                    items.push(value);
+                })
+
+                $("#claves").data("kendoMultiSelect").setDataSource(items);               
+            });
+
+            $("#claves").kendoMultiSelect({
+                dataSource: items               
+            });
+
+            $("#datepicker").kendoDatePicker();
+            
+            $("#grid").kendoGrid({
+                dataSource: [{ name: "Jane Doe", age: 30 }, { name: "John Doe", age: 33 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 } ],
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿@model iTuinBook.Models.DatoSimple
+
+@{
+    ViewBag.Title = "View1";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>View1</h2>
+
+<fieldset>
+    <legend>DatoSimple</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TextoID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TextoID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PaginaID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PaginaID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PreguntaID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PreguntaID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Momento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Momento)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Tiempo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tiempo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CodeOP)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CodeOP)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Valor)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Dato01)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Dato01)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Dato02)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Dato02)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Dato03)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Dato03)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Info)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Info)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Info2)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Info2)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DatosUsuarioID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DatosUsuarioID)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.DatoSimpleID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

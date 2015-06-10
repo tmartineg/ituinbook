@@ -1,0 +1,287 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pregunta Simple Corregida";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+    Pagina pag = ViewBag.Pagina;
+    string nombre = ViewBag.Nombre;
+}
+<div id="pregunta" style="background-color: beige; width:100%; top: -10px; border-bottom-color:black; position: fixed; overflow-x: hidden; overflow-y: auto;">
+<div id=enunciado style="margin-left: 20px; margin-top: 20px;">
+    @Model.Enunciado.Replace("USUARIO", nombre)
+</div>
+
+@{
+    switch (Model.TipoPreguntaID)
+    {
+        case 1:
+            <text>
+                <div id=alternativas style="margin-left: 20px; margin-top: 20px;">
+                    @{
+                        if (config.MarcarCorrecto)
+                        {
+                            foreach (Alternativa alt in Model.Alternativas)
+                            {
+                                if (alt.Valor)
+                                {
+                                                <img src="~/Content/tick.png" style="width: 15px; height: 15px;" />     
+                                    if (alt.Opcion == ViewBag.Respuesta)
+                                    {
+                                        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled", Checked = "checked" })
+                        
+                                        if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                        { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                        }
+                                        
+                                        @alt.Opcion <br />
+                                    }
+                                    else
+                                    {
+                                        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" })
+                                        if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                        { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                        {
+                                                <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                        {
+                                                <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                        }
+                        
+                                        @alt.Opcion <br />
+                                    }
+                                }
+                                else
+                                {   
+                                    <img src="~/Content/aspa.png" style="width: 15px; height: 15px;" />
+                                    if (alt.Opcion == ViewBag.Respuesta)
+                                    {
+                                        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled", Checked = "checked" }) 
+                                        
+                                        if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                        { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                        }
+                            
+                                        @alt.Opcion <br />
+                                    }
+                                    else
+                                    {
+                                        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" }) 
+                                        
+                                        if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                        { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                        }
+
+                                        if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                        {
+                                        <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                        }
+                        
+                            
+                                        @alt.Opcion <br />
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (Alternativa alt in Model.Alternativas)
+                            {
+                                if (alt.Valor)
+                                {            
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" }) 
+                                    
+                                    if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                    { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                    }
+
+                                    if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                    {
+                                        <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                    }
+
+                                    if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                    {
+                                        <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                    }            
+                            
+                                    @alt.Opcion <br />
+                                }
+                                else
+                                {   
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" }) 
+                                    
+                                    if (alt.Opcion.IndexOf("REFLEXIONAR") > -1)
+                                    { 
+                                        <img width="40" height="40" src="~/Content/images/PrREFLEXIONAR.jpg" />
+                                    }
+
+                                    if (alt.Opcion.IndexOf("DEDUCIR") > -1)
+                                    {
+                                        <img width="40" height="40" src="~/Content/images/PrDEDUCIR.jpg" />
+                                    }
+
+                                    if (alt.Opcion.IndexOf("ENCONTRAR ") > -1)
+                                    {
+                                        <img width="40" height="40" src="~/Content/images/PrENCONTRAR.jpg" />
+                                    }
+                            
+                                    @alt.Opcion <br />
+                                }
+                            }
+                        }
+                    }
+                </div>
+
+                @{
+                    string str = ViewBag.Seleccion;
+                    if (!(str == null || str == ""))
+                    {
+                        <div id="seleccion" style="margin-left: 20px; margin-top: 20px;"> 
+                            <hr style="margin-left: -20px;"/>                       
+                            <b>Mi Selección</b> <br /> <br />
+                            <b><div id="selCorreccion" style="color:red;"></div></b>
+                        </div>
+                    }
+                }
+            </text>
+                        break;
+        case 2:
+            <text>
+                <textarea id="resp" style="margin-left: 20px; margin-top: 20px;"></textarea>
+            </text>
+                        break;
+        case 3:
+                        break;
+        case 4:
+                        break;
+        default:
+                        break;
+    }    
+    
+}
+    <hr />
+</div>
+@{
+    if (Model.TipoPreguntaID != 4)
+    {   
+        <div id="pag" style="padding: 10px;">
+            @Html.Raw(pag.Contenido) 
+        </div>
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {            
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {            
+            ev.preventDefault();            
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.indexOf("drag") == -1)
+                ev.target.appendChild(document.getElementById(data));
+        }
+
+        $(document).ready(function () {
+            var str = '@ViewBag.Seleccion';
+            
+            if (!(str == null || str == "")) {
+                $('#selCorreccion').hide();
+                $('#selCorreccion').html('@ViewBag.Seleccion')
+                
+                $(window).bind('load', function () {
+                    $.ajax({
+                        url: '/iTuinBook/SeleccionPertinente',
+                        type: 'POST',
+                        data: { PreguntaID: '@Model.PreguntaID', Seleccion: $('#selCorreccion').text() },
+                        success: function (result) {
+                            $('#selCorreccion').html($('#selCorreccion').html(result.result.toString().replace(/\\/g, '')).text()).text();
+                            $('#selCorreccion').show();
+
+                            $("#pag").attr("style", "padding: 10px; padding-top: " + $("#pregunta").height() + "px;");
+                        },
+                        error: function () {
+                            alert("Error al cargar tu selección.");
+                        }
+                    });
+
+                    
+                });
+            }
+
+            if ('@ViewBag.Repetido' == "True")
+            {   
+                var input = '@ViewBag.Respuesta';
+                arrayFeedbackContenido = input.split('/');
+                accTotalFeedback = arrayFeedbackContenido.length;
+
+                // Si procede, cargar pregunta corregida. Activar botones de mini dialogo en parent y desactivar los de siguientes/anterior acción
+                //var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                window.parent.$("#btnAnterior").show();
+                window.parent.$("#btnSiguiente").hide();
+                window.parent.$("#btnAntFDBK").hide();
+                window.parent.$("#btnSigFDBK").show();
+                
+                if ('@ViewBag.Mensaje' != null) {
+                    window.parent.feedback('@ViewBag.Mensaje');
+                }
+            }
+            
+            @if (Model.Pertinente != null && Model.Pertinente != "") {               
+                <text>
+                    var str = unescape(decodeURI("@Uri.EscapeDataString(Model.Pertinente)"));              
+                    $("#pag").html($("#pag").html().replace(str, "<span class=\"word\" style=\"background-color: Yellow;\">" + str + "</span>"));
+                </text>
+            }
+
+            $(window).bind('load', function () {
+                $("#pag").attr("style", "padding: 10px; padding-top: " + $("#pregunta").height() + "px;");
+            });
+            
+        });
+    </script>
+}

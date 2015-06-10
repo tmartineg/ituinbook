@@ -1,0 +1,83 @@
+﻿@model IEnumerable<UserProfile>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Alumnos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+
+<h2>Alumnos</h2>
+<hr />
+
+<table id="grid">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Grupo
+        </th>                    
+        <th>
+            Comandos
+        </th>
+    </tr>
+
+    @{
+        if (Model != null)
+        {
+            foreach (UserProfile al in Model)                    
+            {
+                foreach(Grupo gr in al.Grupos)
+                {
+                    <tr>                    
+                        <td>
+                            @Html.DisplayFor(modelItem => al.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => gr.Nombre)
+                        </td>                                      
+                        <td>
+                            <b> @Html.ActionLink("Seguimiento", "SeguirAlumno", "Docente", new { UserId = al.UserId }, null)</b>                                
+                        </td>      
+                    </tr>
+                }
+            } 
+        }
+             
+    }     
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+            
+            $("#grid").kendoGrid({                
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

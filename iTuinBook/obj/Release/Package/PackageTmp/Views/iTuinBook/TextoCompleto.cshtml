@@ -1,0 +1,189 @@
+﻿@model iTuinBook.Models.Texto
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Texto";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+<!--<div id="feedback" style="border: solid 2px black; top: 25%; left: 20%; z-index:10; position: fixed; width:60%; height:40%; background-color:white;">
+    FEEDBACK
+</div>-->
+<span id="pregActual" style="visibility:hidden;">0</span>
+<div id="pregunta" style="z-index:5; left: 1%; border: solid 1px black; box-shadow: 10px 10px 5px #888888; background-color:white; visibility:hidden; width:98%; height:289px; top: -10px; border-bottom-color:black; position: fixed; overflow-x: hidden; overflow-y: auto;">
+    <iframe id="addIframe" src="@Url.Action("PreguntaCompleta", new { pregActual = 0, pregTotal = 2, TextoID = @Model.TextoID })" style="width:100%; height:279px;"></iframe> 
+</div>
+
+<div id="paging_container" class="container" style="width:94%;">	
+    <div id="indice" class="page_navigation""></div>
+    <button id="btnPreguntas" style="padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;">Preguntas</button>
+	<hr style="margin-top:10px" />
+	<ul class="content" id="Pagina">
+		@{
+            foreach(Pagina pag in Model.Paginas)
+            {
+                <li>
+                    <div style="position:relative; width: 100%;">
+                    @Html.Raw(pag.Contenido)
+
+                    @if (Model.TextoID == 142)
+                    { /*
+                        <div style="position: absolute; top: 200px; left: 0; width: 100%; ">Hola</div>*/
+                    }
+                    </div>
+                </li>         
+            }
+        }
+	</ul>	
+</div>	
+
+<svg>
+	<!-- Filter ID/Name -->
+	<filter id="example-one">
+		<!-- Amount of Gaussian Blur that should be applied -->
+		<feGaussianBlur stdDeviation="4"/>
+	</filter>		
+</svg>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    <script src="~/Content/Highlight/jquery.textHighlighter.pack.min.js"></script>
+    <link href="~/Content/Pajination/styles.css" rel="stylesheet" />    
+    <script src="~/Content/Pajination/jquery.pajinate.min.js"></script>
+    
+    <link href="~/Content/Toolbar/jquery.toolbars.css" rel="stylesheet" />
+    <link href="~/Content/Toolbar/bootstrap.icons.css" rel="stylesheet" />
+    
+    <script src="~/Content/Toolbar/jquery.toolbar.js"></script> 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var consulta = false;
+                        
+            if ('@Model.Paginas.Count' > 1) {
+                $('#indice').show();
+            }
+            else {
+                $('#indice').hide();
+            }
+
+            var coordenadas = "16:3:362:82";
+
+            $(".regIM").each(function () {
+                //$(this).attr("src");
+                //alert($(this).attr("src"));
+                //$("<div class=\"regImg\" style=\"position: absolute; top: 3px; left: 0; width: 100%; -webkit-filter: blur(5px); filter:url(#example-one);\"><img src=\"" + $(this).attr("src") + "\"/></div>").insertAfter(this);
+                var img = $(this).attr("src");
+                var param = coordenadas.split("-");
+                var _this = this;
+                //$("<div class=\"regImg\" style=\"position: absolute; top: 3px; left: 0; width: 100%; -webkit-filter: blur(5px); filter:url(#example-one);\"><img src=\"" + img + "\"/></div>").insertAfter(this);
+                /*$.each(param, function (index, value) {
+                    var coor = value.split(":");
+
+                    /*$("<div style=\"width:" + (parseInt(coor[2]) - parseInt(coor[0])).toString() + "px; height:" + (parseInt(coor[3]) - parseInt(coor[1])).toString() + "px; position: absolute; -webkit-filter: blur(5px); filter:url(#example-one);\">" +
+                      "<img src=\"" + img + "\" margin-top:" + coor[1] + "px; margin-left: " + coor[0] + "; />" +
+                      "</div>").insertAfter(_this);*/
+
+                    /*$("<div class=\"regImg\" style=\"position: absolute; top:" + coor[1] + "px; left: " + coor[0] + "; width: " + (parseInt(coor[2]) - parseInt(coor[0])).toString() + "; height:" + (parseInt(coor[3]) - parseInt(coor[1])).toString() + "; -webkit-filter: blur(5px); filter:url(#example-one);\">" +
+                      "<img src=\"" + img + "\"/>" +
+                      "</div>").insertAfter(_this);*/
+
+                    //$("<div class=\"regImg\" style=\"position: absolute; top:" + coor[1] + "px; left: " + coor[0] + "; width: " + (parseInt(coor[2]) - parseInt(coor[0])).toString() + "; height:" + (parseInt(coor[3]) - parseInt(coor[1])).toString() + "; -webkit-filter: blur(5px); filter:url(#example-one);\"><img src=\"" + img + "\"/></div>").insertAfter(_this);
+                    //$("<div class=\"regImg\" style=\"position: absolute; top: 3px; left: 0; width: 100%; -webkit-filter: blur(5px); filter:url(#example-one);\"><img src=\"" + img.toString() + "\"/></div>").insertAfter(this);
+                    //                $("<div class=\"regImg\" style=\"position: absolute; top: 200px; left: 0; width: 100%;\"><img src=\"" + $(this).attr("src") + "\"/></div>").insertAfter(this);
+                    //alert(img);
+                //});
+                
+            });
+
+            $('#Pagina').click(function () {
+                if ($('#Pagina').attr("style") == "-webkit-filter: blur(5px); filter:url(#example-one);") {
+                    $.ajax({
+                        url: "/iTuinBook/Busca",
+                        type: 'POST'
+                    });
+
+                    $('#Pagina').attr("style", "");
+                    $('#Pagina').attr("busca", "ok");
+                }
+            });
+
+            /*
+                <div style="width:scaleX.ToString()px; height:scaleY.ToString()px; overflow: hidden; border: thin solid black;">
+                    <img  src="http://dl.dropboxusercontent.com/u/20864036/test%20universitarios%20In1/accidentes%20In1.jpg" style="margin-top: -coor[1]px; margin-left: -coor[0]px;" />
+                        </div>
+            */
+
+            $('#btnPreguntas').click(function () {
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                if ($('#pregunta').css('visibility') == "hidden") {
+                    $('#pregunta').css("visibility", "visible");
+                    $("#paging_container").css("padding-top", $("#pregunta").height() + "px");
+                    $('#Pagina').attr("style", "-webkit-filter: blur(5px); filter:url(#example-one);")
+                }
+                else {
+                    $('#pregunta').css('visibility', 'hidden');
+                    $("#paging_container").css("padding-top", "10px");
+                }
+            });
+
+
+            $('#paging_container').pajinate({
+                nav_label_first: '<<',
+                nav_label_last: '>>',
+                nav_label_prev: '<',
+                nav_label_next: '>',
+                items_per_page: 1
+            });
+
+            $('reg').addClass("difuminado");
+
+            $('reg').click(function () {                
+                var pregActual = parseInt($('#pregActual').text());
+                var region = $(this).html();
+
+                $.ajax({
+                    url: "/iTuinBook/GetPertinente",
+                    type: 'POST',
+                    data: { pregActual: pregActual, TextoID: '@Model.TextoID' },
+                    success: function (result) {
+                        var input = result.Pertinente;
+                        
+                        if (region.indexOf(input) > -1) {
+                            if ($('#Pagina').attr("busca") == "ok") {
+                                $.ajax({
+                                    url: "/iTuinBook/PertinenteEncontrado",
+                                    type: 'POST'
+                                });
+                            }
+                        }
+                    }
+                });
+
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                $(this).removeClass("difuminado").addClass("no_difuminado");                
+            });
+
+            $('iframe').load(function () {                
+                this.style.height = (75 + this.contentWindow.document.body.offsetHeight) + 'px';
+                $('#pregunta').height($('#addIframe').height() + 10);
+
+                /*$('#pregunta').load(function () {
+                    this.style.height = (85 + this.contentWindow.document.body.offsetHeight) + 'px';
+                    $("#paging_container").css("padding-top", this.style.height + "px");
+                });*/
+            });
+        });
+
+
+    </script>
+}
+
+

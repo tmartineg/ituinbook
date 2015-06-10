@@ -1,0 +1,202 @@
+﻿@model iTuinBook.Models.Timing
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "AgregarTiming";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    List<Timing> Timings = ViewBag.Timings;
+    List<SelectListItem> TipoTimings = ViewBag.TipoTimings;
+}
+
+<h2>Agregar Timming</h2>
+<hr />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Timing</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Nombre)
+            @Html.ValidationMessageFor(model => model.Nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Descripcion)
+            @Html.ValidationMessageFor(model => model.Descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Tipo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Tipo, TipoTimings, "Selecciona el tipo de Timmings", new { @id = "TimingTipo" })
+            @Html.ValidationMessageFor(model => model.Tipo)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Lanzar tras N preguntas")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.PregLanzada, new { @id = "Preguntas"})
+            @Html.ValidationMessageFor(model => model.PregLanzada)
+        </div>
+        <div id="acumulativo">
+            <div class="editor-label">
+                @Html.Label("Comprobar % de acierto en las N anteriores preguntas")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.NAnterior, new { @id = "Anteriores"})
+                @Html.ValidationMessageFor(model => model.NAnterior)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Feedback)
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Feedback, new { @id = "Feedbacks"})
+                @Html.ValidationMessageFor(model => model.Feedback)
+            </div>
+        </div>
+        <p>
+            <input type="submit" value="Crear" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Feedback")
+</div>
+
+
+<h3>Timings</h3>
+<hr />
+<table id="grid">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>                          
+        <th>
+            Tipo
+        </th>
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (Timings != null)
+    {
+        foreach (Timing tm in Timings)                    
+        {   
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Descripcion)
+                </td>  
+                <td>
+                    @TipoTimings.Find(m => m.Value == tm.Tipo.ToString()).Text
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "EditarTiming", "Docente", new { TimingID = tm.TimingID }, null)</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarTiming", "Docente", new { TimingID = tm.TimingID }, new { onclick = "return confirm('¿Estás seguro de eliminar el Timming?');"})</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+            $("#acumulativo").hide();
+            $("#Anteriores").val("0");
+
+            $("#grid").kendoGrid({
+                height: 220
+            });
+
+            $("#Anteriores").change(function () {
+                if ($.isNumeric($("#Anteriores").val())) {
+                    var num = parseInt($("#Anteriores").val()) + 1;
+                    var part = 100 / num;
+                    var str = "(0)FEEDBACK";
+                    for (var i = 1; i <= num; i++) {
+                        if (i == num) {
+                            str += "(100)";
+                        }
+                        else {
+                            str += "(" + parseInt(part * i) + ")/(" + parseInt(part * i) + ")FEEDBACK";
+                        }
+                    }
+
+                    $("#Feedbacks").val(str);
+
+                }
+                else {
+                    $("#Feedbacks").val("");
+                }
+            });
+
+            $("#TimingTipo").change(function () {
+                if ($("#TimingTipo").val() == 0)
+                {
+                    $("#Preguntas").val("1");
+                    $("#Anteriores").val("0");
+                    $("#acumulativo").hide();
+                }
+
+                if ($("#TimingTipo").val() == 1) {
+                    $("#Preguntas").val("1");
+                    $("#Anteriores").val("1");
+                    $("#acumulativo").show();
+
+                    var num = parseInt($("#Anteriores").val()) + 1;
+                    var part = 100 / num;
+                    var str = "(0)FEEDBACK";
+                    for (var i = 1; i <= num; i++) {
+                        if (i == num) {
+                            str += "(100)";
+                        }
+                        else {
+                            str += "(" + parseInt(part * i) + ")/(" + parseInt(part * i) + ")FEEDBACK";
+                        }
+                    }
+
+                    $("#Feedbacks").val(str);
+                }
+
+                
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

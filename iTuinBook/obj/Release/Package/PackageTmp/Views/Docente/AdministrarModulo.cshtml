@@ -1,0 +1,269 @@
+﻿@model iTuinBook.Models.Modulo
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarModulo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";    
+    List<SelectListItem> TipoTimings = ViewBag.TipoTimings;
+}
+
+<h2>Administrar - @Model.Nombre @{           
+            if (Model.Publico)
+            {
+                <text>(Público)</text>
+            }
+            else
+            {   
+                <text>(Privado)</text>             
+            }
+         }</h2>
+<hr />
+
+<fieldset>
+    <legend>Modulo</legend>
+    
+
+@{
+    if (Model.Descripcion != null)
+    {
+    <p>
+        <div class="display-label">
+            @Html.LabelFor(model => model.Descripcion)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Descripcion)
+        </div> 
+    </p>
+    }
+    }
+        
+    @Html.ActionLink("Configurar", "ConfigurarModulo", "Docente", new { ModuloID = @Model.ModuloID }, null) 
+    <hr />
+    <h3>Sus Textos</h3>
+    <hr />
+    <table id="grid">
+        <tr>            
+            <th>
+                Texto
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{var textos = Model.Textos;
+
+          if (textos != null)
+        {
+            foreach (Texto text in textos)
+            {
+            <tr>                
+                <td>
+                    @Html.DisplayFor(modelItem => text.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => text.Descripcion)
+                </td>                         
+                <td>            
+                    <b>@Html.ActionLink("Administrar", "AdministrarTexto", "Docente", new { TextoID = text.TextoID, GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID }, null)</b>
+                    <b>@Html.ActionLink("Eliminar", "EliminarTexto", "Docente", new { TextoID = text.TextoID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar el texto?');"})</b>   
+                </td>
+            </tr>
+            } 
+        }
+    }   
+    </table>
+    <hr />
+    @Html.ActionLink("Crear Texto", "CrearTexto", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
+    <hr />
+    <h3>Sus Escenas</h3>
+    <hr />
+
+    <table id="grid2">
+        <tr>            
+            <th>
+                Escena
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{var escenas = Model.Escenas;
+
+          if (escenas != null)
+        {
+            foreach (Escena esc in escenas)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => esc.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => esc.Descripcion)
+                </td>     
+                <td>            
+                    <b>@Html.ActionLink("Administrar", "AdministrarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, null)</b>
+                    <b>@Html.ActionLink("Eliminar", "EliminarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar la escena?');"})</b>   
+                </td>                    
+            </tr>
+            } 
+        }
+    }   
+    </table>
+    <hr />
+    @Html.ActionLink("Crear Escena", "CrearEscena", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
+    <hr />
+    <h3>Sus Reglas de FEEDBACK</h3>
+    <hr />
+
+    <table id="grid3">
+        <tr>            
+            <th>
+                Regla
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Feedback
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{var reglas = Model.ReglasComplejas;
+
+          if (reglas != null && reglas.Count > 0)
+        {
+            foreach (ReglaCompleja reg in reglas)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => reg.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => reg.Descripcio)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => reg.Feedback)
+                </td>     
+                <td>            
+                    <b>@Html.ActionLink("Editar", "EditarReglaCompleja", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID }, null)</b>
+                    <b>@Html.ActionLink("Desvincular", "DesvincularRegla", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincular el Timing?');"})</b>   
+                </td>                    
+            </tr>
+            } 
+        }
+    }   
+    </table>
+    <hr />
+    @Html.ActionLink("Agregar Regla", "AgregarRegla", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
+    <hr />
+    <h3>Timings</h3>
+<hr />
+<table id="grid4">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>                          
+        <th>
+            Tipo
+        </th>
+        <th>
+            Comandos
+        </th>
+    </tr>
+    @{var timings = Model.Timings;
+
+      if (timings != null && timings.Count > 0)
+    {
+        foreach (Timing tm in timings)                    
+        {   
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Descripcion)
+                </td>  
+                <td>
+                    @TipoTimings.Find(m => m.Value == tm.Tipo.ToString()).Text
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Editar", "EditarTiming", "Docente", new { TimingID = tm.TimingID }, null)</b>                                
+                    <b> @Html.ActionLink("Desvincular", "DesvincularTiming", "Docente", new { TimingID = tm.TimingID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincular el Timing?');"})</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+    </table>
+</fieldset>
+
+<hr />
+    @Html.ActionLink("Agregar Timing", "AgregarTimingaModulo", new { ModuloID = Model.ModuloID })
+<hr />
+
+<p>
+    @Html.ActionLink("Editar Módulo", "EditarModulo", new { ModuloID = Model.ModuloID }) |
+    @{
+        if (ViewBag.GrupoID != null)
+        {
+            <text>
+                @Html.ActionLink("Volver", "AdministrarGrupo", new { GrupoID = ViewBag.GrupoID })
+            </text>
+        }
+        else 
+        {
+            <text>
+                @Html.ActionLink("Volver", "Modulos")
+            </text>
+        }        
+    }
+    
+</p>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 220
+            });
+
+            $("#grid2").kendoGrid({
+                height: 220
+            });
+
+            $("#grid3").kendoGrid({
+                height: 220
+            });
+
+            $("#grid4").kendoGrid({
+                height: 220
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

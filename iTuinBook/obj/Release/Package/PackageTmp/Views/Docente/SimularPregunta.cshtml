@@ -1,0 +1,68 @@
+﻿@model iTuinBook.Models.Alternativa
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "SimularPregunta";
+    Layout = "~/Views/Shared/_LayoutVacio.cshtml";
+}
+
+@{
+    Pregunta preg = ViewBag.Pregunta;
+    }
+<h2>Simulando Pregunta</h2>
+<hr />
+@Html.Label(preg.Enunciado)
+<hr />
+@{
+    switch(preg.TipoPreguntaID)
+    {
+        case 1:
+        {
+            foreach(Alternativa alt in preg.Alternativas)
+            {
+                Html.RadioButtonFor(a => a.Opcion, null); @alt.Opcion <br />
+            }
+            
+            <input type="button" id="btnValidar" value="Validar" />
+        }
+        break;
+            case 2:
+        break;
+            case 3:
+        break;
+            default:
+        break;
+            
+    }
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#btnValidar").hide();
+
+            $(":radio").change(function () {            
+
+                      
+                $("#btnValidar").show();
+                        
+
+            });
+
+            /*, Answer: $('body').data('alternativa'),*/
+            $('#btnValidar').click(function () {
+                
+            });
+
+        });
+    </script>
+}

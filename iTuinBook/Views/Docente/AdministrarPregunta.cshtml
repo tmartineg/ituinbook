@@ -1,0 +1,335 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarPregunta";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Administrar Pregunta</h2>
+<hr />
+<fieldset>
+    <legend>Pregunta</legend>
+
+    @{       
+        <p>
+            <div class="editor-label">
+                @Html.Label("Enunciado")
+            </div>
+            <div class="editor-field">
+                @Html.Raw(Model.Enunciado)
+            </div>
+
+            @if (Model.Pertinente != null && Model.Pertinente != "")
+            {
+                <div class="editor-label">
+                    @Html.Label("Pertinente")
+                </div>
+                <div class="editor-field">
+                    @Model.Pertinente            
+                </div>
+            }
+        </p>              
+    }
+    
+    @Html.ActionLink("Configurar", "ConfigurarPregunta", "Docente", new { PreguntaID = @Model.PreguntaID }, null)
+   
+    <hr />
+    <hr />
+    
+    @{
+        switch (Model.TipoPreguntaID)
+        {
+            case 1:
+                var alternativas = Model.Alternativas;
+                if (alternativas != null && Model.Alternativas.Count != 0)
+                {
+                    <h3>Alternativas</h3>
+                    <hr />
+        
+                    <legend>Alternativas</legend>
+
+                    <table id="alternativas">
+                        <tr>
+                            <th>
+                            
+                            </th>
+                            <th>
+                                Alternativa
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                            <th>
+                                Feedback
+                            </th>                        
+                        </tr>
+                        @{ 
+                    int i = 0;
+
+                    foreach (Alternativa alt in alternativas)
+                    {
+                        i = i + 1;
+                    
+                                <tr>
+                                    <td>            
+                                        <b>@Html.ActionLink("Editar", "EditarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, null)</b>                              
+                                        <b>@Html.ActionLink("Eliminar", "EliminarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, null)</b>                              
+                                    </td>                  
+                                    <td>
+                                        @Html.Raw(alt.Opcion)
+                                    </td>   
+                                    <td style="text-align:center">
+                                        @alt.Valor
+                                    </td>         
+                                    <td>
+                                        @alt.FeedbackContenido
+                                    </td>  
+                                </tr>
+                    } 
+                        }  
+                    </table>
+        
+                    <hr />
+                }
+        
+                @Html.ActionLink("Agregar Alternativa", "AgregarAlternativa", "Docente", new { PreguntaID = @Model.PreguntaID }, null)           
+                break;
+            case 2:
+                var criterio = Model.Criterios;
+                if (criterio != null && Model.Criterios.Count != 0)
+                {
+                <legend>Criterios</legend>
+
+                <table id="alternativas">
+                    <tr>
+                        <th>
+                            
+                        </th>
+                        <th>
+                            Criterio
+                        </th>
+                        <th>
+                            Valor
+                        </th>
+                        <th>
+                            Feedback
+                        </th>                        
+                    </tr>
+                    @{ 
+                    int i = 0;
+
+                    foreach (Criterio cri in criterio)
+                    {
+                        i = i + 1;
+                    
+                            <tr>
+                                <td>            
+                                    <b>@Html.ActionLink("Eliminar", "EliminarCriterioCorreccion", "Docente", new { TextoID = @Model.Texto.TextoID, PreguntaID = Model.PreguntaID, CriterioID = cri.CriterioID }, null)</b>                              
+                                </td>                  
+                                <td>
+                                    @cri.Opcion                   
+                                </td>   
+                                <td style="text-align:center">
+                                    @cri.Valor
+                                </td>         
+                                <td>
+                                    @cri.FeedbackCriterio
+                                </td>  
+                            </tr>
+                    } 
+                    }  
+                </table>
+            
+                <hr />        
+                }
+                
+                @Html.ActionLink("Agregar Criterio", "AgregarCriterioCorreccion", "Docente", new { TextoID = @Model.Texto.TextoID, PreguntaID = @Model.PreguntaID }, null)
+                break;
+            case 3:
+                break;
+            case 4:
+
+                if (Model.Emparejados != null && Model.Emparejados.Count != 0)
+                {
+                    var emparejados = Model.Emparejados;
+                    
+                    <h3>Emparejados</h3>
+                    <hr />
+        
+                    <legend>Emparejados</legend>
+
+                    <table id="alternativas">
+                        <tr>
+                            <th>
+                            
+                            </th>
+                            <th>
+                                Col. Izq.
+                            </th>
+                            <th>
+                                Col. Der.
+                            </th>
+                        </tr>
+                        @{ 
+                    int i = 0;
+
+                    foreach (Emparejado emp in emparejados)
+                    {
+                        i = i + 1;
+                    
+                                <tr>
+                                    <td>
+                                        <b>@Html.ActionLink("Eliminar", "EliminarEmparejado", "Docente", new { EmparejadoID = emp.EmparejadoID, PreguntaID = Model.PreguntaID }, null)</b>  
+                                    </td>                  
+                                    <td>
+                                        @emp.ColIzq                 
+                                    </td>   
+                                    <td>
+                                        @emp.ColDer
+                                    </td>                                      
+                                </tr>
+                    } 
+                        }  
+                    </table>
+        
+                    <hr />
+                }
+        
+                @Html.ActionLink("Agregar Emparejado", "AgregarEmparejados", "Docente", new { PreguntaID = @Model.PreguntaID }, null)  
+                break;
+        }
+    }   
+
+    @{
+        if (Model.Ayuda != null && ((Model.Ayuda.ParafraseoN1 != null && Model.Ayuda.ParafraseoN1 != "") || (Model.Ayuda.Prismaticos != null && Model.Ayuda.Prismaticos != "") || (Model.Ayuda.Lupa != null && Model.Ayuda.Lupa != "")))
+        {
+            <hr /> 
+            <hr /> 
+        
+            <h3>Ayudas</h3>
+            <hr />
+            
+            if (Model.Ayuda.ParafraseoN1 != null && Model.Ayuda.ParafraseoN1 != "")
+            {
+                <div class="editor-label">
+                    @Html.Label("Parafraseo")
+                </div>
+                <div class="editor-field">
+                    @Model.Ayuda.ParafraseoN1
+                </div>    
+                <hr />
+            }
+
+            if (Model.Ayuda.Prismaticos != null && Model.Ayuda.Prismaticos != "")
+            {
+                <div class="editor-label">
+                    @Html.Label("Prismaticos")
+                </div>
+                <div class="editor-field">
+                    @Model.Ayuda.Prismaticos
+                </div>    
+                <hr />
+            }
+
+            if (Model.Ayuda.Lupa != null && Model.Ayuda.Lupa != "")
+            {
+                <div class="editor-label">
+                    @Html.Label("Lupa")
+                </div>
+                <div class="editor-field">
+                    @Model.Ayuda.Lupa
+                </div>    
+                <hr />
+            }
+
+
+        }
+        <hr />
+        @Html.ActionLink("Agregar Ayudas", "AgregarAyudas", "Docente", new { PreguntaID = @Model.PreguntaID }, null)   
+        <hr />
+    }    
+   
+  
+          
+    @{
+        if (Model.SubPreguntas != null && Model.SubPreguntas.Count != 0)
+        {
+            <legend>Preguntas</legend>
+
+            <table id="preg">
+            <tr>            
+                <th>
+                    Comandos
+                </th>            
+                <th>
+                    Pregunta
+                </th>
+                <th>
+                    Alternativas
+                </th>
+            </tr>
+
+            @{
+                if (Model.SubPreguntas != null)
+                {
+                    var subpreguntas = Model.SubPreguntas;
+                    
+                    foreach (SubPregunta preg in subpreguntas)
+                    {       
+                        <tr>
+                            <td>                                
+                                <b>@Html.ActionLink("Eliminar", "EliminarSubPregunta", "Docente", new { PreguntaID = Model.PreguntaID, SubPreguntaID = preg.SubPreguntaID }, null)</b>   
+                            </td>
+                            <td>
+                                @preg.Enunciado
+                            </td> 
+                            <td>
+                                @{
+                                    var str = "";
+                                    foreach (SubAlternativa subAlter in preg.SubAlternativas)
+                                    {
+                                        str = str + subAlter.Opcion + " / ";
+                                    }
+                            
+                                    <text>
+                                        @str
+                                    </text>
+                                }
+                            </td>                                                          
+                        </tr>
+                    }
+                }
+            }
+
+            </table>
+        }       
+    }              
+   
+    @Html.ActionLink("Agregar Subpregunta", "AgregarSubpregunta", "Docente", new { PreguntaID = @Model.PreguntaID }, null)               
+    
+    <div>
+        @Html.ActionLink("Volver", "AdministrarTexto", "Docente", new { TextoID = @Model.Texto.TextoID }, null)  
+    </div>
+</fieldset>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

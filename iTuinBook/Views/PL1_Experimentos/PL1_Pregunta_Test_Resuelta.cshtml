@@ -1,0 +1,70 @@
+﻿@using iTuinBook.Models;
+@model iTuinBook.Models.Pregunta
+
+@{
+    ViewBag.Title = "PL0_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    DatoSimple ds = (DatoSimple)ViewBag.DatoSimple;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+}
+
+<div id="tools">
+    <div>
+        @Html.ActionLink("Texto", "PL0_Texto_Revisa", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual, id = "btnTexto" }, new { @style="padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+    </div>
+</div>
+
+<div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+    @Html.Raw(Model.Enunciado)                        
+</div>
+     
+<div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+    <ul>
+        @if (configPregunta.MarcarCorrecto)
+        {
+            foreach (Alternativa alt in Model.Alternativas)
+            {
+                if(alt.Valor)
+                {
+                    <img src="~/Content/tick.png" style="width: 15px; height: 15px;" />   
+                }
+                else
+                {
+                    <img src="~/Content/aspa.png" style="width: 15px; height: 15px;" />
+                }
+                
+                if (alt.Opcion == ds.Info)
+                { 
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked="checked", disabled = "disabled" }) @alt.Opcion <br />
+                }
+                else
+                {
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                }        
+            }
+        }
+        else
+        {
+            foreach (Alternativa alt in Model.Alternativas)
+            {
+                if (alt.Opcion == ds.Info)
+                { 
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked="checked", disabled = "disabled" }) @alt.Opcion <br />
+                }
+                else
+                {
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                }
+        
+            }
+        }
+    </ul>
+</div>
+
+<div>
+
+    <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
+</div> 
+

@@ -1,0 +1,90 @@
+﻿@model iTuinBook.Models.Modulo
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarGrupo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";    
+}
+
+
+<h2>Agregar Regla a - @Model.Nombre</h2>
+
+<hr />
+
+<fieldset>
+    <legend>Módulo</legend>
+
+    <p>
+    <div class="display-label">
+        Agregar una regla al módulo: @Model.Nombre
+    </div>   
+    </p>
+
+    <h3>Tus Reglas</h3>
+    <hr />
+    <table id="grid">
+        <tr>            
+            <th>
+                Regla
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{var timings = ViewBag.Timings;
+
+          if (timings != null)
+        {
+            foreach (Timing tim in timings)
+            {
+            <tr>                
+                <td>
+                    @Html.DisplayFor(modelItem => tim.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => tim.Descripcion)
+                </td>   
+                <td>            
+                    <b>@Html.ActionLink("Agregar al módulo", "AgregarTimingExistente", "Docente", new { ModuloID = Model.ModuloID, TimingID = tim.TimingID }, null)</b>                    
+                </td>                      
+            </tr>
+            } 
+        }
+    }   
+    </table>
+
+</fieldset>
+
+<p>    
+    @Html.ActionLink("Volver", "AdministrarModulo", new { ModuloID = Model.ModuloID })
+</p>
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 220
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

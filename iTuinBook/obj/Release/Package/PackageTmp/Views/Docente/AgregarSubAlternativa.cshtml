@@ -1,0 +1,108 @@
+﻿@model iTuinBook.Models.SubAlternativa
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AgregarSubAlternativa";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Agregar Alternativa de Sub-Pregunta</h2>
+<hr />
+
+@{
+    SubPregunta subpreg = ViewBag.SubPregunta;
+    
+}
+
+<div class="editor-label">
+    @Html.Label("Enunciado")
+</div>
+<div class="editor-field">
+    @subpreg.Enunciado            
+</div>
+
+@{
+    if (subpreg.SubAlternativas != null && subpreg.SubAlternativas.Count != 0)
+    {   
+        <hr />
+    
+        <table id="alternativas">
+            <tr>
+                <th>
+                            
+                </th>
+                <th>
+                    Alternativa
+                </th>
+            </tr>
+                                            
+    @{
+        foreach (SubAlternativa subalt in subpreg.SubAlternativas)
+        {           
+            <tr>
+                <td>            
+                    <b>@Html.ActionLink("Editar", "EditarSubAlternativa", "Docente", new { SubPreguntaID = subpreg.SubPreguntaID }, null)</b>                              
+                    <b>@Html.ActionLink("Eliminar", "EliminarSubAlternativa", "Docente", new { SubPreguntaID = subpreg.SubPreguntaID, SubAlternativaID = subalt.SubAlternativaID }, null)</b>                              
+                </td>                  
+                <td>
+                    @subalt.Opcion                   
+                </td>       
+            </tr>
+        }                             
+    }                 
+        </table>                              
+    }
+
+}
+
+
+
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>SubAlternativa</legend>
+
+        <div class="editor-label">
+            @Html.Label("Nueva Alternativa")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Opcion)
+            @Html.ValidationMessageFor(model => model.Opcion)
+        </div>
+
+
+        <p>
+            <input type="submit" value="Agregar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "AdministrarPregunta", "Docente", new { PreguntaID = ViewBag.PreguntaID }, null)    
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {         
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });            
+        });
+    </script>
+}

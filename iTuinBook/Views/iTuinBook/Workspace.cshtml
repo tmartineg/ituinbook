@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "Workspace";
+    Layout = "~/Views/Shared/_LayoutWorkSpace.cshtml";
+}
+
+<iframe id="escritorio" src="@Url.Action("Escritorio")" width="100%" height="530" ></iframe> 
+<iframe id="escena" src="@Url.Action("Escena", new { GrupoID = @ViewBag.GrupoID, ModuloID = @ViewBag.ModuloID, escActual = @ViewBag.esActual })" width="100%" height="265" ></iframe>
+

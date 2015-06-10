@@ -1,0 +1,188 @@
+﻿@model IEnumerable<ReglaCompleja>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Alumnos";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    List<ReglaSimple> reglas = ViewBag.Reglas;
+    List<Timing> Timings = ViewBag.Timings;
+    List<SelectListItem> Variables = ViewBag.Variables;
+    List<SelectListItem> Operadores = ViewBag.Operadores;
+}
+
+<h2>Feedback</h2>
+<hr />
+<h3>Reglas Complejas</h3>
+<hr />
+<table id="grid">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>  
+        <th>
+            Feedback
+        </th>                  
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (Model != null )
+    {
+        foreach (ReglaCompleja rc in Model)                    
+        {   
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Descripcio)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => rc.Feedback)
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "EditarReglaCompleja", "Docente", new { ReglaComplejaID = rc.ReglaComplejaID }, null)</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarReglaCompleja", "Docente", new { ReglaComplejaID = rc.ReglaComplejaID }, new { onclick = "return confirm('¿Estás seguro de eliminar la regla? Esto implica borrar la regla de todos los módulos que la estén usando.');"})</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+<hr />
+    @Html.ActionLink("Agregar Regla", "AgregarReglaCompleja")
+<hr />
+
+<h3>Reglas Simples</h3>
+<hr />
+<table id="grid2">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>                          
+        <th>
+            Valor
+        </th>
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (reglas != null)
+    {
+        foreach (ReglaSimple rs in reglas)                    
+        {   
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => Variables[rs.Variable - 1].Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Operadores[rs.Operador - 1].Text)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => rs.Param)
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "EditarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, new { onclick = "return confirm('Recuerda que las modificaciones afectarán a todas las reglas complejas que estén usando esta regla.');" })</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, new { onclick = "return confirm('¿Estás seguro de eliminar la regla? Esto implica borrar todas las reglas complejas que esten usando esta regla simple.');"})</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+<hr />
+    @Html.ActionLink("Agregar Regla", "AgregarReglaSimple")
+<hr />
+
+
+<h3>Timmings</h3>
+<hr />
+<table id="grid3">
+    <tr>            
+        <th>
+            Nombre
+        </th>
+        <th>
+            Descripción
+        </th>                          
+        <th>
+            Tipo
+        </th>
+        <th>
+            Comandos
+        </th>
+    </tr>
+@{
+    if (Timings != null)
+    {
+        foreach (Timing tm in Timings)                    
+        {   
+            <tr>                    
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Descripcion)
+                </td>  
+                <td>
+                    @Html.DisplayFor(modelItem => tm.Tipo)
+                </td>                                     
+                <td>
+                    <b> @Html.ActionLink("Modificar", "EditarTiming", "Docente", new { TimingID = tm.TimingID }, null)</b>                                
+                    <b> @Html.ActionLink("Eliminar", "EliminarTiming", "Docente", new { TimingID = tm.TimingID }, null)</b>                                
+                </td>      
+            </tr>
+        } 
+    }    
+}     
+
+</table>
+<hr />
+    @Html.ActionLink("Agregar Timming", "AgregarTiming")
+<hr />
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+                
+            $("#grid").kendoGrid({
+                height: 440
+            });
+
+            $("#grid2").kendoGrid({
+                height: 440
+            });
+
+            $("#grid3").kendoGrid({
+                height: 440
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

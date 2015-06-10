@@ -1,0 +1,92 @@
+﻿@model iTuinBook.Models.Escena
+@using iTuinBook.Models
+@{
+    ViewBag.Title = "SimularEscena";
+    Layout = "~/Views/Shared/_LayoutVacio.cshtml";
+}
+
+<h2>Simulando Escena</h2>
+<hr />
+
+@{
+    
+    <div class="pane-content">
+        <div id="paging_container" class="container">	
+	        <div class="page_navigation" style="height:20px;"></div>
+            <br />
+	        <ul class="content">
+		        @{
+                    foreach(Accion acc in Model.Acciones)
+                    {
+                        <li>
+                            @{
+                                switch(acc.CodeOP)            
+                                {
+                                    case 1:
+                                        <div style="height:240px;  border:groove;">
+                                        <img src="~/Content/images/Ramiro.png" width="25%" style="float:left; margin:20px;" />                                        
+                                        <textarea style="float:right; margin:20px; height:150px">@acc.Mensaje</textarea>                                            
+                                        <span style="float:right; margin-right:20px;">@Html.ActionLink("Actualizar", "ActualizarAccion", null, new { AccionID = acc.AccionID, @class = "btnActualizar" })</span>
+                                        </div>
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3:
+                                        <div style="height:240px;  border:groove;">
+                                        <img src="~/Content/images/Lue.png" width="25%" style="float:left; margin:20px;" />
+                                        <textarea style="float:right; margin:20px; height:150px">@acc.Mensaje</textarea>
+                                        <span style="float:right; margin-right:20px;">@Html.ActionLink("Actualizar", "ActualizarAccion", null, new { AccionID = acc.AccionID, id = "btnactualizar" })</span>                                            
+                                        </div>
+                                        break;
+                                }
+                                
+                            }
+                        
+                            
+                        </li>
+                    }
+                }
+	        </ul>	
+        </div>	
+    </div>
+    
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")   
+
+    <link href="~/Content/Pajination/styles.css" rel="stylesheet" />    
+    <script src="~/Content/Pajination/jquery.pajinate.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.btnActualizar').click(function () {                
+                $.ajax({
+                    url: this.href, //url: '/Alumno/Texto',
+                    type: 'POST',
+                    data: { AccionID: $(this).attr('AccionID'), mensaje: $(this).parent().prev().val() },
+                    success: function (result) {
+                        if (result.redirect) {
+                            // data.redirect contains the string URL to redirect to
+                            window.location.href = result.redirect;
+                            return
+                        }
+                    },
+                    error: function () {
+                        //alert("error");
+                    }
+                });
+                return false;
+            });
+
+            $('#paging_container').pajinate({
+                nav_label_first : '<<',
+                nav_label_last : '>>',
+                nav_label_prev : '<',
+                nav_label_next : '>',
+                items_per_page: 1
+            });          
+        });
+    </script>
+}

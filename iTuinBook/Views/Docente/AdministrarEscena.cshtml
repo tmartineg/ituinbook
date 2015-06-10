@@ -1,0 +1,107 @@
+﻿@model iTuinBook.Models.Escena
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Administrar Escena";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Administrar Escena - @Model.Nombre</h2>
+<hr />
+
+<fieldset>
+    <legend>Escena</legend>
+
+    <p>
+    <div class="display-label">
+         @Html.LabelFor(model => model.Descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descripcion)
+    </div>
+    </p>
+
+    @Html.ActionLink("Configuración", "ConfigurarEscena", "Docente", new { EscenaID = @Model.EscenaID }, null)
+    @Html.ActionLink("Simulación", "SimularEscena", "Docente", new { EscenaID = @Model.EscenaID }, null)
+</fieldset>
+
+<h3>Sus Acciones</h3>
+    <hr />
+
+    <table id="grid">
+        <tr>            
+            <th>
+                Acción
+            </th>
+            <th>
+                Contenido
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr>
+
+        @{
+            Escena escena = Model;
+            var acciones = escena.Acciones;
+
+          if (acciones != null)
+        {
+            foreach (Accion acc in acciones.OrderBy(a => a.Orden))
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => acc.CodeOP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => acc.Mensaje)
+                </td>     
+                <td>
+                    <b>@Html.ActionLink("Subir", "SubirAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID }, null)</b>   
+                    <b>@Html.ActionLink("Bajar", "BajarAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID }, null)</b> 
+                    <b>@Html.ActionLink("Editar", "EditarAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID, Origen = 2 }, null)</b>
+                    <b>@Html.ActionLink("Eliminar", "EliminarAccion", "Docente", new { AccionID = acc.AccionID, EscenaID = acc.EscenaID, Origen = 2 }, null)</b>   
+                </td>                    
+            </tr>
+            } 
+        }
+    }   
+    </table>
+
+    <hr />
+    @Html.ActionLink("Agregar Acción", "CrearAccion", new { EscenaID = @Model.EscenaID })
+    <hr />
+
+<p>
+    @Html.ActionLink("Editar Escena", "EditarEscenta", new { id=Model.EscenaID }) |
+    @Html.ActionLink("Volver", "AdministrarModulo", new { ModuloID = ViewBag.ModuloID })
+</p>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 220
+            });
+
+            $("#grid2").kendoGrid({
+                height: 220
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

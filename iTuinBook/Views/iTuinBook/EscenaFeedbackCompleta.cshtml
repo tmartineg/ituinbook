@@ -1,0 +1,143 @@
+﻿@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Escena";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";    
+}
+
+<img width="200" src="~/Content/images/Ramiro.png" style="float:left;margin-top:15px" />
+<img width="200" src="~/Content/images/Lue.png" style="float:right;margin-top:15px" />
+<div class="speech_bubble"><text id="textbox"></text>
+ <div id="arrow" class="arrow_border_right"></div>
+ <div id="arrow2" class="bubble_arrow_right"></div>
+</div>
+<button id="btnAnterior">Anterior</button>
+<button id="btnSiguiente">Siguiente</button>
+<button id="btnSiguiente2" hidden="hidden">Siguiente2</button>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  
+    <script type="text/javascript">
+        $(document).ready(function () {
+            accActual = 0;
+            accFeedback = 0;
+            accTotalFeedback = 0;
+            arrayFeedbackContenido = new Array();
+            var input = "@ViewBag.mensaje";
+            var array = input.split('/');
+            var codeOP = parseInt("@ViewBag.codeOP");
+            
+            accTotalFeedback = array.length;
+           
+
+            if (codeOP == 101 || codeOP == 103) {
+                $("#arrow").removeClass("arrow_border_right");
+                $("#arrow").addClass("arrow_border_left");
+                $("#arrow2").removeClass("bubble_arrow_right");
+                $("#arrow2").addClass("bubble_arrow_left");
+            }
+
+            if (codeOP == 102) {
+                $("#arrow").removeClass("arrow_border_left");
+                $("#arrow").addClass("arrow_border_right");
+                $("#arrow2").removeClass("bubble_arrow_left");
+                $("#arrow2").addClass("bubble_arrow_right");
+            }
+
+            
+            $('#textbox').text("");
+
+            $('#textbox').teletype({
+                text: [
+                  decodeURIComponent(array[accActual])
+                ]
+            });
+
+            $("#btnSiguiente").click(function () {
+                accActual = accActual + 1;
+
+                if (accActual == accTotalFeedback) {
+
+
+                }
+                else {
+
+                    if (accActual % 2 == 0) // impar
+                    {
+                        $("#arrow").removeClass("arrow_border_right");
+                        $("#arrow").addClass("arrow_border_left");
+                        $("#arrow2").removeClass("bubble_arrow_right");
+                        $("#arrow2").addClass("bubble_arrow_left");
+                    }
+                    else // par
+                    {
+                        $("#arrow").removeClass("arrow_border_left");
+                        $("#arrow").addClass("arrow_border_right");
+                        $("#arrow2").removeClass("bubble_arrow_left");
+                        $("#arrow2").addClass("bubble_arrow_right");
+                    }
+
+                    $('#textbox').text("");
+
+                    $('#textbox').teletype({
+                        text: [
+                          array[accActual]
+                        ]
+                    });
+                }
+            });
+        });
+
+        (function ($) {
+            function typeString($target, str, cursor, delay, cb) {
+                $target.html(function (_, html) {
+                    return html + str[cursor];
+                });
+
+                if (cursor < str.length - 1) {
+                    setTimeout(function () {
+                        typeString($target, str, cursor + 1, delay, cb);
+                    }, delay);
+                }
+                else {
+                    cb();
+                }
+            }
+
+            // jQuery hook
+            $.fn.extend({
+                teletype: function (opts) {
+                    var settings = $.extend({}, $.teletype.defaults, opts);
+
+                    return $(this).each(function () {
+                        (function loop($tar, idx) {
+                            // type
+                            typeString($tar, settings.text[idx], 0, settings.delay, function () {
+                                // delete
+                                setTimeout(function () {
+
+                                }, settings.pause);
+                            });
+
+                        }($(this), 0));
+                    });
+                }
+            });
+
+            // plugin defaults  
+            $.extend({
+                teletype: {
+                    defaults: {
+                        delay: 100,
+                        pause: 5000,
+                        text: []
+                    }
+                }
+            });
+        }(jQuery));
+
+
+    </script>
+
+}

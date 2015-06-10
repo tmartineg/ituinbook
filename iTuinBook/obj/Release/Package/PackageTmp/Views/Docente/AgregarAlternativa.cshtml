@@ -1,0 +1,145 @@
+﻿@model iTuinBook.Models.Alternativa
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AgregarAlternativa";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";     
+}
+
+<h2>Agregar Alternativa</h2>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Pregunta</legend>
+
+        @{
+            Pregunta preg = ViewBag.Pregunta;
+                        
+            <div class="editor-label">
+                @Html.Label("Enunciado")
+            </div>
+            <div class="editor-field">
+                @Html.Raw(preg.Enunciado)
+            </div>
+
+            if (@preg.Pertinente != null)
+            {
+            <div class="editor-label">
+                @Html.Label("Pertinente")
+            </div>
+            <div class="editor-field">
+                @preg.Pertinente            
+            </div>
+            }
+        }   
+        <hr />
+              
+        @{
+            var alternativas = preg.Alternativas;
+            if (alternativas != null && preg.Alternativas.Count != 0)
+            {
+                <table id="alternativas">
+                    <tr>
+                        <th>
+                            
+                        </th>
+                        <th>
+                            Alternativa
+                        </th>
+                        <th>
+                            ¿Correcta?
+                        </th>
+                        <th>
+                            Feedback
+                        </th>                        
+                    </tr>
+                    @{ 
+                        int i = 0;
+                    
+                        foreach (Alternativa alt in alternativas)
+                        {
+                            i = i + 1;
+                    
+                            <tr>
+                                <td>            
+                                    <b>@Html.ActionLink("Editar", "EditarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID }, null)</b>                              
+                                    <b>@Html.ActionLink("Eliminar", "EliminarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID }, null)</b>                              
+                                </td>                  
+                                <td>
+                                    @Html.Raw(alt.Opcion)
+                                </td>   
+                                <td style="text-align:center">
+                                    @alt.Valor
+                                </td>         
+                                <td>
+                                    @alt.FeedbackContenido
+                                </td>  
+                            </tr>
+                        } 
+                    }  
+                </table>
+            
+                <hr />        
+            }
+        }   
+
+        <div class="editor-label">
+            @Html.Label("Alternativa")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Opcion, new { style="width:100%;"})
+            @Html.ValidationMessageFor(model => model.Opcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("¿Correcta?")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Valor)
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Feedback de Contenido")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.FeedbackContenido, new { style="width:100%;"})
+            @Html.ValidationMessageFor(model => model.FeedbackContenido)
+        </div>
+
+        <p>
+            <input type="submit" value="Agregar" name="txt" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Finalizar", "AdministrarPregunta", "Docente", new { PreguntaID = ViewBag.Pregunta.PreguntaID }, null)               
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {         
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+            alert("va");
+        });
+    </script>
+}

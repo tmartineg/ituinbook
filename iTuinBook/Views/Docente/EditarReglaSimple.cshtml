@@ -1,0 +1,79 @@
+﻿@model iTuinBook.Models.ReglaSimple
+
+@{
+    ViewBag.Title = "EditarReglaSimple";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    List<SelectListItem> Variables = ViewBag.Variables;
+    List<SelectListItem> Operadores = ViewBag.Operadores;    
+}
+
+<h2>Editar Regla Simple</h2>
+<hr />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Regla Simple</legend>
+
+        @Html.HiddenFor(model => model.ReglaSimpleID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Variable)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Variable, Variables, "Selecciona Variable")            
+            @Html.ValidationMessageFor(model => model.Variable)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Operador)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Operador, Operadores, "Selecciona Operador")
+            @Html.ValidationMessageFor(model => model.Operador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Parametro)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Param)
+            @Html.ValidationMessageFor(model => model.Param)
+        </div>
+
+        <div id="identificador" class="editor-label" style="visibility: hidden">
+            @Html.EditorFor(model => model.UserProfileID)
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Feedback")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+        
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#identificador").hide();
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

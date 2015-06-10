@@ -1,0 +1,39 @@
+﻿@model iTuinBook.Models.Pagina
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pagina";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+<div id="pag" style="padding: 10px; text-align: center;" >
+    @Html.Raw(Model.Contenido) 
+</div>
+
+
+
+@section Scripts {
+    <link href="~/Content/Toolbar/jquery.toolbars.css" rel="stylesheet" />
+    <link href="~/Content/Toolbar/bootstrap.icons.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Content/Toolbar/jquery.toolbar.js"></script>    
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#toolbar').toolbar({
+                content: '#toolbar-options',
+                position: 'right',
+                hideOnClick: true
+            });
+
+            $('reg').addClass("difuminado");
+
+            $('reg').click(function () {
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                $(this).removeClass("difuminado").addClass("no_difuminado");
+            });
+        });
+    </script>
+}

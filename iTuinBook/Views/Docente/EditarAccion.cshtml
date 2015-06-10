@@ -1,0 +1,113 @@
+﻿@model iTuinBook.Models.Accion
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "EditarAccion";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml"; 
+}
+
+<h2>Editar Accion</h2>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Accion</legend>
+
+        @Html.HiddenFor(model => model.AccionID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Mensaje)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Mensaje)
+            @Html.ValidationMessageFor(model => model.Mensaje)
+        </div>
+
+        <span hidden="hidden">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Orden)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Orden)
+            @Html.ValidationMessageFor(model => model.Orden)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CodeOP)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CodeOP)
+            @Html.ValidationMessageFor(model => model.CodeOP)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EscenaID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EscenaID)
+            @Html.ValidationMessageFor(model => model.EscenaID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TextoID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TextoID)
+            @Html.ValidationMessageFor(model => model.TextoID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PaginaID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PaginaID)
+            @Html.ValidationMessageFor(model => model.PaginaID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PreguntaID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PreguntaID)
+            @Html.ValidationMessageFor(model => model.PreguntaID)
+        </div>
+
+        </span>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {         
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+            alert("va");
+        });
+    </script>
+}
+

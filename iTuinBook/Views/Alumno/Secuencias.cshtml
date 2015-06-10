@@ -1,0 +1,171 @@
+﻿@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Secuencias";
+    Layout = "~/Views/Shared/_LayoutAlumno.cshtml";
+
+    List<DatosUsuario> listaDU = ViewBag.DatosUsuario;
+    List<DatoSimple> listaDS = ViewBag.DatosSimples;
+    
+}
+
+<h2>Secuencias</h2>
+
+<button>Detalles</button>
+<button>Detalles</button>
+<hr />
+@{
+    foreach (DatosUsuario du in listaDU)
+    {
+        var tmp = from q in listaDS
+                  where q.DatosUsuarioID == du.DatosUsuarioID
+                  select q;
+
+        foreach (DatoSimple ds in tmp)
+        {
+            <div class="detalle">
+            <fieldset>
+                <legend>DatoSimple</legend>
+
+                <div class="display-label">
+                     @Html.DisplayName("TextoID")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.TextoID.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("PaginaID")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.PaginaID.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("PreguntaID")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.PreguntaID.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Momento")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Momento.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Tiempo")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Tiempo.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("CodeOP")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.CodeOP.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Valor")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Valor.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Dato01")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Dato01.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Dato02")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Dato02.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Dato03")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.Dato03.ToString())
+                </div>
+
+                <div class="display-label">
+                     @Html.DisplayName("Info")
+                </div>
+                @if (ds.Info != null)
+                {
+                <div class="display-field">
+                    @Html.DisplayName(ds.Info)
+                </div>
+                }
+                else
+                {
+                <div class="display-field">
+                    @Html.DisplayName("NULL")
+                </div>
+                }
+
+                <div class="display-label">
+                     @Html.DisplayName("Info2")
+                </div>
+                @if (ds.Info2 != null)
+                {
+                <div class="display-field">
+                    @Html.DisplayName(ds.Info2)
+                </div>
+                }
+                else
+                {
+                <div class="display-field">
+                    @Html.Display("NULL")
+                </div>
+                }
+
+                <div class="display-label">
+                     @Html.DisplayName("DatosUsuarioID")
+                </div>
+                <div class="display-field">
+                    @Html.DisplayName(ds.DatosUsuarioID.ToString())
+                </div>
+            </fieldset>
+            </div>
+            <div class="texto">
+
+
+            </div>
+            <hr />
+        }
+        
+        <hr />
+    }
+    }
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {   
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+    
+}

@@ -1,0 +1,227 @@
+﻿@model iTuinBook.Models.Texto
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarTexto";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Administrar - @Model.Nombre</h2>
+<hr />
+
+<fieldset>
+    <legend>Texto</legend>
+
+    <p>
+        <div class="display-label">
+             @Html.LabelFor(model => model.Descripcion)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Descripcion)
+        </div>
+    </p>
+    
+    @Html.ActionLink("Configurar", "ConfigurarTexto", "Docente", new { TextoID = @Model.TextoID }, null)    
+    <hr />
+
+    <h3>Sus Páginas</h3>
+    <hr />
+    <legend>Páginas</legend>
+
+    <table id="pag">
+        <tr>
+            <th>
+                Página
+            </th>
+            <th>
+                Preguntas
+            </th>
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{
+            var paginas = Model.Paginas;
+            int i = 0;
+            if (paginas != null)
+            {
+                foreach (Pagina pag in paginas)
+                {
+                    i = i + 1;
+                    
+                    <tr>
+                        <td>            
+                            <b>@Html.ActionLink("Editar", "EditarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, null)</b>
+                            <b>@Html.ActionLink("Ver", "VerPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, null)</b>   
+                            <b>@Html.ActionLink("Eliminar", "EliminarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, new { onclick = "return confirm('¿Estás seguro de eliminar la página?');"})</b>   
+                        </td>
+                        <td>
+                            Página @i                   
+                        </td>   
+                        <td style="text-align:center">
+                            @pag.Preguntas.Count()                            
+                        </td>                                  
+                    </tr>
+                } 
+            }
+        }   
+    </table>
+    <hr />
+    @Html.ActionLink("Crear Página", "CrearPagina", new { TextoID = Model.TextoID })
+    <hr />
+    <h3>Sus Preguntas</h3>
+    <hr />
+    <legend>Preguntas</legend>
+
+    <table id="preg">
+        <tr>            
+            <th>
+                Pregunta
+            </th>
+            <th>
+                Tipo
+            </th>
+            <th>
+                Comandos
+            </th>
+        </tr>
+        @{
+            var preguntas = Model.Preguntas;
+            i = 0;
+
+            if (preguntas != null)
+            {
+                foreach (Pregunta preg in preguntas)
+                {
+                    i = i + 1;
+                    
+                    <tr>
+                        <td>            
+                            <b>@Html.ActionLink("Editar", "EditarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, null)</b>                           
+                            <b>@Html.ActionLink("Ver", "AdministrarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, null)</b>                           
+                            <b>@Html.ActionLink("Eliminar", "EliminarPregunta", "Docente", new { TextoID = Model.TextoID, PreguntaID = preg.PreguntaID }, new { onclick = "return confirm('¿Estás seguro de eliminar la pregunta?');"})</b>   
+                        </td>
+                        <td>
+                            Pregunta @i                   
+                        </td>   
+                        <td style="text-align:center">
+                            @{
+                                switch(preg.TipoPreguntaID)
+                                {
+                                    case 1:
+                                        <text>
+                                            Tipo Test
+                                        </text>
+                                    break;
+                                    case 2:
+                                        <text>
+                                            Respuesta Abierta
+                                        </text>
+                                    break;
+                                    case 3:
+                                        <text>
+                                            Seleccionar Pertinente
+                                        </text>
+                                    break;
+                                    default:
+                                        <text>
+                                            Indefinidas
+                                        </text>  
+                                    break;                                  
+                                }
+                                
+                             }                         
+                        </td>                                  
+                    </tr>
+                } 
+            }
+        }   
+    </table>
+    <hr />
+    @Html.ActionLink("Crear Pregunta", "CrearPregunta", new { TextoID = Model.TextoID })
+    <hr />
+    <legend>Tareas Ordenar</legend>
+
+    <h3>Sus Tareas</h3>
+    <hr />
+    <legend>Tareas</legend>
+
+    <table id="tar">
+        <tr>
+            <th>
+                Comandos
+            </th>
+            <th>
+                Preguntas
+            </th>
+            <th>
+                ID
+            </th>
+        </tr>
+        @{
+            var tareas = Model.TareasOrdenar;
+            i = 0;
+            if (tareas != null)
+            {
+                foreach (TareaOrdenar tar in tareas)
+                {
+                    i = i + 1;
+                    
+                    <tr>
+                        <td>            
+                            <b>@Html.ActionLink("Editar", "EditarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, null)</b>
+                            <b>@Html.ActionLink("Ver", "VerTareaOrdenar", "Docente", new { TareaOrdenarID = tar.TareaOrdenarID }, null)</b> 
+                            <b>@Html.ActionLink("Eliminar", "EliminarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, new { onclick = "return confirm('¿Estás seguro de eliminar la tarea de ordenar?');"})</b>   
+                        </td>
+                        <td>
+                            Tarea @i                   
+                        </td>   
+                        <td style="text-align:center">
+                            @tar.TareaOrdenarID
+                        </td>                                  
+                    </tr>
+                } 
+            }
+        }   
+    </table>
+    <hr />
+    @Html.ActionLink("Crear Tarea", "CrearTarea", new { TextoID = Model.TextoID })
+    <hr />
+</fieldset>
+<p>
+    @Html.ActionLink("Editar Texto", "EditarTexto", new { TextoID = Model.TextoID }) |
+    @Html.ActionLink("Volver", "AdministrarModulo", new { ModuloID = ViewBag.ModuloID, GrupoID = ViewBag.GrupoID })
+</p>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#pag").kendoGrid({
+                height: 220
+            });
+
+            $("#preg").kendoGrid({
+                height: 220
+            });
+
+            $("#tar").kendoGrid({
+                height: 220
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

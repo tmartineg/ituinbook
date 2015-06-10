@@ -1,0 +1,110 @@
+﻿@model iTuinBook.Models.Ayuda
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AgregarAyudas";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Agregar Ayudas</h2>
+<hr />
+
+@{
+    Ayuda ayudas = Model;
+    
+    using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+          
+        <fieldset>
+        <legend>Ayudas</legend>        
+          
+        <div class="editor-label">
+            @Html.Label("Parafraseo")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ParafraseoN1)
+            @Html.ValidationMessageFor(model => model.ParafraseoN1)
+        </div>
+        
+        <div class="editor-label">
+            @Html.Label("Nuevo Prismático")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Prismaticos)
+            @Html.ValidationMessageFor(model => model.Prismaticos)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Nueva Lupa")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Lupa)
+            @Html.ValidationMessageFor(model => model.Lupa)
+        </div>
+
+        <span id="undo" style="display:none" class="k-group">Buscar ayudas.</span>
+
+        <p>
+            <input type="submit" value="Agregar" />
+        </p>
+    </fieldset>
+        
+    
+    }    
+}
+
+@{
+    Texto mainText = ViewBag.Texto;
+    <iframe id="window" src="@Url.Action("VisualizarPagina", new { TextoID = mainText.TextoID })" width="800" height="320" ></iframe>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var items = [];
+            
+            var window = $("#window"),
+                        undo = $("#undo")
+                                .bind("click", function () {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+            var onClose = function () {
+                undo.show();
+            }
+
+            window.kendoWindow({               
+                title: "Ayudas",                
+                close: onClose,
+                visible: false
+            });
+
+            undo.show();            
+
+            $("#optional").kendoMultiSelect({                
+                dataSource: items
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}
+
+

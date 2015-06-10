@@ -1,0 +1,15 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "GetSecuencia";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Secuencia</h2>
+
+@using (@Html.BeginForm()) { 
+    
+    @:Nombre del usuario: <input type="text" id="UserName" name="UserName" value=""/>
+    
+    <input type="submit" value="Buscar" />
+}

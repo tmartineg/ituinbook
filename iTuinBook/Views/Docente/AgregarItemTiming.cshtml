@@ -1,0 +1,53 @@
+﻿@model ICollection<ItemTiming>
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "AgregarItemTiming";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+    Timing timing = ViewBag.Timing;
+
+    var PregLanzada = timing.PregLanzada;
+    var NAnterior = timing.NAnterior;
+
+    //List<Timing> Lista = ViewBag.Lista;
+}
+
+<h2>AgregarItemTiming</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ItemTiming</legend>
+
+        @{
+            for (int i = 0; i < PregLanzada - NAnterior; i++)
+            { 
+                @Model.Count
+
+                <div class="editor-label">
+                    @Html.Label("Prueba " + i.ToString())
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ToList()[i].Binario)
+                    @Html.ValidationMessageFor(model => model.ToList()[i].Binario)
+                </div>
+            }
+         }
+
+        
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

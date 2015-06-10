@@ -1,0 +1,223 @@
+﻿@model string
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Detalles Alumno";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+
+    Modulo mod = ViewBag.Modulo;
+    
+}
+
+<h2>@ViewBag.Nombre</h2>
+<hr />
+
+@{
+    if (mod.Escenas == null || mod.Escenas.Count() == 0)
+    { 
+        <div id="container" style="width:100%; height:400px;"></div>
+        <hr />
+
+        
+    }
+}
+
+<b>@Html.ActionLink("Volver", "SeguimientosAlumnosAcabado", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null)</b> 
+
+    
+        <br />
+
+<table id="grid">
+@{
+    string Datos = ViewBag.Datos;
+    string[] param = Datos.Split('#');
+
+    
+
+    if (mod.Escenas != null && mod.Escenas.Count() > 0)
+    {   
+        <tr>    
+            <th style="text-align:center;">
+                PregID
+            </th>  
+            <th style="text-align:center;">
+                Preg
+            </th>        
+            <th style="text-align:center;">
+                TipoPreg
+            </th>       
+            <th style="text-align:center;">
+                Acierto
+            </th>     
+            <th style="text-align:center;">
+                PorcBien
+            </th>  
+            <th style="text-align:center;">
+                PorcMal
+            </th>
+            <th style="text-align:center;">
+                Selección
+            </th>       
+            <th style="text-align:center;">
+                TmpPreg
+            </th>                 
+        </tr>
+    
+        int i = 1;
+
+        foreach (string fila in param)
+        {
+            string[] colum = fila.Split('+');
+            <tr>
+                @foreach (string col in colum)
+                {
+                    if (col == "")
+                    {
+                        <td style="text-align:center;">0</td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center;">@col</td>
+                    }
+                }
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>        
+            <th style="text-align:center;">
+                Txt
+            </th>       
+            <th style="text-align:center;">
+                LecIn
+            </th>     
+            <th style="text-align:center;">
+                Preg
+            </th>  
+            <th style="text-align:center;">
+                A
+            </th>        
+            <th style="text-align:center;">
+                Busca
+            </th>       
+            <th style="text-align:center;">
+                Ayu1
+            </th>     
+            <th style="text-align:center;">
+                Ayu2
+            </th>  
+            <th style="text-align:center;">
+                Ayu3
+            </th>
+            <th style="text-align:center;">
+                Rev
+            </th>       
+            <th style="text-align:center;">
+                TaSel
+            </th>     
+            <th style="text-align:center;">
+                Pert
+            </th>  
+            <th style="text-align:center;">
+                NoPert
+            </th>
+            <th style="text-align:center;">
+                Tmp
+            </th>
+        </tr>
+    
+    
+        int i = 1;
+
+        foreach (string fila in param)
+        {
+            string[] colum = fila.Split('+');
+            <tr>
+                @foreach (string col in colum)
+                {
+                    if (col == "")
+                    {
+                        <td style="text-align:center;">0</td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center;">@col</td>
+                    }
+                }
+            </tr>
+        }
+    }
+}
+
+</table>
+
+<hr />
+<br />
+
+<b>@Html.ActionLink("Volver", "SeguimientosAlumnosAcabado", "Docente", new { GrupoID = ViewBag.GrupoID, ModuloID = ViewBag.ModuloID }, null)</b> 
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />    
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    <script src="~/Content/Highcharts/highcharts.js"></script>
+
+    <script type="text/javascript">
+        function setProgress(progress) {
+            var progressBarWidth = progress * $(".container").width() / 100;
+            $(".progressbar").width(progressBarWidth).html(progress + "% ");
+        }
+
+        $(document).ready(function () {
+            $("#datepicker").kendoDatePicker();
+           
+            $("#grid").kendoGrid({                
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $('#container').highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Datos de @ViewBag.Nombre'
+                },
+                xAxis: {                    
+                    categories: ['Aciertos', 'Búsquedas', 'Uso Ayudas', 'Revisiónes']
+                },
+                yAxis: {
+                    max: 14,
+                    title: {
+                        text: 'Datos de @ViewBag.Nombre'
+                    }
+                },
+                series: [{
+                    name: '@ViewBag.Nombre',
+                    data: [@ViewBag.tAciertos, @ViewBag.tBusca, @ViewBag.tAyudas, @ViewBag.tRevisa]
+                }, {
+                    name: 'Media',
+                    data: [@ViewBag.medAciertos, @ViewBag.medBusca, @ViewBag.medAyuda, @ViewBag.medRevisa]
+                }]
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

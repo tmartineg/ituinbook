@@ -1,0 +1,134 @@
+﻿@model iTuinBook.Models.Grupo
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarGrupo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+
+<h2>Administrar - @Model.Nombre @{           
+            if (Model.Publico)
+            {
+                <text>(Público)</text>
+            }
+            else
+            {   
+                <text>(Privado)</text>             
+            }
+         }</h2>
+
+<hr />
+
+<fieldset>
+    <legend>Grupo</legend>
+
+    <p>
+    <div class="display-label">
+        @Html.LabelFor(model => model.Descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descripcion)
+    </div>
+    </p>
+
+    @Html.ActionLink("Configurar", "ConfigurarGrupo", "Docente", new { GrupoID = @Model.GrupoID }, null) 
+
+    <h3>Sus Módulos</h3>
+    <hr />
+    <table id="grid">
+        <tr>            
+            <th>
+                Módulo
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Comandos
+            </th>
+        </tr> @{
+        var modulos = Model.Modulos;
+        string[] param = {};
+        
+        if(Model.Orden != null)
+        {
+            param = Model.Orden.Split(':');
+        }
+        
+        if (modulos != null & modulos.Count > 0)
+        {   
+            ICollection<Modulo> OrdenModulos = new List<Modulo>();
+            
+            foreach(string str in param)
+            {
+                if(str != "")
+                {
+                    OrdenModulos.Add(modulos.First(id => id.ModuloID == Convert.ToInt32(str)));
+                }
+            }
+
+            foreach (Modulo mod in OrdenModulos)
+            {
+            <tr>                
+                <td>
+                    @Html.DisplayFor(modelItem => mod.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => mod.Descripcion)
+                </td>   
+                <td>   
+                    @if(mod.Propiedad == ViewBag.User)  
+                    {       
+                    <b>@Html.ActionLink("Administrar", "AdministrarModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>
+                    <b>@Html.ActionLink("Desvincular", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>   
+                    }
+                    else
+                    {
+                    <b>No eres propietario</b>
+                    <b>@Html.ActionLink("Desvincular", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>   
+                    }
+                </td>                      
+            </tr>
+            }
+        }
+    }   
+    </table>
+
+    <hr />
+    @Html.ActionLink("Crear Módulo", "CrearModulo", new { GrupoID = Model.GrupoID })
+    @Html.ActionLink("Agregar Módulo Existente", "AgregarModulo", new { GrupoID = Model.GrupoID })
+    <hr />
+</fieldset>
+
+<p>
+    @Html.ActionLink("Editar Grupo", "EditarGrupo", new { GrupoID = Model.GrupoID }) |
+    @Html.ActionLink("Volver", "Grupo")
+</p>
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 220
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

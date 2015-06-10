@@ -1,0 +1,688 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+
+    config.SimultanearTareas = ViewBag.TareaSeleccion;
+    config.SeleccionarPertinente = ViewBag.TareaSeleccion;
+    
+    Pregunta pregunta = ViewBag.Pregunta;
+    Texto texto = ViewBag.Texto;
+    int i = 0;
+}
+
+
+
+<!--<div id="modalTabelGray">
+ <div id="modalDiv" style="background-color:white; width:75%; height:75%;">   
+     <b>FEEDBACK</b>
+     <br /><br />
+     <label id="lblFDBK"></label>
+     <br /><br />
+     <button id="btnCerrar">Cerrar</button>
+ </div>
+</div>-->
+
+  
+     
+     
+     <br />     
+     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @Html.Raw(Model.Enunciado)
+        <div style="float:right; padding-right:20px;"><b style="padding-right:5px;">Puntuación:</b>@ViewBag.Puntos puntos.</div>
+        <div id="ayuFlotador" style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b>
+                                                      
+        </div>
+     </div>
+     
+     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+        <ul>
+        @foreach (Alternativa alt in Model.Alternativas)
+        {
+            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style="width:20px"}) @alt.Opcion <br />
+        }
+        </ul>
+        
+        <div id="seleccionarPrimero">
+            <h3>Mi Selección</h3>
+            <textarea id="seleccion1" style="width:80%;"></textarea> <br />
+            <button id="btnValidarSel1">Validar</button>
+            <button id="btnValidarSimultanea">Validar</button>
+            <button id="btnBorrarSimultanea">Borrar</button>
+        </div>
+
+        <div id="primeraseleccion">
+            <h3>Mi Selección - Primer Intento</h3>
+            <span id="miseleccion"></span>
+        </div>
+
+        <div id="seleccionarSegundo">
+            <h3>Mi Selección - Segundo Intento</h3>
+            <textarea id="seleccion2"></textarea> <br />
+            <button id="btnValidarSel2">Validar</button>
+        </div>
+
+        <div id="segundaseleccion">
+            <h3>Mi Selección - Segundo Intento</h3>
+            <span id="miseleccion2"></span>
+        </div>
+         
+        <div>
+            <button id="btnValidar" style="float:left;">Validar</button>                   
+            <div id="ayudas" style="float:right; margin-top: -20px; ">
+                
+                <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
+                <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
+                <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+            </div>
+        </div> 
+     </div>
+        
+     
+    
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/ImageSelect/css/imgareaselect-default.css" rel="stylesheet" />
+    <script src="~/Content/ImageSelect/scripts/jquery.imgareaselect.pack.js"></script>
+    
+    <script type="text/javascript">
+        
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {            
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {            
+            ev.preventDefault();            
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.indexOf("drag") == -1)
+                ev.target.appendChild(document.getElementById(data));
+        }
+        
+        $(document).ready(function () {            
+            var usaFlota = false;
+            var usaPrism = false;
+            var consulta = false;
+            var tareaSel = false;
+            
+            $('#ayuFlotador').hide();
+            @{
+                if(config.SimultanearTareas)
+                {
+                    <text>
+                        jQuery("#alternativas input:radio").attr('disabled', false);
+                        tareaSel = true;
+                        $('#btnValidar').hide();
+                        $('#btnValidarSimultanea').show();
+                        $('#btnBorrarSimultanea').show();
+                        jQuery("#btnValidarSimultanea").attr('disabled', true);
+                        $('#seleccionarPrimero').show();
+                        $('#seleccionarSegundo').hide();
+                        $("#primeraseleccion").hide();
+                        $("#segundaseleccion").hide();
+                        $('#btnValidarSel1').hide();                       
+                    </text>
+                }
+                else
+                {
+                    if (config.SeleccionarPertinente)
+                    {
+                        <text>
+                            tareaSel = true;
+                            $('#btnValidar').hide();
+                            $('#btnBorrarSimultanea').hide();
+                            $('#seleccionarPrimero').show();
+                            jQuery("#alternativas input:radio").attr('disabled', true);
+                            $('#seleccionarSegundo').hide();
+                            $("#primeraseleccion").hide();
+                            $("#segundaseleccion").hide();                            
+                        </text>
+                    }
+                    else
+                    {
+                        <text>    
+                            $("#btnValidar").attr("disabled", "disabled");
+                            $('#btnBorrarSimultanea').hide();
+                            $('#seleccionarPrimero').hide();
+                            $('#seleccionarSegundo').hide();
+                            $("#primeraseleccion").hide();
+                            $("#segundaseleccion").hide();                            
+                        </text>
+                    }
+                }
+            }
+           
+            $('#btnCerrar').click(function () {
+                $('#modalTabelGray').hide();
+            });
+ 
+            $('#btnBorrarSimultanea').click(function () {
+                $('#seleccion1').val("");
+                jQuery("#btnValidarSimultanea").attr('disabled', true);
+            });
+
+            $('#btnFlotador').click(function () {
+                $.ajax({
+                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    type: 'POST',
+                    data: { Ayuda: 1 }
+                });
+
+                $('#ayuFlotador').show();
+            });
+
+            $("#btnLupa").click(function () {
+                $.ajax({
+                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    type: 'POST',
+                    data: { Ayuda: 3 }
+                });
+
+                var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+                
+                if (array.length == 1) {
+                    
+                    var items = array[0].split(':');
+                    
+                    if (items[0] == "Lupa") {
+                        var coors = items[1].split('-');
+                        
+                        var i;
+                        for (i = 0; i < coors.length; ++i) {
+                            
+                            var coor = coors[i].split('/');
+
+                            window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                        }
+
+                        //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                    }
+                    else {
+                        $('.paginas', window.parent.document).each(function () {
+                            var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+
+                            for (var i = 0; i < param.length; i++) {
+                                $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                            }
+                        });
+                    }
+                }
+                else {
+                    // Imagen
+
+                    var itemsImg = array[0].split(':');
+
+                    if (itemsImg[0] == "Lupa") {
+                        var coors = items[1].split('-');
+
+                        var i;
+                        for (i = 0; i < coors.length; ++i) {
+
+                            var coor = coors[i].split('/');
+
+                            window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                        }
+
+                        //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                    }
+
+                    var itemsTxt = array[1].split(':');
+
+                    $('.paginas', window.parent.document).each(function () {
+                        var param = itemsTxt.split('/');
+
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                        }
+                    });
+
+                }
+            });
+
+            $('#btnPrismaticos').click(function () {
+                $.ajax({
+                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    type: 'POST',
+                    data: { Ayuda: 2 },
+                });
+
+                var array = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('+');
+
+                if (array.length == 1) {
+
+                    var items = array[0].split(':');
+
+                    if (items[0] == "Prisma") {
+                        var coors = items[1].split('-');
+
+                        var i;
+                        for (i = 0; i < coors.length; ++i) {
+
+                            var coor = coors[i].split('/');
+
+                            window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                        }
+                    }
+                    else {
+
+                        $('.paginas', window.parent.document).each(function () {
+                            var param = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('/');
+
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<prismaticos style=\"border:1px solid red;\">" + param[i] + "</prismaticos>"));
+                        }
+
+                        });
+                    }
+                }
+                else {
+                    var itemsImg = array[0].split(':');
+
+                    if (itemsImg[0] == "Prisma") {
+                        var coors = items[1].split('-');
+
+                        var i;
+                        for (i = 0; i < coors.length; ++i) {
+
+                            var coor = coors[i].split('/');
+
+                            window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                        }
+
+                        //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                    }
+
+                    var itemsTxt = array[1].split(':');
+
+                    $('.paginas', window.parent.document).each(function () {
+                        var param = itemsTxt.split('/');
+
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<prismaticos style=\"border:1px solid red;\">" + param[i] + "</prismaticos>"));
+                        }
+                    });
+                }
+            });
+
+            $('#modalTabelGray').hide();
+            $('.word').click(function () {
+                if ($(this).hasClass("word_marcada")) {
+                    $(this).removeClass("word_marcada");
+                }
+                else {
+                    $(this).addClass("word_marcada");
+                }
+            });
+
+            if ($(this).scrollTop() > 50) // change 50 to what you want (work out how far the nav is from the top of the page alraedy and add it there, that'll make it smoother transition)
+            {
+                $('.topnavigation').addClass('scrolling');
+            } else {
+                $('.topnavigation').removeClass('scrolling');
+            }
+
+            // Configuración de la pregunta
+             if ('@config.EnmascararAlternativas' == 'True')
+             {
+                $('#enunciado').addClass("difuminado");
+
+                $('#enunciado').click(function () {
+                    if(tareaSel == false)
+                        $(":radio").attr("disabled", false);
+                                       
+                    if('@config.EnmascararAlternativas' == 'True')
+                         $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+                });
+            }
+            
+            if ('@config.EnmascararAlternativas' == 'True') {
+                $('#alternativas').addClass("difuminado");
+
+                $('#alternativas').click(function () {
+                    
+                    if ('@config.EnmascararEnunciado' == 'True')
+                        $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+                });
+            }
+
+            if ('@config.EnunciadoActivaRadio' == 'True')
+                $(":radio").attr("disabled", true);
+            
+            if ('@config.Responder' == 'True') {
+                if (tareaSel == false) {
+                    $("#btnValidar").removeAttr('disabled');
+                }
+            }
+
+            // Fin de configuración
+
+            var respTest = ""
+            
+            $(":radio").change(function () {
+                respTest = $(this).attr("value");
+
+                if ('@config.EnmascararEnunciado' == 'True') {
+                    $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+                }
+
+                $("#btnValidar").removeAttr('disabled');
+
+                if (!$.trim($("#seleccion1").val())) { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
+                    jQuery("#btnValidarSimultanea").attr('disabled', true);
+                }
+                else {
+                    jQuery("#btnValidarSimultanea").attr('disabled', false);
+                }
+            });
+            
+            $("#btnValidarSimultanea").click(function () {
+                $("#btnValidarSimultanea").attr("disabled", "disabled");
+
+                window.parent.$('img').imgAreaSelect({ remove: true });
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() },
+                    success: function (result) {
+                        var input = result.Mensaje;
+                        
+                        if (result.Mensaje != null && result.Mensaje != "") {
+                            window.parent.$('#feedback').css("visibility", "visible");
+                            window.parent.$('#fdbkSMS').text(result.Mensaje);
+                        }
+                        else {
+
+                        }
+                        
+                        // data.redirect contains the string URL to redirect to
+                        var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+
+                        if (array.length == 1) {
+
+                            var items = array[0].split(':');
+
+                            if (items[0] == "Lupa") {
+                                var coors = items[1].split('-');
+
+                                var i;
+                                for (i = 0; i < coors.length; ++i) {
+
+                                    var coor = coors[i].split('/');
+
+                                    window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                                }
+
+                                //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                            }
+                            else {
+                                $('.paginas', window.parent.document).each(function () {
+                                    var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+
+                                    for (var i = 0; i < param.length; i++) {
+                                        $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            // Imagen
+
+                            var itemsImg = array[0].split(':');
+
+                            if (itemsImg[0] == "Lupa") {
+                                var coors = items[1].split('-');
+
+                                var i;
+                                for (i = 0; i < coors.length; ++i) {
+
+                                    var coor = coors[i].split('/');
+
+                                    window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                                }
+
+                                //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                            }
+
+                            var itemsTxt = array[1].split(':');
+
+                            $('.paginas', window.parent.document).each(function () {
+                                var param = itemsTxt.split('/');
+
+                                for (var i = 0; i < param.length; i++) {
+                                    $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                                }
+                            });
+                        }
+
+                        window.location.href = result.redirect;
+                        // Corregir Pregunta.
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+            $("#btnValidar").click(function () {
+                $("#btnValidar").attr("disabled", "disabled");
+
+                window.parent.$('img').imgAreaSelect({ remove: true });
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID'  },
+                    success: function (result) {
+                        var input = result.Mensaje;
+                        
+                        if (result.Mensaje != null && result.Mensaje != "") {
+                            window.parent.$('#feedback').css("visibility", "visible");
+                            window.parent.$('#fdbkSMS').text(result.Mensaje);
+                        }
+
+                        var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+
+                        if (array.length == 1) {
+
+                            var items = array[0].split(':');
+
+                            if (items[0] == "Lupa") {
+                                var coors = items[1].split('-');
+
+                                var i;
+                                for (i = 0; i < coors.length; ++i) {
+
+                                    var coor = coors[i].split('/');
+
+                                    window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                                }
+
+                                //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                            }
+                            else {
+                                $('.paginas', window.parent.document).each(function () {
+                                    var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+
+                            for (var i = 0; i < param.length; i++) {
+                                $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                            }
+                        });
+                    }
+                }
+                else {
+                    // Imagen
+
+                    var itemsImg = array[0].split(':');
+
+                    if (itemsImg[0] == "Lupa") {
+                        var coors = items[1].split('-');
+
+                        var i;
+                        for (i = 0; i < coors.length; ++i) {
+
+                            var coor = coors[i].split('/');
+
+                            window.parent.$('img').imgAreaSelect({ borderWidth: '5px', borderColor1: 'red', persistent: true, x1: coor[0], y1: coor[1], x2: coor[2], y2: coor[3] });
+                        }
+
+                        //window.parent.$('img').imgAreaSelect({ remove: true }); // Para borrar esto
+                    }
+
+                    var itemsTxt = array[1].split(':');
+
+                    $('.paginas', window.parent.document).each(function () {
+                        var param = itemsTxt.split('/');
+
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                        }
+                    });
+
+                }
+
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                        // Corregir Pregunta.
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+            var sel1 = "";
+
+            $('#seleccion1').focus(function () {
+                $(this).blur();
+            });
+
+            $( "#seleccion1" ).bind( "drop", function(event, ui) {
+                if (event.stopPropagation) event.stopPropagation();
+                
+                $.ajax({
+                    url: '/iTuinBook/Algoritmo',
+                    type: 'POST',
+                    data: { Pertinente: $('#seleccion1').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
+                        success: function (result) {
+                            $('#seleccion1').val(result.result);
+
+                            if (respTest == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
+                                jQuery("#btnValidarSimultanea").attr('disabled', true);
+                            }
+                            else {
+                                jQuery("#btnValidarSimultanea").attr('disabled', false);
+                            }
+                        },
+                        error: function () {
+                            alert("No selecciones espacios entre párrafos. Haz dos selecciones.");
+                        }
+                });
+            });
+
+            $('#seleccion2').focus(function () {
+                $(this).blur();
+            });
+
+            $("#seleccion2").bind("drop", function (event, ui) {
+                if (event.stopPropagation) event.stopPropagation();
+
+                $.ajax({
+                    url: '/iTuinBook/Algoritmo',
+                    type: 'POST',
+                    data: { Pertinente: $('#seleccion2').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
+                    success: function (result) {
+                        $('#seleccion2').val(result.result);
+                    },
+                    error: function () {
+                        alert("No selecciones espacios entre párrafos. Haz dos selecciones.");
+                    }
+                });
+            });
+
+            
+
+            $("#btnValidarSel1").click(function () {
+                $("#btnValidarSel1").attr("disabled", "disabled");
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/iTuinBook/ValidarPrimeraSeleccion',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion1').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#lblFDBK').text(data.Feedback);
+                        $('#modalTabelGray').show();
+
+                        @{
+                            if (config.DosIntentos == true)
+                            {
+                                <text>
+                        $("#primeraseleccion").show();
+                        $("#miseleccion").text(data.Respuesta);
+
+                        tareaSel = true;
+                        $('#btnValidar').hide();
+                        $('#seleccionarPrimero').hide();
+                        jQuery("#alternativas input:radio").attr('disabled', true);
+                        $('#seleccionarSegundo').show();
+                        </text>
+                            }
+
+                            if (config.DosIntentos == false)
+                            {   
+                                <text>
+                                    
+                                </text>
+                            }
+                        }
+
+                        //Activas segundo intento o alternativas para responder
+                    }
+                });
+            });
+
+            $("#btnValidarSel2").click(function () {
+                //$("#btnValidarSel2").attr("disabled", "disabled");
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/iTuinBook/ValidarSegundaSeleccion',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion2').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#lblFDBK').text(data.Feedback);
+                        $('#modalTabelGray').show();
+
+                        $("#miseleccion2").text(data.Respuesta);
+                        $('#seleccionarSegundo').hide();
+                        $("#segundaseleccion").show();
+
+                        tareaSel = false;
+                        $('#btnValidar').show();
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+
+            $("#btnValidar").attr("disabled", "disabled");
+        });
+    </script>
+}

@@ -1,0 +1,164 @@
+﻿@model iTuinBook.Models.Pagina
+@using iTuinBook.Models;
+@{
+    ViewBag.Title = "VerPagina";
+}
+
+<fieldset>
+    @{
+        IList<Indice> indices = ViewBag.Indices;
+ 
+        if(indices.Count() > 0)
+        {
+            <legend>Índice</legend> 
+        
+            <h3>Índice</h3>
+            <hr />
+            foreach(Indice ind in indices)
+            {   
+                string tabs = new String('-', ind.Nivel - 1);                
+                <b>@tabs @Html.ActionLink(ind.Contenido, "VerPagina", "Docente", new { TextoID = ViewBag.TextoID, PaginaID = ind.PaginaID }, null) </b> <br />
+            }
+            <hr />
+        }
+    }
+    
+
+</fieldset>
+
+<h2>Visualizando Página</h2>
+<hr />
+<fieldset>
+    <legend>Pagina</legend>
+
+    <div id="pagina">
+        @Html.Raw(HttpUtility.HtmlDecode(Model.Contenido) )             
+    </div>
+    
+</fieldset>
+<hr />
+
+<p>    
+    @Html.ActionLink("Editar Página", "EditarPagina", new { TextoID = ViewBag.TextoID, PaginaID = Model.PaginaID }) |
+    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = ViewBag.TextoID })
+</p>
+
+
+@section Scripts {
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <link href="~/Content/Jcrop/js/jquery.Jcrop.min.js" rel="stylesheet"/>
+    <link href="~/Content/Jcrop/css/jquery.Jcrop.min.css" rel="stylesheet" />
+    <script src="~/Content/Blur/blur.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var i = 1;
+
+
+
+            $(".imagen").each(function () {               
+                var coor = $(this).attr("coor");
+                var lines = coor.split(':')
+
+                //creamos la nueva imagen 
+                var img = new Image();
+                img.src = $(this).attr("src");
+
+                $(this).replaceWith("<canvas id=\"canvas" + i + "\" width=\"" + $(this).width() + "\" height=\"" + $(this).height() + "\" ></canvas>");
+
+                var canvas = document.getElementById("canvas" + i);
+                //Cojemos la 2D para dibujar en él
+                var context = canvas.getContext("2d");
+
+                context.beginPath();
+                
+                img.onload = function () { //la nueva imagen tiene que haberse cargado
+                    context.drawImage(img, 0, 0);
+
+                    $.each(lines, function (key, lines) {
+                        var parts = lines.split(',');
+                        
+                        
+                        context.fillStyle = "rgba(0, 0, 0, 0.5)";  //red
+                        context.fillRect(parts[0], parts[1], parts[2], parts[3]);                     
+                    });
+                }
+
+                
+
+                i = i + 1;
+            });
+
+            /*
+
+            var canvas = document.getElementById("myCanvas");
+				var ctx = canvas.getContext("2d");
+				ctx.fillStyle = "rgb(255, 0, 0)";  //red
+				ctx.fillRect(50, 50, 100, 100);  
+            var canvas = document.getElementById("primero");
+
+            $("#primero").after("<canvas id=\"segundo\" width=\"300\" height=\"300\"></canvas>");
+            
+            var canvas = document.getElementById("segundo");
+            //Cojemos la 2D para dibujar en él
+            var context = canvas.getContext("2d");
+            //creamos la nueva imagen 
+            var img = new Image();
+            //le decimos la ruta de la imagen, en este caso html5.jpg
+            $(".imagen").each(function () {
+                img.src = $(this).attr("src");
+            });
+
+            context.beginPath();
+
+            img.onload = function () { //la nueva imagen tiene que haberse cargado
+                context.drawImage(img, 0, 0); 
+            }*/
+            
+            //pasamos la imagen al 2d del canvas y se dibujará
+            //en 0 0 podemos poner las cordenadas de donde empezar a dibujar la imagen
+            
+            
+            /*
+            var src = $("#ramiro").attr("src");
+
+            var img = new Image($("#ramiro").width(), $("#ramiro").height());
+            img.src = src;
+            alert(src);
+            var canvas = $("#prueba");
+            var context = canvas.getContext("2d");
+
+            context.drawImage(img, 0, 0);
+            */
+            //$('reg').addClass("difuminado");
+        
+          /*  $("img").each(function () {
+                var coor = $(this).attr("coor");                
+             /*   $(this).wrap("<canvas id=\"prueba\" width=\"" + $(this).width() + "\" height=\"" + $(this).height() + "\" ></canvas>")
+       
+                var canvas = $("#prueba");
+                var context = canvas.get(0).getContext("2d");
+                var img = $(this);*/
+               // context.fillRect(80, 80, 100, 100); // x, y, width, height
+               // context.drawImage(img);
+               /* var lines = coor.split(':');
+
+                $.each(lines, function (key, line) {
+                    var parts = line.split(',');
+                    //alert(parts[0] + ' ' + parts[1] + ' ' + parts[2] + ' ' + parts[3]);
+                });
+            })
+        */
+
+
+           /* $('reg').click(function () {
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+                Scripts.Render("~/bundles/jqueryval")
+            <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet"/>
+                $(this).removeClass("difuminado").addClass("no_difuminado");
+            });*/
+        });
+    </script>
+}

@@ -1,0 +1,289 @@
+﻿@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Analizador";
+
+    List<SelectListItem> Grupos = ViewBag.Grupos;
+    List<SelectListItem> Variables = ViewBag.Variables;
+}
+<h3>Instrucciones:</h3>
+<p>Configura el análisis que desees realizar. Luego pulsa el botón "Analizar" y espera los resultados.</p>
+<section>
+    <button id="btnAnalizar">Analizar</button>     
+</section>
+
+<section id="main">    
+    <p><b>Grupo de la prueba</b></p>
+        
+    <section>
+        @Html.DropDownList("Analisis", Grupos, "Selecciona grupo (Opcional)", new { @id = "GrupoID"})
+    </section>
+
+    <p><b>Fecha de la prueba (mm/dd/aaaa)</b></p>
+    <section>
+        <input type="text" id="inicio" class="datepicker" style="width:100px;" placeholder="Posterior a...">
+        <input type="text" id="final" class="datepicker" style="width:100px;" placeholder="Anterior a...">
+    </section>
+
+    <section id="variables">
+    <p><b>Variables</b></p>
+        <button id="btnSeleccionar">Seleccionar TODO</button>     
+        <button id="btnDeseleccionar">Deseleccionar TODO</button>     
+        <p>De usuario:</p>
+
+        <section style="width:425px; display:inline-block"><input type="checkbox" name="variable" checked="checked" disabled="disabled">Nombre de usuario</section>    
+
+        <p>De texto:</p>
+        @foreach (SelectListItem item in Variables)
+        {         
+            if(Convert.ToInt32(item.Value) < 8)
+            {
+                <section style="width:425px; display:inline-block"><input data-variable-type="@item.Text"; class="checkbox cbTexto" type="checkbox" name="variable" id="@item.Value" value="@item.Value" style="margin-right:3px;">@item.Text</section>
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        <p>De pregunta:</p>
+
+        @foreach (SelectListItem item in Variables)
+        {         
+            if(Convert.ToInt32(item.Value) > 7)
+            {
+                <section style="width:425px; display:inline-block"><input data-variable-type="@item.Text"; class="checkbox cbPregunta" type="checkbox" name="variable" id="@item.Value" value="@item.Value" style="margin-right:3px;">@item.Text</section>
+            }
+        }
+    </section>    
+</section>
+
+<hr id="scrollToHere" />
+<h2>Datos Generados</h2>
+<span id="datos"></span>
+
+<hr />
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".datepicker").datepicker();
+
+            $("#selTabla").click(function () {
+                //alert($('#tabla').prop('outerHTML'));
+                window.clipboardData.setData('Text', $('#tabla').prop('outerHTML'));
+            });
+
+            $("#btnAnalizar").click(function () {
+
+                
+                $(this).text("Analizando...")
+                //$(this).attr("disabled", "disabled");
+                $("#progressbar").progressbar({ disabled: false });
+                $("#progressbar").progressbar({ value: 25 });
+
+                
+                varSelected = "";
+                
+                $(".checkbox").each(function () {                    
+                    if ($(this).is(':checked')) {
+                        
+                        if (varSelected != "")
+                        {
+                            varSelected += "/";
+                        }
+                        
+                        varSelected = varSelected + $(this).attr("id");
+                    }
+                });
+
+                //$("#GrupoID option:selected").val()
+
+                
+                $.ajax({
+                    url: "/Docente/Analisis",
+                    type: 'POST',
+                    data: { varSelected: varSelected, dateIni: $("#inicio").val(), dateFin: $("#final").val(), GrupodID: $("#GrupoID option:selected").val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#datos").html("");
+
+                        var json_x = $.parseJSON(result);
+                        var max = 0;
+
+                        $.each(json_x, function (index, value) { // Sujeto
+                            if (max < value.datos.length)
+                                max = value.datos.length;
+                        });
+
+                        
+                        /* $.each(result.matrix, function(i, obj) { 
+                            alert(obj.datos.length);
+                        });*/
+                        $("#datos").append("<table id=\"tabla\" border=\"1\" style=\"border: solid 1px;\"></table>");
+
+                        $("#tabla").append("<thead style=\"background: lightgray ;\"><tr id=\"cabeceras\"></tr></thead>");
+
+                        $("#cabeceras").append("<th>UserID</th>")
+                        $("#cabeceras").append("<th>Nombre de Usuario</th>")
+
+                        $(".cbTexto").each(function () {
+                            if ($(this).is(':checked')) {
+                                $("#cabeceras").append("<th id=\"\">" + $(this).attr("data-variable-type") + "</th>")
+                            }
+                        });
+
+                        for (var i = 0; i < max; i++) {
+                            if ($('.cbPregunta:checkbox:checked').length > 0) {
+                                $("#cabeceras").append("<th>Identificador de Pregunta</th>")
+                            }
+
+                            $(".cbPregunta").each(function () {
+                                if ($(this).is(':checked')) {
+                                    $("#cabeceras").append("<th>" + $(this).attr("data-variable-type") + "</th>")
+                                }
+                            });
+                        }
+                        
+                        //lert(result);
+                        //alert(json_x[1].Nombre);
+                        
+                        
+                        var count = 0;
+
+                        $.each(json_x, function (index, value) { // Sujeto                            
+                            if (value.datos.length > 0) {
+                                if (count % 2 == 0)
+                                    $("#tabla").append("<tr style=\"background: white;\"></tr>"); 
+                                else
+                                    $("#tabla").append("<tr></tr>"); 
+                                
+                                $("#tabla tbody tr:last-child").append("<td>" + value.UserID + "</td>");
+                                $("#tabla tbody tr:last-child").append("<td>" + value.Nombre + "</td>");
+
+                                if ($("#1").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].TiempoTotalTexto + "</td>");
+                                }
+
+                                if ($("#2").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].InicioTexto + "</td>");
+                                }
+
+                                if ($("#3").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].FinalTexto + "</td>");
+                                }
+
+                                if ($("#4").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].PorcLectIni + "</td>");
+                                }
+
+                                if ($("#5").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].TiempoLecIni + "</td>");
+                                }
+
+                                if ($("#6").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].VelLecIni + "</td>");
+                                }
+
+                                if ($("#7").is(':checked')) {
+                                    $("#tabla tbody tr:last-child").append("<td>" + value.datos[0].Continuidad + "</td>");
+                                }
+
+                                $.each(value.datos, function (count, variable) { // Pregunta
+                                    if ($('.cbPregunta:checkbox:checked').length > 0) {
+                                        $("#tabla tbody tr:last-child").append("<td bgcolor=\"#CCDD99\" style=\"font-weight:bold\">" + variable.PreguntaID + "</td>");
+                                    }
+
+                                    if ($("#8").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td title=\"prueba\">" + variable.TiempoTotalPregunta + "</td>");
+                                    }
+
+                                    if ($("#9").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.Intento + "</td>");
+                                    }
+
+                                    if ($("#10").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.Inicio + "</td>");
+                                    }
+
+                                    if ($("#11").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.Final + "</td>");
+                                    }
+
+                                    if ($("#13").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.PorcAcierto + "</td>");
+                                    }
+
+                                    if ($("#14").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.NumCambiosResp + "</td>");
+                                    }
+
+                                    if ($("#15").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.RespDada + "</td>");
+                                    }
+
+                                    if ($("#24").is(':checked')) {
+                                        alert(variable.NumBusq);
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.NumBusq + "</td>");
+                                    }
+
+                                    if ($("#44").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.TiempoLecFDBK + "</td>");
+                                    }
+
+                                    if ($("#45").is(':checked')) {
+                                        $("#tabla tbody tr:last-child").append("<td>" + variable.VelLecFDBK + "</td>");
+                                    }
+                                    
+                                });
+                            }
+
+                            count = count + 1;
+                        });
+
+                        //$("#datos").html(str);
+                        // Capturar matriz de datos y mostrarla
+                        //var dataArray = jQuery.parseJSON(result);
+
+                        //var matriz = result.matrix;
+
+                        //alert(items[1]);
+
+                        //alert("fin");
+                        $("#btnAnalizar").text("¡Analizado!");
+
+                        $('html, body').animate({
+                            scrollTop: $("#scrollToHere").offset().top
+                        }, 2000);
+                    },
+                    error: function () {
+                        $("#btnAnalizar").text("¡Error!");
+                        alert("Error: Hubo un problema en el análisis.");
+                    }
+                });
+            });
+
+            $("#btnSeleccionar").click(function () {
+                $(".checkbox").each(function () {
+                    $(this).prop('checked', true);
+                });
+            });
+
+            $("#btnDeseleccionar").click(function () {
+                $(".checkbox").each(function () {
+                    $(this).prop('checked', false);
+                });
+            });
+
+            $("#progressbar").progressbar({ disabled: true });
+        });
+    </script>
+}

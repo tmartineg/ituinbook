@@ -1,0 +1,47 @@
+﻿@model iTuinBook.Models.Grupo
+
+@{
+    ViewBag.Title = "EliminarGrupo";
+}
+
+<h2>Eliminar Grupo</h2>
+
+<h3>¿Estás seguro que quieres eliminar el siguiente grupo?</h3>
+<fieldset>
+    <legend>Grupo</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Publico)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Publico)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Condicion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Condicion)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Volver", "Grupo")
+    </p>
+}

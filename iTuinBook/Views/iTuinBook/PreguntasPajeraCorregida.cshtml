@@ -1,0 +1,159 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+@using System.Text.RegularExpressions;
+ 
+@{
+    ViewBag.Title = "Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+    Pagina pag = ViewBag.Pagina;
+}
+
+<div id="pregunta" style="background-color: white; width:100%; top: -10px; border-bottom-color:black; overflow-x: hidden; overflow-y: auto;">
+    <div id=enunciado style="margin-left: 20px; margin-top: 20px;">
+        @Html.Raw(Model.Enunciado)
+    </div>
+
+    <div id=tarea style="margin-left: 20px; margin-top: 20px;">
+        <table id="izqParejas">
+        @{  
+            int cont = 0;
+            foreach (Emparejado emp in Model.Emparejados)
+            {
+                if (emp.ColIzq != null)
+                {
+                    <tr>
+                        <td>
+                            <div class="celdaIzqParejas" ondrop="drop(event)" ondragover="allowDrop(event)" style="width: 600px; text-align:justify;"><hr /> @emp.ColIzq </div>         
+                            @{
+                    string Lista = ViewBag.Respuesta;
+                    string[] param = Lista.Split('/');
+
+                    foreach (string str in param[cont].Split('-'))
+                    {
+                        if (str != param[cont].Split('-')[0] && str != param[cont].Split('-')[param[cont].Split('-').Length - 1])
+                        {
+                            if (emp.ColDer != null && emp.ColDer.IndexOf(str) == -1)
+                            {
+                                if (config.CorregirSeleccion)
+                                {
+                                                <div class="usuario" style="margin-left:4px; border: 1px solid; background-color:lightcoral; width: 300px; margin-bottom: 2px; margin-top: 2px;">@str</div>
+                                }
+                                else
+                                {
+                                                <div class="usuario" style="margin-left:4px; border: 1px solid; background-color:cornsilk; width: 300px; margin-bottom: 2px; margin-top: 2px;">@str</div>
+                                }
+                            }
+                            else
+                            {
+                                if (config.CorregirSeleccion)
+                                {
+                                                <div class="usuario" style="margin-left:4px; border: 1px solid; background-color:palegreen; width: 300px; margin-bottom: 2px; margin-top: 2px;">@str</div>
+                                }
+                                else
+                                {
+                                                <div class="usuario" style="margin-left:4px; border: 1px solid; background-color:cornsilk; width: 300px; margin-bottom: 2px; margin-top: 2px;">@str</div>
+                                }
+                            }
+                        }
+                    }
+
+                    if (emp.ColDer != null)
+                    {
+                        foreach (string str2 in emp.ColDer.Split('/'))
+                        {   
+                                        <div class="correctas" hidden="hidden" style="margin-left:4px; border: 1px solid; background-color: cornsilk; width: 300px; margin-bottom: 2px; margin-top: 2px;">@str2</div>                                   
+                        }
+                    }
+                            }                       
+                        </td>                            
+                    </tr>
+                }
+
+                cont++;
+            }  
+        }        
+        </table>
+
+        <div style="width:300px; z-index: 10; position: fixed; right: 10px; top: 40px;">
+            <table>
+                <tr>
+                    <td id="inicial" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:300px; padding-top:20px; padding-bottom:20px; background-color:snow;">
+                    @{
+                        string tinterio_bien = ViewBag.TinterioBien;
+                        string tinterio_mal = ViewBag.TinterioMal;
+                        string tinterio_sistema = ViewBag.TinterioSistema;
+
+                        foreach (string emp in tinterio_bien.Split('/'))
+                        {
+                            if (config.CorregirSeleccion)
+                            {
+                                <div class="usuario" style="margin-left:4px; border: 1px solid; width: 300px; background-color: gainsboro; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                            }
+                            else
+                            {
+                                <div class="usuario" style="margin-left:4px; border: 1px solid; width: 300px; background-color: cornsilk; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                            }
+                        }
+
+                        foreach (string emp in tinterio_mal.Split('/'))
+                        {
+                            if (config.CorregirSeleccion)
+                            {
+                                <div class="usuario" style="margin-left:4px; border: 1px solid; width: 300px; background-color: lightcoral; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                            }
+                            else
+                            {
+                                <div class="usuario" style="margin-left:4px; border: 1px solid; width: 300px; background-color: cornsilk; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                            }
+                        }
+
+                        foreach (string emp in tinterio_sistema.Split('/'))
+                        {   
+                            <div class="correctas" hidden="hidden" style="margin-left:4px; border: 1px solid; width: 300px; background-color: cornsilk; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                        }
+                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @if (config.CorregirSeleccion)
+                        {
+                            <button id="btnVerSolucion">Ver Solución Correcta</button>  
+                        }
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    <hr />
+</div>
+
+</div>
+
+<div id="pag" style="padding: 10px;">
+    @Html.Raw(pag.Contenido) 
+</div>
+
+@{  
+    
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnVerSolucion").click(function () {
+                if ($(".correctas").attr("hidden") == "hidden") {
+                    $(".usuario").attr("hidden", "hidden")
+                    $(".correctas").removeAttr("hidden");
+                    $(this).text("Ver Mi Solución");
+                }
+                else {
+                    $(".usuario").removeAttr("hidden");
+                    $(".correctas").attr("hidden", "hidden")
+                    $(this).text("Ver Solución Correcta");
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,85 @@
+﻿@model iTuinBook.Models.Pagina
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Crear Pagina";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>@{
+        Grupo grupo = ViewBag.Grupo;
+        
+        if(grupo != null)
+        {
+            <b>@Html.ActionLink(grupo.Nombre + " > " , "AdministrarGrupo", "Docente", new { GrupoID = grupo.GrupoID }, null)</b>
+        }
+
+         Modulo modulo = ViewBag.Modulo;
+
+         if (modulo != null)
+         {
+            <b>@Html.ActionLink(modulo.Nombre + " > " , "AdministrarModulo", "Docente", new { ModuloID = modulo.ModuloID }, null)</b>
+         }
+
+        Texto texto = ViewBag.Texto;
+        
+        <b>@Html.ActionLink(texto.Nombre + " > " , "AdministrarTexto", "Docente", new { TextoID = texto.TextoID }, null)</b>
+    }
+    
+    Crear Pagina</h2>
+<hr />
+<h3>Editor</h3>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Pagina</legend>
+                    
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Contenido, new { id = "input" })
+            @Html.ValidationMessageFor(model => model.Contenido)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" name="txt" />                     
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+ 
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {          
+            $("#input").cleditor({
+                width: 716, // width not including margins, borders or padding
+                height: 600, // height not including margins, borders or padding
+                controls:     // controls to add to the toolbar
+                    "bold italic underline strikethrough subscript superscript | font size " +
+                    "style | color highlight removeformat | bullets numbering | outdent " +
+                    "indent | alignleft center alignright justify | undo redo | " +
+                    "rule image link unlink | inserthtml delete | print source"
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

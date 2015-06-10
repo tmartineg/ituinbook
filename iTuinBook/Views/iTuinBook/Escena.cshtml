@@ -1,0 +1,235 @@
+﻿@model iTuinBook.Models.Accion
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Escena";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";    
+}
+
+<img width="200" src="~/Content/images/Ramiro.png" style="float:left;margin-top:15px" />
+<img width="200" src="~/Content/images/Lue.png" style="float:right;margin-top:15px" />
+<div class="speech_bubble"><textarea style="background-color:red;" id="textbox"></textarea>
+ <div id="arrow" class="arrow_border_right"></div>
+ <div id="arrow2" class="bubble_arrow_right"></div>
+</div>
+<button id="btnAnterior">Anterior</button>
+<button id="btnSiguiente">Siguiente</button>
+<button id="btnSiguiente2" hidden="hidden">Siguiente2</button>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  
+    <script type="text/javascript">
+        $(document).ready(function () {
+            accActual = 0;
+            accFeedback = 0;
+            accTotalFeedback = 0;
+            arrayFeedbackContenido = new Array();
+
+            $("btnSiguiente2").click(function () {
+                
+
+
+            });
+
+
+            @{       
+                Accion accion = Model;
+               
+                switch (accion.CodeOP)
+                {
+                    case 1:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                        </text>
+                        break;
+                    default:
+                        <text>
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+                        </text>
+                        break;
+                }                
+            }
+
+            $('#textbox').text("");
+
+            $('#textbox').text('@accion.Mensaje');           
+
+        });
+
+        $("#btnAnterior").click(function () {
+            accActual = accActual - 1;
+
+            if (accActual < 0)
+                accActual = 0;
+
+            $.ajax({
+                url: '/iTuinBook/SiguienteAccion',
+                type: 'POST',
+                data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: accActual },
+                success: function (result) {
+                    $('#textbox').text("");
+
+                    $('#textbox').text(result.mensaje);  
+                    
+                    switch (result.codeOP) {
+                        case 1, 2:
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                            break;
+                        case 3, 4:
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+                            break;
+                        case 7:
+
+
+                            break;
+
+                        
+                        default:
+
+                            break;
+                    }
+                    return
+                },
+                error: function () {
+                    alert("Has acabado. Levanta la mano y espera.");
+                }
+            });            
+        });
+        
+        $("#btnSiguiente").click(function () {
+            accActual = accActual + 1;
+
+            $.ajax({
+                url: '/iTuinBook/SiguienteAccion',
+                type: 'POST',
+                data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: accActual },
+                success: function (result) {                    
+
+                    if (result.mensaje != "")
+                    {                        
+                        $('#textbox').text("");
+
+                        $('#textbox').text(result.mensaje);
+
+                        $("#arrow").removeClass("arrow_border_right");
+                        $("#arrow").addClass("arrow_border_left");
+                        $("#arrow2").removeClass("bubble_arrow_right");
+                        $("#arrow2").addClass("bubble_arrow_left");
+                        $(".speech_bubble").css("background-color", "#EEE")
+                        
+                    }                    
+
+                    switch (result.codeOP) {
+                        case 1:
+                            $("#arrow").removeClass("arrow_border_right");
+                            $("#arrow").addClass("arrow_border_left");
+                            $("#arrow2").removeClass("bubble_arrow_right");
+                            $("#arrow2").addClass("bubble_arrow_left");
+                            $(".speech_bubble").css("background-color", "#EEE")
+                            break;
+                        case 7:
+                            var src = "/iTuinBook/TextoCompleto?TextoID=" + result.TextoID;
+                            window.parent.$("#escritorio").attr("src", src);                            
+                            break;
+                        case 9:
+                            var src = "/iTuinBook/Pagina?TextoID=" + result.TextoID;
+                            window.parent.$("#escritorio").attr("src", src);
+                            break;
+                        case 11:                            
+                            var src = "/iTuinBook/Pregunta?PreguntaID=" + result.PreguntaID + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + accActual + "&GrupoID=" + '@ViewBag.GrupoID';
+                            window.parent.$("#escritorio").attr("src", src);
+                            break;
+                        case 8:
+                        case 10:
+                        case 12:
+                            var src = "/iTuinBook/Escritorio";
+                            window.parent.$("#escritorio").attr("src", src);
+                            break;
+                        case 103:
+                            var input = result.mensaje;
+                            arrayFeedbackContenido = input.split('/');
+                            accTotalFeedback = arrayFeedbackContenido.length;
+                            $("#btnSiguiente").hide();
+                            $("#btnSiguiente2").show();
+                            break;
+                        default:
+                            $("#arrow").removeClass("arrow_border_left");
+                            $("#arrow").addClass("arrow_border_right");
+                            $("#arrow2").removeClass("bubble_arrow_left");
+                            $("#arrow2").addClass("bubble_arrow_right");
+                            $(".speech_bubble").css("background-color", "#FFE8E8")                         
+                            break;
+                    }
+                    return                        
+                },
+                error: function () {
+                    alert("Has acabado. Levanta la mano y espera.");
+                }
+            });
+            $(".speech_bubble").css("background-color", "#FFE8E8")
+        });
+      /*
+        (function ($) {            
+            function typeString($target, str, cursor, delay, cb) {
+                $target.html(function (_, html) {
+                    return html + str[cursor];
+                });
+
+                if (cursor < str.length - 1) {
+                    setTimeout(function () {
+                        typeString($target, str, cursor + 1, delay, cb);
+                    }, delay);
+                }
+                else {
+                    cb();
+                }
+            }
+            
+            // jQuery hook
+            $.fn.extend({
+                teletype: function (opts) {
+                    var settings = $.extend({}, $.teletype.defaults, opts);
+
+                    return $(this).each(function () {
+                        (function loop($tar, idx) {
+                            // type
+                            typeString($tar, settings.text[idx], 0, settings.delay, function () {
+                                // delete
+                                setTimeout(function () {
+                                    
+                                }, settings.pause);
+                            });
+
+                        }($(this), 0));
+                    });
+                }
+            });
+
+            // plugin defaults  
+            $.extend({
+                teletype: {
+                    defaults: {
+                        delay: 100,
+                        pause: 5000,
+                        text: []
+                    }
+                }
+            });
+        }(jQuery));
+        */
+    </script>
+
+}

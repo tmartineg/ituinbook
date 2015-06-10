@@ -1,0 +1,364 @@
+﻿@model IEnumerable<Grupo>
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Tarea";
+    Layout = "~/Views/Shared/_LayoutAlumno.cshtml";
+}
+
+<aside>    
+    <h2>Menú</h2>
+    <hr />
+    <ul id="menuCategorias">   
+        <li>
+            @Html.ActionLink("Tareas", "Tareas", "Alumno")
+        </li>                       
+        <li>            
+            @Html.ActionLink("Grupos", "Grupos", "Alumno")
+        </li>                        
+    </ul>
+</aside>
+<article>
+    <h2>Tarea</h2>
+    <hr />
+
+    @{
+        if (Model != null)
+        { 
+            <table id="grid">
+                <tr>            
+                    <th>
+                        Grupo
+                    </th>
+                    <th>
+                        Módulo
+                    </th>                    
+                    <th>
+                        Comandos
+                    </th>
+                   <th>
+                        Estrellas
+                    </th>
+                </tr>
+                @{
+            ICollection<DatosUsuario> datosUsuario = ViewBag.DatosUsuario;
+
+            foreach (Grupo gru in Model)
+            {
+                var param = gru.Orden.Split(':');
+                bool flag_empezar = false;
+
+                ICollection<Modulo> OrdenModulos = new List<Modulo>();
+
+                foreach (string str in param)
+                {
+                    if (str != "")
+                    {
+                        OrdenModulos.Add(gru.Modulos.First(id => id.ModuloID == Convert.ToInt32(str)));
+                    }
+                }
+
+                foreach (Modulo mod in OrdenModulos)
+                {
+                    try
+                    {
+                        var du = (from d in datosUsuario
+                                  where d.ModuloID == mod.ModuloID
+                                  select d).Single();
+                                
+                        <tr>                    
+                            <td>
+                                @Html.DisplayFor(modelItem => gru.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => mod.Nombre)
+                            </td>                                      
+                            <td>
+                                @if (du.Cerrada)
+                                {
+                                    <b>Acabado</b>   
+                                }
+                                else
+                                {   
+                                    switch(mod.Condicion)
+                                    {
+                                        case 1: // iTextBook
+                                        case 2:
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
+                                        break;
+                                        case 3:                                        
+                                        case 4:                                        
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
+                                        break;
+                                        default:
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
+                                            break;
+                                       
+                                    }                           
+                                }
+                            </td>      
+                            <td>
+                                @if (du.Cerrada)
+                                {
+                                    if (mod.ModuloID == 16) // MOdulo 0
+                                    {
+                                        if (du.Puntos < 100) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 100 && du.Puntos <= 140) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 140 && du.Puntos <= 195) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (mod.ModuloID == 2) // MOdulo 1
+                                    {
+                                        if (du.Puntos <= 400) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 400 && du.Puntos <= 800) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 800 && du.Puntos <= 1200) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (mod.ModuloID == 4) // MOdulo 2
+                                    {
+                                        if (du.Puntos <= 600) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 600 && du.Puntos <= 1300) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 1300 && du.Puntos <= 1900) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (mod.ModuloID == 7) // MOdulo 3
+                                    {
+                                        if (du.Puntos <= 600) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 600 && du.Puntos <= 1300) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 1300 && du.Puntos <= 2100) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (mod.ModuloID == 12) // MOdulo 1
+                                    {
+                                        if (du.Puntos <= 400) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 400 && du.Puntos <= 800) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 800 && du.Puntos <= 1300) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (mod.ModuloID >= 8 && mod.ModuloID <= 11) // MOdulo 1
+                                    {
+                                        if (du.Puntos <= 400) // mal
+                                        {
+                                            <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                        }
+                                        else
+                                        {
+                                            if (du.Puntos > 400 && du.Puntos <= 700) //regular
+                                            {
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                            }
+                                            else
+                                            {
+                                                if (du.Puntos > 700 && du.Puntos <= 1000) //bien
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                    <img width="20" height="20" src="~/Content/images/Estrella_destacado.png" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                    catch (Exception e)
+                    {
+                        <tr>                    
+                            <td>
+                                @Html.DisplayFor(modelItem => gru.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => mod.Nombre)
+                            </td>                                      
+                            <td>
+                                @if (!flag_empezar)
+                                {
+                                    <b> @Html.ActionLink("Empezar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>                                
+                                }
+                            </td>  
+                            <td>
+
+                            </td>    
+                        </tr>
+                    
+                                flag_empezar = true;
+                    }
+
+
+                }
+            }
+                }
+            </table>
+        }        
+    }
+    
+    
+
+        
+</article>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>    
+   
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                groupable: true,
+                height: 430,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

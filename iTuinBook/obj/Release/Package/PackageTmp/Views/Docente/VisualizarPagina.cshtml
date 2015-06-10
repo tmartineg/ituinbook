@@ -1,0 +1,44 @@
+﻿@using iTuinBook.Models;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Visualizando Pagina</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>VisualizarPagina</h1>
+    <hr />
+    <div>
+        @{
+            Texto text = ViewBag.Texto;
+            Pagina pag = ViewBag.Pagina;
+            int num = 1;
+            
+            <ul>
+                @foreach(Pagina pagina in text.Paginas)
+                {
+                    <li>@Html.ActionLink("Página " + num++, "VisualizarPagina", new { TextoID = text.TextoID, PaginaID = pagina.PaginaID })</li>
+                }
+            </ul>
+            
+            <hr />
+            
+            if(pag != null)
+            {
+                @Html.Raw(pag.Contenido);
+            }
+            else            
+            {
+                <h2>Todavía no has creado ninguna página.</h2>
+            }
+        }
+    </div>
+</body>
+</html>

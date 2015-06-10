@@ -1,0 +1,376 @@
+﻿@using iTuinBook.Models;
+@model iTuinBook.Models.Texto
+
+@{
+    ViewBag.Title = "Texto";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+}
+
+<div id="contenedor" style="z-index:10;">
+    
+    @if(Model.Preguntas != null && Model.Preguntas.Count > 0)
+    {
+        <div id="pregunta" style="z-index:5; position: fixed; width:100%; margin-top: -12px; visibility:hidden;">
+            <iframe id="addIframe" onload="autofitIframe(this)" src="@Url.Action("PL2_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, })" style="width:100%; height:0;"></iframe> 
+        </div>
+        
+        <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;">PREGUNTAS</button></div>
+    }
+    else
+    {
+        <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
+    }
+    
+    <div style="position: relative;">	    	
+        @foreach (Pagina pag in Model.Paginas)
+        {
+            <div class="paginas" style="padding: 0px 50px; position: absolute;">@Html.Raw(Model.Paginas.First().Contenido)</div>
+        }
+    </div>
+
+    <div id="feedAvatar" style="float: left; z-index:100; margin: 0 auto; text-align: left; position:fixed; top:50%; left:50%; margin-top:-100px; margin-left:-375px;">
+        <div style="float: left;">
+            <img id="ramiro" width="200" src="~/Content/images/Ramiro.png" style="margin-top: 15px; margin-right: 8px;" />
+            <img id="lue" width="200" src="~/Content/images/Lue.png" style="margin-top: 15px; margin-right: 8px;" />
+        </div>
+        <div class="speech_bubble" style="float: left;">
+            <textarea readonly="readonly" id="tbAvatar" style="background-color:#eee"></textarea>
+            <div class="arrow_border_left"></div>
+        </div>
+        <button class="btnCerrarFDBK">X</button>
+    </div>
+    
+    <div id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">        
+        <h2 id="mensaje" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
+        <button class="btnCerrarFDBK">X</button>
+    </div>    
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script type="text/javascript">
+        var ini_LecIni = $.now();
+        var flag_LecIni = false;
+        var ini_PregActual = 0;
+        var ini_LecFDBK = 0;
+        var flag_blur = false;
+        var flag_busqueda = false;
+        var flag_revision = false;
+
+        $(document).ready(function () {
+            $('reg').addClass("difuminado");
+
+            $(document).on("click", "reg", function () {
+                if (flag_LecIni) {
+                    if (flag_blur || !flag_busqueda) {                        
+                        $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                        $(this).removeClass("difuminado").addClass("no_difuminado");
+                    }
+                    else {
+                        $(this).removeClass("difuminado").addClass("no_difuminado");
+                    }
+
+                    $.ajax({
+                        url: "/PL2_Experimentos/RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 40, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                    });
+                }
+                else {                    
+                    $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+
+                    $.ajax({
+                        url: "/PL2_Experimentos/RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 41, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                    });
+                }
+            });
+            
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+
+            $("#btnPregunta").click(function () {
+                $.ajax({
+                    url: "/PL2_Experimentos/RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 5, Param: ($.now() - ini_LecIni).toString() },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+                
+                $.ajax({
+                    url: "/PL2_Experimentos/RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 6, Param: ((($.now() - ini_LecIni) / 1000) / $('.paginas:First').text().split(' ').length).toString() },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+
+                flag_LecIni = true;
+                flag_busqueda = true;
+
+                $("#divBoton").hide();
+                $("#pregunta").css("visibility", "visible");
+
+                if (flag_blur) {
+                    $('.paginas').css("-webkit-filter", "blur(5px)");
+                    $('.paginas').css("filter", "url(#example-one)");
+                    $('reg').removeClass("no_difuminado").addClass("difuminado");
+                }
+                else {                    
+                    $('.paginas').css("-webkit-filter", "");
+                    $('.paginas').css("filter", "");
+                    $('reg').removeClass("difuminado").addClass("no_difuminado");
+                }
+
+                var id = document.getElementById("addIframe");
+
+                $('.paginas').css("padding", "1px 50px")
+
+                autofitIframe(id)
+
+                ini_PregActual = $.now();
+            });
+
+            $("#btnPasar").click(function () {
+                $.ajax({
+                    url: "/PL2_Experimentos/PL2_Texto_Cambiar",
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID' },
+                    success: function (result) {
+                        window.parent.window.location.href = result.redirect;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+            });
+        });
+
+        $(".btnCerrarFDBK").click(function () {
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+            
+            var tmpNow = $.now();
+            
+            if ($("#tbAvatar").text() != "") {
+                $.ajax({
+                    url: "/PL2_Experimentos/RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#tbAvatar").text().split(' ').length).toString() },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                });
+            }
+            else {
+                if ($("#mensaje").text() != "") {
+                    $.ajax({
+                        url: "/PL2_Experimentos/RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#mensaje").text().split(' ').length).toString() },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                    });
+                }
+            }
+
+            $("#tbAvatar").text("");
+            $("#mensaje").text("");
+
+            // Fin lectura Feedback
+            $.ajax({ 
+                url: "/PL2_Experimentos/RegistrarAccion",
+                type: 'POST',
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 44, Param: ($.now() - ini_LecFDBK).toString() },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+            });
+
+            if ($('#addIframe').contents().find('#btnSiguientePregunta').length) {
+                //Ejecutar si existe el elemento                
+                $('#addIframe').contents().find('#btnSiguientePregunta').removeAttr("disabled");
+            }
+            else {                
+                $('#addIframe').contents().find(':radio').removeAttr("disabled");
+            }
+        });
+
+        $('.paginas').click(function () {
+            if (document.getElementById("addIframe").contentWindow.ClickPagina)
+                document.getElementById("addIframe").contentWindow.ClickPagina();
+            
+            if ($('.paginas').css("-webkit-filter") == "blur(5px)") {
+                $.ajax({
+                    url: "/PL2_Experimentos/GetPreguntaID",
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID' },
+                    success: function (result) {
+                        $.ajax({
+                            url: "/PL2_Experimentos/RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: result.result, CodeOP: 24 },
+                            error: function () {
+                                alert("Error: Hubo un problema con tu última acción. (RegistrarAccion)");
+                            }
+                        });
+                    },
+                    error: function (result) {
+                        alert("Error: GetPreguntaID");
+                    }
+                });
+
+                $('.paginas').css("-webkit-filter", "");
+                $('.paginas').css("filter", "");                
+            }
+        });
+        
+        function IniciarBlur()
+        {
+            if (valor == "True") {
+                flag_blur = true;
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+            }
+            else {
+                flag_blur = false;
+                $('.paginas').css("-webkit-filter", "");
+                $('.paginas').css("filter", "");
+                $('reg').removeClass("difuminado").addClass("no_difuminado");
+            }
+        }
+
+        function BlurPagina(valor)
+        {
+            if (valor == "True") {
+                flag_blur = true;                
+            }
+            else {
+                flag_blur = false;                
+            }
+        }
+        
+        function BlurRevision(valor) {
+            if (valor == "True") {
+                flag_blur = true;
+            }
+            else {
+                flag_blur = false;
+            }
+        }
+
+        function IniciarTiempoPregunta()
+        {
+            ini_PregActual = $.now();
+        }
+
+        function FinalizarTiempoPregunta() {
+            $.ajax({
+                url: "/PL2_Experimentos/RegistrarAccion",
+                type: 'POST',
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 8, Param: ($.now() - ini_PregActual).toString() },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+            });
+        }
+
+        function feedbackAvatar(sms, avatar) // avatar: true = Ramiro ; false = Lue
+        {
+            if (sms != null)
+            {
+                ini_LecFDBK = $.now();
+                
+                if (avatar == "True") {
+                    $("#ramiro").show();
+                    $("#lue").hide();
+                    $("#feedAvatar").show();
+                    $("#feedback").hide();
+                }
+                else {
+                    $("#ramiro").hide();
+                    $("#lue").show();
+                    $("#feedAvatar").show();
+                    $("#feedback").hide();
+                }
+
+                $("#tbAvatar").text(sms);
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+
+
+                
+                $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
+                $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
+                $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
+            }
+        }
+
+        function feedbackVentana(sms)
+        {   
+            if (sms != null)
+            {
+                ini_LecFDBK = $.now();
+
+                $("#ramiro").hide();
+                $("#lue").hide();
+                $("#feedAvatar").hide();
+                $("#feedback").show();
+                $("#feedback").css("visibility", "visible")
+
+                $("#mensaje").html(sms);
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+
+                $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
+                $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
+                $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
+            }            
+        }
+
+        //Ajusta el tamaño de un iframe al de su contenido interior para evitar scroll
+        function autofitIframe(id) {            
+            if ($('.paginas').css("padding") != "0px 50px") {
+                id.style.height = "0px";
+
+                if (!window.opera && document.all && document.getElementById) {
+                    id.style.height = id.contentWindow.document.body.scrollHeight;
+                } else if (document.getElementById) {
+                    id.style.height = id.contentDocument.body.scrollHeight + "px";
+                }
+
+                $('.paginas').css("padding", id.style.height + " 50px 0px 50px");
+            }
+        }
+
+        $("#addIframe").load(function () {
+            var id = document.getElementById("addIframe");
+            
+            if (!window.opera && document.all && document.getElementById) {
+                id.style.height = id.contentWindow.document.body.scrollHeight;
+            } else if (document.getElementById) {
+                id.style.height = id.contentDocument.body.scrollHeight + "px";
+            }           
+        });
+    </script>        
+}

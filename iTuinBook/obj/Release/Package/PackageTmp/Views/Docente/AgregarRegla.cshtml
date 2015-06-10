@@ -1,0 +1,135 @@
+﻿@model iTuinBook.Models.Modulo
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "AdministrarGrupo";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+
+<h2>Agregar Regla a - @Model.Nombre</h2>
+
+<hr />
+
+<fieldset>
+    <legend>Módulo</legend>
+
+    <p>
+    <div class="display-label">
+        Agregar una regla al módulo: @Model.Nombre
+    </div>   
+    </p>
+
+    <h3>Tus Reglas</h3>
+    <hr />
+    <table id="grid">
+        <tr>            
+            <th>
+                Regla
+            </th>
+            <th>
+                Descripción
+            </th>        
+            <th>
+                Comandos
+            </th>
+            <th>
+                Selección
+            </th>
+        </tr>
+        @{var reglas = ViewBag.Reglas;
+
+        if (reglas != null)
+        {
+            foreach (ReglaCompleja mod in reglas)
+            {
+            <tr>                
+                <td>
+                    @Html.DisplayFor(modelItem => mod.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => mod.Descripcio)
+                </td>   
+                <td>            
+                    <b>@Html.ActionLink("Agregar al módulo", "AgregarReglaExistente", "Docente", new { ModuloID = Model.ModuloID, ReglaID = mod.ReglaComplejaID }, null)</b>                    
+                </td>   
+                <td>
+                    @Html.CheckBox("regla", new { @id = mod.ReglaComplejaID, @class = "checkbox" } )
+                </td>             
+            </tr>
+            } 
+            
+            <tr>                
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>   
+                <td>            
+                    
+                </td>   
+                <td>
+                    <button id="agregar">Agregar seleccionadas</button>
+                </td>             
+            </tr>
+        }
+    }   
+    </table>
+
+</fieldset>
+
+<p>    
+    @Html.ActionLink("Volver", "AdministrarModulo", new { ModuloID = Model.ModuloID })
+</p>
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                height: 440
+            });
+            
+            $("#agregar").click(function () {
+                var str = "";
+                var cb = $("input:checked");
+                
+                if (cb.length > 0) {
+                    $.each(cb, function () {
+                        str = str + this.id + "-";
+                    });
+                    
+                    $.ajax({
+                        url: "/Docente/AgregarReglasSeleccionadas",
+                        type: 'POST',
+                        data: { ModuloID: '@Model.ModuloID', Lista: str.toString() },
+                        success: function (result) {
+                            window.location.href = result.redirect;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un error al agregar las reglas.");
+                        }
+                    });
+                }
+            });
+            
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

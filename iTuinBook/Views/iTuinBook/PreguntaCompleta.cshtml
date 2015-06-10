@@ -1,0 +1,76 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+    
+}
+
+ @{ 
+     <br />
+     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @Html.Raw(Model.Enunciado)
+     </div>
+     
+     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+        <ul>
+        @foreach (Alternativa alt in Model.Alternativas)
+        {
+            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style="width:20px"}) @alt.Opcion <br />
+        }
+        </ul>
+        
+        <div>
+            <button id="btnValidar" style="float:left;">Validar</button>
+        </div> 
+     </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnValidar").attr("disabled", "disabled");
+
+            if ($(this).scrollTop() > 50) // change 50 to what you want (work out how far the nav is from the top of the page alraedy and add it there, that'll make it smoother transition)
+            {
+                $('.topnavigation').addClass('scrolling');
+            } else {
+                $('.topnavigation').removeClass('scrolling');
+            }
+
+            // Fin de configuración
+
+            var respTest = ""
+
+            $(":radio").change(function () {
+                $("#btnValidar").removeAttr("disabled");
+                respTest = $(this).attr("value");
+            });
+
+            $("#btnValidar").click(function () {
+                $("#btnValidar").attr("disabled", "disabled");
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPreguntaCompleta", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                    success: function (result) {
+                        var input = result.Mensaje;
+                        window.parent.$('reg').removeClass("no_difuminado").addClass("difuminado");
+                        window.parent.parent.feedbackCompleto(result.Mensaje);
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                        // Corregir Pregunta.
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}

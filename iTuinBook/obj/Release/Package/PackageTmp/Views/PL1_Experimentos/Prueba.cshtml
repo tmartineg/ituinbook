@@ -1,0 +1,31 @@
+﻿@{
+    
+    ViewBag.Title = "Prueba";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+
+@Ajax.ActionLink(
+    "load partial view", 
+    "Pregunta", 
+    "PL1_Experimentos",                     
+    new AjaxOptions { 
+        UpdateTargetId = "pregunta",
+        InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace,  
+        OnSuccess = "onSuccess"               
+    }
+)
+
+<h2>Prueba</h2>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function onSuccess() {
+                alert("hola");
+            }
+        });
+    </script>        
+}

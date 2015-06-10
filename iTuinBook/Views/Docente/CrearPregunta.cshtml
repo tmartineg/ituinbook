@@ -1,0 +1,197 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "CrearPregunta";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Crear Pregunta</h2>
+<hr />
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    
+    <fieldset>
+        <legend>Pregunta</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Enunciado)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Enunciado, new { id = "enunciado", style="width:100%;"})
+            @Html.ValidationMessageFor(model => model.Enunciado)
+        </div>
+
+        <hr />
+
+        <div class="editor-label">
+            @Html.Label("Claves (Separar palabras clave por el carácter \"/\")")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Claves, new { style="width:100%;" })
+            @Html.ValidationMessageFor(model => model.Claves)
+        </div>
+        
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Tipo de Pregunta")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(m => m.TipoPreguntaID, new SelectList(ViewBag.Tipos, "TipoPreguntaID", "Tipo"), new { id = "tipoPreg" })
+            @Html.ValidationMessageFor(model => model.TipoPreguntaID)
+        </div>
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Identificador de Tarea")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.TareaID)
+            @Html.ValidationMessageFor(model => model.TareaID)
+        </div>
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Feedback de Acierto")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.FDBK_Correcto)
+            @Html.ValidationMessageFor(model => model.FDBK_Correcto)
+        </div>
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Feedback de Fallo")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.FDBK_Incorrecto)
+            @Html.ValidationMessageFor(model => model.FDBK_Incorrecto)
+        </div>
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Pertinente (Copia y Pega desde la ventana que encontrarás en \"Buscar Pertinente\")")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Pertinente)
+            @Html.ValidationMessageFor(model => model.Pertinente)
+        </div>
+        <span id="undo" style="display:none" class="k-group">Buscar Pertinente (Texto).</span>
+        <span id="pertIMG" style="display:none" class="k-group">Buscar Pertinente (Imagen).</span>
+        <hr />
+
+        <p>
+            <input id="btnSend" type="submit" value="Crear" />
+        </p>
+    </fieldset>
+}
+@{
+    Texto mainText = ViewBag.Texto;
+    <iframe id="window" src="@Url.Action("VisualizarPagina", new { TextoID = mainText.TextoID })" width="800" height="320" ></iframe>
+    
+    <div id="pertinenteIMG">
+        @{
+            Texto text = ViewBag.Texto;
+            List<string> list = new List<string>();
+            if(text != null)
+            {
+                foreach(Pagina pag in text.Paginas)
+                {
+                     /* if(pag.Contenido.IndexOf("coor=\"") > -1)
+                      {
+                          int pos = pag.Contenido.IndexOf("coor=\"") + 6;
+                      }*/
+                }
+            
+            }
+        }
+    </div>
+    
+}
+<div>
+    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = mainText.TextoID })
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var items = [];
+            
+            var window = $("#window"),
+                        undo = $("#undo")
+                                .bind("click", function () {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+            var onClose = function () {
+                undo.show();
+            }
+
+            window.kendoWindow({               
+                title: "Pertinente",                
+                close: onClose,
+                visible: false
+            });
+
+            undo.show();            
+
+            $("#optional").kendoMultiSelect({                
+                dataSource: items
+            });
+
+            $("#tipoPreg").kendoDropDownList({
+                dataTextField: "ProductName",
+                dataValueField: "ProductID"
+            });
+
+            //create AutoComplete UI component
+            $("#enunciado").kendoAutoComplete({              
+                placeholder: "Introduce el enunciado..."                
+            });
+
+            $("#enunciado").focusout(function () {
+                var enun = $("#enunciado").val();
+                var palabras = enun.split(' ');
+
+                items = [];
+                
+                $.each( palabras, function(index, value) {
+                    items.push(value);
+                })
+
+                $("#claves").data("kendoMultiSelect").setDataSource(items);               
+            });
+
+            $("#claves").kendoMultiSelect({
+                dataSource: items               
+            });
+
+            $("#datepicker").kendoDatePicker();
+            
+            $("#grid").kendoGrid({
+                dataSource: [{ name: "Jane Doe", age: 30 }, { name: "John Doe", age: 33 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 } ],
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true
+                }
+            });
+            
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,170 @@
+﻿@model iTuinBook.Models.Fichero
+@using iTuinBook.Models;
+@using System.Drawing;
+
+@{
+    ViewBag.Title = "AgregarImagen";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+    
+<div class="demo-section">
+    <h2>Imágenes</h2>
+    <div id="listView"></div>
+    <div id="pager" class="k-pager-wrap"> </div>
+</div>
+
+<div style="padding-left:20px;">
+    <h3>Agregar Imagen</h3>
+
+    @using (Html.BeginForm("AgregarImagen", "Docente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Imagenes</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Nombre)
+            </div>
+        
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Nombre)
+                @Html.ValidationMessageFor(model => model.Nombre)
+            </div>
+        
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.file, new { type = "file" })
+                @Html.ValidationMessageFor(m => m.file)
+            </div>
+
+            <p>
+                <input type="submit" value="Agregar" />
+            </p>
+        </fieldset>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Scripts/jquery.gallery.js" rel="stylesheet" />
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/js/kendo.all.min.js" rel="stylesheet" />
+   
+    <script type="text/x-kendo-tmpl" id="template">
+        <div class="imagen"> 
+            <img width="110px" src="data:image/jpg;base64,#:file#" />           
+            <h3>#:Name#</h3>
+        </div>
+    </script>
+
+    <script type="text/jscript"> 
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/Docente/Imagenes",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json"                    
+                }
+            },
+            pageSize: 9           
+        });
+
+        var listView = $("#listView").data("kendoListView");
+        function setItemDoubleClickEvent() {
+            $(".imagen").on("dblclick", function () {
+                var listView = $("#listView").data("kendoListView");
+                var idx = $(this).index();
+                var item = listView.dataSource.view()[idx];
+
+                window.parent.$("#temp").val(item.file);
+                window.parent.$("#window").data("kendoWindow").close();
+            });
+        }
+
+        $("#pager").kendoPager({
+            dataSource: dataSource
+        });
+
+        $("#listView").kendoListView({
+            dataSource: dataSource,
+            selectable: "single",
+            dataBound: setItemDoubleClickEvent,
+            template: kendo.template($("#template").html())        
+        });
+
+        //get file size
+        function GetFileSize(fileid) {
+            try {
+                var fileSize = 0;
+                //for IE
+                if (navigator.userAgent.match(/msie [6]/i)) {
+                    //before making an object of ActiveXObject, 
+                    //please make sure ActiveX is enabled in your IE browser
+                    var objFSO = new ActiveXObject("Scripting.FileSystemObject"); var filePath = $("#" + fileid)[0].value;
+                    var objFile = objFSO.getFile(filePath);
+                    var fileSize = objFile.size; //size in kb
+                    fileSize = fileSize / 1048576; //size in mb 
+                }
+                    //for FF, Safari, Opeara and Others
+                else {
+                    fileSize = $("#" + fileid)[0].files[0].size //size in kb
+                    fileSize = fileSize / 1048576; //size in mb 
+                }
+
+                return fileSize;
+            }
+            catch (e) {
+                alert("Error is :" + e);
+            }
+        }
+
+        //get file path from client system
+        function getNameFromPath(strFilepath) {
+            var objRE = new RegExp(/([^\/\\]+)$/);
+            var strName = objRE.exec(strFilepath);
+
+            if (strName == null) {
+                return null;
+            }
+            else {
+                return strName[0];
+            }
+        }
+
+        $(function () {
+            $("#file").change(function () {
+                var file = getNameFromPath($(this).val());
+                if (file != null) {
+                    var extension = file.substr((file.lastIndexOf('.') + 1));
+                    switch (extension) {
+                        case 'jpg':
+                        case 'png':
+                        case 'gif':                        
+                            flag = true;
+                            break;
+                        default:
+                            flag = false;
+                    }
+                }
+                if (flag == false) {
+                    $(".lifile > span").text("Solo puedes cargar imágenes del tipo jpg, png y gif.");
+                    return false;
+                }
+                else {
+                    var size = GetFileSize('file');
+                    if (size > 3) {
+                        $(".lifile > span").text("Puedes cargar imágenes de 3 MB máx.");
+                    }
+                    else {
+                        $(".lifile > span").text("");
+                    }
+                }
+            });
+        });
+</script>
+}

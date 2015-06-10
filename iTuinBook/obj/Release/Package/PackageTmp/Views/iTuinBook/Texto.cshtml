@@ -1,0 +1,129 @@
+﻿@model iTuinBook.Models.Texto
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Texto";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+<!--<div id="feedback" style="border: solid 2px black; top: 25%; left: 20%; z-index:10; position: fixed; width:60%; height:40%; background-color:white;">
+    FEEDBACK
+</div>-->
+
+<div id="pregunta" style="z-index:5; left: 1%; border: solid 1px black; box-shadow: 10px 10px 5px #888888; background-color:white; visibility:hidden; width:98%; top: -10px; border-bottom-color:black; position: fixed; overflow-x: hidden; overflow-y: auto;">
+    <iframe id="addIframe" src="@Url.Action("PreguntaIndependiente", new { pregActual = ViewBag.PregActual, pregTotal = 7, TextoID = @Model.TextoID })" width="100%" ></iframe> 
+</div>
+
+<div id="paging_container" class="container" style="width:94%;">	
+    <div id="indice" class="page_navigation""></div>
+    <button id="btnPreguntas" style="padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;">Preguntas</button>
+	<hr style="margin-top:10px" />
+	<ul class="content" id="Pagina">
+		@{
+            foreach(Pagina pag in Model.Paginas)
+            {
+                <li class="paginas" style="padding-bottom:50px;">@Html.Raw(pag.Contenido)</li>         
+            }
+        }
+	</ul>	
+</div>	
+
+
+<div id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; visibility:hidden; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">
+    <h2 id="fdbkSMS" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
+</div>
+
+<svg>
+	<!-- Filter ID/Name -->
+	<filter id="example-one">
+		<!-- Amount of Gaussian Blur that should be applied -->
+		<feGaussianBlur stdDeviation="4"/>
+	</filter>		
+</svg>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    <script src="~/Content/Highlight/jquery.textHighlighter.pack.min.js"></script>
+    <link href="~/Content/Pajination/styles.css" rel="stylesheet" />    
+    <script src="~/Content/Pajination/jquery.pajinate.min.js"></script>
+    
+    <link href="~/Content/Toolbar/jquery.toolbars.css" rel="stylesheet" />
+    <link href="~/Content/Toolbar/bootstrap.icons.css" rel="stylesheet" />
+    
+    <link href="~/Content/ImageSelect/css/imgareaselect-default.css" rel="stylesheet" />
+    <script src="~/Content/ImageSelect/scripts/jquery.imgareaselect.pack.js"></script>
+
+    <script src="~/Content/Toolbar/jquery.toolbar.js"></script> 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var consulta = false;
+
+            if ('@Model.Paginas.Count' > 1) {
+                $('#indice').show();
+            }
+            else {
+                $('#indice').hide();
+            }
+
+            $('#Pagina').click(function () {
+                if ($('#Pagina').attr("style") == "-webkit-filter: blur(5px); filter:url(#example-one);") {
+                    $.ajax({
+                        url: "/iTuinBook/BuscaIndependiente",
+                        type: 'POST'
+                    });
+
+                    $('#Pagina').attr("style", "");
+                }   
+            });
+           
+            $('#btnPreguntas').click(function () {
+                if ($('#pregunta').css('visibility') == "hidden") {                    
+                    $('#pregunta').css("visibility", "visible");
+                    $("#pregunta").height(240);
+                    $("iframe").height(230);
+                    $("#paging_container").css("padding-top", $("#pregunta").height() + "px");
+                    $('#Pagina').attr("style", "-webkit-filter: blur(5px); filter:url(#example-one);")                    
+                    }
+                else {
+                    $('#pregunta').css('visibility', 'hidden');                    
+                    $("#paging_container").css("padding-top", "10px");
+                }
+            });
+
+            
+            $('#paging_container').pajinate({
+                nav_label_first : '<<',
+                nav_label_last : '>>',
+                nav_label_prev : '<',
+                nav_label_next : '>',
+                items_per_page: 1
+            });
+
+            $('reg').addClass("difuminado");
+
+            $('reg').click(function () {
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                $(this).removeClass("difuminado").addClass("no_difuminado");
+            });
+
+            $('#pregunta').load(function () {
+                this.style.height = (85 + this.contentWindow.document.body.offsetHeight) + 'px';
+                
+                $("#paging_container").css("padding-top", this.style.height + "px");
+            });
+
+            $('iframe').load(function () {
+                this.style.height = (75 + this.contentWindow.document.body.offsetHeight) + 'px';               
+            });
+        });
+    </script>
+}
+
+

@@ -1,0 +1,105 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pregunta Simple Corregida";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+}
+
+<div id=enunciado style="margin-left: 20px; margin-top: 20px;">
+    @Model.Enunciado
+</div>
+
+<div id=alternativas style="margin-left: 20px; margin-top: 20px;">
+    @{  
+        foreach (Alternativa alt in Model.Alternativas)
+        {
+            if (alt.Valor)
+            {
+                if (ViewBag.Respuesta == alt.Opcion)
+                {
+                    <img src="~/Content/tick.png" style="width: 15px; height: 15px;" />     
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled", Checked = "checked" }) @alt.Opcion <br />
+                }
+                else
+                {
+                    <img src="~/Content/tick.png" style="width: 15px; height: 15px;" />     
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" }) @alt.Opcion <br />
+                }
+            }
+            else
+            {
+                if (ViewBag.Respuesta == alt.Opcion)
+                {
+                    <img src="~/Content/aspa.png" style="width: 15px; height: 15px;" />
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled", Checked = "checked" }) @alt.Opcion <br />
+                }
+                else
+                {
+                     <img src="~/Content/aspa.png" style="width: 15px; height: 15px;" />
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px;", disabled = "disabled" }) @alt.Opcion <br />
+                }
+            }
+        }
+    }
+    <br />
+</div>
+
+<button id="btnSiguiente" style="margin-left: 20px;">Siguiente</button>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {            
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {            
+            ev.preventDefault();            
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.indexOf("drag") == -1)
+                ev.target.appendChild(document.getElementById(data));
+        }
+
+        $(document).ready(function () {
+            $("#btnSiguiente").click(function () {
+                if (parseInt('@ViewBag.pregActual') < parseInt('@ViewBag.pregTotal')) {
+                    $.ajax({
+                        url: "/iTuinBook/SiguientePreguntaCompleta", //url: '/iTuinBook/Validar',
+                        type: 'POST',
+                        data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                        success: function (result) {
+                            window.parent.parent.feedbackCompleto("");
+                            // data.redirect contains the string URL to redirect to
+                            window.parent.$('reg').removeClass("no_difuminado").addClass("difuminado");
+                            window.parent.$('#pregActual').text(parseInt('@ViewBag.pregActual') + 1);
+                            window.parent.$('#Pagina').attr("style", "-webkit-filter: blur(5px); filter:url(#example-one);");
+                            window.location.href = result.redirect;                            
+                        },
+                        error: function () {
+                            alert("error");
+                        }
+                    });
+                }
+                else {
+                    $('#btnSiguiente').hide();
+
+                    window.parent.parent.$('#btnSiguiente').show();
+                    window.parent.parent.$('#btnAnterior').show();
+                    window.parent.parent.$('#btnSiguiente').trigger('click');
+                }
+
+                
+                return false;
+            });
+
+           
+        });
+    </script>
+}

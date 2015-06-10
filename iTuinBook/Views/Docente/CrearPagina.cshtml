@@ -1,0 +1,292 @@
+﻿@model iTuinBook.Models.Pagina
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "Crear Pagina";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>@{
+        Grupo grupo = ViewBag.Grupo;
+        
+        if(grupo != null)
+        {
+            <b>@Html.ActionLink(grupo.Nombre + " > " , "AdministrarGrupo", "Docente", new { GrupoID = grupo.GrupoID }, null)</b>
+        }
+
+         Modulo modulo = ViewBag.Modulo;
+
+         if (modulo != null)
+         {
+            <b>@Html.ActionLink(modulo.Nombre + " > " , "AdministrarModulo", "Docente", new { ModuloID = modulo.ModuloID }, null)</b>
+         }
+
+        Texto texto = ViewBag.Texto;
+        
+        <b>@Html.ActionLink(texto.Nombre + " > " , "AdministrarTexto", "Docente", new { TextoID = texto.TextoID }, null)</b>
+    }
+    
+    Crear Página</h2>
+<hr />
+<h3>Editor</h3>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Pagina</legend>
+                    
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Contenido, new { id = "editor", style = "width:740px;height:440px;" })
+            @Html.ValidationMessageFor(model => model.Contenido)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" name="txt" />                     
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "AdministrarTexto", "Docente", new { TextoID = @texto.TextoID }, null)  
+</div>
+
+<!-- modal tools -->
+<div id="addRegionImagen-modal">
+	<h3>Regiones en imagen</h3>
+	<div id="workspace"></div>
+    <button id="agregarRegion">Agregar Región</button>
+    <button id="cerrarRegion">Finalizar</button>
+    <ol id="regiones">
+    </ol>
+</div>
+
+<!-- modal tools -->
+<div id="addTooltip-modal">
+	<h3>Introduce la Etiqueta</h3>
+	<textarea cols="20" id="tooltipContent"></textarea>
+</div>
+
+<!-- modal tools -->
+<div id="window">	
+    <iframe id="add" src="@Url.Action("AgregarImagen")" width="750" height="480" ></iframe>    
+    <textarea id="temp"></textarea>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+ 
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>    
+    <script src="~/Content/ImageSelect/scripts/jquery.imgareaselect.pack.js"></script>    
+    <link href="~/Content/ImageSelect/css/imgareaselect-default.css" rel="stylesheet" />    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var regX1, regY1, regX2, regY2;
+
+            $("#agregarRegion").click(function () {
+                $("#regiones").append("<li>" + regX1 + "," + regY1 + "," + regX2 + "," + regY2 + "</li>");
+                
+                $('ol').listview('refresh');
+            });
+
+            $("#window").hide();
+            $("#addRegionImagen-modal").hide();
+            $("#addTable-modal").hide();
+            $("#addTooltip-modal").hide();
+
+            $("#temp").hide();
+            var editor_;
+            var numReg = 1;
+            var html;
+            var window = $("#window"),
+                        undo = $("#undo")
+                                .bind("click", function () {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+            var regionImagen = $("#addRegionImagen-modal"),
+                        undo = $("#undo")
+                                .bind("click", function () {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+            var onClose = function () {                
+                editor_.clipboard.paste("<img class=\"regIM\" coor=\"\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");                
+            }
+
+            var onClose2 = function () {
+                $('.regIM').imgAreaSelect({ remove: true });
+                var image = $("#workspace").children("img");
+                image.remove();
+                var phrase = "";
+                $('#regiones').find('li').each(function(){
+                    // cache jquery var
+                    var current = $(this);
+                    // check if our current li has children (sub elements)
+                    // if it does, skip it
+                    // ps, you can work with this by seeing if the first child
+                    // is a UL with blank inside and odd your custom BLANK text
+                    if(current.children().size() > 0) {return true;}
+                    // add current text to our current phrase
+
+                    if (phrase == "") {
+                        phrase += current.text();
+                    }
+                    else {
+                        phrase += ":" + current.text();
+                    }
+                    
+                })                
+
+                editor_.clipboard.paste("<img class=\"imagen\" coor=\"" + phrase + "\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");
+            }
+              
+            if (!regionImagen.data("kendoWindow")) {
+                regionImagen.kendoWindow({
+                    width: "800px",
+                    title: "Regiones en imagen...",
+                    actions: [
+                        "Minimize",
+                        "Maximize",
+                        "Close"
+                    ],
+
+                    close: onClose2
+                });
+            }
+
+            if (!window.data("kendoWindow")) {
+                window.kendoWindow({
+                    width: "800px",
+                    title: "Selecciona una imagen...",
+                    actions: [                       
+                        "Minimize",
+                        "Maximize",
+                        "Close"
+                    ],
+                    
+                    close: onClose
+                });
+            }
+
+            //$("#addTooltip-modal").hide();
+            $("#addTable-modal").hide();
+            $("#addImage-modal").hide();
+            
+            $("#editor").kendoEditor({
+                tools: [
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strikethrough",
+                    "justifyLeft",
+                    "justifyCenter",
+                    "justifyRight",
+                    "justifyFull",
+                    "insertUnorderedList",
+                    "insertOrderedList",
+                    "indent",
+                    "outdent",
+                    "createLink",
+                    "unlink",
+                    "insertImage",
+                    "subscript",
+                    "superscript",
+                    "createTable",
+                    "addRowAbove",
+                    "addRowBelow",
+                    "addColumnLeft",
+                    "addColumnRight",
+                    "deleteRow",
+                    "deleteColumn",
+                    "viewHtml",
+                    "formatting",
+                    "fontName",
+                    "fontSize",
+                    "foreColor",
+                    "backColor",
+                    {
+                        name: "addReg",
+                        tooltip: "Agregar Región",
+                        exec: function (e) {
+                            var editor = $("#editor").data("kendoEditor");
+                            var selectedText = editor.getSelection();
+                            var selectedHtml = editor.selectedHtml();
+
+                            if (selectedHtml.toLowerCase().indexOf("<img") >= 0) {                               
+                                $('#workspace').prepend(selectedHtml)
+
+                                editor_ = $("#editor").data("kendoEditor");
+                                regionImagen.data("kendoWindow").center().open();
+                                $('.regIM').imgAreaSelect({
+                                    aspectRatio: '4:3', handles: true,
+                                    onSelectEnd: function (img, selection) {
+                                        regX1 = selection.x1;
+                                        regY1 = selection.y1;
+                                        regX2 = selection.x2;
+                                        regY2 = selection.y2;                                        
+                                    }
+                                });
+                            }
+                            else {
+                                editor.clipboard.paste("<reg pagina=\"@(texto.Paginas.Count + 1)" + "" + "\" region=\"" + numReg.toString() + "\">" + selectedHtml + "</reg>");
+                                numReg++;
+                            }
+                        }
+                    },
+                    {
+                        name: "addToolTip",
+                        tooltip: "Agregar Etiqueta",
+                        exec: function (e) {
+                            $("#addTooltip-modal").dialog({
+                                height: 230,
+                                width: 540,
+                                modal: true,
+                                buttons: {
+                                    "Aceptar": function () {
+                                        var editor = $("#editor").data("kendoEditor");
+                                        var content = $("#tooltipContent").val();
+                                        var selectedText = editor.getSelection();
+                                        var selectedHtml = editor.selectedHtml();                                        
+
+                                        editor.clipboard.paste("<a content=\"" + content + "\"class=\"tooltip\">" + selectedHtml + "</a>");
+                                       
+                                        $(this).dialog("close");
+                                    },
+                                    "Cancelar": function () {                                       
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        name: "addImage",
+                        tooltip: "Agregar Imagen",
+                        exec: function (e) {
+                            editor_ = $("#editor").data("kendoEditor");
+
+                            window.data("kendoWindow").center().open();                          
+                        }
+                    }
+                ]
+            });
+
+            
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

@@ -1,0 +1,148 @@
+﻿@model iTuinBook.Models.Emparejado
+@using iTuinBook.Models
+
+@{
+    ViewBag.Title = "AgregarEmparejados";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Agregar Emparejado</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Pregunta</legend>
+
+         @{
+            Pregunta preg = ViewBag.Pregunta;
+                        
+            <div class="editor-label">
+                @Html.Label("Enunciado")
+            </div>
+            <div class="editor-field">
+                @preg.Enunciado            
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Dificultad")
+            </div>
+            <div class="editor-field">
+                @preg.Dificultad            
+            </div>
+
+             <div class="editor-label">
+                @Html.Label("Pertinente")
+            </div>
+            <div class="editor-field">
+                @preg.Pertinente            
+            </div>
+        }   
+        <hr />
+
+    </fieldset>
+        
+    if (preg.Emparejados != null && preg.Emparejados.Count != 0)
+    {
+        var emparejados = preg.Emparejados;
+        
+        <fieldset>
+            <legend>Emparejados</legend>
+
+            <table id="alternativas">
+                    <tr>
+                        <th>
+                            
+                        </th>
+                        <th>
+                            Col. Izquierda
+                        </th>
+                        <th>
+                            Col. Derecha
+                        </th>                        
+                    </tr>
+                    @{ 
+                        int i = 0;
+                    
+                        foreach (Emparejado emp in emparejados)
+                        {
+                            i = i + 1;
+                    
+                            <tr>
+                                <td>                                               
+                                    <b>@Html.ActionLink("Eliminar", "EliminarEmparejado", "Docente", new { EmparejadoID = emp.EmparejadoID, PreguntaID = preg.PreguntaID }, null)</b>                              
+                                </td>                  
+                                <td>
+                                    @emp.ColIzq                   
+                                </td>   
+                                <td style="text-align:center">
+                                    @emp.ColDer
+                                </td>        
+                               
+                            </tr>
+                        } 
+                    }  
+                </table>
+        </fieldset>
+    }        
+    
+    <hr />
+    <fieldset>
+        <legend>Emparejado</legend>
+
+        <div class="editor-label">
+            @Html.Label("Columna Izquierda")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ColIzq)
+            @Html.ValidationMessageFor(model => model.ColIzq)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Columna Derecha")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ColDer)
+            @Html.ValidationMessageFor(model => model.ColDer)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    <b>@Html.ActionLink("Volver", "AdministrarPregunta", "Docente", new { PreguntaID = ViewBag.Pregunta.PreguntaID }, null)</b>                           
+    
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#pag").kendoGrid({
+                height: 220
+            });
+
+            $("#preg").kendoGrid({
+                height: 220
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

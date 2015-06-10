@@ -1,0 +1,296 @@
+﻿@model iTuinBook.Models.Pregunta
+@using iTuinBook.Models;
+
+@{
+    ViewBag.Title = "Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    ConfigPregunta config = ViewBag.config;
+}
+
+ @{        
+     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @{
+            var code = "";
+            var strs = new String[0];
+            var tmp = "";
+            
+            if(false)
+            {
+                strs = Model.Enunciado.Split('/');
+                var pals = Model.Claves.Split('/');                
+                
+                var s = 1;
+                
+                foreach(string str in strs)
+                {
+                    tmp = str;
+                
+                    foreach(string pal in pals)
+                    {
+                        if(str.IndexOf(pal) > -1)
+                        {
+                            tmp = tmp.Replace(pal, "<span style=\"background-color: Yellow;\">" + pal + "</span>");
+                        }
+                    }
+                
+                    if(strs.Count() == s){
+                        code = code + "<p style=\"text-align: justify;\"><b>" + tmp + "</b></p>";
+                    }
+                    else{
+                        code = code + "<p style=\"text-align: justify;\">" + tmp + "</p>";
+                    }
+                    s++;
+                }
+            }
+            else
+            {
+                strs = Model.Enunciado.Split('/');
+
+                var s = 1;
+                
+                foreach(string str in strs)
+                {
+                    var word = str.Split(' ');
+
+                    if (strs.Count() == s)
+                    {
+                        code = code + "<p style=\"text-align: justify;\"><b>";
+                        
+                        foreach(string pal in word)
+                        {
+                            code = code + "<span class=\"word\">" + pal + " </span>"; 
+                        }
+                        
+                        code = code + "</b></p>";
+                    }
+                    else
+                    {
+                        code = code + "<p style=\"text-align: justify;\">";
+
+                        foreach (string pal in word)
+                        {
+                            code = code + "<span class=\"word\">" + pal + " </span>";
+                        }
+
+                        code = code + "</p>";
+                    }
+                    
+                    s++;                  
+                }                
+            }
+        }
+
+        @Html.Raw(code)
+                        
+     </div>
+    
+     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+     @if (Model.TipoPreguntaID == 0) 
+     {
+        
+     }
+     else
+     {
+         if (Model.TipoPreguntaID == 1) //Test
+         {
+             
+             <ul>
+                @foreach (Alternativa alt in Model.Alternativas)
+                {
+                    @Html.RadioButtonFor(r => alt.Opcion, alt.Opcion, new { @style="width:20px"}) @alt.Opcion <br />
+                }
+             </ul>
+         
+            <button id="btnValidar">Validar</button>
+         }
+         else
+         {
+             if (Model.TipoPreguntaID == 2) // Abierta @Html.CheckBox(alt.Opcion, new { @value = alt.Opcion, @class="opcion"})
+             {
+                <textarea id="resp"></textarea>
+             }
+             else
+             {
+                 if (Model.TipoPreguntaID == 4) // Emparejar
+                 {
+                    
+                    <table>
+                        @foreach (Emparejado emp in Model.Emparejados)
+                        {
+                            if (emp.ColIzq != null)
+                            {
+                                <tr>
+                                    <td>
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width: 600px; text-align:justify;"><hr /> @emp.ColIzq </div>                                
+                                    </td>                            
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width: 600px; text-align:justify;"><hr /> @emp.ColIzq </div>                                
+                                    </td>                            
+                                </tr>
+                            }
+                        }          
+                    </table>
+                    
+                    <div style="width:300px; z-index: 10; position: fixed; right: 10px; top: 40px;">
+                       <table>
+                           <tr>
+                               <td id="inicial" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:300px; padding-top:20px; padding-bottom:20px; background-color:snow;">
+                                    @{
+                        int i = 1;
+                        string id;
+                        var Lista = ViewBag.Lista;
+                        foreach (string emp in Lista)
+                        {
+                            if (emp != null)
+                            {
+                                id = "drag" + i;
+                                            <div id=@id.ToString() + draggable="true" ondragstart="drag(event)" style="margin-left:4px; border: 1px solid; width: 300px; float:right; margin-bottom: 2px; margin-top: 2px;">@emp</div>
+                                i++;
+                            }
+                        }
+                                }
+                               </td>
+                           </tr>
+                           <tr>
+                               <td>
+                                   <button id="btnValidarParejas">Validar</button>
+                               </td>
+                           </tr>
+
+                       </table>
+                        
+
+                        
+                    </div>
+                     
+                 }
+                 else
+                 {
+                     // Otro caso
+                 }
+             }
+         }
+     }
+    
+     </div>
+        
+    
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {            
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {            
+            ev.preventDefault();            
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.indexOf("drag") == -1)
+                ev.target.appendChild(document.getElementById(data));
+        }
+
+        $(document).ready(function () { 
+            $('.word').click(function () {
+                if ($(this).hasClass("word_marcada")) {
+                    $(this).removeClass("word_marcada");
+                }
+                else {
+                    $(this).addClass("word_marcada");
+                }
+            });
+
+            if ($(this).scrollTop() > 50) // change 50 to what you want (work out how far the nav is from the top of the page alraedy and add it there, that'll make it smoother transition)
+            {
+                $('.topnavigation').addClass('scrolling');
+            } else {
+                $('.topnavigation').removeClass('scrolling');
+            }
+
+            // Configuración de la pregunta
+             if ('@config.EnmascararAlternativas' == 'True')
+             {
+                $('#enunciado').addClass("difuminado");
+
+                $('#enunciado').click(function () {
+                    $(":radio").attr("disabled", false);
+                                       
+                    if('@config.EnmascararAlternativas' == 'True')
+                         $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+                });
+            }
+
+            if ('@config.EnmascararAlternativas' == 'True') {
+                $('#alternativas').addClass("difuminado");
+
+                $('#alternativas').click(function () {
+                    
+                    if ('@config.EnmascararEnunciado' == 'True')
+                        $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+                });
+            }
+
+            if ('@config.EnunciadoActivaRadio' == 'True')
+                $(":radio").attr("disabled", true);
+            
+            $(":radio").change(function () {
+                if ('@config.EnmascararEnunciado' == 'True') {
+                    $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+                }                
+            });
+
+            if ('@config.Responder' == 'True')
+                $("#btnValidar").attr("disabled", false);
+
+            // Fin de configuración
+
+            var respTest = ""
+            
+            $(":radio").change(function () {
+                if ($(this).attr("checked"))
+                {
+                    respTest = $(this).attr("value");
+                }
+            });
+            
+            $("#btnValidar").click(function () {
+                $("#btnValidar").attr("disabled", "disabled");
+
+                $.ajax({
+                    url: "/iTuinBook/ValidarPregunta", //url: '/iTuinBook/Validar',
+                    type: 'POST',
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest },
+                    success: function (result) {
+                        var input = result.mensaje;
+                        arrayFeedbackContenido = input.split('/');
+                        accTotalFeedback = arrayFeedbackContenido.length;
+                            // data.redirect contains the string URL to redirect to
+                            //window.location.href = result.redirect;
+                        var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                        window.parent.$("#escena").attr("src", src);
+
+                        
+                        
+                        // Corregir Pregunta.
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });        
+        });
+    </script>
+}

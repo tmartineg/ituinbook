@@ -1,0 +1,78 @@
+﻿@model iTuinBook.Models.TareaOrdenar
+
+@{
+    ViewBag.Title = "AgregarItemsOrdenar";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+<h2>Agregar Items Ordenar</h2>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Tarea Ordenar</legend>
+
+        @Html.HiddenFor(model => model.TareaOrdenarID)
+
+        @if(Model.Nombre != null)
+        {
+            <div class="editor-label">
+            
+            @Html.Label(Model.Nombre)
+            </div>
+        }
+        <br />
+        <div class="editor-label">
+            Tipo de elementos: @switch((int)Model.Tipo){
+                case 0:
+                    <b>Palabras</b>
+                    break;
+                case 1:
+                    <b>Frases</b>
+                    break;
+                case 2:
+                    <b>Imágenes</b>
+                    break;
+                default:
+                    break;
+            } 
+            <br>
+            <b>*Nota:</b> Tarea Ordenar (Item: Orden de aparición // Orden: Orden correcto)
+        </div>
+        <br />
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Num; i++)
+            { 
+                @:Item @(i+1) - @Html.EditorFor(model => model.Ordenados[i])
+                @Html.ValidationMessageFor(model => model.Ordenados[i])
+                <br />
+                @:Orden @(i+1) - @Html.EditorFor(model => model.Orden[i])
+                @Html.ValidationMessageFor(model => model.Orden[i])
+                <br />
+            }
+        </div>
+
+        <div hidden="hidden">
+            @Html.TextBoxFor(model => model.Nombre)
+            @Html.TextBoxFor(model => model.Num)
+            @Html.TextBoxFor(model => model.TextoID)
+            @Html.TextBoxFor(model => model.TareaOrdenarID)
+            @Html.TextBoxFor(model => model.Tipo)
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Escritorio";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var flag = 0;
+
+            $("#btnToogle").click(function () {
+                if (window.parent.$("#escritorio").attr("height") == "795px") {
+                    window.parent.$("#escritorio").attr("height", "530px");
+                    flag = 1;
+                }
+
+                window.parent.$("#escena").toggle(200, cambiarTamanyo);
+            });
+            
+            function cambiarTamanyo() {
+                if(flag == 0)
+                    window.parent.$("#escritorio").attr("height", "795px");
+
+                flag = 0;
+            }
+        });
+    </script>
+}
+
+
