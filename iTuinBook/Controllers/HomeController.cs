@@ -4,16 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using iTuinBook.Models;
-
+using NLog;
 
 namespace iTuinBook.Controllers
 {
     public class HomeController : Controller
     {
         Contexto db = new Contexto();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public ActionResult Index()
         {
+            logger.Debug("Index");
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
             if (User.Identity.IsAuthenticated)
@@ -45,6 +48,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult About()
         {
+            logger.Debug("About");
             ViewBag.Message = "Your app description page.";
 
             return View();
@@ -52,6 +56,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult Contact()
         {
+            logger.Debug("Contact");
             ViewBag.Message = "Your contact page.";
 
             return View();

@@ -151,13 +151,14 @@
                 $.ajax({
                     url: "/iTuinBook/GetPertinente",
                     type: 'POST',
-                    data: { pregActual: pregActual, TextoID: '@Model.TextoID' },
+                    data: { pregActual: pregActual, TextoID: '@Model.TextoID' }, //guirisan: add paginaID and other data
                     success: function (result) {
                         var input = result.Pertinente;
                         
                         if (region.indexOf(input) > -1) {
                             if ($('#Pagina').attr("busca") == "ok") {
                                 $.ajax({
+                                    //guirisan: modify petition? add data?
                                     url: "/iTuinBook/PertinenteEncontrado",
                                     type: 'POST'
                                 });

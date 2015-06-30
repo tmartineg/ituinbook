@@ -70,10 +70,12 @@
         $(document).ready(function () {
             $("#btnSiguiente").click(function () {
                 if (parseInt('@ViewBag.pregActual') < parseInt('@ViewBag.pregTotal')) {
+                    var datetimeclient = new Date();
+                    datetimeclient = datetimeclient.toISOString();
                     $.ajax({
                         url: "/iTuinBook/SiguientePreguntaCompleta", //url: '/iTuinBook/Validar',
                         type: 'POST',
-                        data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                        data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient},
                         success: function (result) {
                             window.parent.parent.feedbackCompleto("");
                             // data.redirect contains the string URL to redirect to

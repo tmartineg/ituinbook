@@ -42,7 +42,9 @@
                 </tr>
                 @{
             ICollection<DatosUsuario> datosUsuario = ViewBag.DatosUsuario;
-
+            
+            //guirisan: usamos el mismo datetime para todas las acciones de la página, ya que no se usan disparadores por click + ajax
+            string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
             foreach (Grupo gru in Model)
             {
                 var param = gru.Orden.Split(':');
@@ -79,19 +81,23 @@
                                     <b>Acabado</b>   
                                 }
                                 else
-                                {   
+                                {
+                                    
                                     switch(mod.Condicion)
                                     {
                                         case 1: // iTextBook
                                         case 2:
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
-                                        break;
+                                            
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 ,moment = datetimeclient}, null)</b>     
+                                            break;
                                         case 3:                                        
-                                        case 4:                                        
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
-                                        break;
+                                        case 4:
+                                          
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient}, null)</b>     
+                                            break;
                                         default:
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>     
+
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
                                             break;
                                        
                                     }                           
@@ -307,7 +313,7 @@
                             <td>
                                 @if (!flag_empezar)
                                 {
-                                    <b> @Html.ActionLink("Empezar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>                                
+                                    <b> @Html.ActionLink("Empezar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 , moment = datetimeclient}, null)</b>                                
                                 }
                             </td>  
                             <td>

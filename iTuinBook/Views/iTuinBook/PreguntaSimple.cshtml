@@ -436,10 +436,12 @@
                     cont = cont + 1;
                 });
 
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaParejas", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respuesta },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respuesta, moment: datetimeclient },
                     success: function (result) {
                         var input = result.Mensaje;
                         arrayFeedbackContenido = input.split('/');
@@ -478,10 +480,12 @@
                     palabras = palabras + $(this).html() + "/";
                 });*/
 
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaClaves", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras , moment: datetimeclient},
                     success: function (result) {
                         var aciertos = result.Results.split('/');
                         var fallos = result.Errores.split('/');
@@ -538,11 +542,12 @@
                 $(".word_marcada").each(function () {
                     palabras = palabras + $(this).html() + ":" + $(this).attr("indice") + "/";
                 });
-
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaClaves", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras, moment: datetimeclient },
                     success: function (result) {
                         var aciertos = result.Results.split('/');
                         var fallos = result.Errores.split('/');
@@ -613,10 +618,12 @@
             });
             
             $("#btnValidarTest").click(function () {
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaTest", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest,moment: datetimeclient },
                     success: function (result) {
                         var input = result.mensaje;
                         arrayFeedbackContenido = input.split('/');
@@ -644,10 +651,12 @@
             });
 
             $("#btnValidarSeleccion").click(function () {
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaSeleccion", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val() },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val(), moment: datetimeclient },
                     success: function (result) {
                         var input = result.Mensaje;
                         arrayFeedbackContenido = input.split('/');

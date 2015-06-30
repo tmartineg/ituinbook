@@ -52,11 +52,12 @@
 
             $("#btnValidar").click(function () {
                 $("#btnValidar").attr("disabled", "disabled");
-
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaCompleta", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     success: function (result) {
                         var input = result.Mensaje;
                         window.parent.$('reg').removeClass("no_difuminado").addClass("difuminado");

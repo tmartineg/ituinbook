@@ -91,7 +91,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">        
+    <script type="text/javascript">
         $(document).ready(function () {
             var timeStart = new Date();
             var timeFinish = new Date();
@@ -99,17 +99,17 @@
             @if(configPregunta != null && configPregunta.EnmascararTexto)
             {
                 <text>
-                parent.BlurPagina("True");
-                window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-                window.parent.$('.paginas').css("filter", "url(#example-one)");
+            parent.BlurPagina("True");
+            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+            window.parent.$('.paginas').css("filter", "url(#example-one)");
                 </text>
             }
             else
             {
                 <text>
-                parent.BlurPagina("False");
-                window.parent.$('.paginas').css("-webkit-filter", "");
-                window.parent.$('.paginas').css("filter", "");
+            parent.BlurPagina("False");
+            window.parent.$('.paginas').css("-webkit-filter", "");
+            window.parent.$('.paginas').css("filter", "");
                 </text>
             }
 
@@ -124,12 +124,16 @@
                         return false;
                     }
                 });
-  
+
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Pregunta_Test_Validar", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter },
-                    success: function (result) {                        
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient },
+                    success: function (result) {
                         window.location.href = result.redirect;
 
                         if (!(result.mensaje == null || result.mensaje == "")) {
@@ -152,7 +156,7 @@
                     },
                     error: function () {
                         alert("error");
-                    }                    
+                    }
                 });
             });
 
@@ -167,10 +171,13 @@
             $('#btnFlotador').click(function () {
                 $("#btnFlotador").attr("disabled", "disabled");
 
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34 },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34, moment: datetimeclient },
                     error: function () {
                         alert("Error: Hubo un error con tu última acción.");
                     }
@@ -194,24 +201,27 @@
             $("#btnLupa").click(function () {
                 $("#btnLupa").attr("disabled", "disabled");
 
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36 },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36, moment: datetimeclient },
                     error: function () {
                         alert("Error: Hubo un error con tu última acción.");
                     }
                 });
 
                 var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
-                                
+
                 $('.paginas', window.parent.document).each(function () {
                     var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
 
-                    for (var i = 0; i < param.length; i++) {                        
-                        $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));                        
+                    for (var i = 0; i < param.length; i++) {
+                        $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
                     }
-                });                                
+                });
             });
             </text>
                 }
@@ -222,10 +232,13 @@
             $('#btnPrismaticos').click(function () {
                 $("#btnPrismaticos").attr("disabled", "disabled");
 
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35 },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35, moment: datetimeclient },
                     error: function () {
                         alert("Error: Hubo un error con tu última acción.");
                     }
@@ -252,28 +265,31 @@
             <text>
             if ('@configPregunta.EnmascararEnunciado' == 'True') {
                 $('#enunciado').addClass("difuminado");
-                
-                $('#enunciado').click(function () {                    
+
+                $('#enunciado').click(function () {
                     if ($('#enunciado').hasClass("difuminado")) {
                         @if (configPregunta != null && configPregunta.EnmascararTexto)
                         {
                             <text>
-                            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-                            window.parent.$('.paginas').css("filter", "url(#example-one)");
+                        window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+                        window.parent.$('.paginas').css("filter", "url(#example-one)");
                             </text>
                         }
                         else
                         {
                             <text>
-                            window.parent.$('.paginas').css("-webkit-filter", "");
-                            window.parent.$('.paginas').css("filter", "");
+                        window.parent.$('.paginas').css("-webkit-filter", "");
+                        window.parent.$('.paginas').css("filter", "");
                             </text>
                         }
 
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
                         $.ajax({
                             url: "/PL2_Experimentos/RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16 },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16, moment: datetimeclient },
                             error: function () {
                                 alert("Error: Hubo un error con tu última acción.");
                             }
@@ -285,7 +301,7 @@
 
                         if ('@configPregunta.EnmascararAlternativas' == 'True') {
                             if ($('#alternativas').hasClass("difuminado")) {
-                                
+
                             }
                             else {
                                 $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
@@ -295,20 +311,23 @@
 
                                 var diff = timeFinish - timeStart;
 
+                                //guirisan: datetime set in client
+                                var datetimeclient = new Date();
+                                datetimeclient = datetimeclient.toISOString();
                                 $.ajax({
                                     url: "/PL2_Experimentos/RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString() },
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient },
                                     error: function () {
                                         alert("Error: Hubo un error con tu última acción.");
                                     }
                                 });
                             }
                         }
-                              
-                        timeStart = jQuery.now();                        
+
+                        timeStart = jQuery.now();
                     }
-                });               
+                });
             }
 
             if ('@configPregunta.EnmascararAlternativas' == 'True') {
@@ -331,10 +350,13 @@
                             </text>
                         }
 
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
                         $.ajax({
                             url: "/PL2_Experimentos/RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17 },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient },
                             error: function () {
                                 alert("Error: Hubo un error con tu última acción.");
                             }
@@ -353,10 +375,13 @@
 
                                 var diff = timeFinish - timeStart;
 
+                                //guirisan: datetime set in client
+                                var datetimeclient = new Date();
+                                datetimeclient = datetimeclient.toISOString();
                                 $.ajax({
                                     url: "/PL2_Experimentos/RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() },
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient },
                                     error: function () {
                                         alert("Error: Hubo un problema con tu última acción.");
                                     }
@@ -376,35 +401,38 @@
                 if (configModulo.Ayudas)
                 {   
                     @: $('#ayudas').show();
-                    @: $('#ayudas').css("visibility", "visible")
+                                @: $('#ayudas').css("visibility", "visible")
                 }
                 else
                 {
                     if (configPregunta.Ayuda)
                     {
                         @: $('#ayudas').show();
-                        @: $('#ayudas').css("visibility", "visible")
+                                    @: $('#ayudas').css("visibility", "visible")
                     }
                     else
                     {
                         @: $('#ayudas').hide();
-                        @: $('#ayudas').css("visibility", "hidden")
+                                    @: $('#ayudas').css("visibility", "hidden")
                     }
                 }                
             }
             else
             {
                 @: $('#ayudas').hide();
-                @: $('#ayudas').css("visibility", "hidden")
+                            @: $('#ayudas').css("visibility", "hidden")
             }
 
             $(":radio").change(function () {
                 $("#btnValidarTest").removeAttr("disabled");
 
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14 },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient },
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }
@@ -415,7 +443,7 @@
 
             /**************************************/
             /**************************************/
-            
+
             parent.IniciarTiempoPregunta();
         });
 

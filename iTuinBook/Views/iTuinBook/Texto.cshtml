@@ -73,9 +73,12 @@
 
             $('#Pagina').click(function () {
                 if ($('#Pagina').attr("style") == "-webkit-filter: blur(5px); filter:url(#example-one);") {
+                    var datetimeclient = new Date();
+                    datetimeclient = datetimeclient.toISOString();
                     $.ajax({
                         url: "/iTuinBook/BuscaIndependiente",
-                        type: 'POST'
+                        type: 'POST',
+                        data: { moment: datetimeclient }
                     });
 
                     $('#Pagina').attr("style", "");

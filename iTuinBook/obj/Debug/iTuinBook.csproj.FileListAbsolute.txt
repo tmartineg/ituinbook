@@ -197,3 +197,6 @@ C:\Guillem\iTuinBook\iTuinBook\obj\Debug\iTuinBook.csproj.GenerateResource.Cache
 C:\Guillem\iTuinBook\iTuinBook\obj\Debug\en\iTuinBook.resources.dll
 C:\Guillem\iTuinBook\iTuinBook\obj\Debug\iTuinBook.dll
 C:\Guillem\iTuinBook\iTuinBook\obj\Debug\iTuinBook.pdb
+C:\Guillem\ituinbook\iTuinBook\bin\NLog.config
+C:\Guillem\ituinbook\iTuinBook\bin\NLog.dll
+C:\Guillem\ituinbook\iTuinBook\bin\NLog.xml

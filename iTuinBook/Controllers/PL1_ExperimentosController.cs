@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using NLog;
 
 namespace iTuinBook.Controllers
 {
@@ -12,7 +13,8 @@ namespace iTuinBook.Controllers
     {
         Contexto db = new Contexto(); 
         ExternalMethods ext = new ExternalMethods();
-        
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         //
         // GET: /PL1_Experimentos/
         #region FUNCIONES COMUNES
@@ -312,7 +314,8 @@ namespace iTuinBook.Controllers
         #endregion
 
         public ActionResult PL1_Texto(int GrupoID, int ModuloID, int textoActual)
-        {            
+        {
+            logger.Debug("PL1_Texto");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto text = ext.GetTextoActual(ModuloID, textoActual);

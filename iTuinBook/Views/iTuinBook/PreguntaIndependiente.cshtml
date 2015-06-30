@@ -171,20 +171,24 @@
             });
 
             $('#btnFlotador').click(function () {
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 1 }
+                    data: { Ayuda: 1, moment: datetimeclient }
                 });
 
                 $('#ayuFlotador').show();
             });
 
             $("#btnLupa").click(function () {
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 3 }
+                    data: { Ayuda: 3 , moment: datetimeclient}
                 });
 
                 var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
@@ -249,10 +253,12 @@
             });
 
             $('#btnPrismaticos').click(function () {
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 2 },
+                    data: { Ayuda: 2, moment: datetimeclient },
                 });
 
                 var array = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('+');
@@ -392,11 +398,12 @@
                 $("#btnValidarSimultanea").attr("disabled", "disabled");
 
                 window.parent.$('img').imgAreaSelect({ remove: true });
-
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() , moment: datetimeclient},
                     success: function (result) {
                         var input = result.Mensaje;
                         

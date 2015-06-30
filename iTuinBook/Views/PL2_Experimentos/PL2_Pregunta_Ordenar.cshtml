@@ -192,11 +192,16 @@
                 }
 
                 resp = resp.substring(0, resp.length - 8);
-                
+
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Pregunta_Ordenar_Validar",
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@configPregunta.PreguntaID', TareaOrdenarID: '@Model.TareaOrdenarID', respuesta: resp },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@configPregunta.PreguntaID', TareaOrdenarID: '@Model.TareaOrdenarID', respuesta: resp, moment: datetimeclient},
                     success: function (result) {
                         if (!(result.mensaje == null || result.mensaje == "")) {
                         @if (configPregunta != null)

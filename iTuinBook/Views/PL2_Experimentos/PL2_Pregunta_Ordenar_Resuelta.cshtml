@@ -191,10 +191,15 @@
             });
 
             $("#btnSiguientePregunta").click(function () {
+
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Siguiente_Pregunta", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@pregunta.PreguntaID', TextoID: '@du.TextoID' },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@pregunta.PreguntaID', TextoID: '@du.TextoID', moment: datetimeclient },
                     success: function (result) {
                         $('.paginas', window.parent.document).each(function () {
                             $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));

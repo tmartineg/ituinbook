@@ -22,7 +22,7 @@
         <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
     }
     
-    <div style="position: relative;">	    	
+    <div style="position: relative;">           
         @foreach (Pagina pag in Model.Paginas)
         {
             <div class="paginas" style="padding: 0px 50px; position: absolute;">@Html.Raw(Model.Paginas.First().Contenido)</div>
@@ -71,11 +71,15 @@
                     else {
                         $(this).removeClass("difuminado").addClass("no_difuminado");
                     }
+                    
+                    //guirisan: datetime set in client
+                    var datetimeclient = new Date();
+                    datetimeclient = datetimeclient.toISOString();
 
                     $.ajax({
                         url: "/PL2_Experimentos/RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 40, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() },
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 40, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient},
                         error: function () {
                             alert("Error: Hubo un problema con tu última acción.");
                         }
@@ -85,11 +89,15 @@
                     $('reg').removeClass("no_difuminado").addClass("difuminado");
 
                     $(this).removeClass("difuminado").addClass("no_difuminado");
+                    
+                    //guirisan: datetime set in client
+                    var datetimeclient = new Date();
+                    datetimeclient = datetimeclient.toISOString();
 
                     $.ajax({
                         url: "/PL2_Experimentos/RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 41, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() },
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 41, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient},
                         error: function () {
                             alert("Error: Hubo un problema con tu última acción.");
                         }
@@ -103,19 +111,28 @@
             $("#feedback").hide();
 
             $("#btnPregunta").click(function () {
+                
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 5, Param: ($.now() - ini_LecIni).toString() },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 5, Param: ($.now() - ini_LecIni).toString() , moment: datetimeclient},
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }
                 });
                 
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 6, Param: ((($.now() - ini_LecIni) / 1000) / $('.paginas:First').text().split(' ').length).toString() },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 6, Param: ((($.now() - ini_LecIni) / 1000) / $('.paginas:First').text().split(' ').length).toString() , moment: datetimeclient},
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }
@@ -148,10 +165,15 @@
             });
 
             $("#btnPasar").click(function () {
+                
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Texto_Cambiar",
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID' },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID' , moment: datetimeclient},
                     success: function (result) {
                         window.parent.window.location.href = result.redirect;
                     },
@@ -171,10 +193,15 @@
             var tmpNow = $.now();
             
             if ($("#tbAvatar").text() != "") {
+                
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#tbAvatar").text().split(' ').length).toString() },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#tbAvatar").text().split(' ').length).toString() , moment: datetimeclient},
                         error: function () {
                             alert("Error: Hubo un problema con tu última acción.");
                         }
@@ -182,10 +209,15 @@
             }
             else {
                 if ($("#mensaje").text() != "") {
+                    
+                    //guirisan: datetime set in client
+                    var datetimeclient = new Date();
+                    datetimeclient = datetimeclient.toISOString();
+
                     $.ajax({
                         url: "/PL2_Experimentos/RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#mensaje").text().split(' ').length).toString() },
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#mensaje").text().split(' ').length).toString() , moment: datetimeclient},
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }
@@ -197,10 +229,15 @@
             $("#mensaje").text("");
 
             // Fin lectura Feedback
+            
+            //guirisan: datetime set in client
+            var datetimeclient = new Date();
+            datetimeclient = datetimeclient.toISOString();
+
             $.ajax({ 
                 url: "/PL2_Experimentos/RegistrarAccion",
                 type: 'POST',
-                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 44, Param: ($.now() - ini_LecFDBK).toString() },
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 44, Param: ($.now() - ini_LecFDBK).toString() , moment: datetimeclient},
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }
@@ -225,10 +262,15 @@
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID' },
                     success: function (result) {
+                        
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
+
                         $.ajax({
                             url: "/PL2_Experimentos/RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: result.result, CodeOP: 24 },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: result.result, CodeOP: 24 , moment: datetimeclient},
                             error: function () {
                                 alert("Error: Hubo un problema con tu última acción. (RegistrarAccion)");
                             }
@@ -285,10 +327,15 @@
         }
 
         function FinalizarTiempoPregunta() {
+            
+            //guirisan: datetime set in client
+            var datetimeclient = new Date();
+            datetimeclient = datetimeclient.toISOString();
+
             $.ajax({
                 url: "/PL2_Experimentos/RegistrarAccion",
                 type: 'POST',
-                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 8, Param: ($.now() - ini_PregActual).toString() },
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 8, Param: ($.now() - ini_PregActual).toString() , moment: datetimeclient},
                     error: function () {
                         alert("Error: Hubo un problema con tu última acción.");
                     }

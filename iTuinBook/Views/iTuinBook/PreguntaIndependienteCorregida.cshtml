@@ -97,19 +97,22 @@
             $("#puntos").val('@ViewBag.Puntos');
             $("#btnSiguiente").click(function () {
                 window.parent.$('img').imgAreaSelect({ remove: true });
-
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 if ($.now() - ini > 5000) // REVISA EN 5 SEGUNDOS
                 {
+                    
                     $.ajax({
                         url: "/iTuinBook/RevisaIndependiente",
-                        type: 'POST'
+                        type: 'POST',
+                        data: { moment: datetimeclient }
                     });
                 }
 
                 $.ajax({
                     url: "/iTuinBook/SiguientePregunta", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                    data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     success: function (result) {
                         $('.paginas', window.parent.document).each(function () {
                             $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));

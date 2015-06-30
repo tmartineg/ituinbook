@@ -5,17 +5,20 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-
+using NLog;
+   
 namespace iTuinBook.Controllers
 {
     public class PL2_ExperimentosController : Controller
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         Contexto db = new Contexto();
         ExternalMethods ext = new ExternalMethods();
 
         #region FUNCIONES COMUNES
         public void ValidarSeleccion(int ModuloID, int GrupoID, int PreguntaID, int TextoID, string respuesta, out double pert, out double noPert, bool subtarea)
         {
+            logger.Debug("PL2_Experimentos/ValidarSeleccion");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Pagina pagina = pregunta.Texto.Paginas.First();
             string respOriginal = respuesta;
@@ -206,6 +209,7 @@ namespace iTuinBook.Controllers
 
         public string GetFeedbackSeleccion(DatosUsuario du, double porcPert, double porcNoPert)
         {
+            logger.Debug("PL2_Experimentos/GetFeedbackSeleccion");
             string mensaje = "";
 
             if (porcNoPert > 25) // SI IRRELEVANTE
@@ -261,6 +265,7 @@ namespace iTuinBook.Controllers
 
         private void SaveChanges()
         {
+            logger.Debug("PL2_Experimentos/SaveChanges");
             try
             {
                 ext.SaveChanges();
@@ -274,6 +279,7 @@ namespace iTuinBook.Controllers
 
         protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID)
         {
+            logger.Debug("PL2_Experimentos/RouterPregunta");
             ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
 
             db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = DateTime.Now, PreguntaID = pregunta.PreguntaID });
@@ -327,6 +333,7 @@ namespace iTuinBook.Controllers
 
         private double CalculoPertinente(string str)
         {
+            logger.Debug("PL2_Experimentos/CalculoPertinente");
             string[] param = str.Substring(0, str.Length - 1).Split('/');
             List<Pertinente> lista = new List<Pertinente>();
 
@@ -346,6 +353,7 @@ namespace iTuinBook.Controllers
 
         private double CalculoPertinenteSobreBusqueda(string str)
         {
+            logger.Debug("PL2_Experimentos/CalculoPertinenteSobreBusqueda");
             string[] param = str.Substring(0, str.Length - 1).Split('/');
             List<Pertinente> lista = new List<Pertinente>();
 
@@ -375,6 +383,7 @@ namespace iTuinBook.Controllers
         [HttpPost]
         public ActionResult GetPreguntaID(int ModuloID, int GrupoID)
         {
+            logger.Debug("PL2_Experimentos/GetPreguntaID");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             return Json(new { result = du.PreguntaID });
@@ -382,7 +391,8 @@ namespace iTuinBook.Controllers
 
         [HttpPost]
         public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param)
-        {   
+        {
+            logger.Debug("PL2_Experimentos/RegistraraAccion");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Texto texto = db.Textos.Find(TextoID);
@@ -517,6 +527,7 @@ namespace iTuinBook.Controllers
 
         public bool BuscarAccion(int CodeOP, int GrupoID, int ModuloID, int TextoID, int PreguntaID)
         {
+            logger.Debug("PL2_Experimentos/BuscarAccion");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             var acciones = from d in db.DatosSimples
@@ -532,6 +543,7 @@ namespace iTuinBook.Controllers
         [HttpPost]
         public ActionResult Algoritmo(string Pertinente, int TextoID, string NuevaSeleccion)
         {
+            logger.Debug("PL2_Experimentos/Algoritmo");
             Pertinente = Regex.Replace(Pertinente, "\\/+", "/");
 
             if (Pertinente != "" && Pertinente.First() == ' ')
@@ -920,6 +932,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult PL2_Texto(int GrupoID, int ModuloID, int textoActual)
         {
+            logger.Debug("PL2_Experimentos/PL2_Texto");
             try
             {
                 DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -942,7 +955,8 @@ namespace iTuinBook.Controllers
         
         [HttpPost]
         public ActionResult PL2_Texto_Cambiar(int GrupoID, int ModuloID, int TextoID)
-        {   
+        {
+            logger.Debug("PL2_Experimentos/PL2_Texto_Cambiar");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Modulo mod = db.Modulos.Find(ModuloID);
             Texto text = db.Textos.Find(TextoID);
@@ -1022,6 +1036,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult PL2_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
+            logger.Debug("PL2_Experimentos/PL2_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -1038,6 +1053,7 @@ namespace iTuinBook.Controllers
         #region Pregunta TEST
         public ActionResult PL2_Pregunta_Test(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
+            logger.Debug("PL2_Experimentos/PL2_Pregunta_Test");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -1081,6 +1097,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult PL2_Pregunta_Test_2(int GrupoID, int ModuloID, int PreguntaID)
         {
+            logger.Debug("PL2_Experimentos/PL2_pregunta_test_2");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
@@ -1128,6 +1145,7 @@ namespace iTuinBook.Controllers
 
         public ActionResult PL2_Pregunta_Test_Seleccion(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
+            logger.Debug("PL2_Experimentos/pl2_pregunta_test_seleccion");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -1149,6 +1167,7 @@ namespace iTuinBook.Controllers
         [HttpPost]
         public ActionResult AjaxConfigPregunta(int PreguntaID)
         {
+            logger.Debug("PL2_Experimentos/AjaxConfigPRegunta");
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
             if(configPreg != null)
