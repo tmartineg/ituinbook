@@ -140,3 +140,15 @@
 2015-06-29 10:38:54.7271|DEBUG|iTuinBook.Controllers.PL2_ExperimentosController|PL2_Experimentos/SaveChanges
 2015-06-29 10:38:54.7871|DEBUG|iTuinBook.Controllers.PL2_ExperimentosController|PL2_Experimentos/SaveChanges
 2015-06-30 13:13:56.4006|DEBUG|iTuinBook.Controllers.HomeController|Index
+2015-07-02 11:26:34.1947|DEBUG|iTuinBook.Controllers.HomeController|Index
+2015-07-02 11:34:04.3304|DEBUG|iTuinBook.Controllers.HomeController|Index
+2015-07-02 11:35:19.9514|DEBUG|iTuinBook.Controllers.HomeController|Index
+2015-07-02 11:35:30.0544|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/Iniciar
+2015-07-02 11:35:30.7685|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/Texto
+2015-07-02 11:35:30.7685|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/GetDatosUsuario
+2015-07-02 11:35:34.3730|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/PreguntaIndependiente
+2015-07-02 11:35:34.3730|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/GetDatosUsuario
+2015-07-02 11:35:45.9822|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/BuscaIndependiente
+2015-07-02 11:35:45.9822|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/GetDatosUsuario
+2015-07-02 11:35:55.9676|DEBUG|iTuinBook.Controllers.iTuinBookController|iTuinBookController/ValidarPreguntaIndependiente
+2015-07-03 11:07:48.4746|DEBUG|iTuinBook.Controllers.HomeController|Index

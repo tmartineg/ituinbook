@@ -489,11 +489,12 @@
                 $("#btnValidar").attr("disabled", "disabled");
 
                 window.parent.$('img').imgAreaSelect({ remove: true });
-
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
                 $.ajax({
                     url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID'  },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' , moment: datetimeclient },
                     success: function (result) {
                         var input = result.Mensaje;
                         

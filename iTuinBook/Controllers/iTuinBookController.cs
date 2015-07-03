@@ -131,7 +131,9 @@ namespace iTuinBook.Controllers
                         datUser = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
                         return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });
-
+                           
+                        // guirisan: commentat perquè el return de dalt fa el codi inaccessible
+                        /*
                         switch (configModulo.Plantilla)
                         { 
                             case 0:
@@ -147,7 +149,8 @@ namespace iTuinBook.Controllers
                             default:
                                 break;
                         }
-                        return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient });                    
+                        return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient });        
+                         */
                 default:
                     datUser = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 

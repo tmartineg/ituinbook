@@ -298,7 +298,7 @@ namespace iTuinBook.Controllers
             switch (pregunta.TipoPreguntaID)
             {
                 case 0:
-                    return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
+                    return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID , moment = moment});
                 case 1: // Test
                     if (config != null && config.SeleccionarPertinente)
                     {
@@ -313,7 +313,7 @@ namespace iTuinBook.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
+                        return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment });
                     }
                 case 2: // Abierta
                     if (config != null && config.SeleccionarPertinente)
@@ -329,7 +329,7 @@ namespace iTuinBook.Controllers
                 case 5: // Ordenar
                     return RedirectToAction("PL2_Pregunta_Ordenar", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
                 default:
-                    return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
+                    return RedirectToAction("PL2_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID , moment = moment});
             }
         }
 
@@ -1047,8 +1047,9 @@ namespace iTuinBook.Controllers
             }
         }
 
-        public ActionResult PL2_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
+        public ActionResult PL2_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment)
         {
+            
             logger.Debug("PL2_Experimentos/PL2_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
@@ -1060,7 +1061,7 @@ namespace iTuinBook.Controllers
 
             SaveChanges();
 
-            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID);
+            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment);
         }
 
         #region Pregunta TEST
@@ -2025,7 +2026,7 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Abierta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta)
+        public ActionResult PL2_Pregunta_Abierta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment)
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -2033,7 +2034,7 @@ namespace iTuinBook.Controllers
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true);
+            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment);
 
             if (pert > 70 && noPert < 35)
             {
@@ -2048,7 +2049,7 @@ namespace iTuinBook.Controllers
         
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Abierta_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta)
+        public ActionResult PL2_Pregunta_Abierta_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment)
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -2056,7 +2057,7 @@ namespace iTuinBook.Controllers
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true);
+            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment);
 
             return Json(new { redirect = Url.Action("PL2_Pregunta_Abierta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, TextoID = pregunta.Texto.TextoID }), Puntos = du.Puntos, mensaje = GetFeedbackSeleccion(du = du, pert, noPert), PreguntaID = pregunta.PreguntaID });
         }
@@ -2290,6 +2291,7 @@ namespace iTuinBook.Controllers
         [HttpPost]
         public ActionResult PL2_Pregunta_Ordenar_Validar(int GrupoID, int ModuloID, int PreguntaID, int TareaOrdenarID, string respuesta, string moment)
         {
+            DateTime datetimeclient = DateTime.Parse(moment);
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             TareaOrdenar tareaOrdenar = db.TareasOrdenar.Find(TareaOrdenarID);
