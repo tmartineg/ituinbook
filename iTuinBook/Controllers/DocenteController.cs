@@ -10,13 +10,14 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using System.Globalization;
-
+using NLog;
 
 namespace iTuinBook.Controllers
 {
     public class DocenteController : Controller
     {
         Contexto db = new Contexto();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         //
         // GET: /Docente/
@@ -1142,7 +1143,6 @@ namespace iTuinBook.Controllers
 
             return View("Secuencia", Todos);
         }
-
 
 
         #region Funciones Modelado
@@ -3818,8 +3818,15 @@ namespace iTuinBook.Controllers
                                     where s.DatosUsuarioID == datosUsuario.DatosUsuarioID
                                     orderby s.DatoSimpleID ascending
                                     select s;
+                    
+                    //guirisan code to fix slash problems in path
+                    string username = user.UserName.Replace("/", "_");
+                    
+                    //esta lína no hace falta salvo que haya barras invertidas \ en el nombre de usuario. Ya serian ganas de tocar la moral...
+                    //ATENCIÓN: no funciona tal cual! hay que ver como inclur una barra invertida como string sin que la tome como un carácter de control para anular el siguiente carácter.
+                    //string username = user.UserName.Replace("'\'", "_");
 
-                    string fileLoc = @"C:\inetpub\wwwroot\Secuencias\" + user.UserName + "_" + user.UserId + "_G" + datosUsuario.GrupoID + "_M" + datosUsuario.ModuloID + ".txt";
+                    string fileLoc = @"C:\inetpub\wwwroot\Secuencias\" + username + "_" + user.UserId + "_G" + datosUsuario.GrupoID + "_M" + datosUsuario.ModuloID + ".txt";
 
                     if (!System.IO.File.Exists(fileLoc))
                     {
@@ -4000,7 +4007,7 @@ namespace iTuinBook.Controllers
                     continue;*/
 
                 DatoSujeto suj = new DatoSujeto();
-
+                logger.Debug("EXTRAER DATOS: {0}", suj.Nombre);
                 try
                 {
                     List<DatoUnitario> datos = new List<DatoUnitario>();
@@ -4169,6 +4176,8 @@ namespace iTuinBook.Controllers
                 }
                 catch (Exception e)
                 {
+                    logger.Debug("ERROR EXTRAYENDO DATOS: {0}", suj.Nombre);
+
                     suj.Nombre += "::ERROR";
                     arrayDatos.Add(suj);
 

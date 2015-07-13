@@ -1277,7 +1277,7 @@ namespace iTuinBook.Controllers
                 ViewBag.TareaSel = false;
             }
 
-
+            //guirisan: que cambios está guardando, si únicamente utiliza seleccion para consultarla?
             db.SaveChanges();
 
             ViewBag.ConfigPregunta = config;
@@ -2501,7 +2501,7 @@ namespace iTuinBook.Controllers
             {
                 Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
 
-                return Json(new { redirect = Url.Action("PL2_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID }), Parent = false });
+                return Json(new { redirect = Url.Action("PL2_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment}), Parent = false });
             }
             catch (Exception e)
             {

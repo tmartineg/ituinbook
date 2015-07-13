@@ -99,9 +99,6 @@ namespace iTuinBook.Models
         public double TiempoLecFDBK { get; set; }
         public double VelLecFDBK { get; set; }
 
-        /*public override String toString()
-        {
-            
-        }*/
+
     }
 }
