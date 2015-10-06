@@ -17,6 +17,8 @@ namespace iTuinBook.Models
         public DbSet<Modulo> Modulos { get; set; }
         public DbSet<ConfigModulo> ConfigModulo { get; set; }
         public DbSet<ConfigGrupo> ConfigGrupo { get; set; }
+        //guirisan/secuencias (orden de modulos por grupo)
+        public DbSet<GrupoModulo> GrupoModulo { get; set; }
         
         public DbSet<Inscripcion> Inscripciones { get; set; }        
         
@@ -65,12 +67,27 @@ namespace iTuinBook.Models
                 .MapRightKey("UserId")
                 .ToTable("GrupoPropietario"));
 
-            modelBuilder.Entity<Grupo>()
+            /* //guirisan/secuencias
+             * Relació original entre grupo y módulo
+             * descomentar el siguiente bloque para volver a la relación original, 
+             * y comentar el siguiente bloque debajo de //guirisan
+             */
+            /*modelBuilder.Entity<Grupo>()
                .HasMany(g => g.Modulos).WithMany(m => m.Grupos)
                .Map(t => t.MapLeftKey("GrupoID")
                .MapRightKey("ModuloID")
                .ToTable("GrupoModulo"));
+            */
+            
+            //guirisan
+            //especifica que en la tabla que relaciona grupo(s) con modulo(s)
+            //la clave primaria son los identficadores de ambas entidades
+            //(un grupo y un módulo solo pueden aparecer una vez, y por tanto un
+            //modulo solo tiene un orden para un grupo dado)
+            modelBuilder.Entity<GrupoModulo>()
+                .HasKey(e => new { e.GrupoID, e.ModuloID });
 
+            
             modelBuilder.Entity<Modulo>()
                 .HasMany(c => c.Textos).WithMany(m => m.Modulos)
                 .Map(t => t.MapLeftKey("ModuloID")

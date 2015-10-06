@@ -314,7 +314,7 @@ namespace iTuinBook.Controllers
         //
         // GET: /PL0_Experimentos/
 
-        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, Contexto _db)
+        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, Contexto _db, int NumAccion)
         {
             if (_db != null)
             {
@@ -329,6 +329,7 @@ namespace iTuinBook.Controllers
             Pregunta preg = ext.GetPreguntaActual(text, du.PreguntaActual);
 
             ViewBag.DatosUsuario = du;
+            ViewBag.numAccion = NumAccion;
 
             return View(ext.GetTexto(text.TextoID));
         }

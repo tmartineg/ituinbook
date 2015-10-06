@@ -44,7 +44,7 @@
             ICollection<DatosUsuario> datosUsuario = ViewBag.DatosUsuario;
             
             //guirisan: usamos el mismo datetime para todas las acciones de la página, ya que no se usan disparadores por click + ajax
-            string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
+            string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             foreach (Grupo gru in Model)
             {
                 var param = gru.Orden.Split(':');

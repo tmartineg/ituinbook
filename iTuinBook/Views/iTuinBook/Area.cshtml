@@ -2,9 +2,12 @@
 
 @{
     ViewBag.Title = "Area";
-    Layout = "~/Views/Shared/_LayoutVacio.cshtml";    
+    Layout = "~/Views/Shared/_LayoutVacio.cshtml";
 }
-
+<script>
+    //guirisan/secuencias
+    sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
+</script>
 
 <span style="font-size: medium; font-weight:bold;">PUNTOS: <span id="puntos">0</span></span>
 
@@ -131,12 +134,39 @@
                     var sms = "";
 
                     AccionActual = AccionActual + 1;
-                    var datetimeclient = new Date();
-                    datetimeclient = datetimeclient.toISOString();
+
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
                     $.ajax({
                         url: '/iTuinBook/CambiarAccion',
                         type: 'POST',
-                        data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual), moment: datetimeclient},
+                        data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual), moment: datetimeclient, numAccion: numAcc},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
                         success: function (result) {
                         switch (result.CodeOP) {
                             case 1: // Habla Ramiro
@@ -372,12 +402,39 @@
 
                 if(AccionActual > 0)
                     AccionActual = AccionActual - 1;
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
                 $.ajax({
                     url: '/iTuinBook/CambiarAccion',
                     type: 'POST',
                     data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual), moment: datetimeclient},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         switch (result.CodeOP) {
                             case 1: // Habla Ramiro
@@ -507,13 +564,37 @@
                 var sms = "";
 
                 AccionActual = AccionActual + 1;
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
 
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
                     url: '/iTuinBook/CambiarAccion',
                     type: 'POST',
                     data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual) ,moment:datetimeclient},
+                    beforeSend: function(){
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         switch (result.CodeOP)
                         {

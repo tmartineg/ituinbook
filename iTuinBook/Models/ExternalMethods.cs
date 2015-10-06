@@ -23,6 +23,50 @@ namespace iTuinBook.Models
     {
         Contexto db = new Contexto();
 
+        /**
+         * Escribe en el fichero de datosRaw (C:\inetpub\wwwroot\datosRawiTuinBook) del usuario una nueva línea. Si el fichero no existe, lo crea.
+         * El nombre de fichero tiene el siguiente formato: UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt"
+         * p.ej. alu12_U12_G1_M1.txt
+         * Recibe el nombre e ID de usuario, GrupoID, ModuloID, y los datos a imprimir en el fichero.
+         */
+        public bool AddDataRow(string UserName, int UserID, int GrupoID, int ModuloID, string dataRow)
+        {   
+            string path = @"C:\inetpub\wwwroot\datosRawiTuinBook\" + UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt";
+            /*
+             * da fallo tanto al crear un nuevo archivo como al intentar añadir líneas.
+             * para más inri, solo con algunos usuarios (con user alu1 funciona OK, con alu21 falla en el if y en el else
+             * diciendo "El archivo ... está siendo utilizado por otro proceso"
+             */
+            /*  
+            try
+            {
+                if (!System.IO.File.Exists(path))
+                {
+                    System.IO.File.Create(path);
+                    System.IO.TextWriter tw = new System.IO.StreamWriter(path);
+                    tw.WriteLine(dataRow);
+                    tw.Close();
+                }
+                else if (System.IO.File.Exists(path))
+                {
+                    System.IO.TextWriter tw = new System.IO.StreamWriter(path, true);
+                    tw.WriteLine(dataRow);
+                    tw.Close();
+                }
+            }
+              */
+            try
+            {
+                System.IO.File.AppendAllLines(path, new[] { dataRow });
+            }
+            catch (Exception e)
+            {
+                //error writing datosRow
+                return false;
+            }
+            return true;
+        }
+        
         public void SaveChanges()
         {
             db.SaveChanges();
@@ -145,6 +189,9 @@ namespace iTuinBook.Models
             }
         }
 
+        //guirisan/secuencias
+        //los siguientes métodos permiten conocer el árbol de pertenencia de una pregunta - texto - modulo
+        //end guirisan/secuencias
         public string GetFeedback(DatosUsuario du)
         {
             Modulo modulo = db.Modulos.Find(du.ModuloID);
@@ -157,6 +204,7 @@ namespace iTuinBook.Models
 
             return "";
         }
+
 
         #region Reglas de Feedback
         public ReglaSimple getReglaS(int ReglaID)

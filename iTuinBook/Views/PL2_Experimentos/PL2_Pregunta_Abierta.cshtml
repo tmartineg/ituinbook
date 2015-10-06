@@ -32,7 +32,7 @@
     {
         <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
             <b>Selección:</b>
-            <p style="color: red;">@Html.Raw(ds.Info2)</p>            
+            <p style="color: red;">@Html.Raw(ds.Info2)</p>
         </div>
     }
 
@@ -74,6 +74,7 @@
                 //guirisan: datetime set in client
                 var datetimeclient = new Date();
                 datetimeclient = datetimeclient.toISOString();
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Pregunta_Abierta_Validar", //url: '/iTuinBook/Validar',
                     type: 'POST',

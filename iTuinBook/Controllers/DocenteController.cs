@@ -44,7 +44,6 @@ namespace iTuinBook.Controllers
       
             return View(Solicitudes);
         }
-
         #region Funciones Alumnos
         public ActionResult Alumnos()
         {
@@ -144,12 +143,31 @@ namespace iTuinBook.Controllers
             modulo.Propietarios = new List<UserProfile>();
             ConfigModulo config = new ConfigModulo();
 
+            //guirisan/secuencias
+            //ver1.0: los grupos de un modulo se referencian desde una icollection en la clase modulo
+            
             // Si viene de la creación de un grupo, se agrega automáticamente al grupo
             if (GrupoID != null)
             {
                 modulo.Grupos = new List<Grupo>();
                 modulo.Grupos.Add(db.Grupos.Find(GrupoID));               
             }
+            
+            //ver2.0: ahora se referenciana además a través de la clase intermedia GrupoModulo
+            GrupoModulo gm = new GrupoModulo();
+
+            if (GrupoID != null)
+            {
+                gm.Grupo = db.Grupos.Find(GrupoID);
+                gm.GrupoID = (int)GrupoID;
+            
+                gm.Modulo = modulo;
+                gm.ModuloID = modulo.ModuloID;
+                gm.Orden = db.Grupos.Find(GrupoID).GrupoModulo.Count() + 1;
+                db.GrupoModulo.Add(gm);
+            }
+            //end guirisan/secuencias
+
 
             modulo.Propietarios.Add(user);
             modulo.Propiedad = user.UserId;
@@ -398,6 +416,11 @@ namespace iTuinBook.Controllers
             {
                 nuevoTexto.Modulos = new List<Modulo>();
                 nuevoTexto.Modulos.Add(db.Modulos.Find(ModuloID));
+                
+                //guirisan/secuencias
+                int length = db.Modulos.Find(ModuloID).Textos.Count();
+                nuevoTexto.Orden = length + 1;
+               
             }
 
             db.Textos.Add(nuevoTexto);
@@ -546,6 +569,10 @@ namespace iTuinBook.Controllers
             {
                 nuevaPagina.TextoID = TextoID;
                 nuevaPagina.Texto = db.Textos.Find(TextoID);
+
+                //guirisan/secuencias
+                int length = db.Textos.Find(TextoID).Paginas.Count();
+                nuevaPagina.Orden = length + 1;
 
                 nuevaPagina.Contenido = HttpUtility.HtmlDecode(nuevaPagina.Contenido);
 
@@ -805,6 +832,10 @@ namespace iTuinBook.Controllers
 
             nuevaPregunta.Texto = db.Textos.Find(TextoID);
             nuevaPregunta.SubPreguntas = new List<SubPregunta>();
+
+            //guirisan/secuencias
+            int length = db.Textos.Find(TextoID).Preguntas.Count();
+            nuevaPregunta.Orden = length + 1;
 
             db.Preguntas.Add(nuevaPregunta);
 
@@ -1534,6 +1565,18 @@ namespace iTuinBook.Controllers
             Modulo modulo = db.Modulos.Find(ModuloID);
             Grupo grupo = db.Grupos.Find(GrupoID);
 
+            //guirisan/secuencias
+            //var count = contar modulos del grupo grupo
+            //añadir a la entidad GrupoModulo la relación, asignando al orden count +1
+            
+            GrupoModulo gm = new GrupoModulo();
+            gm.GrupoID = GrupoID;
+            gm.Grupo = grupo;
+            gm.ModuloID = ModuloID;
+            gm.Modulo = modulo;
+            gm.Orden = grupo.Modulos.Count() + 1;
+            db.GrupoModulo.Add(gm);
+
             db.Grupos.Find(GrupoID).Modulos.Add(modulo);
 
             if (grupo.Orden == null || grupo.Orden == "")
@@ -1567,6 +1610,10 @@ namespace iTuinBook.Controllers
 
         public ActionResult DesvincularModulo(int GrupoID, int ModuloID)
         {
+            //TO DO
+            //guirisan/pending
+            //eliminar en la tabla relacion GrupoModulo la fila correspondiente
+
             Modulo modulo = db.Modulos.Find(ModuloID);
             Grupo grupo = db.Grupos.Find(GrupoID);
 
@@ -3823,7 +3870,8 @@ namespace iTuinBook.Controllers
                     string username = user.UserName.Replace("/", "_");
                     
                     //esta lína no hace falta salvo que haya barras invertidas \ en el nombre de usuario. Ya serian ganas de tocar la moral...
-                    //ATENCIÓN: no funciona tal cual! hay que ver como inclur una barra invertida como string sin que la tome como un carácter de control para anular el siguiente carácter.
+                    //ATENCIÓN: no funciona tal cual! hay que ver como inclur una barra invertida como string sin que la tome como un 
+                    //carácter de control para anular el siguiente carácter (puede que dos barras invertidas?)
                     //string username = user.UserName.Replace("'\'", "_");
 
                     string fileLoc = @"C:\inetpub\wwwroot\Secuencias\" + username + "_" + user.UserId + "_G" + datosUsuario.GrupoID + "_M" + datosUsuario.ModuloID + ".txt";

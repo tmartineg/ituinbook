@@ -34,7 +34,11 @@
         {
             foreach (Modulo mod in Model)
             {
-                var num = mod.Grupos.Count();
+                //guirisan/secuencias
+                //al cambiar la relacion entre grupos y módulos a una coleccion a la clase intermedia GrupoModulo
+                //obtenemos el numero de grupos de un modulo contando el GrupoModulo en lugar de Grupos
+                //var num = mod.Grupos.Count();
+                var num = mod.GrupoModulo.Count();
                 
                 <tr>                    
                     <td>
@@ -58,7 +62,11 @@
         {
             foreach (Modulo mod in adquiridos)
             {
-                var num = mod.Grupos.Count();
+                //guirisan/secuencias
+                //al cambiar la relacion entre grupos y módulos a una coleccion a la clase intermedia GrupoModulo
+                //obtenemos el numero de grupos de un modulo contando el GrupoModulo en lugar de Grupos
+                //var num = mod.Grupos.Count();
+                var num = mod.GrupoModulo.Count();
                 
                 <tr>                    
                     <td>
@@ -108,7 +116,11 @@
         {
             foreach (Modulo mod in todos)
             {
-                var num = mod.Grupos.Count();
+                //guirisan/secuencias
+                //al cambiar la relacion entre grupos y módulos a una coleccion a la clase intermedia GrupoModulo
+                //obtenemos el numero de grupos de un modulo contando el GrupoModulo en lugar de Grupos
+                //var num = mod.Grupos.Count();
+                var num = mod.GrupoModulo.Count();
                 
                 <tr>                    
                     <td>

@@ -22,6 +22,9 @@ namespace iTuinBook.Models
         public virtual ICollection<TareaOrdenar> TareasOrdenar { get; set; }
 
         public virtual ConfigTexto ConfigTexto { get; set; }
+
+        //guirisan/secuencias
+        public int Orden { get; set; }
     }
 
     public class Pagina
@@ -32,6 +35,9 @@ namespace iTuinBook.Models
                 
         public virtual Texto Texto { get; set; }
         public virtual ICollection<Pregunta> Preguntas { get; set; }
+
+        //guirisan/secuencias
+        public int Orden { get; set; }
     }
 
     public class Pregunta
@@ -67,6 +73,9 @@ namespace iTuinBook.Models
         public virtual Ayuda Ayuda { get; set; }
         public virtual ICollection<UserProfile> Usuarios { get; set; }
         public virtual ICollection<SubPregunta> SubPreguntas { get; set; }
+
+        //guirisan/secuencias
+        public int Orden { get; set; }
     }
 
     public class TareaOrdenar

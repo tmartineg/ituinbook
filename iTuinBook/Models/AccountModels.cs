@@ -254,6 +254,14 @@ namespace iTuinBook.Models
         public string Info { get; set; }
         public string Info2 { get; set; }
 
+        //guirisan/secuencias
+        public int ParteActiva{ get; set; }
+        /* Leyenda
+         * 1- Lee texto
+         * 2- Lee o realiza preguntas*/
+        public int NumAccion { get; set; }
+
+
         public int DatosUsuarioID { get; set; }
         public virtual DatosUsuario DatosUsuario { get; set; }
     }

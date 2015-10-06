@@ -97,15 +97,40 @@
             $("#puntos").val('@ViewBag.Puntos');
             $("#btnSiguiente").click(function () {
                 window.parent.$('img').imgAreaSelect({ remove: true });
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 if ($.now() - ini > 5000) // REVISA EN 5 SEGUNDOS
                 {
                     
                     $.ajax({
                         url: "/iTuinBook/RevisaIndependiente",
                         type: 'POST',
-                        data: { moment: datetimeclient }
+                        data: { moment: datetimeclient, numAccion: numAcc },
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
                     });
                 }
 
@@ -113,6 +138,16 @@
                     url: "/iTuinBook/SiguientePregunta", //url: '/iTuinBook/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         $('.paginas', window.parent.document).each(function () {
                             $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));

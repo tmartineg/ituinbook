@@ -15,20 +15,26 @@ namespace iTuinBook.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
         Contexto db = new Contexto();
+        
+        //Generamos ext para poder usar métodos como ext.GetUsuarioID()
+        ExternalMethods ext = new ExternalMethods();
+      
 
-        //
         // GET: /iTuinBook/
-
+        
         // Indica el inicio o la continuación de una tarea por parte del alumno.
         public ActionResult Iniciar(int GrupoID, int ModuloID, int tmpActual, int accActual,string moment)        
         {
+            //guirisan/secuencias
+            int numAccion = 1;
+
             DateTime datetimeclient = DateTime.Parse(moment);
             logger.Debug("iTuinBookController/Iniciar");
             var user = (from u in db.UserProfiles
                         where User.Identity.Name == u.UserName
                         select u).Single();
 
-            // intentamos recuperar los DatosUsuario referidos a esta tarea. pueden ser 0
+            // intentamos recuperar los DatosUsuario referidos a esta tarea. pueden ser 0 (si se está empezando el test)
             var datosUser = (from dat in db.DatosUsuario
                              where dat.ModuloID == ModuloID &&
                              dat.GrupoID == GrupoID &&
@@ -43,7 +49,7 @@ namespace iTuinBook.Controllers
                 DatosUsuario du = new DatosUsuario() { GrupoID = GrupoID, ModuloID = ModuloID, Cerrada = false, EscenaActual = 0, PreguntaActual = 0, TextoActual = 0, AccionActual = 0, IndAcierto = 0, IndSelec = 0, IndUsoAyud = 0, Puntos = 0, Inicio = datetimeclient, UserProfileID = user.UserId, UserProfile = user, DatoSimple = new List<DatoSimple> (),
                                                        SeleccionNeg = 0, SeleccionPos = 0, RespuestaPos = 0, RespuestaNeg = 0, AyudaPos = 0, AyudaNeg = 0, BuscaNeg = 0, BuscaPos = 0, RevisaNeg = 0, RevisaPos = 0, RevisaStatus = 1};
                 // creamos el datosimple de inicio de la tarea (codeop=1)
-                DatoSimple ds = new DatoSimple() { CodeOP = 1, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID };
+                DatoSimple ds = new DatoSimple() { CodeOP = 1, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, NumAccion = 1 };
 
                 du.DatoSimple.Add(ds);
 
@@ -53,26 +59,54 @@ namespace iTuinBook.Controllers
 
                 // añadimos el datosimple del momento de inicio
                 // mientras CodeOP = 1 indica el primer inicio, CodeOP = 2 puede marcar una continuación, por eso es necesario añadir dos datos simples.
-                du.DatoSimple.Add(new DatoSimple() { CodeOP = 2, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID });
+                du.DatoSimple.Add(new DatoSimple() { CodeOP = 2, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, NumAccion = 1});
 
                 db.SaveChanges();
 
                 Session.Timeout = 120;
                 // añadimos a la sesion la referencia al ID del DatosUsuario creado
                 Session["DatosUsuarioID"] = du.DatosUsuarioID;
+
+                //guirisan/secuencias
+                
+                //print datosRow
+                string datosRow = numAccion + "__url:[/iTuinBookController/Iniciar]__data:[" + "GrupoID=" + GrupoID + "_ModuloID=" + ModuloID + "_tmpActual=" + tmpActual
+                + "_accActual=" + accActual + "_moment=" + moment + "]";
+                //print to file datosRow
+                ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name),GrupoID,ModuloID,datosRow);
+
+                //Al iniciar un test por vez primera, se generan dos datos simples (codeop=1 y codeop=2),
+                //a partir de una única acción del usuario. Por tanto, devolveremos al navegador numAccion=2
+                //para saber que la siguiente, será la segunda acción que realice el usuario
+                //numAccion = 2;
+                //NOTA: Se ha comentado ya que el cliente suma +1 a numAccion antes de generar los datosRaw
+                //así que le pasamos el número de la última acción realizada, no de la próxima a realizar
+                
             }
             else 
             {
                 // Hay Secuencia, continuación de la tarea
+
+                //guirisan/secuencias
+                //capturamos último DatoSimple y obtenemos el valor del último numAccion
+                numAccion = datosUser.First().DatoSimple.Last().NumAccion + 1;
                 
                 //añadimos el datosimple del momento inicial (se refiere al instante en que se retoma la actividad)
-                DatoSimple ds = new DatoSimple() { CodeOP = 2, Momento = datetimeclient, DatosUsuario = datosUser.First(), DatosUsuarioID = datosUser.First().DatosUsuarioID, Dato01 = datosUser.First().AccionActual, Dato02 = 1 };
+                DatoSimple ds = new DatoSimple() { CodeOP = 2, Momento = datetimeclient, DatosUsuario = datosUser.First(), DatosUsuarioID = datosUser.First().DatosUsuarioID, Dato01 = datosUser.First().AccionActual, Dato02 = 1, NumAccion = numAccion };
                 datosUser.First().DatoSimple.Add(ds);
                 datosUser.First().RevisaStatus = 1;
                 db.SaveChanges();
 
                 Session.Timeout = 120;
                 Session["DatosUsuarioID"] = datosUser.First().DatosUsuarioID;
+
+                //guirisan/secuencias
+                string datosRow = numAccion + "__url:[/iTuinBookController/Iniciar]__data:[" + "GrupoID=" + GrupoID + "_ModuloID=" + ModuloID + "_tmpActual=" + tmpActual
+                + "_accActual=" + accActual + "_moment=" + moment + "]";
+                //print to file datosRow
+                ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, datosRow);
+
+
             }
             
             // cargamos el módulo que está realizando el usuario
@@ -101,11 +135,17 @@ namespace iTuinBook.Controllers
                     switch (configModulo.Plantilla)
                     { 
                         case 0:
+                            /* DEPRECATED CODE */
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 0, redirect to PL0_experimentos/PL0_Texto");
-                            return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db });
+                            //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
+                            return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db, NumAccion = numAccion });
+                            /* END DEPRECATED CODE */
                         case 1:
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 1, redirect to PL2_experimentos/PL2_Texto");
-                            return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
+                            //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
+                            return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, NumAccion = numAccion });
+
+                        /* DEPRECATED CODE 
                             //return RedirectToAction("PL1_Texto", "PL1_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual});                            
                         case 2:
                             //return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
@@ -113,45 +153,27 @@ namespace iTuinBook.Controllers
                             break;
                         default:
                             break;
+                        end DEPRECATED CODE */
                     }
                     
-                    return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient });                           
-                case 2:
-                case 3:
+                    return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient, numAccion = numAccion });                           
+                case 2://tuinlec
+                case 3://tuinlec
                     datUser = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
                     if (modulo.Escenas.Count() > 0)
                     {
-                        return RedirectToAction("Area", new { GrupoID = datUser.GrupoID, ModuloID = datUser.ModuloID, escActual = datUser.EscenaActual, accActual = datUser.AccionActual });
+                        return RedirectToAction("Area", new { GrupoID = datUser.GrupoID, ModuloID = datUser.ModuloID, escActual = datUser.EscenaActual, accActual = datUser.AccionActual, numAccion = numAccion });
                     }
                     else
                     {
                         return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = tmpActual, moment = datetimeclient });
                     }                    
-                case 4:
+                case 4://sin uso
                         datUser = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
-
                         return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });
                            
-                        // guirisan: commentat perquè el return de dalt fa el codi inaccessible
-                        /*
-                        switch (configModulo.Plantilla)
-                        { 
-                            case 0:
-                                    return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db });
-                            case 1:
-                                    return RedirectToAction("PL1_Texto", "PL1_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual});
-                                break;
-                            case 2:
-                                    return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });
-                                break;
-                            case 3:
-                                break;
-                            default:
-                                break;
-                        }
-                        return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient });        
-                         */
-                default:
+                        
+                default://sin uso?
                     datUser = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
                     switch (configModulo.Plantilla)
@@ -174,10 +196,11 @@ namespace iTuinBook.Controllers
             //Texto texto = db.Modulos.Find(ModuloID).Textos.First();
             
             
-            return RedirectToAction("Escena", new { GrupoID = GrupoID, ModuloID = ModuloID, escActual = 0 });
+            //codigo inaccesible, eliminar?
+            //return RedirectToAction("Escena", new { GrupoID = GrupoID, ModuloID = ModuloID, escActual = 0 });
         }
 
-        public ActionResult Area(int GrupoID, int ModuloID, int accActual, int escActual)
+        public ActionResult Area(int GrupoID, int ModuloID, int accActual, int escActual, int numAccion)
         {
             logger.Debug("iTuinBookController/Area");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
@@ -212,12 +235,16 @@ namespace iTuinBook.Controllers
             ViewBag.TextoID = accion.TextoID;
             ViewBag.PreguntaID = accion.PreguntaID;
             ViewBag.Accion = accion;
+            ViewBag.numAccion = numAccion;
 
             return View();
         }
 
-        public ActionResult CambiarAccion(int GrupoID, int ModuloID, int accActual, int escActual, string moment)
+        public ActionResult CambiarAccion(int GrupoID, int ModuloID, int accActual, int escActual, string moment, string dataRow = "", int numAccion = -1)
         {
+            //guirisan/secuencias
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
             logger.Debug("iTuinBookController/CambiarAccion");
             string mensaje = "";
 
@@ -245,7 +272,7 @@ namespace iTuinBook.Controllers
 
                 DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
                 
-                DatoSimple ds = new DatoSimple() { CodeOP = 3, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Dato01 = accActual, Dato02 = accion.AccionID };
+                DatoSimple ds = new DatoSimple() { CodeOP = 3, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Dato01 = accActual, Dato02 = accion.AccionID, NumAccion = numAccion };
                 
                 db.DatosSimples.Add(ds);
 
@@ -268,7 +295,11 @@ namespace iTuinBook.Controllers
                 //if (!accActual < escena.Acciones.Count) significa que ha acabado. codeOP=100 -> siguiente pregunta
                 DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
-                DatoSimple ds = new DatoSimple() { CodeOP = 100, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Dato01 = accActual };
+                DatoSimple ds = new DatoSimple() { CodeOP = 100, Momento = datetimeclient, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Dato01 = accActual, NumAccion = numAccion };
+
+                //guirisan/secuencias
+                //FIN DE ESCENA
+                ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow + "__fin-de-area");
 
                 du.Cerrada = true;
 
@@ -570,16 +601,19 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidarPreguntaSeleccion(int PreguntaID, string respuesta, string moment)
+        public ActionResult ValidarPreguntaSeleccion(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("iTuinBookController/ValidarPreguntaSeleccion");
-            DateTime datetimeclient = DateTime.Parse(moment);
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Pagina pagina = pregunta.Texto.Paginas.First();
             string respOriginal = respuesta;
 
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
-            
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
             // SELECCION PERTINENTE //
             int CharPertPregunta = 0;
             string contenido = "";
@@ -727,7 +761,7 @@ namespace iTuinBook.Controllers
                 porcNoPert = 100;
             }
 
-            DatoSimple ds = new DatoSimple() { CodeOP = 6, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert };
+            DatoSimple ds = new DatoSimple() { CodeOP = 6, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert, NumAccion = numAccion };
 
             db.DatosSimples.Add(ds);
 
@@ -789,18 +823,21 @@ namespace iTuinBook.Controllers
         
         //ValidarPreguntaParejas
         [HttpPost]
-        public ActionResult ValidarPreguntaParejas(int PreguntaID, string respuesta, string moment)
+        public ActionResult ValidarPreguntaParejas(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
+            DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+            
             logger.Debug("iTuinBookController/ValidarPreguntaParejas");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             ConfigPregunta configPreg = db.ConfigPregunta.Single(c => c.PreguntaID == PreguntaID);
 
             ViewBag.Pagina = preg.Texto.Paginas.First();
             
-            DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
-            DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID };
+            DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, NumAccion = numAccion };
 
             db.DatosSimples.Add(ds);
 
@@ -991,9 +1028,13 @@ namespace iTuinBook.Controllers
 
 
         [HttpPost]
-        public ActionResult ValidarPreguntaClaves(int PreguntaID, string respuesta, string moment)
+        public ActionResult ValidarPreguntaClaves(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            DatosUsuario du = GetDatosUsuario();
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow); 
+            
             logger.Debug("iTuinBookController/ValidarPreguntaClaves");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             string Mensaje = "";
@@ -1061,9 +1102,9 @@ namespace iTuinBook.Controllers
 
                 string feedback = "";
 
-                DatosUsuario du = GetDatosUsuario();
+                
 
-                DatoSimple ds = new DatoSimple() { CodeOP = 7, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Dato01 = porcAcierto, Dato02 = porcErrores,  };
+                DatoSimple ds = new DatoSimple() { CodeOP = 7, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Dato01 = porcAcierto, Dato02 = porcErrores,  NumAccion = numAccion};
                 db.DatosSimples.Add(ds);
 
                 db.SaveChanges();
@@ -1144,13 +1185,16 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidarPreguntaTest(int PreguntaID, string respuesta, string moment)
+        public ActionResult ValidarPreguntaTest(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow ="")
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
-
             logger.Debug("iTuinBookController/ValidarPreguntaTest");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
-            DatoSimple ds = new DatoSimple() { CodeOP = 4, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID };
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
+            DatoSimple ds = new DatoSimple() { CodeOP = 4, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, NumAccion = numAccion};
             db.DatosSimples.Add(ds);
 
             db.SaveChanges();
@@ -1585,10 +1629,10 @@ namespace iTuinBook.Controllers
             return View(db.Preguntas.Find(PreguntaID));
         }
 
-        public ActionResult Texto(int GrupoID, int ModuloID, int textoActual, string moment)
+        public ActionResult Texto(int GrupoID, int ModuloID, int textoActual, string moment, int numAccion = -1 )
         {
             logger.Debug("iTuinBookController/Texto");
-            DateTime datetimeclient = DateTime.Parse(moment);
+            
             try
             {
                 DatosUsuario du = GetDatosUsuario();
@@ -1605,6 +1649,8 @@ namespace iTuinBook.Controllers
             {
                 DatosUsuario du = GetDatosUsuario();
                 DatoSimple ds;
+                //guirisan/secuencias
+                DateTime datetimeclient = DateTime.Parse(moment);
 
                 du.TextoActual++;
                 du.PreguntaActual = 0;
@@ -1615,7 +1661,7 @@ namespace iTuinBook.Controllers
 
                 if (du.TextoActual == 1)
                 {
-                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
                     db.SaveChanges();
 
@@ -1623,7 +1669,7 @@ namespace iTuinBook.Controllers
                 }
                 else // Fin módulo
                 {
-                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
                     du.Cerrada = true;
 
@@ -1634,14 +1680,14 @@ namespace iTuinBook.Controllers
             }
         }
 
-        public ActionResult TextoCompleto(int TextoID, string moment)
+        public ActionResult TextoCompleto(int TextoID, string moment, int numAccion = -1)
         {
             logger.Debug("iTuinBookController/TextoCompleto");
             DatosUsuario du = GetDatosUsuario();
             DateTime datetimeclient = DateTime.Parse(moment);
 
             // Inicio Practica Guiada
-            DatoSimple ds = new DatoSimple() { CodeOP = 200, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID };
+            DatoSimple ds = new DatoSimple() { CodeOP = 200, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, NumAccion = numAccion};
             db.DatosSimples.Add(ds);
 
             return View(db.Textos.Find(TextoID));
@@ -1661,14 +1707,18 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidarPreguntaCompleta(int PreguntaID, string respuesta, int pregActual, int pregTotal, int TextoID, string moment)
+        public ActionResult ValidarPreguntaCompleta(int PreguntaID, string respuesta, int pregActual, int pregTotal, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("iTuinBookController/ValidarPreguntaCompleta");
+            DatosUsuario du = GetDatosUsuario();
+
+            //guirisan/secuencias/pending
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             DateTime datetimeclient = DateTime.Parse(moment);
             if (CorregirRespuesta(PreguntaID, respuesta)) // Acierto
             {
-                DatosUsuario du = GetDatosUsuario();
                 
                 string Mensaje = "";
 
@@ -1704,7 +1754,7 @@ namespace iTuinBook.Controllers
                 }
 
                 // 201 - Validar Pregunta
-                DatoSimple ds = new DatoSimple() { CodeOP = 201, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Valor = 1, Info = respuesta, Dato01 = du.BuscaStatus };
+                DatoSimple ds = new DatoSimple() { CodeOP = 201, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Valor = 1, Info = respuesta, Dato01 = du.BuscaStatus, NumAccion = numAccion};
                 db.DatosSimples.Add(ds);
                 
                 du.BuscaStatus = 0;
@@ -1717,7 +1767,7 @@ namespace iTuinBook.Controllers
             }
             else // Fallo
             {
-                DatosUsuario du = GetDatosUsuario();
+                
                 string Mensaje = "";
 
 
@@ -1753,7 +1803,7 @@ namespace iTuinBook.Controllers
                 }
 
                 // 201 - Validar Pregunta
-                DatoSimple ds = new DatoSimple() { CodeOP = 201, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Valor = 1, Info = respuesta, Dato01 = du.BuscaStatus };
+                DatoSimple ds = new DatoSimple() { CodeOP = 201, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Valor = 1, Info = respuesta, Dato01 = du.BuscaStatus, NumAccion = numAccion };
                 db.DatosSimples.Add(ds);
 
                 du.BuscaStatus = 0;
@@ -1761,7 +1811,7 @@ namespace iTuinBook.Controllers
                 du.RespuestaNeg++;
 
                 db.SaveChanges();
-
+               
                 return Json(new { redirect = Url.Action("PreguntaCompletaCorregida", new { PreguntaID = PreguntaID, pregActual = pregActual, pregTotal = pregTotal, TextoID = TextoID, Respuesta = respuesta }), Mensaje = Mensaje, PreguntaID = pregunta.PreguntaID, Respuesta = respuesta });
             }
         }
@@ -1872,11 +1922,16 @@ namespace iTuinBook.Controllers
             return View(pregunta);
         }
 
-        public ActionResult SiguientePregunta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment)
+        public ActionResult SiguientePregunta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, string dataRow, int numAccion = -1)
         {
             logger.Debug("iTuinBookController/SiguientePregunta");
 
-            DateTime datetimeclient = DateTime.Parse(moment);	
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            //ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+            /***********************************************************/
+            /*************************YOU ARE HERE**********************/
+            /***********************************************************/
 
             DatosUsuario du = GetDatosUsuario();
             Texto text = db.Textos.Find(TextoID);
@@ -1893,14 +1948,14 @@ namespace iTuinBook.Controllers
 
                 if (du.TextoActual == 1)
                 {
-                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion};
                     db.DatosSimples.Add(ds);
                     db.SaveChanges();
                     return Json(new { redirect = Url.Action("Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = 1, moment = datetimeclient }) });
                 }
                 else // Fin módulo
                 {
-                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
 
                     du.Cerrada = true;
@@ -1911,7 +1966,7 @@ namespace iTuinBook.Controllers
                 }
             }
 
-            ds = new DatoSimple() { CodeOP = 10, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+            ds = new DatoSimple() { CodeOP = 10, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
             db.DatosSimples.Add(ds);
 
             du.AyudaStatus = 0;
@@ -1935,18 +1990,20 @@ namespace iTuinBook.Controllers
                 du.AyudaStatus = 0;
                 du.BuscaStatus = 0;
 
+
+
                 db.SaveChanges();
 
                 if (du.TextoActual == 1)
                 {
-                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 50, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
                     db.SaveChanges();
-                    return Json(new { redirect = Url.Action("Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = 1, moment = datetimeclient }) });
+                    return Json(new { redirect = Url.Action("Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = 1, moment = datetimeclient, NumAccion = numAccion }) });
                 }
                 else // Fin módulo
                 {
-                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus };
+                    ds = new DatoSimple() { CodeOP = 60, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
 
                     du.Cerrada = true;
@@ -1958,21 +2015,26 @@ namespace iTuinBook.Controllers
             }
         }
 
-        public ActionResult SiguientePreguntaCompleta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment)
+        public ActionResult SiguientePreguntaCompleta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("iTuinBookController/SiguientePreguntaCompleta");
+
             DatosUsuario du = GetDatosUsuario();
 
             Texto texto = db.Textos.Find(TextoID);
 
+            //guirisan/secuencias/pending
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
             //parse datetime measured in client
-            DateTime datetimeclient = DateTime.Parse(moment);	
+            DateTime datetimeclient = DateTime.Parse(moment);
+	
 
 
             if (texto.Preguntas.Count > pregActual + 1)
             {
                 // 202 - Validar Pregunta
-                DatoSimple ds = new DatoSimple() { CodeOP = 202, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, Info = du.PreguntaActual.ToString(), Dato01 = du.BuscaStatus };
+                DatoSimple ds = new DatoSimple() { CodeOP = 202, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, Info = du.PreguntaActual.ToString(), Dato01 = du.BuscaStatus, NumAccion = numAccion};
                 db.DatosSimples.Add(ds);
 
                 du.PreguntaActual++;
@@ -1983,12 +2045,12 @@ namespace iTuinBook.Controllers
             else
             {
                 // Fin Practica Guiada
-                DatoSimple ds = new DatoSimple() { CodeOP = 299, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID };
+                DatoSimple ds = new DatoSimple() { CodeOP = 299, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, NumAccion = numAccion};
 
                 db.DatosSimples.Add(ds);
 
                 // Crear una HttpPost que permita cambiar de acción ya que no puedo llamar directamente a CambiarAccion por JsonRequestBehavior.AllowGet
-                return Json(new { redirect = Url.Action("CambiarAccion", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, accActual = du.AccionActual, escActual = du.EscenaActual, moment = datetimeclient }) }, JsonRequestBehavior.AllowGet);
+                return Json(new { redirect = Url.Action("CambiarAccion", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, accActual = du.AccionActual, escActual = du.EscenaActual, moment = datetimeclient, numAccion = numAccion, dataRow = dataRow  }) }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -2603,10 +2665,13 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public void UsoAyudasIndependiente(int Ayuda, string moment)
+        public void UsoAyudasIndependiente(int Ayuda, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("iTuinBookController/UsoAyudasIndependiente");
             DatosUsuario du = GetDatosUsuario();
+
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
             DateTime datetimeclient = DateTime.Parse(moment);
             #region Codificación
             switch (du.IndUsoAyud)
@@ -2750,7 +2815,7 @@ namespace iTuinBook.Controllers
             }
             #endregion
 
-            DatoSimple ds = new DatoSimple() { CodeOP = 15, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.TextoActual, Dato02 = du.PreguntaActual, Dato03 = Ayuda };
+            DatoSimple ds = new DatoSimple() { CodeOP = 15, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.TextoActual, Dato02 = du.PreguntaActual, Dato03 = Ayuda, NumAccion = numAccion };
             db.DatosSimples.Add(ds);
 
             db.SaveChanges();
@@ -2764,15 +2829,20 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public void RevisaIndependiente(string moment)
+        public void RevisaIndependiente(string moment, int numAccion = -1, string dataRow = "" )
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
+
             logger.Debug("iTuinBookController/RevisaIndependiente");
             DatosUsuario du = GetDatosUsuario();
 
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
+
+
             if ((du.PreguntaActual + du.TextoActual * 7) >= (du.RevisaPos + du.RevisaNeg))
             {
-                DatoSimple ds = new DatoSimple() { CodeOP = 17, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.TextoActual, Dato02 = du.PreguntaActual };
+                DatoSimple ds = new DatoSimple() { CodeOP = 17, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.TextoActual, Dato02 = du.PreguntaActual, NumAccion = numAccion };
                 db.DatosSimples.Add(ds);
 
                 du.RevisaPos++;
@@ -2812,16 +2882,18 @@ namespace iTuinBook.Controllers
 
 
         [HttpPost]
-        public void BuscaIndependiente(string moment)
+        public void BuscaIndependiente(string moment, int numAccion = -1)
         {
             logger.Debug("iTuinBookController/BuscaIndependiente");
-            DateTime datetimeclient = DateTime.Parse(moment);
 
             DatosUsuario du = GetDatosUsuario();
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             if ((du.PreguntaActual + du.TextoActual * 7) >= (du.BuscaPos + du.BuscaNeg))
             {
-                DatoSimple ds = new DatoSimple() { CodeOP = 16, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient };
+                DatoSimple ds = new DatoSimple() { CodeOP = 16, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
                 db.DatosSimples.Add(ds);
 
                 du.BuscaPos++;
@@ -2874,12 +2946,14 @@ namespace iTuinBook.Controllers
 
 
         [HttpPost]
-        public ActionResult ValidarPreguntaIndependiente(int PreguntaID, int pregActual, int pregTotal, int TextoID, string respuesta, string Seleccion, string moment)
+        public ActionResult ValidarPreguntaIndependiente(int PreguntaID, int pregActual, int pregTotal, int TextoID, string respuesta, string Seleccion, string moment, int numAccion = -1, string dataRow ="")
         {
             logger.Debug("iTuinBookController/ValidarPreguntaIndependiente");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
+            //guirisan/secuencias
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
             DateTime datetimeclient = DateTime.Parse(moment);
 
             if (du.AyudaStatus != 1)
@@ -3063,7 +3137,7 @@ namespace iTuinBook.Controllers
                         porcNoPert = 100;
                     }
 
-                    DatoSimple ds = new DatoSimple() { CodeOP = 25, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert };
+                    DatoSimple ds = new DatoSimple() { CodeOP = 25, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert, NumAccion = numAccion};
 
                     db.DatosSimples.Add(ds);
 
@@ -3076,7 +3150,7 @@ namespace iTuinBook.Controllers
 
             if (CorregirRespuesta(PreguntaID, respuesta)) // Acierto
             {   
-                DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Valor = 1 };
+                DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Valor = 1, NumAccion = numAccion};
                 db.DatosSimples.Add(ds);
 
                 if (config.ForzarNoTarea)
@@ -3127,7 +3201,7 @@ namespace iTuinBook.Controllers
             }
             else // Fallo
             {
-                DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Valor = 0 };
+                DatoSimple ds = new DatoSimple() { CodeOP = 5, DatosUsuario = du, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respuesta, PreguntaID = PreguntaID, Valor = 0, NumAccion = numAccion };
                 db.DatosSimples.Add(ds);
 
                 du.RespuestaNeg++;

@@ -14,11 +14,17 @@ namespace iTuinBook.Models
         public string Descripcion { get; set; }
         public bool Publico { get; set; }
 
+        //guirisan/secuencias
         public string Orden { get; set; }
 
         public virtual ICollection<Inscripcion> Inscripciones { get; set; }
-        public virtual ICollection<Modulo> Modulos { get; set; }
         public virtual ICollection<UserProfile> Propietarios { get; set; }
+        
+        //guirisan/secuencias
+        //ver1.0: el grupo se relaciona con un icollection de modulos (linea siguiente)
+        public virtual ICollection<Modulo> Modulos { get; set; }
+        //ver2.0: el grupo se relacoina con un virtual icollection de GrupoModulo;
+        public virtual ICollection<GrupoModulo> GrupoModulo { get; set; }
 
         public virtual ConfigGrupo ConfigGrupo { get; set; }
     }
@@ -43,7 +49,15 @@ namespace iTuinBook.Models
         public int Condicion { get; set; }
 
         public virtual ICollection<UserProfile> Propietarios { get; set; }
+
+        //guirisan/secuencias
+        //ver 1.0: el módulo se relacionaba con un virtual ICollection de grupos.
         public virtual ICollection<Grupo> Grupos { get; set; }
+        //ver 2.0: el módulo se relaciona con un virtual ICollection de GrupoModulo 
+        //(Aunque podria valer con una referencia normal, no una coleccion)
+        public virtual ICollection<GrupoModulo> GrupoModulo { get; set; }
+        
+        
         public int Propiedad { get; set; }
 
         // Cuando sea modelado, estará vacía
@@ -55,6 +69,9 @@ namespace iTuinBook.Models
         public virtual ICollection<Timing> Timings { get; set; }
 
         public virtual ConfigModulo ConfigModulo { get; set; }
+
+        //guirisan/secuencias
+        public int Orden { get; set; }
     }
 
     public class ConfigModulo
@@ -79,6 +96,31 @@ namespace iTuinBook.Models
         public int ModuloID { get; set; }
         public virtual Modulo Modulo { get; set; }
     }
+    
+    //guirisan/secuencias
+        //related to http://stackoverflow.com/questions/15153390/many-to-many-mapping-with-extra-fields-in-fluent-api
+        /* Problemas con el orden de los módulos
+         * Los módulos no pueden tener un orden único, ya que al pertenecer a varios grupos en cada uno
+         * tendrán un orden distinto. La forma de dar un Orden a cada módulo en función del grupo es
+         * a través de la tabla GrupoModulo, que en la versión anterior se generaba mediante Fluent-API
+         * modelBuilder.Entity<Grupo>()
+            .HasMany(g => g.Modulos).WithMany(m => m.Grupos)
+            .Map(t => t.MapLeftKey("GrupoID")
+            .MapRightKey("ModuloID")
+            .ToTable("GrupoModulo"));
+         * Siguiendo las instrucciones de stackoverflow, hay que crear una nueva clase para asociarlos,
+         * y a dicha clase añadir el/los parametros que necesitemos (el orden en este caso)
+         * Además, a través de Fluent-API indicamos que la clave primaria de la nueva clase relación 
+         * serán los ID's de las clases relacionadas.
+         */
+    public class GrupoModulo{
+        public int GrupoID { get; set; }
+        public int ModuloID { get; set; }
+        public int Orden { get; set; }
+        public virtual Grupo Grupo { get; set; }
+        public virtual Modulo Modulo { get; set; }
+    }
+    //end guirisan/secuencias
 
     public class Inscripcion
     {
