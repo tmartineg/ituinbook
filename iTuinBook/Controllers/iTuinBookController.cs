@@ -829,7 +829,7 @@ namespace iTuinBook.Controllers
 
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
             
             logger.Debug("iTuinBookController/ValidarPreguntaParejas");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
@@ -2882,14 +2882,15 @@ namespace iTuinBook.Controllers
 
 
         [HttpPost]
-        public void BuscaIndependiente(string moment, int numAccion = -1)
+        public void BuscaIndependiente(string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("iTuinBookController/BuscaIndependiente");
 
             DatosUsuario du = GetDatosUsuario();
+
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
 
             if ((du.PreguntaActual + du.TextoActual * 7) >= (du.BuscaPos + du.BuscaNeg))
             {

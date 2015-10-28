@@ -399,14 +399,13 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = 0)
+        public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("PL2_Experimentos/RegistraraAccion");
-            DateTime datetimeclient = DateTime.Parse(moment);
 
             //guirisan/secuencias
-            
-            
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
@@ -972,10 +971,14 @@ namespace iTuinBook.Controllers
 
         
         [HttpPost]
-        public ActionResult PL2_Texto_Cambiar(int GrupoID, int ModuloID, int TextoID, string moment, int numAccion = -1)
+        public ActionResult PL2_Texto_Cambiar(int GrupoID, int ModuloID, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
             logger.Debug("PL2_Experimentos/PL2_Texto_Cambiar");
+
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Modulo mod = db.Modulos.Find(ModuloID);
@@ -1200,9 +1203,11 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Test_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Test_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -1231,9 +1236,11 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Test_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Test_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -1313,9 +1320,11 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Test_Seleccion_Simultaneo_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuestaTest, string respuestaSel, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Test_Seleccion_Simultaneo_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuestaTest, string respuestaSel, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -1682,9 +1691,12 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Test_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Test_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             
@@ -1848,9 +1860,11 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -2074,15 +2088,20 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Abierta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment)
+        public ActionResult PL2_Pregunta_Abierta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
             Double pert = 0, noPert = 0;
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment);
+            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment, numAccion);
 
             if (pert > 70 && noPert < 35)
             {
@@ -2097,9 +2116,14 @@ namespace iTuinBook.Controllers
         
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Abierta_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Abierta_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
             Double pert = 0, noPert = 0;
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
 
@@ -2110,9 +2134,11 @@ namespace iTuinBook.Controllers
             return Json(new { redirect = Url.Action("PL2_Pregunta_Abierta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, TextoID = pregunta.Texto.TextoID }), Puntos = du.Puntos, mensaje = GetFeedbackSeleccion(du = du, pert, noPert), PreguntaID = pregunta.PreguntaID });
         }
 
-        public ActionResult PL2_Pregunta_Abierta_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Abierta_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
@@ -2190,11 +2216,14 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Abierta_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Abierta_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow ="")
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
 
@@ -2343,10 +2372,14 @@ namespace iTuinBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult PL2_Pregunta_Ordenar_Validar(int GrupoID, int ModuloID, int PreguntaID, int TareaOrdenarID, string respuesta, string moment, int numAccion = -1)
+        public ActionResult PL2_Pregunta_Ordenar_Validar(int GrupoID, int ModuloID, int PreguntaID, int TareaOrdenarID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
 
             TareaOrdenar tareaOrdenar = db.TareasOrdenar.Find(TareaOrdenarID);
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
@@ -2460,14 +2493,18 @@ namespace iTuinBook.Controllers
             return View(tareaOrdenar);
         }
 
-        public ActionResult PL2_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1)
+        public ActionResult PL2_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
-            DateTime datetimeclient = DateTime.Parse(moment);
-
+            
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
             Modulo mod = db.Modulos.Find(ModuloID);
             Texto text = db.Textos.Find(TextoID);
-            DatoSimple ds, ds2;
+            DatoSimple ds;
             Grupo gr = db.Grupos.Find(GrupoID);
 
             db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion  });
@@ -2495,6 +2532,8 @@ namespace iTuinBook.Controllers
                 }
                 else  // Fin módulo
                 {
+                    //guirisan/secuencias/development
+                    //fin de módulo
                     ConfigGrupo config = new ConfigGrupo();
 
                     config = gr.ConfigGrupo;
@@ -2512,7 +2551,8 @@ namespace iTuinBook.Controllers
                             du.Cerrada = true;
 
                             SaveChanges();
-                            //guirisan/secuencias
+                            //guirisan/secuencias/development
+                            //fin de módulo (y comienzo de uno nuevo), guardar datos!!
                             //paso al siguiente módulo, reiniciar numAccion!!
                             int sigModuloID = Convert.ToInt32(param[pos + 1]);
 

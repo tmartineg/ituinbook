@@ -172,13 +172,37 @@
                         return false;
                     }
                 });
-                //guirisan: datetime set in client
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Pregunta_Test_2_Validar", //url: '/iTuinBook/Validar',
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         // data.redirect contains the string URL to redirect to   
                         if (!(result.mensaje == null || result.mensaje == "")) {
@@ -210,27 +234,51 @@
                     <text>
             $('#btnFlotador').click(function () {
                 $("#btnFlotador").attr("disabled", "disabled");
-                //guirisan: datetime set in client
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34, moment: datetimeclient },
-                            error: function () {
-                                alert("Error: Hubo un error con tu última acción.");
-                            }
-                        });
-                        /*$.ajax({
-                            url: "/PL2_Experimentos/UsoAyudasIndependiente",
-                            type: 'POST',
-                            data: { Ayuda: 1 }
-                        });*/
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34, moment: datetimeclient , numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
 
-                        $('#ayuFlotador').show();
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un error con tu última acción.");
+                    }
+                });
+                    /*$.ajax({
+                        url: "/PL2_Experimentos/UsoAyudasIndependiente",
+                        type: 'POST',
+                        data: { Ayuda: 1 }
+                    });*/
 
-                        parent.autofitIframe(parent.document.getElementById("addIframe"));
-                    });
+                    $('#ayuFlotador').show();
+
+                    parent.autofitIframe(parent.document.getElementById("addIframe"));
+                });
                     </text>
                 }
 
@@ -239,28 +287,52 @@
                     <text>
             $("#btnLupa").click(function () {
                 $("#btnLupa").attr("disabled", "disabled");
-                //guirisan: datetime set in client
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36, moment: datetimeclient },
-                            error: function () {
-                                alert("Error: Hubo un error con tu última acción.");
-                            }
-                        });
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
 
-                        var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un error con tu última acción.");
+                    }
+                });
 
-                        $('.paginas', window.parent.document).each(function () {
-                            var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+                    var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
 
-                            for (var i = 0; i < param.length; i++) {
-                                $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
-                            }
-                        });
+                    $('.paginas', window.parent.document).each(function () {
+                        var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                        }
                     });
+                });
                     </text>
                 }
 
@@ -269,17 +341,41 @@
                     <text>
             $('#btnPrismaticos').click(function () {
                 $("#btnPrismaticos").attr("disabled", "disabled");
-                //guirisan: datetime set in client
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
                     url: "/PL2_Experimentos/RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35, moment: datetimeclient },
-                            error: function () {
-                                alert("Error: Hubo un error con tu última acción.");
-                            }
-                        });
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un error con tu última acción.");
+                    }
+                });
 
                         $('.paginas', window.parent.document).each(function () {
                             var param = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('/');
@@ -319,13 +415,38 @@
                         window.parent.$('.paginas').css("filter", "");
                             </text>
                         }
-                        //guirisan: datetime set in client
-                        var datetimeclient = new Date();
-                        datetimeclient = datetimeclient.toISOString();
+                        //guirisan/secuencias
+                        //datetime set in client
+                        var datetimeclient = new Date().toISOString();
+
+                        //NUMACC
+
+                        //get and add+1 numAcc
+                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                        numAcc++;
+                        sessionStorage.setItem("numAccion", numAcc);
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
+                        }
+
                         $.ajax({
                             url: "/PL2_Experimentos/RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16, moment: datetimeclient },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16, moment: datetimeclient, numAccion: numAcc },
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
                             error: function () {
                                 alert("Error: Hubo un error con tu última acción.");
                             }
@@ -346,13 +467,37 @@
                                 timeFinish = jQuery.now();
 
                                 var diff = timeFinish - timeStart;
-                                //guirisan: datetime set in client
-                                var datetimeclient = new Date();
-                                datetimeclient = datetimeclient.toISOString();
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
                                 $.ajax({
                                     url: "/PL2_Experimentos/RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient },
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
                                     error: function () {
                                         alert("Error: Hubo un error con tu última acción.");
                                     }
@@ -383,15 +528,39 @@
                             <text>
                         window.parent.$('.paginas').css("-webkit-filter", "");
                         window.parent.$('.paginas').css("filter", "");
-                            </text>
+                        </text>
                         }
-                        //guirisan: datetime set in client
-                        var datetimeclient = new Date();
-                        datetimeclient = datetimeclient.toISOString();
+                        //guirisan/secuencias
+                        //datetime set in client
+                        var datetimeclient = new Date().toISOString();
+
+                        //NUMACC
+
+                        //get and add+1 numAcc
+                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                        numAcc++;
+                        sessionStorage.setItem("numAccion", numAcc);
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
+                        }
                         $.ajax({
                             url: "/PL2_Experimentos/RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient, numAccion: numAcc },
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
                             error: function () {
                                 alert("Error: Hubo un error con tu última acción.");
                             }
@@ -409,13 +578,37 @@
                                 timeFinish = jQuery.now();
 
                                 var diff = timeFinish - timeStart;
-                                //guirisan: datetime set in client
-                                var datetimeclient = new Date();
-                                datetimeclient = datetimeclient.toISOString();
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
                                 $.ajax({
                                     url: "/PL2_Experimentos/RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient },
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
                                     error: function () {
                                         alert("Error: Hubo un problema con tu última acción.");
                                     }
@@ -460,13 +653,38 @@
 
             /**************************************/
             /**************************************/
-            //guirisan: datetime set in client
-            var datetimeclient = new Date();
-            datetimeclient = datetimeclient.toISOString();
+            
+            //guirisan/secuencias
+            //datetime set in client
+            var datetimeclient = new Date().toISOString();
+
+            //NUMACC
+
+            //get and add+1 numAcc
+            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+            numAcc++;
+            sessionStorage.setItem("numAccion", numAcc);
+
+            //DATOSRAW
+            //get datosRaw to add row in ajax.beforeSend
+            var datosRaw;
+            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                datosRaw = {};
+            }
             $.ajax({
                 url: "/PL2_Experimentos/RegistrarAccion",
                 type: 'POST',
-                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 9, moment: datetimeclient },
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 9, moment: datetimeclient, numAccion: numAcc },
+                //guirisan/secuencias
+                beforeSend: function () {
+                    //set datosRaw on sessionStorage
+                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                    datosRaw[numAcc] = cadena;
+                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                    //set datosRaw on ajax petition
+                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                },
                 error: function () {
                     alert("Error: Hubo un error con tu última acción.");
                 }
