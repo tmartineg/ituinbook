@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta";
@@ -72,7 +72,7 @@
                 }
 
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaCompleta", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaCompleta", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     //guirisan/secuencias

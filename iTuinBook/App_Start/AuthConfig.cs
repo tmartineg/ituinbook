@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
-using iTuinBook.Models;
+using ReadAndLearn.Models;
 
-namespace iTuinBook
+namespace ReadAndLearn
 {
     public static class AuthConfig
     {

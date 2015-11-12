@@ -1,5 +1,5 @@
-﻿@using iTuinBook.Models;
-@model iTuinBook.Models.Pregunta
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
 @using System.Text.RegularExpressions;
 @{
     ViewBag.Title = "PL0_Pregunta";
@@ -148,7 +148,7 @@
 
 
                 $.ajax({
-                    url: "/PL2_Experimentos/PL2_Pregunta_Test_Validar", //url: '/iTuinBook/Validar',
+                    url: "/PL2_Experimentos/PL2_Pregunta_Test_Validar", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias

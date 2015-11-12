@@ -1,5 +1,5 @@
 ﻿@model List<Seguimientos>
-@using iTuinBook.Models;
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Seguimientos";
@@ -77,7 +77,7 @@
 
         function ActualizarDatos() {
             $.ajax({
-                url: "/Docente/ActualizarSeguimiento", //url: '/iTuinBook/Validar',
+                url: "/Docente/ActualizarSeguimiento", //url: '/ReadAndLearn/Validar',
                 type: 'POST',
                 data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID' },
                 success: function (result) {

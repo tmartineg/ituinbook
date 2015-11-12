@@ -1,4 +1,4 @@
-﻿using iTuinBook.Models;
+﻿using ReadAndLearn.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     public class PL0_ExperimentosController : Controller
     {

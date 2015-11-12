@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     /*public class PruebaController : Controller
     {

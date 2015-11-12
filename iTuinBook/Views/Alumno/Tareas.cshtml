@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Grupo>
-@using iTuinBook.Models;
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Tarea";
@@ -88,16 +88,16 @@
                                         case 1: // iTextBook
                                         case 2:
                                             
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 ,moment = datetimeclient}, null)</b>     
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 ,moment = datetimeclient}, null)</b>     
                                             break;
                                         case 3:                                        
                                         case 4:
                                           
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient}, null)</b>     
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient}, null)</b>     
                                             break;
                                         default:
 
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
                                             break;
                                        
                                     }                           
@@ -313,7 +313,7 @@
                             <td>
                                 @if (!flag_empezar)
                                 {
-                                    <b> @Html.ActionLink("Empezar", "Iniciar", "iTuinBook", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 , moment = datetimeclient}, null)</b>                                
+                                    <b> @Html.ActionLink("Empezar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 , moment = datetimeclient}, null)</b>                                
                                 }
                             </td>  
                             <td>

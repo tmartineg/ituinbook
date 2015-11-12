@@ -1,4 +1,4 @@
-﻿@using iTuinBook.Models
+﻿@using ReadAndLearn.Models
 
 @{
     ViewBag.Title = "Escena";
@@ -59,7 +59,7 @@
 
                 if (accActual == accTotalFeedback) {
                     $.ajax({
-                        url: '/iTuinBook/FinFeedbackContenido',
+                        url: '/ReadAndLearn/FinFeedbackContenido',
                         type: 'POST',
                         data: { ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: '@ViewBag.accActual', GrupoID: '@ViewBag.GrupoID' },
                         success: function (result) {

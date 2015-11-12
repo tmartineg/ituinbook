@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta";
@@ -269,7 +269,7 @@
                 $("#btnValidar").attr("disabled", "disabled");
 
                 $.ajax({
-                    url: "/iTuinBook/ValidarPregunta", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPregunta", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest },
                     success: function (result) {
@@ -278,7 +278,7 @@
                         accTotalFeedback = arrayFeedbackContenido.length;
                             // data.redirect contains the string URL to redirect to
                             //window.location.href = result.redirect;
-                        var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                        var src = "/ReadAndLearn/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
                         window.parent.$("#escena").attr("src", src);
 
                         

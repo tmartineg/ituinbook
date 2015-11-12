@@ -1,18 +1,18 @@
-namespace iTuinBook.Migrations
+namespace ReadAndLearn.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<iTuinBook.Models.Contexto>
+    internal sealed class Configuration : DbMigrationsConfiguration<ReadAndLearn.Models.Contexto>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(iTuinBook.Models.Contexto context)
+        protected override void Seed(ReadAndLearn.Models.Contexto context)
         {
             //  This method will be called after migrating to the latest version.
 

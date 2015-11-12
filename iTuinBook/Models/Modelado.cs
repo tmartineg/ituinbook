@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace iTuinBook.Models
+namespace ReadAndLearn.Models
 {
     public class TextoMod
     {

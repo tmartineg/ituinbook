@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Accion
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Accion
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Crear Accion";
@@ -34,7 +34,7 @@ Crear Acción</h2>
         </th>    
     </tr>
 @{
-    IList<iTuinBook.Controllers.DocenteController.TipoOperacion> lista = ViewBag.Tipos;
+    IList<ReadAndLearn.Controllers.DocenteController.TipoOperacion> lista = ViewBag.Tipos;
     
     var acciones = escena.Acciones;
          

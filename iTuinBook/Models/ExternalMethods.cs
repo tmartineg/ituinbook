@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
-namespace iTuinBook.Models
+namespace ReadAndLearn.Models
 {
     public class ClientErrorHandler : FilterAttribute, IExceptionFilter
     {
@@ -24,14 +24,14 @@ namespace iTuinBook.Models
         Contexto db = new Contexto();
 
         /**
-         * Escribe en el fichero de datosRaw (C:\inetpub\wwwroot\datosRawiTuinBook) del usuario una nueva línea. Si el fichero no existe, lo crea.
+         * Escribe en el fichero de datosRaw (C:\inetpub\wwwroot\datosRawReadAndLearn) del usuario una nueva línea. Si el fichero no existe, lo crea.
          * El nombre de fichero tiene el siguiente formato: UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt"
          * p.ej. alu12_U12_G1_M1.txt
          * Recibe el nombre e ID de usuario, GrupoID, ModuloID, y los datos a imprimir en el fichero.
          */
         public bool AddDataRow(string UserName, int UserID, int GrupoID, int ModuloID, string dataRow)
         {   
-            string path = @"C:\inetpub\wwwroot\datosRawiTuinBook\" + UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt";
+            string path = @"C:\inetpub\wwwroot\datosRawReadAndLearn\" + UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt";
             /*
              * da fallo tanto al crear un nuevo archivo como al intentar añadir líneas.
              * para más inri, solo con algunos usuarios (con user alu1 funciona OK, con alu21 falla en el if y en el else

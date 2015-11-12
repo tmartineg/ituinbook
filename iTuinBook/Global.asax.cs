@@ -1,4 +1,4 @@
-﻿using iTuinBook.Models;
+﻿using ReadAndLearn.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace iTuinBook
+namespace ReadAndLearn
 {
     // Nota: para obtener instrucciones sobre cómo habilitar el modo clásico de IIS6 o IIS7, 
     // visite http://go.microsoft.com/?LinkId=9394801
@@ -24,7 +24,10 @@ namespace iTuinBook
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            AuthConfig.RegisterAuth();            
+            AuthConfig.RegisterAuth();     
+       
+            //guirisan/secuencias/dbMigration
+            Database.SetInitializer<Contexto>(null);
         }
     }
 }

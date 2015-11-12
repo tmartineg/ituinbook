@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta Simple Corregida";
@@ -70,10 +70,41 @@
         $(document).ready(function () {
             $("#btnSiguiente").click(function () {
                 if (parseInt('@ViewBag.pregActual') < parseInt('@ViewBag.pregTotal')) {
+                    
+
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+
                     $.ajax({
-                        url: "/iTuinBook/SiguientePreguntaCompleta", //url: '/iTuinBook/Validar',
+                        url: "/ReadAndLearn/SiguientePreguntaCompleta", //url: '/ReadAndLearn/Validar',
                         type: 'POST',
-                        data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
+                        data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
                         success: function (result) {
                             window.parent.parent.feedbackCompleto("");
                             // data.redirect contains the string URL to redirect to

@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 @using System.Text.RegularExpressions;
  
 @{
@@ -325,7 +325,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaClaves", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaClaves", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras, moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -412,7 +412,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaTest", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaTest", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -432,7 +432,7 @@
 
 
                         // Si procede, cargar pregunta corregida. Activar botones de mini dialogo en parent y desactivar los de siguientes/anterior acción
-                        //var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                        //var src = "/ReadAndLearn/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
                         window.parent.$("#btnAnterior").hide();
                         window.parent.$("#btnSiguiente").hide();
                         window.parent.$("#btnAntFDBK").show();
@@ -471,7 +471,7 @@
                 }
 
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaSeleccion", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaSeleccion", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias

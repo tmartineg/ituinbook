@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Texto
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Texto
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Texto";
@@ -91,7 +91,7 @@
                         datosRaw = {};
                     }
                     $.ajax({
-                        url: "/iTuinBook/BuscaIndependiente",
+                        url: "/ReadAndLearn/BuscaIndependiente",
                         type: 'POST',
                         //guirisan/secuencias
                         beforeSend: function () {

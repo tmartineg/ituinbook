@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace iTuinBook.Models
+namespace ReadAndLearn.Models
 {
     public class Grupo
     {
@@ -71,7 +71,9 @@ namespace iTuinBook.Models
         public virtual ConfigModulo ConfigModulo { get; set; }
 
         //guirisan/secuencias
-        public int Orden { get; set; }
+        //comentada línea siguiente porque el módulo no tiene orden, 
+        //lo tiene respecto del grupo en la tabla GrupoModulo
+        //public int Orden { get; set; }
     }
 
     public class ConfigModulo

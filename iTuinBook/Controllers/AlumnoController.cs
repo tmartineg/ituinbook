@@ -1,11 +1,11 @@
-﻿using iTuinBook.Models;
+﻿using ReadAndLearn.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     public class AlumnoController : Controller
     {

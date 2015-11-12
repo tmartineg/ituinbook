@@ -1,4 +1,4 @@
-namespace iTuinBook.Migrations
+namespace ReadAndLearn.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

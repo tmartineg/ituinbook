@@ -1,10 +1,13 @@
-﻿@using iTuinBook.Models;
+﻿@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Area";
-    Layout = "~/Views/Shared/_LayoutVacio.cshtml";    
+    Layout = "~/Views/Shared/_LayoutVacio.cshtml";
 }
-
+<script>
+    //guirisan/secuencias
+    sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
+</script>
 
 <span style="font-size: medium; font-weight:bold;">PUNTOS: <span id="puntos">0</span></span>
 
@@ -131,11 +134,39 @@
                     var sms = "";
 
                     AccionActual = AccionActual + 1;
-                    
+
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
                     $.ajax({
-                        url: '/iTuinBook/CambiarAccion',
+                        url: '/ReadAndLearn/CambiarAccion',
                         type: 'POST',
-                        data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual) },
+                        data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual), moment: datetimeclient, numAccion: numAcc},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
                         success: function (result) {
                         switch (result.CodeOP) {
                             case 1: // Habla Ramiro
@@ -157,7 +188,7 @@
                             case 7: // Mostrar Texto Completo
                                 HablaRamiro();
 
-                                src = "/iTuinBook/TextoCompleto?TextoID=" + result.TextoID;
+                                src = "/ReadAndLearn/TextoCompleto?TextoID=" + result.TextoID;
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
@@ -166,7 +197,7 @@
                             case 9: // Mostrar Pagina
                                 HablaRamiro();
 
-                                src = "/iTuinBook/Pagina?TextoID=" + result.TextoID;
+                                src = "/ReadAndLearn/Pagina?TextoID=" + result.TextoID;
 
                                 $("#escritorio").attr("src", src);
                                 break;
@@ -175,14 +206,14 @@
                             case 11: // Mostrar Pregunta
                                 HablaRamiro();
 
-                                src = "/iTuinBook/PreguntaSimple?PreguntaID=" + result.PreguntaID;
+                                src = "/ReadAndLearn/PreguntaSimple?PreguntaID=" + result.PreguntaID;
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
                             case 12: // Quitar Pregunta
                                 HablaRamiro();
 
-                                src = "/iTuinBook/Escritorio"
+                                src = "/ReadAndLearn/Escritorio"
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
@@ -256,7 +287,7 @@
                             mensajeCont = str.substring(1);
                         }
 
-                        src = "/iTuinBook/TextoCompleto?TextoID=" + '@ViewBag.TextoID';
+                        src = "/ReadAndLearn/TextoCompleto?TextoID=" + '@ViewBag.TextoID';
 
                         $("#btnAnterior").hide();
                         $("#btnSiguiente").hide();
@@ -291,7 +322,7 @@
                             mensajeCont = str.substring(1, str.length);
                         }
 
-                        src = "/iTuinBook/Pagina?TextoID=" + '@ViewBag.TextoID';
+                        src = "/ReadAndLearn/Pagina?TextoID=" + '@ViewBag.TextoID';
 
                         $("#escritorio").attr("src", src);
                         </text>
@@ -324,7 +355,7 @@
                             mensajeCont = str.substring(1, str.length);
                         }
             
-                        src = "/iTuinBook/PreguntaSimple?PreguntaID=" + '@ViewBag.PreguntaID';
+                        src = "/ReadAndLearn/PreguntaSimple?PreguntaID=" + '@ViewBag.PreguntaID';
                         window.parent.$("#escritorio").attr("src", src);
                         </text>
                         break;
@@ -341,7 +372,7 @@
                             mensajeCont = str.substring(1, str.length);
                         }
 
-                        src = "/iTuinBook/Escritorio"
+                        src = "/ReadAndLearn/Escritorio"
 
                         window.parent.$("#escritorio").attr("src", src);
                         </text>
@@ -358,15 +389,9 @@
             $("#btnAnterior").click(function () {
                 $(".speech_bubble").css("visibility", "hidden")
 
-                var $elt = $('#btnSiguiente').attr('disabled', true);
-                setTimeout(function () {
-                    $elt.attr('disabled', false);
-                }, 2000);
+                var $elt = $('#btnSiguiente');
 
-                var $elt2 = $('#btnAnterior').attr('disabled', true);
-                setTimeout(function () {
-                    $elt2.attr('disabled', false);
-                }, 2000);
+                var $elt2 = $('#btnAnterior');
 
                 var src = "";
                 var sms = "";
@@ -378,10 +403,38 @@
                 if(AccionActual > 0)
                     AccionActual = AccionActual - 1;
 
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
                 $.ajax({
-                    url: '/iTuinBook/CambiarAccion',
+                    url: '/ReadAndLearn/CambiarAccion',
                     type: 'POST',
-                    data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual) },
+                    data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual), moment: datetimeclient},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         switch (result.CodeOP) {
                             case 1: // Habla Ramiro
@@ -446,7 +499,7 @@
                                     result.Mensaje = str.substring(1, str.length - 1);
                                 }
 
-                                src = "/iTuinBook/Pagina?TextoID=" + result.TextoID;
+                                src = "/ReadAndLearn/Pagina?TextoID=" + result.TextoID;
 
                                 $("#escritorio").attr("src", src);
                                 break;
@@ -470,7 +523,7 @@
                                     result.Mensaje = str.substring(1, str.length - 1);
                                 }
 
-                                src = "/iTuinBook/PreguntaSimple?PreguntaID=" + result.PreguntaID;
+                                src = "/ReadAndLearn/PreguntaSimple?PreguntaID=" + result.PreguntaID;
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
                             case 12: // Quitar Pregunta
@@ -485,7 +538,7 @@
                                     result.Mensaje = str.substring(1, str.length - 1);
                                 }
 
-                                src = "/iTuinBook/Escritorio"
+                                src = "/ReadAndLearn/Escritorio"
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
@@ -503,25 +556,45 @@
             $("#btnSiguiente").click(function () {
                 $(".speech_bubble").css("visibility", "hidden")
 
-                var $elt = $('#btnSiguiente').attr('disabled', true);
-                setTimeout(function () {
-                    $elt.attr('disabled', false);
-                }, 1000);
+                var $elt = $('#btnSiguiente');
                 
-                var $elt2 = $('#btnAnterior').attr('disabled', true);
-                setTimeout(function () {
-                    $elt2.attr('disabled', false);
-                }, 1000);
+                var $elt2 = $('#btnAnterior');
 
                 var src = "";
                 var sms = "";
 
                 AccionActual = AccionActual + 1;
-                
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
-                    url: '/iTuinBook/CambiarAccion',
+                    url: '/ReadAndLearn/CambiarAccion',
                     type: 'POST',
-                    data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual) },
+                    data: { GrupoID: parseInt('@ViewBag.GrupoID'), ModuloID: parseInt('@ViewBag.ModuloID'), escActual: parseInt('@ViewBag.escActual'), accActual: parseInt(AccionActual) ,moment:datetimeclient},
+                    beforeSend: function(){
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         switch (result.CodeOP)
                         {
@@ -563,7 +636,7 @@
                                     result.Mensaje = str.substring(1);
                                 }
 
-                                src = "/iTuinBook/TextoCompleto?TextoID=" + result.TextoID;
+                                src = "/ReadAndLearn/TextoCompleto?TextoID=" + result.TextoID;
 
                                 $("#btnAnterior").hide();
                                 $("#btnSiguiente").hide();
@@ -594,7 +667,7 @@
                                     result.Mensaje = str.substring(1, str.length);
                                 }
 
-                                src = "/iTuinBook/Pagina?TextoID=" + result.TextoID;
+                                src = "/ReadAndLearn/Pagina?TextoID=" + result.TextoID;
 
                                 $("#escritorio").attr("src", src);
                                 break;
@@ -621,7 +694,7 @@
                                     result.Mensaje = str.substring(1, str.length);
                                 }
 
-                                src = "/iTuinBook/PreguntaSimple?PreguntaID=" + result.PreguntaID;
+                                src = "/ReadAndLearn/PreguntaSimple?PreguntaID=" + result.PreguntaID;
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
                             case 12: // Quitar Pregunta
@@ -636,7 +709,7 @@
                                     result.Mensaje = str.substring(1, str.length);
                                 }
 
-                                src = "/iTuinBook/Escritorio"
+                                src = "/ReadAndLearn/Escritorio"
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;

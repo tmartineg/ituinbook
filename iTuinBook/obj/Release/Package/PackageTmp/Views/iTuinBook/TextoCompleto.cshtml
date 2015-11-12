@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Texto
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Texto
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Texto";
@@ -104,7 +104,7 @@
             $('#Pagina').click(function () {
                 if ($('#Pagina').attr("style") == "-webkit-filter: blur(5px); filter:url(#example-one);") {
                     $.ajax({
-                        url: "/iTuinBook/Busca",
+                        url: "/ReadAndLearn/Busca",
                         type: 'POST'
                     });
 
@@ -149,16 +149,17 @@
                 var region = $(this).html();
 
                 $.ajax({
-                    url: "/iTuinBook/GetPertinente",
+                    url: "/ReadAndLearn/GetPertinente",
                     type: 'POST',
-                    data: { pregActual: pregActual, TextoID: '@Model.TextoID' },
+                    data: { pregActual: pregActual, TextoID: '@Model.TextoID' }, //guirisan: add paginaID and other data
                     success: function (result) {
                         var input = result.Pertinente;
                         
                         if (region.indexOf(input) > -1) {
                             if ($('#Pagina').attr("busca") == "ok") {
                                 $.ajax({
-                                    url: "/iTuinBook/PertinenteEncontrado",
+                                    //guirisan: modify petition? add data?
+                                    url: "/ReadAndLearn/PertinenteEncontrado",
                                     type: 'POST'
                                 });
                             }

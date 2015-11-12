@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace iTuinBook.Models
+namespace ReadAndLearn.Models
 {
     public class Contexto : DbContext
     {

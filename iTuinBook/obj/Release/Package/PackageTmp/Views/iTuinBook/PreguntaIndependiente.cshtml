@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta";
@@ -171,20 +171,73 @@
             });
 
             $('#btnFlotador').click(function () {
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 1 }
+                    data: { Ayuda: 1, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    }
                 });
 
                 $('#ayuFlotador').show();
             });
 
             $("#btnLupa").click(function () {
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 3 }
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    data: { Ayuda: 3 , moment: datetimeclient, numAccion: numAcc}
                 });
 
                 var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
@@ -249,10 +302,38 @@
             });
 
             $('#btnPrismaticos').click(function () {
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
-                    data: { Ayuda: 2 },
+                    data: { Ayuda: 2, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                 });
 
                 var array = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('+');
@@ -392,11 +473,38 @@
                 $("#btnValidarSimultanea").attr("disabled", "disabled");
 
                 window.parent.$('img').imgAreaSelect({ remove: true });
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
 
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaIndependiente", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() , moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         var input = result.Mensaje;
                         
@@ -482,11 +590,37 @@
                 $("#btnValidar").attr("disabled", "disabled");
 
                 window.parent.$('img').imgAreaSelect({ remove: true });
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
 
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaIndependiente", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
-                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID'  },
+                    data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' , moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         var input = result.Mensaje;
                         
@@ -576,7 +710,7 @@
                 if (event.stopPropagation) event.stopPropagation();
                 
                 $.ajax({
-                    url: '/iTuinBook/Algoritmo',
+                    url: '/ReadAndLearn/Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#seleccion1').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
                         success: function (result) {
@@ -603,7 +737,7 @@
                 if (event.stopPropagation) event.stopPropagation();
 
                 $.ajax({
-                    url: '/iTuinBook/Algoritmo',
+                    url: '/ReadAndLearn/Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#seleccion2').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
                     success: function (result) {
@@ -622,7 +756,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: '/iTuinBook/ValidarPrimeraSeleccion',
+                    url: '/ReadAndLearn/ValidarPrimeraSeleccion',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion1').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
                     dataType: 'json',
                     success: function (data) {
@@ -662,7 +796,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/iTuinBook/ValidarSegundaSeleccion',
+                    url: '/ReadAndLearn/ValidarSegundaSeleccion',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion2').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
                     dataType: 'json',
                     success: function (data) {

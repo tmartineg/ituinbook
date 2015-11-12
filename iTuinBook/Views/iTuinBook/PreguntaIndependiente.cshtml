@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta";
@@ -189,7 +189,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
                     data: { Ayuda: 1, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -226,7 +226,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
                     beforeSend: function () {
                         //set datosRaw on sessionStorage
@@ -321,7 +321,7 @@
                 }
 
                 $.ajax({
-                    url: "/iTuinBook/UsoAyudasIndependiente",
+                    url: "/ReadAndLearn/UsoAyudasIndependiente",
                     type: 'POST',
                     data: { Ayuda: 2, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -492,7 +492,7 @@
                 }
 
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaIndependiente", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', Seleccion: $('#seleccion1').val() , moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -608,7 +608,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/iTuinBook/ValidarPreguntaIndependiente", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/ValidarPreguntaIndependiente", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' , moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -710,7 +710,7 @@
                 if (event.stopPropagation) event.stopPropagation();
                 
                 $.ajax({
-                    url: '/iTuinBook/Algoritmo',
+                    url: '/ReadAndLearn/Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#seleccion1').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
                         success: function (result) {
@@ -737,7 +737,7 @@
                 if (event.stopPropagation) event.stopPropagation();
 
                 $.ajax({
-                    url: '/iTuinBook/Algoritmo',
+                    url: '/ReadAndLearn/Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#seleccion2').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
                     success: function (result) {
@@ -756,7 +756,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: '/iTuinBook/ValidarPrimeraSeleccion',
+                    url: '/ReadAndLearn/ValidarPrimeraSeleccion',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion1').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
                     dataType: 'json',
                     success: function (data) {
@@ -796,7 +796,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/iTuinBook/ValidarSegundaSeleccion',
+                    url: '/ReadAndLearn/ValidarSegundaSeleccion',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion2').val(), pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID' },
                     dataType: 'json',
                     success: function (data) {

@@ -8,10 +8,10 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using iTuinBook.Filters;
-using iTuinBook.Models;
+using ReadAndLearn.Filters;
+using ReadAndLearn.Models;
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]

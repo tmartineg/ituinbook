@@ -1,5 +1,5 @@
-﻿@using iTuinBook.Models;
-@model iTuinBook.Models.TareaOrdenar
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.TareaOrdenar
 
 @{
     ViewBag.Title = "VerTareaOrdenar";
@@ -192,11 +192,41 @@
                 }
 
                 resp = resp.substring(0, resp.length - 8);
-                
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+
+
                 $.ajax({
                     url: "/PL2_Experimentos/PL2_Pregunta_Ordenar_Validar",
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@configPregunta.PreguntaID', TareaOrdenarID: '@Model.TareaOrdenarID', respuesta: resp },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@configPregunta.PreguntaID', TareaOrdenarID: '@Model.TareaOrdenarID', respuesta: resp, moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
                     success: function (result) {
                         if (!(result.mensaje == null || result.mensaje == "")) {
                         @if (configPregunta != null)

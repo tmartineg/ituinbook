@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using iTuinBook.Models;
+using ReadAndLearn.Models;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.IO;
@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using NLog;
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     public class DocenteController : Controller
     {

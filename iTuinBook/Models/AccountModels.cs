@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
 
-namespace iTuinBook.Models
+namespace ReadAndLearn.Models
 {
     public class TextRes
     {

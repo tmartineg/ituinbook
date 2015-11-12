@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using iTuinBook.Models;
+using ReadAndLearn.Models;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using NLog;
 
 
-namespace iTuinBook.Controllers
+namespace ReadAndLearn.Controllers
 {
     public class PL2_ExperimentosController : Controller
     {
@@ -1029,7 +1029,7 @@ namespace iTuinBook.Controllers
 
                         int sigModuloID = Convert.ToInt32(param[pos + 1]);
 
-                        return Json(new { redirect = Url.Action("Iniciar", "iTuinBook", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient, NumAccion = numAccion }), Parent = true });                           
+                        return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient, NumAccion = numAccion }), Parent = true });                           
                     }
                     else // No quedan módulos
                     {
@@ -1470,7 +1470,7 @@ namespace iTuinBook.Controllers
 
             /*
             //add dataRow to user file
-            string path = @"C:\inetpub\wwwroot\datosRawiTuinBook\" + User.Identity.Name + "_U" + ext.GetUsuarioID(User.Identity.Name) + "_G" + du.GrupoID + "_M" + du.ModuloID + ".txt";
+            string path = @"C:\inetpub\wwwroot\datosRawReadAndLearn\" + User.Identity.Name + "_U" + ext.GetUsuarioID(User.Identity.Name) + "_G" + du.GrupoID + "_M" + du.ModuloID + ".txt";
 
             if (!System.IO.File.Exists(path))
             {
@@ -2556,7 +2556,7 @@ namespace iTuinBook.Controllers
                             //paso al siguiente módulo, reiniciar numAccion!!
                             int sigModuloID = Convert.ToInt32(param[pos + 1]);
 
-                            return Json(new { redirect = Url.Action("Iniciar", "iTuinBook", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = moment }), Parent = true });                           
+                            return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = moment }), Parent = true });                           
                         }
                         else // No quedan módulos
                         {

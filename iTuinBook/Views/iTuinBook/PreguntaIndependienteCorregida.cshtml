@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta Simple Corregida";
@@ -118,7 +118,7 @@
                 {
                     
                     $.ajax({
-                        url: "/iTuinBook/RevisaIndependiente",
+                        url: "/ReadAndLearn/RevisaIndependiente",
                         type: 'POST',
                         data: { moment: datetimeclient, numAccion: numAcc },
                         //guirisan/secuencias
@@ -135,7 +135,7 @@
                 }
 
                 $.ajax({
-                    url: "/iTuinBook/SiguientePregunta", //url: '/iTuinBook/Validar',
+                    url: "/ReadAndLearn/SiguientePregunta", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     //guirisan/secuencias

@@ -1,5 +1,5 @@
-﻿@using iTuinBook.Models;
-@model iTuinBook.Models.Pregunta
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
 
 @{
     ViewBag.Title = "PL2_Pregunta";
@@ -76,7 +76,7 @@
                 datetimeclient = datetimeclient.toISOString();
 
                 $.ajax({
-                    url: "/PL2_Experimentos/PL2_Pregunta_Abierta_Validar", //url: '/iTuinBook/Validar',
+                    url: "/PL2_Experimentos/PL2_Pregunta_Abierta_Validar", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient},
                     success: function (result) {

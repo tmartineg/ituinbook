@@ -1,5 +1,5 @@
-﻿@using iTuinBook.Models;
-@model iTuinBook.Models.Pregunta
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
 
 @{
     ViewBag.Title = "PL0_Pregunta";
@@ -45,7 +45,7 @@
             
             $("#btnValidarAbierta").click(function () {
                 $.ajax({
-                    url: "/PL0_Experimentos/PL0_Pregunta_Abierta_Validar", //url: '/iTuinBook/Validar',
+                    url: "/PL0_Experimentos/PL0_Pregunta_Abierta_Validar", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@ViewBag.TextoID', PreguntaID: '@Model.PreguntaID', respuesta: "Hola" },
                     success: function (result) {

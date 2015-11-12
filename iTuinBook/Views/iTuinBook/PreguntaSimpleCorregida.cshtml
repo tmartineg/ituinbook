@@ -1,5 +1,5 @@
-﻿@model iTuinBook.Models.Pregunta
-@using iTuinBook.Models;
+﻿@model ReadAndLearn.Models.Pregunta
+@using ReadAndLearn.Models;
 
 @{
     ViewBag.Title = "Pregunta Simple Corregida";
@@ -235,7 +235,7 @@
                 
                 $(window).bind('load', function () {
                     $.ajax({
-                        url: '/iTuinBook/SeleccionPertinente',
+                        url: '/ReadAndLearn/SeleccionPertinente',
                         type: 'POST',
                         data: { PreguntaID: '@Model.PreguntaID', Seleccion: $('#selCorreccion').text() },
                         success: function (result) {
@@ -260,7 +260,7 @@
                 accTotalFeedback = arrayFeedbackContenido.length;
 
                 // Si procede, cargar pregunta corregida. Activar botones de mini dialogo en parent y desactivar los de siguientes/anterior acción
-                //var src = "/iTuinBook/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
+                //var src = "/ReadAndLearn/EscenaFeedback?codeOP=" + result.codeOP + "&mensaje=" + result.mensaje + "&PreguntaID=" + result.PreguntaID + "&accTotalFeedback=" + accTotalFeedback + "&ModuloID=" + '@ViewBag.ModuloID' + "&escActual=" + '@ViewBag.escActual' + "&accActual=" + '@ViewBag.accActual' + "&GrupoID=" + '@ViewBag.GrupoID';
                 window.parent.$("#btnAnterior").show();
                 window.parent.$("#btnSiguiente").hide();
                 window.parent.$("#btnAntFDBK").hide();
