@@ -2301,6 +2301,11 @@ namespace ReadAndLearn.Controllers
                        where d.CodeOP == 13 && d.Dato03 == 2
                        select d;
 
+            /*
+             (from ds in db.DatosSimples
+            where ds.DatosUsuarioID == du.DatosUsuarioID
+            select ds).ToList().Last().Momento.ToString();*/
+
             pregunta = ext.GetPregunta((int)preguntaID);
 
             ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
@@ -2315,7 +2320,7 @@ namespace ReadAndLearn.Controllers
 
             if (dato != null)
             {
-                ViewBag.DatoSimple2 = dato.ToList().Last(); 
+                ViewBag.DatoSimple2 = dato.ToList().LastOrDefault(); 
             }
 
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
