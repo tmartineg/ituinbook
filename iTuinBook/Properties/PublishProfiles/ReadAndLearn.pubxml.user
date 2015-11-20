@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>11/09/2015 23:47:53</publishTime>
+      <publishTime>11/20/2015 13:15:41</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/28/2015 11:42:34</publishTime>
@@ -163,13 +163,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:35</publishTime>
     </File>
     <File Include="bin/NLog.config">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="bin/NLog.dll">
       <publishTime>10/28/2015 11:42:35</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>11/09/2015 23:47:53</publishTime>
+      <publishTime>11/20/2015 13:15:41</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>10/28/2015 11:42:35</publishTime>
@@ -2716,7 +2716,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/21/2013 11:53:11</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>10/28/2015 11:42:32</publishTime>
+      <publishTime>11/20/2015 12:19:14</publishTime>
     </File>
     <File Include="Content/spanish_function_words.txt">
       <publishTime>10/28/2015 11:42:32</publishTime>
@@ -3004,13 +3004,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Copia de Web.config">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>10/28/2015 11:42:33</publishTime>
     </File>
     <File Include="Global.asax">
-      <publishTime>09/11/2015 11:43:50</publishTime>
+      <publishTime>11/09/2015 11:43:50</publishTime>
     </File>
     <File Include="Images/accent.png">
       <publishTime>10/28/2015 11:42:32</publishTime>
@@ -3052,7 +3052,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="NLog.config">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>10/28/2015 11:42:34</publishTime>
@@ -4336,373 +4336,373 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Account/Copia de Login.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Account/ExternalLoginConfirmation.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Account/ExternalLoginFailure.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Account/Login.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Account/Manage.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/Register.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Account/_ChangePasswordPartial.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_ExternalLoginsListPartial.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Account/_RemoveExternalLoginsPartial.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_SetPasswordPartial.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Alumno/Grupos.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Alumno/Index.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Alumno/Secuencias.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Alumno/Tareas.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Alumno/View1.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarEscena.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarGrupo.cshtml">
-      <publishTime>09/11/2015 13:57:48</publishTime>
+      <publishTime>11/09/2015 13:57:48</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarModulo.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarPregunta.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarTexto.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarAccion.cshtml">
       <publishTime>05/21/2013 13:06:35</publishTime>
     </File>
     <File Include="Views/Docente/AgregarAlternativa.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarAyudas.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarCriterioCorreccion.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarEmparejados.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarImagen.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarItemsOrdenar.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarItemTiming.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarModulo.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarRegionImagen.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Docente/AgregarRegla.cshtml">
-      <publishTime>09/11/2015 13:55:16</publishTime>
+      <publishTime>11/09/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaCompleja.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaSimple.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/AgregarSubAlternativa.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/AgregarSubpregunta.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/AgregarTiming.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/AgregarTimingaModulo.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/Alumnos.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/Analizador.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarEscena.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarGrupo.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarModulo.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarPregunta.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarTexto.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/Copia de CrearPagina.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/Copia de EditarPagina.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/Copia de VerTareaOrdenar.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/CrearAccion.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/CrearEscena.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/CrearGrupo.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/CrearModulo.cshtml">
-      <publishTime>09/11/2015 13:55:15</publishTime>
+      <publishTime>11/09/2015 13:55:15</publishTime>
     </File>
     <File Include="Views/Docente/CrearPagina.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/CrearPregunta.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/CrearTarea.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/CrearTexto.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/DetallesAlumno.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/DetallesTodos.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarAccion.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarAlternativa.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarGrupo.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarModulo.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarPagina.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarPregunta.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaCompleja.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaSimple.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarTareaOrdenar.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarTexto.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EditarTiming.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/EliminarGrupo.cshtml">
-      <publishTime>09/11/2015 13:55:14</publishTime>
+      <publishTime>11/09/2015 13:55:14</publishTime>
     </File>
     <File Include="Views/Docente/Feedback.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/GetSecuencia.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Docente/Grupo.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/Index.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/Modulos.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/SacarSecuencias.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Docente/Secuencia.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/Seguimientos.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SeguimientosAlumnos.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SeguimientosAlumnosAcabado.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SeguimientosAlumnosIndependiente.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SeguimientosGrupos.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SeguimientosModulos.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SimularEscena.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/SimularPregunta.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/VerPagina.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/VerTareaOrdenar.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Docente/VisualizarPagina.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
-      <publishTime>11/09/2015 23:54:17</publishTime>
+      <publishTime>09/11/2015 23:54:17</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Area.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Copia de Escena.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Escena.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/EscenaFeedback.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/EscenaFeedbackCompleta.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Escritorio.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/iTuinBook/Iniciar.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Pagina.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/Pregunta.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaCompleta.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaCompletaCorregida.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaIndependiente.cshtml">
-      <publishTime>09/11/2015 13:55:13</publishTime>
+      <publishTime>11/09/2015 13:55:13</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaIndependienteCorregida.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaSimple.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaSimpleCorregida.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntaSimpleSimulada.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/PreguntasPajeraCorregida.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/Texto.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/TextoCompleto.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/iTuinBook/Workspace.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Relacionar.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Seleccion.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto_Busca.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto_Revisa.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto_Seleccion.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Test.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Texto.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/Pregunta.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
@@ -4714,67 +4714,67 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/20/2015 13:09:09</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_2.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/20/2015 12:17:43</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion_2.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Ordenar.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Ordenar_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:55:17</publishTime>
+      <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Seleccion.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/09/2015 13:55:12</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Seleccion_2.cshtml">
-      <publishTime>09/11/2015 13:55:12</publishTime>
+      <publishTime>11/18/2015 09:30:48</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Seleccion_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:54:53</publishTime>
+      <publishTime>11/09/2015 13:54:53</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test.cshtml">
-      <publishTime>09/11/2015 13:54:52</publishTime>
+      <publishTime>11/20/2015 11:59:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_2.cshtml">
-      <publishTime>09/11/2015 13:54:50</publishTime>
+      <publishTime>11/09/2015 13:54:50</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>09/11/2015 13:54:49</publishTime>
+      <publishTime>11/09/2015 13:54:49</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Seleccion.cshtml">
-      <publishTime>09/11/2015 13:54:47</publishTime>
+      <publishTime>11/09/2015 13:54:47</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Seleccion_2.cshtml">
-      <publishTime>09/11/2015 13:54:43</publishTime>
+      <publishTime>11/09/2015 13:54:43</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Seleccion_Simultaneo.cshtml">
-      <publishTime>09/11/2015 13:54:37</publishTime>
+      <publishTime>11/09/2015 13:54:37</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Texto.cshtml">
-      <publishTime>09/11/2015 13:54:36</publishTime>
+      <publishTime>11/09/2015 13:54:36</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/11/2015 11:01:44</publishTime>
+      <publishTime>11/09/2015 11:01:44</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutAlumno.cshtml">
-      <publishTime>09/11/2015 11:01:26</publishTime>
+      <publishTime>11/09/2015 11:01:26</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutDocente.cshtml">
-      <publishTime>09/11/2015 11:01:56</publishTime>
+      <publishTime>11/09/2015 11:01:56</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutNada.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
@@ -4795,7 +4795,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/09/2015 23:47:55</publishTime>
+      <publishTime>09/11/2015 23:47:55</publishTime>
     </File>
   </ItemGroup>
 </Project>

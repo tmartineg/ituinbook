@@ -11,7 +11,7 @@
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    <div style="float:right;">
+    <div style="float:right;" class="hiddenDebug">
         <b>PUNTOS:</b>
         <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
     </div>
@@ -80,15 +80,19 @@
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient},
                     success: function (result) {
-                        // data.redirect contains the string URL to redirect to   
+                        // result.redirect contains the string URL to redirect to   
                         if (!(result.mensaje == null || result.mensaje == "")) {                            
                             @if (configPregunta != null && (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno))
                             {
-                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
+                                //guirisan/abiertas
+                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
+                                //@: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
                             }
                             else
                             {
-                                @: parent.feedbackVentana(result.mensaje);
+                                //guirisan/abiertas
+                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
+                                //@: parent.feedbackVentana(result.mensaje);
                             }
                         }
             
