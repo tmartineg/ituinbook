@@ -148,7 +148,7 @@
 
 
                 $.ajax({
-                    url: "/PL2_Experimentos/PL2_Pregunta_Test_Validar", //url: '/ReadAndLearn/Validar',
+                    url: "PL2_Pregunta_Test_Validar", //url: '/ReadAndLearn/Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -218,7 +218,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL2_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -236,7 +236,7 @@
                     }
                 });
                 /*$.ajax({
-                    url: "/PL2_Experimentos/UsoAyudasIndependiente",
+                    url: "UsoAyudasIndependiente",
                     type: 'POST',
                     data: { Ayuda: 1 }
                 });*/
@@ -274,7 +274,7 @@
 
 
                 $.ajax({
-                    url: "/PL2_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -330,7 +330,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL2_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -406,7 +406,7 @@
                         }
 
                         $.ajax({
-                            url: "/PL2_Experimentos/RegistrarAccion",
+                            url: "RegistrarAccion",
                             type: 'POST',
                             data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16, moment: datetimeclient, numAccion: numAcc},
                             //guirisan/secuencias
@@ -458,7 +458,7 @@
                                     datosRaw = {};
                                 }
                                 $.ajax({
-                                    url: "/PL2_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
@@ -521,7 +521,7 @@
                             datosRaw = {};
                         }
                         $.ajax({
-                            url: "/PL2_Experimentos/RegistrarAccion",
+                            url: "RegistrarAccion",
                             type: 'POST',
                             data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient, numAccion: numAcc },
                             //guirisan/secuencias
@@ -570,7 +570,7 @@
                                     datosRaw = {};
                                 }
                                 $.ajax({
-                                    url: "/PL2_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
@@ -645,7 +645,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/PL2_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias

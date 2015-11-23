@@ -4714,13 +4714,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:42:32</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta.cshtml">
-      <publishTime>11/20/2015 13:09:09</publishTime>
+      <publishTime>11/20/2015 14:18:31</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_2.cshtml">
       <publishTime>11/09/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Resuelta.cshtml">
-      <publishTime>11/20/2015 12:17:43</publishTime>
+      <publishTime>11/20/2015 14:12:44</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion.cshtml">
       <publishTime>11/09/2015 13:55:12</publishTime>
@@ -4744,13 +4744,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>11/09/2015 13:54:53</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test.cshtml">
-      <publishTime>11/20/2015 11:59:17</publishTime>
+      <publishTime>11/20/2015 14:12:25</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_2.cshtml">
-      <publishTime>11/09/2015 13:54:50</publishTime>
+      <publishTime>11/20/2015 14:21:06</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>11/09/2015 13:54:49</publishTime>
+      <publishTime>11/20/2015 14:16:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Test_Seleccion.cshtml">
       <publishTime>11/09/2015 13:54:47</publishTime>
@@ -4762,7 +4762,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>11/09/2015 13:54:37</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Texto.cshtml">
-      <publishTime>11/09/2015 13:54:36</publishTime>
+      <publishTime>11/20/2015 14:13:03</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>10/28/2015 11:42:32</publishTime>
