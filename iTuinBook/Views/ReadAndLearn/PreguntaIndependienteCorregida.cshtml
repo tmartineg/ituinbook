@@ -118,7 +118,7 @@
                 {
                     
                     $.ajax({
-                        url: "/ReadAndLearn/RevisaIndependiente",
+                        url: "RevisaIndependiente",
                         type: 'POST',
                         data: { moment: datetimeclient, numAccion: numAcc },
                         //guirisan/secuencias
@@ -135,7 +135,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/SiguientePregunta", //url: '/ReadAndLearn/Validar',
+                    url: "SiguientePregunta", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     //guirisan/secuencias

@@ -109,7 +109,7 @@
                     });
                     
                     $.ajax({
-                        url: "/Docente/AgregarReglasSeleccionadas",
+                        url: "AgregarReglasSeleccionadas",
                         type: 'POST',
                         data: { ModuloID: '@Model.ModuloID', Lista: str.toString() },
                         success: function (result) {

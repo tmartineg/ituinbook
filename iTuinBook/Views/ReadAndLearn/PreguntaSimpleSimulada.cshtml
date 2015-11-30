@@ -325,7 +325,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaClaves", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaClaves", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras, moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -412,7 +412,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaTest", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaTest", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -471,7 +471,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaSeleccion", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaSeleccion", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias

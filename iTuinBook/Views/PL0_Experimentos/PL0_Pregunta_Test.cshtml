@@ -59,7 +59,7 @@
                 });
 
                 $.ajax({
-                    url: "/PL0_Experimentos/PL0_Pregunta_Test_Validar", //url: '/ReadAndLearn/Validar',
+                    url: "/PL0_Experimentos/PL0_Pregunta_Test_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter },
                     success: function (result) {

@@ -66,7 +66,7 @@
 
                 $.ajax({
                     cache: false,
-                    url: "/PL1_Experimentos/PL1_Pregunta_Test_Validar", //url: '/ReadAndLearn/Validar',
+                    url: "/PL1_Experimentos/PL1_Pregunta_Test_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter },
                     success: function (redirect) {

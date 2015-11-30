@@ -229,7 +229,7 @@
                         ddl.empty();
 
                         $.ajax({
-                            url: "/Docente/GetSimples", //url: '/ReadAndLearn/Validar',
+                            url: "GetSimples", //url: 'Validar',
                             type: 'POST',
                             success: function (result) {
                                 var ddl = $('#Regla1ID');
@@ -254,7 +254,7 @@
                         ddl.empty();
 
                         $.ajax({
-                            url: "/Docente/GetComplejas", //url: '/ReadAndLearn/Validar',
+                            url: "GetComplejas", //url: 'Validar',
                             type: 'POST',
                             success: function (result) {
                                 var ddl = $('#Regla1ID');
@@ -291,7 +291,7 @@
                             ddl.empty();
 
                             $.ajax({
-                                url: "/Docente/GetSimples", //url: '/ReadAndLearn/Validar',
+                                url: "GetSimples", //url: 'Validar',
                                 type: 'POST',
                                 success: function (result) {
                                     var ddl = $('#Regla2ID');
@@ -316,7 +316,7 @@
                             ddl.empty();
 
                             $.ajax({
-                                url: "/Docente/GetComplejas", //url: '/ReadAndLearn/Validar',
+                                url: "GetComplejas", //url: 'Validar',
                                 type: 'POST',
                                 success: function (result) {
                                     var ddl = $('#Regla2ID');
@@ -349,7 +349,7 @@
 
                         if ($(this).val() == "5" || $(this).val() == "6") {
                             $.ajax({
-                                url: "/Docente/GetSimples", //url: '/ReadAndLearn/Validar',
+                                url: "GetSimples", //url: 'Validar',
                                 type: 'POST',
                                 success: function (result) {
                                     var ddl = $('#Regla1ID');
@@ -370,7 +370,7 @@
 
                             if ($(this).val() == "5") {
                                 $.ajax({
-                                    url: "/Docente/GetSimples", //url: '/ReadAndLearn/Validar',
+                                    url: "GetSimples", //url: 'Validar',
                                     type: 'POST',
                                     success: function (result) {
                                         var ddl = $('#Regla2ID');
@@ -391,7 +391,7 @@
                             }
                             else {
                                 $.ajax({
-                                    url: "/Docente/GetComplejas", //url: '/ReadAndLearn/Validar',
+                                    url: "GetComplejas", //url: 'Validar',
                                     type: 'POST',
                                     success: function (result) {
                                         var ddl = $('#Regla2ID');
@@ -413,7 +413,7 @@
                         }
                         else {
                             $.ajax({
-                                url: "/Docente/GetComplejas", //url: '/ReadAndLearn/Validar',
+                                url: "GetComplejas", //url: 'Validar',
                                 type: 'POST',
                                 success: function (result) {
                                     var ddl = $('#Regla1ID');
@@ -434,7 +434,7 @@
 
                             if ($(this).val() == "7") {
                                 $.ajax({
-                                    url: "/Docente/GetSimples", //url: '/ReadAndLearn/Validar',
+                                    url: "GetSimples", //url: 'Validar',
                                     type: 'POST',
                                     success: function (result) {
                                         var ddl = $('#Regla2ID');
@@ -455,7 +455,7 @@
                             }
                             else {
                                 $.ajax({
-                                    url: "/Docente/GetComplejas", //url: '/ReadAndLearn/Validar',
+                                    url: "GetComplejas", //url: 'Validar',
                                     type: 'POST',
                                     success: function (result) {
                                         var ddl = $('#Regla2ID');

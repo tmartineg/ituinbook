@@ -88,7 +88,7 @@
             }
 
             $.ajax({
-                url: '/ReadAndLearn/SiguienteAccion',
+                url: 'SiguienteAccion',
                 type: 'POST',
                 data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: accActual },
 
@@ -142,7 +142,7 @@
             accActual = accActual + 1;
 
             $.ajax({
-                url: '/ReadAndLearn/SiguienteAccion',
+                url: 'SiguienteAccion',
                 type: 'POST',
                 data: { GrupoID: '@ViewBag.GrupoID', ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: accActual },
                 success: function (result) {                    

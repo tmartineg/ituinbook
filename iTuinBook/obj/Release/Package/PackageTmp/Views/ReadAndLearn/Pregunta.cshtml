@@ -269,7 +269,7 @@
                 $("#btnValidar").attr("disabled", "disabled");
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPregunta", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPregunta", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest },
                     success: function (result) {

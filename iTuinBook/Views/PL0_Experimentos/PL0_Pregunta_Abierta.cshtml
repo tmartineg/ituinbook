@@ -45,7 +45,7 @@
             
             $("#btnValidarAbierta").click(function () {
                 $.ajax({
-                    url: "/PL0_Experimentos/PL0_Pregunta_Abierta_Validar", //url: '/ReadAndLearn/Validar',
+                    url: "/PL0_Experimentos/PL0_Pregunta_Abierta_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@ViewBag.TextoID', PreguntaID: '@Model.PreguntaID', respuesta: "Hola" },
                     success: function (result) {

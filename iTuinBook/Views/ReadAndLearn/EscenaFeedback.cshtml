@@ -59,7 +59,7 @@
 
                 if (accActual == accTotalFeedback) {
                     $.ajax({
-                        url: '/ReadAndLearn/FinFeedbackContenido',
+                        url: 'FinFeedbackContenido',
                         type: 'POST',
                         data: { ModuloID: '@ViewBag.ModuloID', escActual: '@ViewBag.escActual', accActual: '@ViewBag.accActual', GrupoID: '@ViewBag.GrupoID' },
                         success: function (result) {

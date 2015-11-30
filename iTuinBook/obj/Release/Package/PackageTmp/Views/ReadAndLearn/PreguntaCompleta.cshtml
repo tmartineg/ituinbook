@@ -72,7 +72,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaCompleta", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaCompleta", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest, pregActual: '@ViewBag.pregActual', pregTotal: '@ViewBag.pregTotal', TextoID: '@ViewBag.TextoID', moment: datetimeclient },
                     //guirisan/secuencias

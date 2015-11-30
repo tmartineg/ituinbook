@@ -56,7 +56,7 @@
                 {
                     if (str != "")
                     {
-                        OrdenModulos.Add(gru.Modulos.First(id => id.ModuloID == Convert.ToInt32(str)));
+                        OrdenModulos.Add(gru.GrupoModulo.First(id => id.ModuloID == Convert.ToInt32(str)).Modulo);
                     }
                 }
 
@@ -88,7 +88,7 @@
                                         case 1: // iTextBook
                                         case 2:
                                             
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 ,moment = datetimeclient}, null)</b>     
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
                                             break;
                                         case 3:                                        
                                         case 4:

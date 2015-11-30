@@ -93,7 +93,7 @@
                 if (event.stopPropagation) event.stopPropagation();
 
                 $.ajax({
-                    url: '/ReadAndLearn/Algoritmo',
+                    url: 'Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#seleccion').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString(), PreguntaID: '@Model.PreguntaID' },
                     success: function (result) {
@@ -133,7 +133,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion_Validar", //url: '/ReadAndLearn/Validar',
+                    url: "/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias

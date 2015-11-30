@@ -235,7 +235,7 @@
                 
                 $(window).bind('load', function () {
                     $.ajax({
-                        url: '/ReadAndLearn/SeleccionPertinente',
+                        url: 'SeleccionPertinente',
                         type: 'POST',
                         data: { PreguntaID: '@Model.PreguntaID', Seleccion: $('#selCorreccion').text() },
                         success: function (result) {

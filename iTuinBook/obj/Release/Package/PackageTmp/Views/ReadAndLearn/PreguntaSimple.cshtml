@@ -454,7 +454,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaParejas", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaParejas", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respuesta, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -524,7 +524,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaClaves", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaClaves", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras , moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -612,7 +612,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaClaves", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaClaves", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: palabras, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -713,7 +713,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaTest", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaTest", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: respTest,moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -772,7 +772,7 @@
                 }
 
                 $.ajax({
-                    url: "/ReadAndLearn/ValidarPreguntaSeleccion", //url: '/ReadAndLearn/Validar',
+                    url: "ValidarPreguntaSeleccion", //url: 'Validar',
                     type: 'POST',
                     data: { PreguntaID: '@Model.PreguntaID', respuesta: $("#pertinente").val(), moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -874,7 +874,7 @@
                 if (event.stopPropagation) event.stopPropagation();
 
                 $.ajax({
-                    url: '/ReadAndLearn/Algoritmo',
+                    url: 'Algoritmo',
                     type: 'POST',
                     data: { Pertinente: $('#pertinente').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString() },
                     success: function (result) {

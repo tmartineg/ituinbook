@@ -1488,35 +1488,35 @@
     <Content Include="Scripts\kendo\2013.1.319\kendo.window.min.js" />
     <Content Include="Scripts\tutor-scripts.js" />
     <Content Include="Views\Docente\AgregarRegionImagen.cshtml" />
-    <Content Include="Views\iTuinBook\Pagina.cshtml" />
-    <Content Include="Views\iTuinBook\Pregunta.cshtml" />
+    <Content Include="Views\ReadAndLearn\Pagina.cshtml" />
+    <Content Include="Views\ReadAndLearn\Pregunta.cshtml" />
     <Content Include="Views\Shared\_LayoutNada.cshtml" />
-    <Content Include="Views\iTuinBook\Escena.cshtml" />
-    <Content Include="Views\iTuinBook\Workspace.cshtml" />
-    <Content Include="Views\iTuinBook\Escritorio.cshtml" />
+    <Content Include="Views\ReadAndLearn\Escena.cshtml" />
+    <Content Include="Views\ReadAndLearn\Workspace.cshtml" />
+    <Content Include="Views\ReadAndLearn\Escritorio.cshtml" />
     <Content Include="Views\Docente\AgregarModulo.cshtml" />
     <Content Include="Views\Docente\AgregarSubpregunta.cshtml" />
     <Content Include="Views\Docente\AgregarSubAlternativa.cshtml" />
     <Content Include="Views\Docente\AgregarAyudas.cshtml" />
-    <Content Include="Views\iTuinBook\Copia de Escena.cshtml" />
-    <Content Include="Views\iTuinBook\TextoCompleto.cshtml" />
+    <Content Include="Views\ReadAndLearn\Copia de Escena.cshtml" />
+    <Content Include="Views\ReadAndLearn\TextoCompleto.cshtml" />
     <Content Include="Views\Shared\_LayoutWorkSpace.cshtml" />
-    <Content Include="Views\iTuinBook\EscenaFeedback.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaCompleta.cshtml" />
-    <Content Include="Views\iTuinBook\EscenaFeedbackCompleta.cshtml" />
+    <Content Include="Views\ReadAndLearn\EscenaFeedback.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaCompleta.cshtml" />
+    <Content Include="Views\ReadAndLearn\EscenaFeedbackCompleta.cshtml" />
     <Content Include="Views\Docente\EditarPregunta.cshtml" />
     <Content Include="Views\Docente\AgregarEmparejados.cshtml" />
     <Content Include="Views\Docente\EditarTexto.cshtml" />
     <Content Include="Views\Docente\EditarAlternativa.cshtml" />
     <Content Include="Views\Docente\EditarAccion.cshtml" />
-    <Content Include="Views\iTuinBook\Area.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaSimple.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaSimpleCorregida.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaSimpleSimulada.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaIndependiente.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaIndependienteCorregida.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntasPajeraCorregida.cshtml" />
-    <Content Include="Views\iTuinBook\PreguntaCompletaCorregida.cshtml" />
+    <Content Include="Views\ReadAndLearn\Area.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaSimple.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaSimpleCorregida.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaSimpleSimulada.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaIndependiente.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaIndependienteCorregida.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntasPajeraCorregida.cshtml" />
+    <Content Include="Views\ReadAndLearn\PreguntaCompletaCorregida.cshtml" />
     <Content Include="Views\Docente\SeguimientosGrupos.cshtml" />
     <Content Include="Views\Docente\SeguimientosModulos.cshtml" />
     <Content Include="Views\Docente\SeguimientosAlumnos.cshtml" />
@@ -1740,8 +1740,8 @@
     <Content Include="Views\Docente\AgregarCriterioCorreccion.cshtml" />
     <Content Include="Views\Alumno\Tareas.cshtml" />
     <Content Include="Views\Shared\_LayoutVacio.cshtml" />
-    <Content Include="Views\iTuinBook\Iniciar.cshtml" />
-    <Content Include="Views\iTuinBook\Texto.cshtml" />
+    <Content Include="Views\ReadAndLearn\Iniciar.cshtml" />
+    <Content Include="Views\ReadAndLearn\Texto.cshtml" />
     <Content Include="Views\Docente\AdministrarPregunta.cshtml" />
     <Content Include="Views\Docente\SimularPregunta.cshtml" />
     <Content Include="Views\Docente\ConfigurarTexto.cshtml" />
@@ -1789,13 +1789,13 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>46665</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4094/</IISUrl>
+          <IISUrl>http://localhost:4094/ReadAndLearn/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <servers defaultServer="SelfHostServer">
+          <servers defaultServer="">
             <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:4094/" workingDir="" />
           </servers>
         </WebProjectProperties>

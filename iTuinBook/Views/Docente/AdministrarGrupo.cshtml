@@ -48,6 +48,7 @@
                 Comandos
             </th>
         </tr> @{
+            System.Diagnostics.Debugger.Break();
         var modulos = Model.Modulos;
         string[] param = {};
         
@@ -64,7 +65,8 @@
             {
                 if(str != "")
                 {
-                    OrdenModulos.Add(modulos.First(id => id.ModuloID == Convert.ToInt32(str)));
+                    
+                    OrdenModulos.Add(modulos.First(m => m.ModuloID == Convert.ToInt32(str)));
                 }
             }
 

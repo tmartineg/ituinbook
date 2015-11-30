@@ -104,7 +104,7 @@
             $('#Pagina').click(function () {
                 if ($('#Pagina').attr("style") == "-webkit-filter: blur(5px); filter:url(#example-one);") {
                     $.ajax({
-                        url: "/ReadAndLearn/Busca",
+                        url: "Busca",
                         type: 'POST'
                     });
 
@@ -149,7 +149,7 @@
                 var region = $(this).html();
 
                 $.ajax({
-                    url: "/ReadAndLearn/GetPertinente",
+                    url: "GetPertinente",
                     type: 'POST',
                     data: { pregActual: pregActual, TextoID: '@Model.TextoID' }, //guirisan: add paginaID and other data
                     success: function (result) {
@@ -159,7 +159,7 @@
                             if ($('#Pagina').attr("busca") == "ok") {
                                 $.ajax({
                                     //guirisan: modify petition? add data?
-                                    url: "/ReadAndLearn/PertinenteEncontrado",
+                                    url: "PertinenteEncontrado",
                                     type: 'POST'
                                 });
                             }
