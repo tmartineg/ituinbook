@@ -100,8 +100,17 @@
         @Html.LabelFor(model => model.Valor)
     </div>
     <div class="editor-field" style="padding-bottom: 15px">
-        @Html.DropDownListFor(model => model.Valor, new SelectList(new double[] { -1.0, -0.5, 0, 0.5, 1.0 }))            
-        
+        <!--Html.DropDownListFor(model => model.Valor, new SelectList(new double[] { -1.0, -0.5, 0, 0.5, 1.0 }))-->
+        @Html.DropDownListFor(model => model.Valor, new SelectList(new List<Object> {                          
+                                                            new {value = -1.0, text = "-1,0"},
+                                                            new {value = -0.5, text = "-0,5"},
+                                                            new {value = 0, text = "0"},
+                                                            new {value = 0.5, text = "0,5"},
+                                                            new {value = 1.0, text = "1,0"}
+                                                        },
+                                                        "value",
+                                                        "text"))
+
     </div>
         
     <div class="editor-label">

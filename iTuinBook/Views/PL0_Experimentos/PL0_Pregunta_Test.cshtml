@@ -59,7 +59,7 @@
                 });
 
                 $.ajax({
-                    url: "/PL0_Experimentos/PL0_Pregunta_Test_Validar", //url: 'Validar',
+                    url: "PL0_Pregunta_Test_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter },
                     success: function (result) {
@@ -99,7 +99,7 @@
                                 var diff = timeFinish - timeStart;
 
                                 $.ajax({
-                                    url: "/PL0_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString() },
                                     error: function () {
@@ -134,7 +134,7 @@
                                 var diff = timeFinish - timeStart;
 
                                 $.ajax({
-                                    url: "/PL0_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() },
                                     error: function () {

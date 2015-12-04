@@ -1097,9 +1097,34 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
+        public ActionResult AgregarCriterioCorreccion(string Opcion, string Valor, string FeedbackCriterio, int TextoID, int? PaginaID, int PreguntaID)
+        {
+            Pregunta preg = db.Preguntas.Find(PreguntaID);
+            Criterio criterio = new Criterio();
+            criterio.Opcion = (string) Opcion;
+            criterio.Valor = Double.Parse(Valor);
+            criterio.FeedbackCriterio = FeedbackCriterio;
+            criterio.PreguntaID = PreguntaID;
+            
+            criterio.Pregunta = preg;
+
+            db.Preguntas.Find(PreguntaID).Criterios.Add(criterio);
+            db.Criterio.Add(criterio);
+
+            db.SaveChanges();
+
+            return RedirectToAction("AgregarCriterioCorreccion", new { TextoID = TextoID, PaginaID = PaginaID, PreguntaID = PreguntaID });
+        }
+           
+        /* MÉTODO ANTIGUO
+         * FALLA Al parsear el atributo Valor de criterio, aunque llegue 0.5 lo parsea como 5.0
+         * No deja enviar "5,0", el atributo llega correcto en la Request, asi que para solucionarlo parseamos manualmente los atributos del criterio
+         * */
+        /*
+        [HttpPost]
         public ActionResult AgregarCriterioCorreccion(Criterio criterio, int TextoID, int? PaginaID, int PreguntaID)
         {
-            Pregunta preg = db.Preguntas.Find(PreguntaID);           
+            Pregunta preg = db.Preguntas.Find(PreguntaID);
 
             criterio.Pregunta = preg;
 
@@ -1110,7 +1135,7 @@ namespace ReadAndLearn.Controllers
 
             return RedirectToAction("AgregarCriterioCorreccion", new { TextoID = TextoID, PaginaID = PaginaID, PreguntaID = PreguntaID });
         }
-
+        */
         public ActionResult EliminarCriterioCorreccion(int TextoID, int CriterioID, int PreguntaID)
         {
             Pregunta preg = db.Preguntas.Find(PreguntaID);

@@ -25,14 +25,16 @@ namespace ReadAndLearn.Controllers
         {           
             switch (pregunta.TipoPreguntaID)
             { 
-                case 0: // Test
+                case 0: // Test //guirisan ERROR! no hay TipoPregunta 0, empiezan desde 1
                     return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
                 case 1:
                     return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
                 case 2:
-                    return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
+                    return RedirectToAction("PL0_Pregunta_Abierta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
                 case 3:
-                    return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
+                    return RedirectToAction("PL0_Pregunta_Seleccion", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
+                case 4:
+                    return RedirectToAction("PL0_Pregunta_Relacionar", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });
                 default:
                     return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID });                    
             }
