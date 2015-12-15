@@ -19,7 +19,7 @@
             @{
                 string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
             }
-            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient id = "btnPreguntas" }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient, id = "btnPreguntas" }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
         </div>
     </div>
     <!--guirisan / preguntas button-->

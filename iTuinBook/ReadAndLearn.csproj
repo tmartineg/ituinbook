@@ -197,7 +197,6 @@
     <Compile Include="Controllers\PL0_ExperimentosController.cs" />
     <Compile Include="Controllers\PL1_ExperimentosController.cs" />
     <Compile Include="Controllers\PL2_ExperimentosController.cs" />
-    <Compile Include="Controllers\PruebaController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1664,15 +1663,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Copia de Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Copia de Web.Debug.config">
-      <DependentUpon>Copia de Web.config</DependentUpon>
-    </None>
-    <None Include="Copia de Web.Release.config">
-      <DependentUpon>Copia de Web.config</DependentUpon>
-    </None>
     <None Include="Properties\PublishProfiles\ReadAndLearn.pubxml" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
