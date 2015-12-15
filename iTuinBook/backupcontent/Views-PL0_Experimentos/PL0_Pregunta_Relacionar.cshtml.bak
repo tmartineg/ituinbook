@@ -1,0 +1,20 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
+
+@{
+    ViewBag.Title = "PL0_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+}
+
+<div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+    @Html.Raw(Model.Enunciado)                        
+</div>
+     
+<div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+    <ul>
+    @foreach (Alternativa alt in Model.Alternativas)
+    {
+        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style="width:20px"}) @alt.Opcion <br />
+    }
+    </ul>
+</div>
