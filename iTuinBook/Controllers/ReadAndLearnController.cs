@@ -1922,20 +1922,19 @@ namespace ReadAndLearn.Controllers
             return View(pregunta);
         }
 
-        public ActionResult SiguientePregunta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, string dataRow, int numAccion = -1)
+        public ActionResult SiguientePregunta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, string dataRow ="", int numAccion = -1)
         {
             logger.Debug("ReadAndLearnController/SiguientePregunta");
 
-            //guirisan/secuencias
-            DateTime datetimeclient = DateTime.Parse(moment);
-            //ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
-            /***********************************************************/
-            /*************************YOU ARE HERE**********************/
-            /***********************************************************/
-
+            
+            
             DatosUsuario du = GetDatosUsuario();
             Texto text = db.Textos.Find(TextoID);
             DatoSimple ds;
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
 
             if (pregActual + 2 > text.Preguntas.Count()) // Cambio de texto
             {

@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AlumnoController.cs" />
     <Compile Include="Controllers\DocenteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <None Include="backupcontent\PL0_ExperimentosOLDController.cs.bak" />
     <Compile Include="Controllers\ReadAndLearnController.cs" />
     <Compile Include="Controllers\PL0_ExperimentosController.cs" />
     <Compile Include="Controllers\PL1_ExperimentosController.cs" />
@@ -1580,6 +1581,7 @@
     <Content Include="Views\PL2_Experimentos\PL2_Pregunta_Test_Seleccion_Simultaneo.cshtml" />
     <Content Include="Views\PL2_Experimentos\PL2_Pregunta_Test_Seleccion_2.cshtml" />
     <Content Include="Views\PL2_Experimentos\PL2_Pregunta_Seleccion_2.cshtml" />
+    <Content Include="Views\PL0_Experimentos\PL0_Pregunta_Abierta_2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

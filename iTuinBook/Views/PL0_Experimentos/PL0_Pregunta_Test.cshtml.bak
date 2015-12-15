@@ -1,0 +1,168 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
+
+@{
+    ViewBag.Title = "PL0_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+}
+
+<div id="tools">
+    <div>
+        @Html.ActionLink("Texto", "PL0_Texto_Busca", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual, id = "btnTexto" }, new { @style="padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+    </div>
+</div>
+<div>
+
+<div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+    @Html.Raw(Model.Enunciado)                        
+</div>
+     
+<div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+    <ul>
+    @foreach (Alternativa alt in Model.Alternativas)
+    {
+        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class="radio", @style="width:20px"}) @alt.Opcion <br />
+    }
+    </ul>
+</div>
+
+<div id="ayudas" style="visibility: hidden">
+    <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
+    <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
+    <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+</div>
+
+
+    <button id="btnValidarTest" style="float:left;">Validar</button>                       
+</div> 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var timeStart = new Date();
+            var timeFinish = new Date();
+
+            $("#btnValidarTest").click(function () {
+                var alter = "";
+
+                $(":radio").each(function () {
+                    if ($(this).is(":checked")) {
+                        alter = $(this).val();
+
+                        return false;
+                    }
+                });
+
+                $.ajax({
+                    url: "PL0_Pregunta_Test_Validar", //url: 'Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter },
+                    success: function (result) {
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;                        
+                    },
+                    error: function () {
+                        alert("error");
+                    }                    
+                });
+            });
+
+            /**************************************/
+            /**************************************/
+            /******* CONFIGURACIÓN PREGUNTA *******/
+            /**************************************/
+            /**************************************/
+            if ('@configPregunta.EnmascararEnunciado' == 'True') {
+                $('#enunciado').addClass("difuminado");
+                
+                $('#enunciado').click(function () {                    
+                    if ($('#enunciado').hasClass("difuminado")) {
+                        $(":radio").attr("disabled", false);
+
+                        $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararAlternativas' == 'True') {
+                            if ($('#alternativas').hasClass("difuminado")) {
+                                
+                            }
+                            else {
+                                $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString() },
+                                    error: function () {
+                                        alert("Error: Hubo un error con tu última acción.");
+                                    }
+                                });
+                            }
+
+                        }
+                              
+                        timeStart = jQuery.now();                        
+                    }
+                });               
+            }
+
+            if ('@configPregunta.EnmascararAlternativas' == 'True') {
+                $('#alternativas').addClass("difuminado");
+
+                $('#alternativas').click(function () {
+                    if ($('#alternativas').hasClass("difuminado")) {
+                        $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararEnunciado' == 'True') {
+                            if ($('#enunciado').hasClass("difuminado")) {
+
+                            }
+                            else {
+                                $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() },
+                                    error: function () {
+                                        alert("Error: Hubo un problema con tu última acción.");
+                                    }
+                                });
+                            }
+                        }
+
+                        timeStart = jQuery.now();
+                    }
+                });
+            }
+
+            if ('@configPregunta.Ayuda' == 'True') {
+                $('#ayudas').show();
+                $('#ayudas').css("visibility", "visible")
+            }
+            else {
+                $('#ayudas').hide();
+                $('#ayudas').css("visibility", "hidden")
+            }
+
+            /**************************************/
+            /**************************************/
+            
+
+
+        });
+    </script>
+}

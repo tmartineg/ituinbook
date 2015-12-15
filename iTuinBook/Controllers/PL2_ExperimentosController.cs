@@ -944,7 +944,7 @@ namespace ReadAndLearn.Controllers
         //
         // GET: /PL2_Experimentos/
 
-        public ActionResult PL2_Texto(int GrupoID, int ModuloID, int textoActual, int NumAccion)
+        public ActionResult PL2_Texto(int GrupoID, int ModuloID, int textoActual, int NumAccion = -1)
         {
             logger.Debug("PL2_Experimentos/PL2_Texto");
             try
