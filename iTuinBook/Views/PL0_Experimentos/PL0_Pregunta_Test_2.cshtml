@@ -218,18 +218,7 @@
                         this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
                     },
                     success: function (result) {
-                        // data.redirect contains the string URL to redirect to   
-                        if (!(result.mensaje == null || result.mensaje == "")) {
-                            @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
-                            {
-                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
-                            }
-                            else
-                            {
-                                @: parent.feedbackVentana(result.mensaje);
-                                @:alert(result.mensaje);
-                            }
-                        }
+                        // result.redirect contains the string URL to redirect to   
 
                         window.location.href = result.redirect;
                     },

@@ -1789,7 +1789,7 @@ namespace ReadAndLearn.Controllers
             //comentado porque borraba el feedback
             //mensaje = ext.GetFeedback(du);
 
-            return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+            return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
         }
 
         public ActionResult PL0_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText)
