@@ -2,6 +2,8 @@
 @model ReadAndLearn.Models.Pregunta
 @using System.Text.RegularExpressions;
 
+
+
 @{
     ViewBag.Title = "PL0_Pregunta";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
@@ -19,6 +21,7 @@
         lista = Model.Alternativas.OrderBy(item => Guid.NewGuid());
     }
 }
+
 
 <div style="margin: 15px 20px;" id="areaPregunta">
     @if (configModulo != null && configModulo.Puntos)
@@ -124,9 +127,14 @@
             }
         } 
     </div>
+    <!-- guirisan -->
     
     <div style="padding-left: 20px; padding-right: 20px;">
+        <!-- botón para volver al texto -->
+        <!--peticion a pl0_texto inicial: PL0_Texto?GrupoID=163&ModuloID=174&textoActual=0&db=ReadAndLearn.Models.Contexto&NumAccion=1 -->
+        <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&SegundoIntento=true">Volver al texto</a></button>
         <button id="btnValidarTest">Validar</button>                       
+        
     </div>
 </div> 
 
@@ -141,13 +149,13 @@
             @if(configPregunta != null && configPregunta.EnmascararTexto)
             {
                 <text>
-            parent.BlurPagina("True");
+            //parent.BlurPagina("True");
                 </text>
             }
             else
             {
                 <text>
-            parent.BlurPagina("False");
+            //parent.BlurPagina("False");
                 </text>
             }
 
@@ -159,6 +167,12 @@
                 $('#btnValidarTest').attr("disabled", "disabled");
                 $(':radio').removeAttr("disabled");
             }
+
+            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
+            $("#btnBackToTexto").click(function () {
+
+            });
+
 
             $("#btnValidarTest").click(function () {
                 $("#btnValidarTest").attr("disabled", "disabled");
@@ -213,6 +227,7 @@
                             else
                             {
                                 @: parent.feedbackVentana(result.mensaje);
+                                @:alert(result.mensaje);
                             }
                         }
 

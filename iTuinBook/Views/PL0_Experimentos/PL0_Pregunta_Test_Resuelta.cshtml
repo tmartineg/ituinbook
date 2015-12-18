@@ -119,6 +119,9 @@
         }
     }
 
+    <div id="feedbackContent">
+        <p>@ViewBag.feedbackText</p>
+    </div>
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
     </div> 
@@ -134,7 +137,7 @@
             @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
             {
                 <text>
-                parent.BlurRevision("True");            
+                //parent.BlurRevision("True");            
                 window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
                 window.parent.$('.paginas').css("filter", "url(#example-one)");                
                 </text>
@@ -142,7 +145,7 @@
             else
             {
                 <text>
-                parent.BlurRevision("False");
+                //parent.BlurRevision("False");
                 window.parent.$('.paginas').css("-webkit-filter", "");
                 window.parent.$('.paginas').css("filter", "");                
                 </text>
@@ -160,7 +163,7 @@
             $("#btnSiguientePregunta").click(function () {
                 $("#btnSiguientePregunta").attr("disabled", "disabled");
 
-                parent.FinalizarTiempoPregunta();
+                //parent.FinalizarTiempoPregunta();
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();

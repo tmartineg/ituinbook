@@ -284,7 +284,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1)
+        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false)
         {
             logger.Debug("PL0_Experimentos/RouterPregunta");
             DateTime datetimeclient = DateTime.Parse(moment);
@@ -298,7 +298,15 @@ namespace ReadAndLearn.Controllers
             switch (pregunta.TipoPreguntaID)
             {
                 case 0:
-                    return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
+                    if (segundoIntento)
+                    {
+                        return RedirectToAction("PL0_Pregunta_Test_2", new {GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = datosUsuario.PreguntaID});
+                    }
+                    else
+                    {
+                        return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
+                    }
+                    
                 case 1: // Test
                     if (config != null && config.SeleccionarPertinente)
                     {
@@ -313,7 +321,14 @@ namespace ReadAndLearn.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
+                        if (segundoIntento)
+                        {
+                            return RedirectToAction("PL0_Pregunta_Test_2", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = datosUsuario.PreguntaID });
+                        }
+                        else
+                        {
+                            return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
+                        }
                     }
                 case 2: // Abierta
                     if (config != null && config.SeleccionarPertinente)
@@ -941,10 +956,8 @@ namespace ReadAndLearn.Controllers
             return porcPert;
         }
         #endregion
-        //
-        // GET: /PL0_Experimentos/
 
-        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, int NumAccion = -1)
+        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, int NumAccion = -1, bool SegundoIntento = false)
         {
             logger.Debug("PL0_Experimentos/PL0_Texto");
             try
@@ -959,7 +972,7 @@ namespace ReadAndLearn.Controllers
                 ViewBag.ModuloID = ModuloID;
                 //guirisan/secuencias/developing
                 ViewBag.numAccion = NumAccion;
-
+                ViewBag.SegundoIntento = SegundoIntento;
 
                 return View(ext.GetTexto(text.TextoID));
             }
@@ -1057,7 +1070,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        public ActionResult PL0_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1)
+        public ActionResult PL0_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false)
         {
 
             logger.Debug("PL0_Experimentos/PL0_Pregunta");
@@ -1071,7 +1084,7 @@ namespace ReadAndLearn.Controllers
 
             SaveChanges();
 
-            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion);
+            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento);
         }
 
         #region Pregunta TEST
@@ -1458,7 +1471,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion, string dataRow)
         {
-
+            logger.Debug("PL0_Pregunta_Test_Validar");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             bool flag_fallo = false;
             float valor = 0;
@@ -1693,6 +1706,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            logger.Debug("PL0_Pregunta_Test_2_Validar");
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -1717,74 +1731,70 @@ namespace ReadAndLearn.Controllers
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc2, Momento = datetimeclient, NumAccion = numAccion });
             }
 
+            DatoSimple ds = new DatoSimple();
             foreach (Alternativa alt in pregunta.Alternativas)
             {
-                if (alt.Opcion == respuesta)
+                if ( alt.Opcion == respuesta) 
+                    
+                if (alt.Valor)// Acierto
                 {
-                    if (alt.Valor) // Acierto
-                    {
-                        DatoSimple ds = new DatoSimple();
+                    // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
+                    mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
 
-                        // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
+                    du.Puntos += 100;
 
-                        du.Puntos += 100;
+                    // Registrar respuesta
+                    ds.CodeOP = 13;
+                    ds.Info = respuesta;
+                    //guirisan/secuencias
+                    ds.Momento = datetimeclient;
+                    ds.NumAccion = numAccion;
 
-                        // Registrar respuesta
-                        ds.CodeOP = 13;
-                        ds.Info = respuesta;
-                        //guirisan/secuencias
-                        ds.Momento = datetimeclient;
-                        ds.NumAccion = numAccion;
+                    ds.PreguntaID = PreguntaID;
+                    ds.TextoID = pregunta.Texto.TextoID;
+                    ds.DatosUsuarioID = du.DatosUsuarioID;
+                    ds.Dato01 = 100;
+                    ds.Dato03 = 2; // Indica intento
+                    db.DatosSimples.Add(ds);
+                    du.DatoSimple.Add(ds);
+                    du.PertinenteOrden = "";
+                    SaveChanges();
+                }
+                else // Fallo
+                {
+                    // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
+                    mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
 
-                        ds.PreguntaID = PreguntaID;
-                        ds.TextoID = pregunta.Texto.TextoID;
-                        ds.DatosUsuarioID = du.DatosUsuarioID;
-                        ds.Dato01 = 100;
-                        ds.Dato03 = 2; // Indica intento
-                        db.DatosSimples.Add(ds);
-                        du.DatoSimple.Add(ds);
-                        du.PertinenteOrden = "";
-                        SaveChanges();
-                    }
-                    else // Fallo
-                    {
-                        DatoSimple ds = new DatoSimple();
+                    // Registrar respuesta
+                    ds.CodeOP = 13;
+                    ds.Info = respuesta;
+                    //guirisan/secuencias
+                    ds.Momento = datetimeclient;
+                    ds.NumAccion = numAccion;
 
-                        // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
+                    ds.PreguntaID = PreguntaID;
+                    ds.TextoID = pregunta.Texto.TextoID;
+                    ds.DatosUsuarioID = du.DatosUsuarioID;
+                    ds.Dato01 = 0;
+                    ds.Dato03 = 2; // Indica intento
+                    db.DatosSimples.Add(ds);
+                    du.DatoSimple.Add(ds);
+                    du.PertinenteOrden = "";
 
-                        // Registrar respuesta
-                        ds.CodeOP = 13;
-                        ds.Info = respuesta;
-                        //guirisan/secuencias
-                        ds.Momento = datetimeclient;
-                        ds.NumAccion = numAccion;
-
-                        ds.PreguntaID = PreguntaID;
-                        ds.TextoID = pregunta.Texto.TextoID;
-                        ds.DatosUsuarioID = du.DatosUsuarioID;
-                        ds.Dato01 = 0;
-                        ds.Dato03 = 2; // Indica intento
-                        db.DatosSimples.Add(ds);
-                        du.DatoSimple.Add(ds);
-                        du.PertinenteOrden = "";
-
-                        SaveChanges();
-                    }
-
-                    break;
+                    SaveChanges();
                 }
             }
 
-            // Genera un feedback si no hay feedback de contenido ni de pregunta.            
-            mensaje = ext.GetFeedback(du);
+            // Genera un feedback si no hay feedback de contenido ni de pregunta.   
+            //comentado porque borraba el feedback
+            //mensaje = ext.GetFeedback(du);
 
             return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
         }
 
-        public ActionResult PL0_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID)
+        public ActionResult PL0_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText)
         {
+            logger.Debug("PL0_Pregunta_Test_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = new Pregunta();
 
@@ -1797,6 +1807,8 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.DatosUsuario = du;
             ViewBag.DatoSimple = ds;
+            //guirisan
+            ViewBag.feedbackText = feedbackText;
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta
 
@@ -1948,6 +1960,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Abierta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
+            logger.Debug("PL0_Pregunta_Abierta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -2136,6 +2149,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Abierta_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
+            logger.Debug("PL0_Pregunta_Abierta_Validar");
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -2292,6 +2306,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Abierta_Resuelta(int GrupoID, int ModuloID, int preguntaID)
         {
+            logger.Debug("PL0_Pregunta_Abierta_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = new Pregunta();
 
@@ -2500,7 +2515,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
-
+            logger.Debug("PL0_Siguiente_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             //guirisan/secuencias

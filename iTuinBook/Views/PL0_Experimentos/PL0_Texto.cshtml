@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     
+    
 }
 <script>
     //guirisan/secuencias
@@ -19,13 +20,16 @@
             @{
                 string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
             }
-            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient, id = "btnPreguntas" }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
         </div>
     </div>
     <!--guirisan / preguntas button-->
 
 
-    @if(Model.Preguntas != null && Model.Preguntas.Count > 0)
+    @{
+        /* en esta plantilla solo necesitamos el botón de arriba para mostar las preguntas, ya que cargan en otra página*/
+    }
+    @{/*if(Model.Preguntas != null && Model.Preguntas.Count > 0)
     {
         <div id="pregunta" style="z-index:5; position: fixed; width:100%; margin-top: -12px; visibility:hidden;">
             
@@ -38,6 +42,7 @@
     {
         <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
     }
+    */}
     
     <div style="position: relative;">           
         @foreach (Pagina pag in Model.Paginas)
