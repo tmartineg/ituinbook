@@ -988,3 +988,8 @@ tr.pager td {
 .hiddenDebug{
     display: none !important;
 }
+
+.noclose .ui-dialog-titlebar-close
+{
+    display:none;
+}

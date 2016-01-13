@@ -1134,7 +1134,7 @@ namespace ReadAndLearn.Controllers
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
 
-        public ActionResult PL0_Pregunta_Test_2(int GrupoID, int ModuloID, int PreguntaID)
+        public ActionResult PL0_Pregunta_Test_2(int GrupoID, int ModuloID, int PreguntaID, string feedbackText)
         {
             logger.Debug("PL0_Experimentos/PL0_pregunta_test_2");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1179,6 +1179,8 @@ namespace ReadAndLearn.Controllers
                 ViewBag.TareaSel = false;
             }
 
+            /*guirisan*/
+            ViewBag.feedbackText = feedbackText;
             return View(pregunta);
         }
 
@@ -1608,11 +1610,11 @@ namespace ReadAndLearn.Controllers
 
             if (configPreg != null && (configPreg.DosIntentosTest && flag_fallo))
             {
-                return Json(new { redirect = Url.Action("PL0_Pregunta_Test_2", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+                return Json(new { redirect = Url.Action("PL0_Pregunta_Test_2", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
             }
             else
             {
-                return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+                return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
             }
         }
 
@@ -1738,9 +1740,10 @@ namespace ReadAndLearn.Controllers
                     
                 if (alt.Valor)// Acierto
                 {
+                    //comentado para que el feedback tras el segundo intento sea correctivo y no elaborativo
                     // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                    mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
-
+                    //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
+                    mensaje = "Has acertado";
                     du.Puntos += 100;
 
                     // Registrar respuesta
@@ -1762,9 +1765,10 @@ namespace ReadAndLearn.Controllers
                 }
                 else // Fallo
                 {
+                    //comentado para que el feedback tras el segundo intento sea correctivo y no elaborativo
                     // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                    mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
-
+                    //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
+                    mensaje = "Has fallado";
                     // Registrar respuesta
                     ds.CodeOP = 13;
                     ds.Info = respuesta;

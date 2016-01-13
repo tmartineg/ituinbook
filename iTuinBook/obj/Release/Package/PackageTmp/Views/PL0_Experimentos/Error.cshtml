@@ -1,0 +1,17 @@
+﻿@model String
+
+@{
+    ViewBag.Title = "Error";
+    string Error = ViewBag.Error;
+    string Exception = ViewBag.Excepcion;
+    int GrupoID = ViewBag.GrupoID;
+    int ModuloID = ViewBag.ModuloID;
+}
+
+<h2>Error</h2>
+
+<p>@Error ( @GrupoID : @ModuloID )</p>
+
+<p>@Exception</p>
+
+@Html.ActionLink("Volver", "Tareas", "Alumno")

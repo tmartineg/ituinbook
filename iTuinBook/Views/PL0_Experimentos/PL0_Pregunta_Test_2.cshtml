@@ -128,6 +128,11 @@
         } 
     </div>
     <!-- guirisan -->
+
+    <div id="fdbkDialog">
+        @ViewBag.feedbackText
+    </div>
+
     
     <div style="padding-left: 20px; padding-right: 20px;">
         <!-- botón para volver al texto -->
@@ -167,7 +172,24 @@
                 $('#btnValidarTest').attr("disabled", "disabled");
                 $(':radio').removeAttr("disabled");
             }
+            
+            /*carga del feedback en dialog. no se puede contestar hasta cerrarlo*/
+            var dialog = $("#fdbkDialog");
+            if ($.trim(dialog.html()) != "") {
 
+            
+            dialog.dialog({
+                dialogClass: "noclose",
+                buttons: [
+                    {
+                        text: "Cerrar",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+            }
             //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
             $("#btnBackToTexto").click(function () {
 
