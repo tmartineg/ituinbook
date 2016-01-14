@@ -989,7 +989,14 @@ tr.pager td {
     display: none !important;
 }
 
+/* Esconde el botón X en los dialogs para los feedbacks de PL0*/
 .noclose .ui-dialog-titlebar-close
 {
     display:none;
+}
+
+/* Alinea la imagen a la izquierda del enunciado y le da margen*/
+.imgEnunciadoIzquierda{
+    float: left;
+    margin: 20px;
 }
