@@ -996,7 +996,7 @@ tr.pager td {
 }
 
 /* Alinea la imagen a la izquierda del enunciado y le da margen*/
-.imgEnunciadoIzquierda{
+img.imgEnunciadoIzquierda{
     float: left;
     margin: 20px;
 }
