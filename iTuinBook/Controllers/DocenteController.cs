@@ -4366,12 +4366,18 @@ namespace ReadAndLearn.Controllers
 
             tipos.Add(new TipoCondicion() { TipoCondicionID = 1, Tipo = "iTextBook" });
             tipos.Add(new TipoCondicion() { TipoCondicionID = 2, Tipo = "TuinLEC" });
+            /* guirisan (https://github.com/guirisan/ituinbook/issues/5)
+             * Dado el código del método iniciar, que comprueba la condición del módulo para 
+             * ver que cargar exactamente, las condiciones de la 3 a la 7 no se usan nunca,
+             * asi que las eliminamos de los tipos disponibles. ESTO ESTÁ EN PRUEBAS A 19-1-2016
+             * */
+            /*
             tipos.Add(new TipoCondicion() { TipoCondicionID = 3, Tipo = "TuinLEC" });
             tipos.Add(new TipoCondicion() { TipoCondicionID = 4, Tipo = "Sin uso" });
             tipos.Add(new TipoCondicion() { TipoCondicionID = 5, Tipo = "Sin uso" });
             tipos.Add(new TipoCondicion() { TipoCondicionID = 6, Tipo = "Sin uso" });
             tipos.Add(new TipoCondicion() { TipoCondicionID = 7, Tipo = "Sin uso" });
-
+            */
             return tipos;
         }
 
