@@ -416,7 +416,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("PL0_Experimentos/RegistraraAccion");
+            logger.Debug("PL0_Experimentos/RegistrarAccion");
 
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);

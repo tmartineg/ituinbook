@@ -46,7 +46,7 @@
             //guirisan: usamos el mismo datetime para todas las acciones de la página, ya que no se usan disparadores por click + ajax
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/33
             //resta una hora a datetime.now()
-            DateTimeOffset dto = new DateTimeOffset(DateTime.Now).AddHours(-1);
+            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
             string datetimeclient = dto.ToString("yyyy-MM-ddTHH:mm:ss.fff");
             
             foreach (Grupo gru in Model)
