@@ -2556,8 +2556,7 @@ namespace ReadAndLearn.Controllers
                 }
                 else  // Fin módulo
                 {
-                    //guirisan/secuencias/development
-                    //fin de módulo
+
                     ConfigGrupo config = new ConfigGrupo();
 
                     config = gr.ConfigGrupo;
@@ -2608,7 +2607,8 @@ namespace ReadAndLearn.Controllers
                 }
             }
 
-            db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+            //eliminada por estar duplicada con la línea de antes del if, remover si faltara un dato al pasar por PL0_Siguiente_Pregunta
+            //db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
 
             ds = new DatoSimple() { CodeOP = 100, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
             db.DatosSimples.Add(ds);
@@ -2619,6 +2619,9 @@ namespace ReadAndLearn.Controllers
 
             SaveChanges();
 
+             /* 
+             * to-do: mirar porque hace un try catch a pregunta() y texto()
+             */
             try
             {
                 Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
