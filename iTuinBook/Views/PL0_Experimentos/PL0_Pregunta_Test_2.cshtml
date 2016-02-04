@@ -148,6 +148,18 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
+            //parametrizar el enlace que permite volver al texto para que incluya el tiempo de cliente
+            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
+            $("#btnBackToTexto").click(function () {
+                var oldhref = $("#btnBackToTexto a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnBackToTexto a").attr("href", oldhref + "&moment=" + datetimeclient);
+                console.log("attr parametrized, button triggered")
+                $(this).trigger('click');
+            });
+
             var timeStart = new Date();
             var timeFinish = new Date();
 
@@ -268,10 +280,7 @@
                 ]
             });
             }
-            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
-            $("#btnBackToTexto").click(function () {
-
-            });
+            
 
 
             $("#btnValidarTest").click(function () {

@@ -957,12 +957,18 @@ namespace ReadAndLearn.Controllers
         }
         #endregion
 
-        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, int NumAccion = -1, bool SegundoIntento = false)
+        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false)
         {
             logger.Debug("PL0_Experimentos/PL0_Texto");
             try
             {
                 DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
+                //crear datosimple para registrar momento de volver al texto
+                DateTime datetimeclient = DateTime.Parse(moment);
+                DatoSimple ds = new DatoSimple() { CodeOP = 127, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                db.DatosSimples.Add(ds);
 
                 Texto text = ext.GetTextoActual(ModuloID, textoActual);
                 Pregunta preg = ext.GetPreguntaActual(text, du.PreguntaActual);
@@ -971,7 +977,7 @@ namespace ReadAndLearn.Controllers
                 ViewBag.Pregunta = preg;
                 ViewBag.ModuloID = ModuloID;
                 //guirisan/secuencias/developing
-                ViewBag.numAccion = NumAccion;
+                ViewBag.numAccion = numAccion;
                 ViewBag.SegundoIntento = SegundoIntento;
 
                 return View(ext.GetTexto(text.TextoID));
