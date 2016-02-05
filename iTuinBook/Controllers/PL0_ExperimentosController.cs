@@ -965,10 +965,16 @@ namespace ReadAndLearn.Controllers
                 DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
                 //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
-                //crear datosimple para registrar momento de volver al texto
-                DateTime datetimeclient = DateTime.Parse(moment);
-                DatoSimple ds = new DatoSimple() { CodeOP = 127, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                db.DatosSimples.Add(ds);
+                if (moment != "")
+                {
+                    //crear datosimple para registrar momento de volver al texto
+                    DateTime datetimeclient = DateTime.Parse(moment);
+                    DatoSimple ds = new DatoSimple() { CodeOP = 127, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                    db.DatosSimples.Add(ds);
+                    SaveChanges();
+                }
+                
+                
 
                 Texto text = ext.GetTextoActual(ModuloID, textoActual);
                 Pregunta preg = ext.GetPreguntaActual(text, du.PreguntaActual);
