@@ -72,31 +72,99 @@
             $("#btnValidarAbierta").click(function () {
                 $("#btnValidarAbierta").attr("disabled", "disabled");
                 //guirisan: datetime set in client
-                var datetimeclient = new Date();
-                datetimeclient = datetimeclient.toISOString();
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
 
                 $.ajax({
                     url: "PL0_Pregunta_Abierta_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient},
                     success: function (result) {
+
+
+                        /*DESCOMENTAR ESTO PARA NO SALTAR DIRECTAMENTE A LA SIGUIENTE PREGUNTA*/
                         // result.redirect contains the string URL to redirect to   
-                        if (!(result.mensaje == null || result.mensaje == "")) {                            
-                            @if (configPregunta != null && (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno))
-                            {
-                                //guirisan/abiertas
-                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
-                                //@: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
-                            }
-                            else
-                            {
-                                //guirisan/abiertas
-                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
-                                //@: parent.feedbackVentana(result.mensaje);
-                            }
+                        //window.location.href = result.redirect;          
+
+
+                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/39
+                        //despues de validar la pregunta y generar en el servidor el datosimple adecuado,
+                        //llamamos para cargar la siguiente pregunta sin pasar por la página PL0_Pregunta_Abierta_Resuelkta
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
                         }
+
+                        $.ajax({
+                            url: "PL0_Siguiente_Pregunta", //url: 'Validar',
+                            type: 'POST',
+                            data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', TextoID: '@du.TextoID' , moment: datetimeclient, numAccion: numAcc},
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
+                            success: function (result) {
+                                $('.paginas', window.parent.document).each(function () {
+                                    $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));
+                                    $(this).html($(this).html().replace(/<\/lupa>/g, ""));
+                                    $(this).html($(this).html().replace(/<prismaticos style=\"border:1px solid red;\">/g, ""));
+                                    $(this).html($(this).html().replace(/<\/prismaticos>/g, ""));
+                                });                
+
+                                window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+                                window.parent.$('.paginas').css("filter", "url(#example-one)");
+
+                                window.parent.$('#feedback').css("visibility", "hidden");
+                                window.parent.$('#fdbkSMS').text("");
+
+                                if (result.Parent)
+                                {   
+                                    // data.redirect contains the string URL to redirect to
+                                    window.parent.window.location.href = result.redirect;                        
+                                }
+                                else
+                                {  
+                                    // data.redirect contains the string URL to redirect to
+                                    window.location.href = result.redirect;                                                    
+                                }
             
-                        window.location.href = result.redirect;                        
+                            },
+                            error: function () {
+                                alert("error");
+                            }
+                        });
+
+
+                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
+                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
+                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
+                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
+                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
+
+
+
                     },
                     error: function () {
                         alert("error");
