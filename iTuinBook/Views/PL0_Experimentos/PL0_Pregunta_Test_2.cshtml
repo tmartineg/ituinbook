@@ -222,7 +222,7 @@
             $.ajax({
                 url: "RegistrarAccion",
                 type: 'POST',
-                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 10, moment: datetimeclient, numAccion: numAcc },
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 128, moment: datetimeclient, numAccion: numAcc },
                 //guirisan/secuencias
                 beforeSend: function () {
                     //set datosRaw on sessionStorage
@@ -273,7 +273,7 @@
                             $.ajax({
                                 url: "RegistrarAccion",
                                 type: 'POST',
-                                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 11, moment: datetimeclient, numAccion: numAcc },
+                                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 129, moment: datetimeclient, numAccion: numAcc },
                                 //guirisan/secuencias
                                 beforeSend: function () {
                                     //set datosRaw on sessionStorage
@@ -308,6 +308,7 @@
                         return false;
                     }
                 });
+
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
