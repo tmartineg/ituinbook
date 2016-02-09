@@ -16,11 +16,9 @@
 <div id="contenedor" style="z-index:10;">
     <!--guirisan / preguntas button-->
     <div id="tools">
-        <div>
-            @{
-                string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
-            }
-            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
+        <div id="btnGotoPreguntas">
+            
+            @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento }, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
         </div>
     </div>
     <!--guirisan / preguntas button-->
@@ -82,6 +80,30 @@
 
         $(document).ready(function () {
             $('reg').addClass("difuminado");
+            
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
+            //parametrizacion enlace vuelta a preguntas
+            var parametrizacionHecha = false;
+            $("#btnGotoPreguntas").click(function (e) {
+
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+
+                //parametrizacion del enlace
+                var oldhref = $("#btnGotoPreguntas a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnGotoPreguntas a").attr("href", oldhref + "&moment=" + datetimeclient);
+                
+
+                parametrizacionHecha = true;
+                $("#btnGotoPreguntas").unbind('click');
+                $(this).trigger('click');
+            });
+
+
+
+
 
             $(document).on("click", "reg", function () {
                 if (flag_LecIni) {

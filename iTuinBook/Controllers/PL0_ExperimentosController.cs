@@ -291,7 +291,14 @@ namespace ReadAndLearn.Controllers
 
             ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
 
-            db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
+            //el primer DS-codeop=10 generado al volver al segundo intento de pregunta se genera desde aquí.
+            //comentamos la línea por duplicidad de información
+            if (!segundoIntento)
+            {
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+            }
+            
 
             db.SaveChanges();
 

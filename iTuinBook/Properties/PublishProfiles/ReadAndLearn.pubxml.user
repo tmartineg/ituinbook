@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>02/05/2016 15:01:52</publishTime>
+      <publishTime>02/08/2016 18:49:43</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -169,7 +169,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>02/05/2016 15:01:52</publishTime>
+      <publishTime>02/08/2016 18:49:43</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4669,7 +4669,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>01/12/2016 13:16:16</publishTime>
+      <publishTime>02/05/2016 15:38:04</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_2.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -4705,7 +4705,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_2.cshtml">
-      <publishTime>02/05/2016 15:01:29</publishTime>
+      <publishTime>02/05/2016 15:14:01</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Resuelta.cshtml">
       <publishTime>02/01/2016 13:51:47</publishTime>
@@ -4720,7 +4720,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto.cshtml">
-      <publishTime>01/12/2016 13:16:16</publishTime>
+      <publishTime>02/08/2016 11:07:28</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto_Busca.cshtml">
       <publishTime>11/09/2015 13:55:12</publishTime>
