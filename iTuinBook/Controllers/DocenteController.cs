@@ -3913,7 +3913,7 @@ namespace ReadAndLearn.Controllers
 
                                 foreach (DatoSimple acc in secuencia)
                                 {
-                                    string linea = (cont++).ToString() + "_" + acc.DatoSimpleID + " " + acc.PreguntaID + " " + acc.Momento + " " + acc.CodeOP + " " + acc.Valor + " " + acc.Dato01 + " " + acc.Dato02 + " " + acc.Dato03 + " " + acc.Info + "\n";
+                                    string linea = (cont++).ToString() + "_" + acc.NumAccion +"_" + acc.DatoSimpleID + " " + acc.PreguntaID + " " + acc.Momento + " " + acc.CodeOP + " " + acc.Valor + " " + acc.Dato01 + " " + acc.Dato02 + " " + acc.Dato03 + " " + acc.Info + "\n";
 
                                     m_streamWriter.WriteLine(linea);
                                 }
