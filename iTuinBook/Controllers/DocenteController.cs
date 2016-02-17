@@ -18,6 +18,7 @@ namespace ReadAndLearn.Controllers
     {
         Contexto db = new Contexto();
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        ExternalMethods ext = new ExternalMethods();
 
         //
         // GET: /Docente/
@@ -3913,7 +3914,37 @@ namespace ReadAndLearn.Controllers
 
                                 foreach (DatoSimple acc in secuencia)
                                 {
-                                    string linea = (cont++).ToString() + "_" + acc.NumAccion +"_" + acc.DatoSimpleID + " " + acc.PreguntaID + " " + acc.Momento + " " + acc.CodeOP + " " + acc.Valor + " " + acc.Dato01 + " " + acc.Dato02 + " " + acc.Dato03 + " " + acc.Info + "\n";
+                                    //guirisan//issues https://github.com/guirisan/ituinbook/issues/47
+                                    //string linea = (cont++).ToString() + "_" + acc.NumAccion +"_" + acc.DatoSimpleID + "_" + acc.PreguntaID + "_" + acc.Momento + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+
+                                    Pregunta preg = ext.GetPregunta(acc.PreguntaID);
+
+                                    string linea = (cont++).ToString() + "_" +
+                                    acc.NumAccion +"_" +
+                                    acc.DatoSimpleID + "_" +
+
+                                    //identificador absoluto del texto
+                                    preg.Texto.TextoID+ "_" +
+                                    //identificador del texto respecto al módulo
+                                    preg.Texto.Orden + "_" + 
+
+                                    //identificador absoluto de la pagina
+                                    preg.Pagina.PaginaID + "_" +
+                                    //identificador de la página respecto al texto
+                                    preg.Pagina.Orden + "_" + 
+
+                                    //identificador absoluto de pregunta
+                                    acc.PreguntaID + "_" +
+                                    //identificador relativo de pregunta
+                                    preg.Orden + "_" +
+
+                                    acc.Momento + "_" +
+                                    acc.CodeOP + "_" +
+                                    acc.Valor + "_" +
+                                    acc.Dato01 + "_" +
+                                    acc.Dato02 + "_" +
+                                    acc.Dato03 + "_" +
+                                    acc.Info + "\n";
 
                                     m_streamWriter.WriteLine(linea);
                                 }
@@ -3927,33 +3958,7 @@ namespace ReadAndLearn.Controllers
                 
                 
                 }
-                /*
-                        string fileLoc = @"C:\inetpub\wwwroot\ExpFDBK\Secuencias\" + user.Usuario + "_" + "_G" + secuencia.GrupoID + "_M" + secuencia.ModuloID + ".txt";
-
-                        if (!System.IO.File.Exists(fileLoc))
-                        {
-                            FileStream fs = null;
-                            if (!System.IO.File.Exists(fileLoc))
-                            {
-                                using (fs = System.IO.File.Create(fileLoc))
-                                {
-                                    StreamWriter m_streamWriter = new StreamWriter(fs);
-
-                                    foreach (Accion acc in secuencia.Acciones)
-                                    {
-                                        string linea = acc.Orden + " " + acc.Operacion + "\n";
-
-                                        m_streamWriter.WriteLine(linea);
-                                    
-                                    }
-
-                                    m_streamWriter.Flush();
-                                }
-
-                                fs.Close();
-                            }
-                        }
-                        */
+                
             }
 
             ViewBag.Numero = numUser;
