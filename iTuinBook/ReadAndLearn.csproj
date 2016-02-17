@@ -1542,6 +1542,7 @@
     <None Include="backupcontent\Views-PL0_Experimentos\PL0_Pregunta_Test.cshtml.bak" />
     <None Include="backupcontent\Views-PL0_Experimentos\PL0_Pregunta_Abierta.cshtml.bak" />
     <None Include="backupcontent\Views-PL0_Experimentos\PL0_Pregunta_Relacionar.cshtml.bak" />
+    <Content Include="Views\PL0_Experimentos\Agradecimiento.cshtml" />
     <None Include="Views\PL0_Experimentos\PL0_Texto_Busca.cshtml" />
     <None Include="Views\PL0_Experimentos\PL0_Texto_Seleccion.cshtml" />
     <None Include="backupcontent\Views-PL0_Experimentos\PL0_Pregunta_Test_Resuelta.cshtml.bak" />

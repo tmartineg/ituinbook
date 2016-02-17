@@ -2,7 +2,7 @@
 @model ReadAndLearn.Models.Pregunta
 
 @{
-    ViewBag.Title = "PL0_Pregunta";
+    ViewBag.Title = "PL2_Pregunta";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
@@ -115,7 +115,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "/PL2_Experimentos/PL2_Pregunta_Abierta_2_Validar", //url: 'Validar',
+                    url: "PL2_Pregunta_Abierta_2_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -178,7 +178,7 @@
                         }
 
                         $.ajax({
-                            url: "/PL2_Experimentos/RegistrarAccion",
+                            url: "RegistrarAccion",
                             type: 'POST',
                             data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120 , moment: datetimeclient, numAccion: numAcc},
                             //guirisan/secuencias
@@ -226,7 +226,7 @@
                             datosRaw = {};
                         }
                         $.ajax({
-                            url: "/PL2_Experimentos/RegistrarAccion",
+                            url: "RegistrarAccion",
                             type: 'POST',
                             data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient, numAccion: numAcc },
                             //guirisan/secuencias
@@ -281,7 +281,7 @@
                             datosRaw = {};
                         }
                         $.ajax({
-                            url: "/PL2_Experimentos/RegistrarAccion",
+                            url: "RegistrarAccion",
                             type: 'POST',
                             data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 121, moment: datetimeclient, numAccion: numAcc },
                             //guirisan/secuencias
@@ -357,7 +357,7 @@
                                     }
 
                                     $.ajax({
-                                        url: "/PL2_Experimentos/RegistrarAccion",
+                                        url: "RegistrarAccion",
                                         type: 'POST',
                                         data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString() , moment: datetimeclient, numAccion: numAcc},
                                         //guirisan/secuencias
@@ -418,7 +418,7 @@
                                         datosRaw = {};
                                     }
                                     $.ajax({
-                                        url: "/PL2_Experimentos/RegistrarAccion",
+                                        url: "RegistrarAccion",
                                         type: 'POST',
                                         data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() , moment: datetimeclient, numAccion: numAcc},
                                         //guirisan/secuencias
@@ -489,7 +489,7 @@
             }
 
             $.ajax({
-                url: "/PL2_Experimentos/RegistrarAccion",
+                url: "RegistrarAccion",
                 type: 'POST',
                 data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 9, moment: datetimeclient, numAccion: numAcc },
                 //guirisan/secuencias

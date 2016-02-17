@@ -838,6 +838,15 @@ namespace ReadAndLearn.Controllers
             return View();
         }
 
+
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
+        //public ActionResult Agradecimiento(int GrupoID, int ModuloID)
+        public ActionResult Agradecimiento(DatosUsuario du)
+        {
+            ViewBag.du = du;
+            return View();
+        }
+
         public double AlgoritmoPertinente(string Contenido, string respuesta, int PreguntaID)
         {
             // SELECCION PERTINENTE //
@@ -2536,7 +2545,7 @@ namespace ReadAndLearn.Controllers
             return View(tareaOrdenar);
         }
 
-        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1, string dataRow = "")
+        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
         {
             logger.Debug("PL0_Siguiente_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -2602,6 +2611,16 @@ namespace ReadAndLearn.Controllers
                         }
                         else // No quedan módulos
                         {
+                            //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
+                            //**************************************************************************/
+                            //********************************TO-DO*************************************/
+                            //********************************TO-DO*************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
                             ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
                             db.DatosSimples.Add(ds);
 
@@ -2614,14 +2633,27 @@ namespace ReadAndLearn.Controllers
                     }
                     else
                     {
-                        ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                        db.DatosSimples.Add(ds);
+                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
+                        //distinguir si viene o no de la página de agradecimiento
+                        if (greetingsPage)
+                        {
+                            ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+                            du.Cerrada = true;
+                            SaveChanges();
 
-                        du.Cerrada = true;
+                            return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+                        }
+                        else
+                        {
+                            //no ha visto la página de agradecimiento. le mandamos allí
 
-                        SaveChanges();
-
-                        return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+                            SaveChanges();
+                            //return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
+                            return Json(new { redirect = Url.Action("Agradecimiento", new { du }) });
+                        }
                     }
                 }
             }
