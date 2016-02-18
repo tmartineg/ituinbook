@@ -3929,12 +3929,12 @@ namespace ReadAndLearn.Controllers
                                         linea += acc.NumAccion + "_";
                                         linea += acc.DatoSimpleID + "_" ;
                                         linea += preg.Texto.TextoID + "_" ;
-                                        linea += preg.Texto.Orden + "_" ;
+                                        linea += "TX" + preg.Texto.Orden + "_" ;
                                         //comentem la pàgina perque CAP pregunta de la BD té una pàgina assignada
                                         //linea += preg.Pagina.PaginaID + "_" ;
                                         //linea += preg.Pagina.Orden + "_" ;
                                         linea += acc.PreguntaID + "_" ;
-                                        linea += preg.Orden + "_" ;
+                                        linea += "PR" + preg.Orden + "_" ;
                                         //issue 
                                         //imprimir milisegons en el moment
                                         //linea += acc.Momento + "_" ;
