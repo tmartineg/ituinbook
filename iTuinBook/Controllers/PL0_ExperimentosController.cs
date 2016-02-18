@@ -298,6 +298,12 @@ namespace ReadAndLearn.Controllers
             {
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
+            else
+            {
+                //issue https://github.com/guirisan/ituinbook/issues/50
+                //si es segundoIntento, indicamos que se está yendo a una pregunta y que és un segundo intento
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 131, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+            }
             
 
             db.SaveChanges();

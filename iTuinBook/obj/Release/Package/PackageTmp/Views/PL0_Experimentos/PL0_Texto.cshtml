@@ -5,7 +5,7 @@
     ViewBag.Title = "Texto";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
-    
+    bool segundoIntento = ViewBag.SegundoIntento;
     
 }
 <script>
@@ -89,7 +89,7 @@
                 if (parametrizacionHecha === true) {
                     return true;
                 }
-
+                
                 //parametrizacion del enlace
                 var oldhref = $("#btnGotoPreguntas a").attr("href");
                 var datetimeclient = new Date().toISOString();

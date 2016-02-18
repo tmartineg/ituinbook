@@ -3885,12 +3885,9 @@ namespace ReadAndLearn.Controllers
 
                 foreach (DatosUsuario datosUsuario in datos)
                 {
-                    numUser++;
+                    
 
-                    var secuencia = from s in db.DatosSimples
-                                    where s.DatosUsuarioID == datosUsuario.DatosUsuarioID
-                                    orderby s.DatoSimpleID ascending
-                                    select s;
+                    
                     
                     //guirisan code to fix slash problems in path
                     string username = user.UserName.Replace("/", "_");
@@ -3904,6 +3901,12 @@ namespace ReadAndLearn.Controllers
 
                     if (!System.IO.File.Exists(fileLoc))
                     {
+                        var secuencia = from s in db.DatosSimples
+                                        where s.DatosUsuarioID == datosUsuario.DatosUsuarioID
+                                        orderby s.DatoSimpleID ascending
+                                        select s;
+
+                        numUser++;
                         FileStream fs = null;
                         if (!System.IO.File.Exists(fileLoc))
                         {
@@ -3916,9 +3919,44 @@ namespace ReadAndLearn.Controllers
                                 {
                                     //guirisan//issues https://github.com/guirisan/ituinbook/issues/47
                                     //string linea = (cont++).ToString() + "_" + acc.NumAccion +"_" + acc.DatoSimpleID + "_" + acc.PreguntaID + "_" + acc.Momento + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+                                    string linea = "";
+                                    if (acc.PreguntaID > 0)
+                                    {
+                                        //para los datos que tienen una pregunta a partir de la cual saber el texto, la página...
+                                        Pregunta preg = db.Preguntas.Find(acc.PreguntaID);
+                                        //linea = (cont++).ToString() + "_" + acc.NumAccion + "_" + acc.DatoSimpleID + "_" + preg.Texto.TextoID + "_" + preg.Texto.Orden + "_" + preg.Pagina.PaginaID + "_" + preg.Pagina.Orden + "_" + acc.PreguntaID + "_" + preg.Orden + "_" + acc.Momento + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+                                        linea = (cont++).ToString() + "_" ;
+                                        linea += acc.NumAccion + "_";
+                                        linea += acc.DatoSimpleID + "_" ;
+                                        linea += preg.Texto.TextoID + "_" ;
+                                        linea += preg.Texto.Orden + "_" ;
+                                        //comentem la pàgina perque CAP pregunta de la BD té una pàgina assignada
+                                        //linea += preg.Pagina.PaginaID + "_" ;
+                                        //linea += preg.Pagina.Orden + "_" ;
+                                        linea += acc.PreguntaID + "_" ;
+                                        linea += preg.Orden + "_" ;
+                                        //issue 
+                                        //imprimir milisegons en el moment
+                                        //linea += acc.Momento + "_" ;
+                                        linea += acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_";
 
-                                    Pregunta preg = ext.GetPregunta(acc.PreguntaID);
+                                        linea += acc.CodeOP + "_" ;
+                                        linea += acc.Valor + "_" ;
+                                        linea += acc.Dato01 + "_" ;
+                                        linea += acc.Dato02 + "_" ;
+                                        linea += acc.Dato03 + "_" ;
+                                        linea += acc.Info + "\n";
 
+                                    }
+                                    else
+                                    {
+                                        //para los datos que NO tienen una pregunta
+                                        linea = (cont++).ToString() + "_" + acc.NumAccion + "_" + acc.DatoSimpleID + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+
+                                    }
+                                    
+                                    
+                                    /*
                                     string linea = (cont++).ToString() + "_" +
                                     acc.NumAccion +"_" +
                                     acc.DatoSimpleID + "_" +
@@ -3945,7 +3983,9 @@ namespace ReadAndLearn.Controllers
                                     acc.Dato02 + "_" +
                                     acc.Dato03 + "_" +
                                     acc.Info + "\n";
+                                    */
 
+                                    
                                     m_streamWriter.WriteLine(linea);
                                 }
 
