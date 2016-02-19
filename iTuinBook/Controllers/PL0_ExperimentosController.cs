@@ -847,8 +847,9 @@ namespace ReadAndLearn.Controllers
 
         //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
         //public ActionResult Agradecimiento(int GrupoID, int ModuloID)
-        public ActionResult Agradecimiento(DatosUsuario du)
+        public ActionResult Agradecimiento(int duID)
         {
+            DatosUsuario du = db.DatosUsuario.Find(duID);
             ViewBag.du = du;
             return View();
         }
@@ -2551,7 +2552,7 @@ namespace ReadAndLearn.Controllers
             return View(tareaOrdenar);
         }
 
-        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int PreguntaID, int TextoID, string moment, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
+        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
         {
             logger.Debug("PL0_Siguiente_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -2658,7 +2659,7 @@ namespace ReadAndLearn.Controllers
                             db.DatosSimples.Add(ds);
                             SaveChanges();
                             //return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
-                            return Json(new { redirect = Url.Action("Agradecimiento", new { du }) });
+                            return Json(new { redirect = Url.Action("Agradecimiento", new { duID = du.DatosUsuarioID }) });
                         }
                     }
                 }
