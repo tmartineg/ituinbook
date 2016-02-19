@@ -3951,7 +3951,7 @@ namespace ReadAndLearn.Controllers
                                     else
                                     {
                                         //para los datos que NO tienen una pregunta
-                                        linea = (cont++).ToString() + "_" + acc.NumAccion + "_" + acc.DatoSimpleID + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+                                        linea = (cont++).ToString() + "_" + acc.NumAccion + "_" + acc.DatoSimpleID + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
 
                                     }
                                     
