@@ -2569,6 +2569,18 @@ namespace ReadAndLearn.Controllers
             db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
             SaveChanges();
 
+            if (greetingsPage)
+            {
+                ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                db.DatosSimples.Add(ds);
+                du.Cerrada = true;
+                SaveChanges();
+
+                return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+            }
+
+
+
             if (du.PreguntaActual + 2 > text.Preguntas.Count()) // Cambio de texto
             {
                 du.TextoActual++;
