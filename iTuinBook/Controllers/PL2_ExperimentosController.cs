@@ -1029,7 +1029,7 @@ namespace ReadAndLearn.Controllers
 
                         int sigModuloID = Convert.ToInt32(param[pos + 1]);
 
-                        return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient, NumAccion = numAccion }), Parent = true });                           
+                        return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient.ToString("yyyy-MM-ddTHH:mm:ssK"), NumAccion = numAccion }), Parent = true });                           
                     }
                     else // No quedan módulos
                     {
