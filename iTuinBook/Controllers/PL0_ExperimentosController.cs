@@ -18,6 +18,19 @@ namespace ReadAndLearn.Controllers
         ExternalMethods ext = new ExternalMethods();
 
         #region FUNCIONES COMUNES
+        [HttpPost]
+        public ActionResult AjaxConfigPregunta(int PreguntaID)
+        {
+            logger.Debug("PL0_Experimentos/AjaxConfigPRegunta");
+            ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
+
+            if (configPreg != null)
+                return Json(new { busqueda = configPreg.EnmascararTexto, revision = configPreg.EnmascararTextoRevisa });
+            else
+                return Json(new { busqueda = "False", revision = "False" });
+        }
+
+
         public void ValidarSeleccion(int ModuloID, int GrupoID, int PreguntaID, int TextoID, string respuesta, out double pert, out double noPert, bool subtarea, string moment, int numAccion = -1)
         {
             //guirisan
@@ -284,7 +297,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false)
+        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
         {
             logger.Debug("PL0_Experimentos/RouterPregunta");
             DateTime datetimeclient = DateTime.Parse(moment);
@@ -315,6 +328,7 @@ namespace ReadAndLearn.Controllers
                     {
                         return RedirectToAction("PL0_Pregunta_Test_2", new {GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = datosUsuario.PreguntaID});
                     }
+                    
                     else
                     {
                         return RedirectToAction("PL0_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
@@ -337,6 +351,10 @@ namespace ReadAndLearn.Controllers
                         if (segundoIntento)
                         {
                             return RedirectToAction("PL0_Pregunta_Test_2", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = datosUsuario.PreguntaID });
+                        }
+                        else if (preguntaResuelta)
+                        {
+                            return RedirectToAction("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaID = datosUsuario.PreguntaID }); //int GrupoID, int ModuloID, int preguntaID, string feedbackText
                         }
                         else
                         {
@@ -980,7 +998,7 @@ namespace ReadAndLearn.Controllers
         }
         #endregion
 
-        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false)
+        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false)
         {
             logger.Debug("PL0_Experimentos/PL0_Texto");
             try
@@ -1008,7 +1026,7 @@ namespace ReadAndLearn.Controllers
                 //guirisan/secuencias/developing
                 ViewBag.numAccion = numAccion;
                 ViewBag.SegundoIntento = SegundoIntento;
-
+                ViewBag.PreguntaResuelta = preguntaResuelta;
                 return View(ext.GetTexto(text.TextoID));
             }
             catch (Exception e)
@@ -1105,7 +1123,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        public ActionResult PL0_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false)
+        public ActionResult PL0_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
         {
 
             logger.Debug("PL0_Experimentos/PL0_Pregunta");
@@ -1119,7 +1137,170 @@ namespace ReadAndLearn.Controllers
 
             SaveChanges();
 
-            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento);
+            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento, preguntaResuelta);
+        }
+
+        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
+        {
+            logger.Debug("PL0_Siguiente_Pregunta");
+            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+
+            //guirisan/secuencias
+            DateTime datetimeclient = DateTime.Parse(moment);
+            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
+
+            Modulo mod = db.Modulos.Find(ModuloID);
+            Texto text = db.Textos.Find(TextoID);
+            DatoSimple ds;
+            Grupo gr = db.Grupos.Find(GrupoID);
+
+            db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+            SaveChanges();
+
+            if (greetingsPage)
+            {
+                ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                db.DatosSimples.Add(ds);
+                du.Cerrada = true;
+                SaveChanges();
+
+                return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+            }
+
+
+
+            if (du.PreguntaActual + 2 > text.Preguntas.Count()) // Cambio de texto
+            {
+                du.TextoActual++;
+                du.PreguntaActual = 0;
+
+                ds = new DatoSimple() { CodeOP = 3, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+
+                db.DatosSimples.Add(ds);
+
+                SaveChanges();
+                if (du.TextoActual < mod.Textos.Count) // Cambiar de texto
+                {
+                    ds = new DatoSimple() { CodeOP = 101, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+
+                    db.DatosSimples.Add(ds);
+
+                    SaveChanges();
+
+                    return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
+                }
+                else  // Fin módulo
+                {
+
+                    ConfigGrupo config = new ConfigGrupo();
+
+                    config = gr.ConfigGrupo;
+
+                    if (config != null && config.AutoChange)
+                    {
+                        string[] param = gr.Orden.Split(':');
+                        int pos = Array.FindIndex(param, item => item == ModuloID.ToString());
+
+                        if (pos < param.Length - 1) // Hay más módulos
+                        {
+                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+
+                            du.Cerrada = true;
+
+                            SaveChanges();
+                            //guirisan/secuencias/development
+                            //fin de módulo (y comienzo de uno nuevo), guardar datos!!
+                            //paso al siguiente módulo, reiniciar numAccion!!
+                            int sigModuloID = Convert.ToInt32(param[pos + 1]);
+
+                            return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = moment }), Parent = true });
+                        }
+                        else // No quedan módulos
+                        {
+                            //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
+                            //**************************************************************************/
+                            //********************************TO-DO*************************************/
+                            //********************************TO-DO*************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            //**************************************************************************/
+                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+
+                            du.Cerrada = true;
+
+                            SaveChanges();
+
+                            return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+                        }
+                    }
+                    else
+                    {
+                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
+                        //distinguir si viene o no de la página de agradecimiento
+                        if (greetingsPage)
+                        {
+                            ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+                            du.Cerrada = true;
+                            SaveChanges();
+
+                            return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
+                        }
+                        else
+                        {
+                            //no ha visto la página de agradecimiento. le mandamos allí
+
+                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+                            db.DatosSimples.Add(ds);
+                            SaveChanges();
+                            //return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
+                            return Json(new { redirect = Url.Action("Agradecimiento", new { duID = du.DatosUsuarioID }) });
+                        }
+                    }
+                }
+            }
+
+            //eliminada por estar duplicada con la línea de antes del if, remover si faltara un dato al pasar por PL0_Siguiente_Pregunta
+            //db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+
+            ds = new DatoSimple() { CodeOP = 100, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
+            db.DatosSimples.Add(ds);
+
+            du.AyudaStatus = 0;
+            du.BuscaStatus = 0;
+            du.PreguntaActual++;
+
+            SaveChanges();
+
+            /* 
+            * to-do: mirar porque hace un try catch a pregunta() y texto()
+            */
+            try
+            {
+                Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
+
+                return Json(new { redirect = Url.Action("PL0_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment, numAccion = numAccion }), Parent = false });
+            }
+            catch (Exception e)
+            {
+                du.TextoActual++;
+                du.PreguntaActual = 0;
+                du.AyudaStatus = 0;
+                du.BuscaStatus = 0;
+
+                db.SaveChanges();
+
+                ds = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
+                db.DatosSimples.Add(ds);
+                db.SaveChanges();
+
+                return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }) });
+            }
         }
 
         #region Pregunta TEST
@@ -1239,19 +1420,7 @@ namespace ReadAndLearn.Controllers
 
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
-
-        [HttpPost]
-        public ActionResult AjaxConfigPregunta(int PreguntaID)
-        {
-            logger.Debug("PL0_Experimentos/AjaxConfigPRegunta");
-            ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
-
-            if (configPreg != null)
-                return Json(new { busqueda = configPreg.EnmascararTexto, revision = configPreg.EnmascararTextoRevisa });
-            else
-                return Json(new { busqueda = "False", revision = "False" });
-        }
-
+        
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
@@ -1871,7 +2040,10 @@ namespace ReadAndLearn.Controllers
 
             return View(pregunta);
         }
+        
+        #endregion //region pregunta_test
 
+        #region Pregunta Seleccion
         public ActionResult PL0_Pregunta_Seleccion(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1996,7 +2168,10 @@ namespace ReadAndLearn.Controllers
 
             return View(pregunta);
         }
+        
+        #endregion
 
+        #region PreguntaAbierta
         public ActionResult PL0_Pregunta_Abierta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
             logger.Debug("PL0_Pregunta_Abierta");
@@ -2401,6 +2576,9 @@ namespace ReadAndLearn.Controllers
             return View(pregunta);
         }
 
+        #endregion
+
+        #region Pregunta Ordenar
         public ActionResult PL0_Pregunta_Ordenar(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -2551,170 +2729,10 @@ namespace ReadAndLearn.Controllers
 
             return View(tareaOrdenar);
         }
-
-        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
-        {
-            logger.Debug("PL0_Siguiente_Pregunta");
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            //guirisan/secuencias
-            DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
-
-            Modulo mod = db.Modulos.Find(ModuloID);
-            Texto text = db.Textos.Find(TextoID);
-            DatoSimple ds;
-            Grupo gr = db.Grupos.Find(GrupoID);
-
-            db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
-            SaveChanges();
-
-            if (greetingsPage)
-            {
-                ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                db.DatosSimples.Add(ds);
-                du.Cerrada = true;
-                SaveChanges();
-
-                return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
-            }
-
-
-
-            if (du.PreguntaActual + 2 > text.Preguntas.Count()) // Cambio de texto
-            {
-                du.TextoActual++;
-                du.PreguntaActual = 0;
-
-                ds = new DatoSimple() { CodeOP = 3, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-
-                db.DatosSimples.Add(ds);
-
-                SaveChanges();
-                if (du.TextoActual < mod.Textos.Count) // Cambiar de texto
-                {
-                    ds = new DatoSimple() { CodeOP = 101, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-
-                    db.DatosSimples.Add(ds);
-
-                    SaveChanges();
-
-                    return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
-                }
-                else  // Fin módulo
-                {
-
-                    ConfigGrupo config = new ConfigGrupo();
-
-                    config = gr.ConfigGrupo;
-
-                    if (config != null && config.AutoChange)
-                    {
-                        string[] param = gr.Orden.Split(':');
-                        int pos = Array.FindIndex(param, item => item == ModuloID.ToString());
-
-                        if (pos < param.Length - 1) // Hay más módulos
-                        {
-                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                            db.DatosSimples.Add(ds);
-
-                            du.Cerrada = true;
-
-                            SaveChanges();
-                            //guirisan/secuencias/development
-                            //fin de módulo (y comienzo de uno nuevo), guardar datos!!
-                            //paso al siguiente módulo, reiniciar numAccion!!
-                            int sigModuloID = Convert.ToInt32(param[pos + 1]);
-
-                            return Json(new { redirect = Url.Action("Iniciar", "ReadAndLearn", new { du.GrupoID, ModuloID = sigModuloID, tmpActual = 0, accActual = 0, moment = moment }), Parent = true });
-                        }
-                        else // No quedan módulos
-                        {
-                            //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
-                            //**************************************************************************/
-                            //********************************TO-DO*************************************/
-                            //********************************TO-DO*************************************/
-                            //**************************************************************************/
-                            //**************************************************************************/
-                            //**************************************************************************/
-                            //**************************************************************************/
-                            //**************************************************************************/
-                            //**************************************************************************/
-                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                            db.DatosSimples.Add(ds);
-
-                            du.Cerrada = true;
-
-                            SaveChanges();
-
-                            return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
-                        }
-                    }
-                    else
-                    {
-                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/46
-                        //distinguir si viene o no de la página de agradecimiento
-                        if (greetingsPage)
-                        {
-                            ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                            db.DatosSimples.Add(ds);
-                            du.Cerrada = true;
-                            SaveChanges();
-
-                            return Json(new { redirect = Url.Action("Tareas", "Alumno"), Parent = true });
-                        }
-                        else
-                        {
-                            //no ha visto la página de agradecimiento. le mandamos allí
-
-                            ds = new DatoSimple() { CodeOP = 102, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-                            db.DatosSimples.Add(ds);
-                            SaveChanges();
-                            //return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }), Parent = true });
-                            return Json(new { redirect = Url.Action("Agradecimiento", new { duID = du.DatosUsuarioID }) });
-                        }
-                    }
-                }
-            }
-
-            //eliminada por estar duplicada con la línea de antes del if, remover si faltara un dato al pasar por PL0_Siguiente_Pregunta
-            //db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
-
-            ds = new DatoSimple() { CodeOP = 100, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
-            db.DatosSimples.Add(ds);
-
-            du.AyudaStatus = 0;
-            du.BuscaStatus = 0;
-            du.PreguntaActual++;
-
-            SaveChanges();
-
-             /* 
-             * to-do: mirar porque hace un try catch a pregunta() y texto()
-             */
-            try
-            {
-                Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
-
-                return Json(new { redirect = Url.Action("PL0_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment, numAccion = numAccion }), Parent = false });
-            }
-            catch (Exception e)
-            {
-                du.TextoActual++;
-                du.PreguntaActual = 0;
-                du.AyudaStatus = 0;
-                du.BuscaStatus = 0;
-
-                db.SaveChanges();
-
-                ds = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Dato01 = du.AyudaStatus, Dato02 = du.BuscaStatus, Dato03 = du.RevisaStatus, NumAccion = numAccion };
-                db.DatosSimples.Add(ds);
-                db.SaveChanges();
-
-                return Json(new { redirect = Url.Action("PL0_Texto", new { du.GrupoID, ModuloID = du.ModuloID, textoActual = du.TextoActual }) });
-            }
-        }
         #endregion
+
+        
+        
 
     }
 }
