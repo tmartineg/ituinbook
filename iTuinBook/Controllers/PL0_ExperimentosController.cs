@@ -307,15 +307,21 @@ namespace ReadAndLearn.Controllers
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
             //el primer DS-codeop=10 generado al volver al segundo intento de pregunta se genera desde aquí.
             //comentamos la línea por duplicidad de información
-            if (!segundoIntento)
+            if (!segundoIntento && !preguntaResuelta)
             {
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
-            else
+            else if (segundoIntento)
             {
                 //issue https://github.com/guirisan/ituinbook/issues/50
                 //si es segundoIntento, indicamos que se está yendo a una pregunta y que és un segundo intento
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 131, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+            }
+            else if (preguntaResuelta)
+            {
+                //issue https://github.com/guirisan/ituinbook/issues/52
+                //si es preguntaResuelta, indicamos que se está yendo a una pregunta ya respondida (consulta el texto después de acertar a la primera o acertar/fallar a la segunda
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 132, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
             
 
@@ -1140,7 +1146,7 @@ namespace ReadAndLearn.Controllers
             return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento, preguntaResuelta);
         }
 
-        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false)
+        public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false, bool preguntaResuelta = false)
         {
             logger.Debug("PL0_Siguiente_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1154,9 +1160,13 @@ namespace ReadAndLearn.Controllers
             DatoSimple ds;
             Grupo gr = db.Grupos.Find(GrupoID);
 
-            db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
-            SaveChanges();
+            if (!preguntaResuelta)
+            {
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+                SaveChanges();
 
+            }
+            
             if (greetingsPage)
             {
                 ds = new DatoSimple() { CodeOP = 130, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
