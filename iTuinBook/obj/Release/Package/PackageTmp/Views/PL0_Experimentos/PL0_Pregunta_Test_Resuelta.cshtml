@@ -185,7 +185,13 @@
                 $(':radio').attr("disabled", "disabled");
             }
 
-            //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
+            
+
+            /*show feedback on dialog*/
+            var dialog = $("#fdbkDialog");
+            if ($.trim(dialog.html()) != "") {
+
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
                 //generamos el datosimple de que se ha empezado a leer el feedback
                 //guirisan/secuencias
                 //datetime set in client
@@ -204,7 +210,7 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
-                
+
                 //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
                 // cambio de CodeOP para lectura de fdbk
                 $.ajax({
@@ -226,9 +232,6 @@
                     }
                 });
 
-            /*show feedback on dialog*/
-            var dialog = $("#fdbkDialog");
-            if ($.trim(dialog.html()) != "") {
                 dialog.dialog({
                     modal: true,
                     dialogClass: "noclose",
