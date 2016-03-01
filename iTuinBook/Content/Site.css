@@ -1000,3 +1000,11 @@ img.imgEnunciadoIzquierda{
     float: left;
     margin: 20px;
 }
+
+/* Fija en la esquina superir izquierda del navegador el DIV indicado (para boton preguntas en PL0*/
+.fixed {
+    position:fixed; 
+    top:0; 
+    left:0; 
+    z-index:2
+}
