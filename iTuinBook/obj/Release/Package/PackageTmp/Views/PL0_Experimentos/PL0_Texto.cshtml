@@ -16,7 +16,7 @@
 <div id="contenedor" style="z-index:10;">
     <!--guirisan / preguntas button-->
     <div id="tools">
-        <div id="btnGotoPreguntas" class="fixed">
+        <div id="btnGotoPreguntas">
             
             @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento, preguntaResuelta = ViewBag.preguntaResuelta}, new { @style = "padding: 3px 5px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 12px; background-color: #DB5C04;" })
         </div>
@@ -438,7 +438,7 @@
         });
 
         $('.paginas').click(function () {
-            if (document.getElementById("addIframe").contentWindow.ClickPagina())
+            if (document.getElementById("addIframe").contentWindow.ClickPagina)
                 document.getElementById("addIframe").contentWindow.ClickPagina();
             
             if ($('.paginas').css("-webkit-filter") == "blur(5px)") {

@@ -859,7 +859,7 @@
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient, numAccion: numAcc, Param: $(this).val() },
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient, numAccion: numAcc },
                         //guirisan/secuencias
                         beforeSend: function () {
                             //set datosRaw on sessionStorage
