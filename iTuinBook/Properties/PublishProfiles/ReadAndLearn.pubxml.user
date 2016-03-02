@@ -163,7 +163,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/NLog.config">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="bin/NLog.dll">
       <publishTime>01/12/2016 13:16:19</publishTime>
@@ -2716,7 +2716,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/21/2013 11:53:11</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>01/14/2016 14:09:33</publishTime>
+      <publishTime>03/01/2016 12:39:35</publishTime>
     </File>
     <File Include="Content/spanish_function_words.txt">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -3052,7 +3052,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="NLog.config">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4348,19 +4348,19 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/Manage.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/Register.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/_ChangePasswordPartial.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_ExternalLoginsListPartial.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/_RemoveExternalLoginsPartial.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_SetPasswordPartial.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4375,7 +4375,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Alumno/Tareas.cshtml">
-      <publishTime>02/01/2016 13:44:08</publishTime>
+      <publishTime>01/02/2016 13:44:08</publishTime>
     </File>
     <File Include="Views/Alumno/View1.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4405,7 +4405,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AgregarCriterioCorreccion.cshtml">
-      <publishTime>11/09/2015 13:55:16</publishTime>
+      <publishTime>09/11/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarEmparejados.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4555,13 +4555,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/Modulos.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/SacarSecuencias.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/Secuencia.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/Seguimientos.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4600,7 +4600,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
-      <publishTime>09/11/2015 23:54:17</publishTime>
+      <publishTime>11/09/2015 23:54:17</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4672,7 +4672,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>02/10/2016 13:24:07</publishTime>
+      <publishTime>03/01/2016 12:19:08</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_2.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -4705,10 +4705,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test.cshtml">
-      <publishTime>01/12/2016 13:16:16</publishTime>
+      <publishTime>02/29/2016 11:24:48</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_2.cshtml">
-      <publishTime>02/17/2016 14:42:44</publishTime>
+      <publishTime>02/29/2016 11:25:47</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Resuelta.cshtml">
       <publishTime>02/26/2016 14:42:13</publishTime>
@@ -4720,10 +4720,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Seleccion_Simultaneo.cshtml">
-      <publishTime>01/12/2016 13:16:16</publishTime>
+      <publishTime>02/29/2016 11:25:30</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto.cshtml">
-      <publishTime>02/24/2016 14:00:25</publishTime>
+      <publishTime>03/01/2016 12:44:46</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Texto_Busca.cshtml">
       <publishTime>11/09/2015 13:55:12</publishTime>
