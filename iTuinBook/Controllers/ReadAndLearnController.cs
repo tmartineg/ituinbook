@@ -23,12 +23,21 @@ namespace ReadAndLearn.Controllers
         // GET: /ReadAndLearn/
         
         // Indica el inicio o la continuación de una tarea por parte del alumno.
-        public ActionResult Iniciar(int GrupoID, int ModuloID, int tmpActual, int accActual,string moment)        
+        public ActionResult Iniciar(int GrupoID, int ModuloID, int tmpActual, int accActual,string moment = "")        
         {
             //guirisan/secuencias
             int numAccion = 1;
+            DateTime datetimeclient;
+            if (moment != "")
+            {
+                datetimeclient = DateTime.Parse(moment);
+            }
+            else
+            {
+                datetimeclient = DateTime.Now;
+            }
+            
 
-            DateTime datetimeclient = DateTime.Parse(moment);
             logger.Debug("ReadAndLearnController/Iniciar");
             var user = (from u in db.UserProfiles
                         where User.Identity.Name == u.UserName

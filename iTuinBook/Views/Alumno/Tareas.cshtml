@@ -46,8 +46,11 @@
             //guirisan: usamos el mismo datetime para todas las acciones de la página, ya que no se usan disparadores por click + ajax
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/33
             //resta una hora a datetime.now()
-            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-            string datetimeclient = dto.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+            //DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+            //string datetimeclient = dto.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/56
+            //comentadas lineas superiores del datetime porque debe CALCULARSE EN CLIENTE
             
             foreach (Grupo gru in Model)
             {
@@ -79,34 +82,33 @@
                             <td>
                                 @Html.DisplayFor(modelItem => mod.Nombre)
                             </td>                                      
-                            <td>
+                            <td >
                                 @if (du.Cerrada)
                                 {
-                                    <b>Acabado</b>   
+                                    <b>Acabado</b>
                                 }
                                 else
                                 {
-                                    
-                                    switch(mod.Condicion)
-                                    {
-                                        case 1: // iTextBook
-                                        case 2:
-                                            
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
-                                            break;
-                                        case 3:                                        
-                                        case 4:
-                                          
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient}, null)</b>     
-                                            break;
-                                        default:
+                                    <div class="btnGoToTarea">
+                                        @switch (mod.Condicion)
+                                        {
+                                            case 1: // iTextBook case 2:
+                                                <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 }, null)</b>
+                                                break;
+                                            case 3:
+                                            case 4:
 
-                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0, moment = datetimeclient }, null)</b>     
-                                            break;
-                                       
-                                    }                           
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0}, null)</b>
+                                                break;
+                                            default:
+
+                                            <b> @Html.ActionLink("Continuar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0}, null)</b>
+                                                break;
+
+                                        }
+                                    </div>
                                 }
-                            </td>      
+</td>      
                             <td>
                                 @if (du.Cerrada)
                                 {
@@ -314,10 +316,10 @@
                             <td>
                                 @Html.DisplayFor(modelItem => mod.Nombre)
                             </td>                                      
-                            <td>
+                            <td class="btnGoToTarea">
                                 @if (!flag_empezar)
                                 {
-                                    <b> @Html.ActionLink("Empezar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0 , moment = datetimeclient}, null)</b>                                
+                                    <div class="btnGoToTarea"><b> @Html.ActionLink("Empezar", "Iniciar", "ReadAndLearn", new { GrupoID = gru.GrupoID, ModuloID = mod.ModuloID, tmpActual = 0, accActual = 0}, null)</b></div>
                                 }
                             </td>  
                             <td>
@@ -348,10 +350,33 @@
    
     <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
-    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <!-- comentado por fallar más que una escopeta deferia<link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />-->
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/56
+            //parametrizacion enlace iniciar/continuar tarea
+            var parametrizacionHecha = false;
+            $(".btnGoToTarea").click(function (e) {
+
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+
+                //parametrizacion del enlace
+                var oldhref = $(".btnGoToTarea a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $(".btnGoToTarea a").attr("href", oldhref + "&moment=" + datetimeclient);
+
+                
+                parametrizacionHecha = true;
+                $(".btnGoToTarea").unbind('click');
+                $(this).trigger('click');   
+            });
+
+
             $("#grid").kendoGrid({
                 groupable: true,
                 height: 430,
