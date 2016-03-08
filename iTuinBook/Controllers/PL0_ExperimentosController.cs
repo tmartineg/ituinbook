@@ -1004,7 +1004,7 @@ namespace ReadAndLearn.Controllers
         }
         #endregion
 
-        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false)
+        public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false, bool inicioTexto = false)
         {
             logger.Debug("PL0_Experimentos/PL0_Texto");
             try
@@ -1033,6 +1033,7 @@ namespace ReadAndLearn.Controllers
                 ViewBag.numAccion = numAccion;
                 ViewBag.SegundoIntento = SegundoIntento;
                 ViewBag.PreguntaResuelta = preguntaResuelta;
+                ViewBag.InicioTexto = inicioTexto;
                 return View(ext.GetTexto(text.TextoID));
             }
             catch (Exception e)

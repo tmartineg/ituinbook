@@ -34,6 +34,8 @@ namespace ReadAndLearn.Controllers
             }
             else
             {
+                //DateTimeOffset dto = new DateTimeOffset(DateTime.Now.Date);
+                //datetimeclient = dto.DateTime;
                 datetimeclient = DateTime.Now;
             }
             
@@ -144,11 +146,9 @@ namespace ReadAndLearn.Controllers
                     switch (configModulo.Plantilla)
                     { 
                         case 0:
-                            /* DEPRECATED CODE */
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 0, redirect to PL0_experimentos/PL0_Texto");
                             //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
-                            return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db, NumAccion = numAccion });
-                            /* END DEPRECATED CODE */
+                            return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db, NumAccion = numAccion, inicioTexto = true });
                         case 1:
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 1, redirect to PL2_experimentos/PL2_Texto");
                             //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro

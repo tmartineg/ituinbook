@@ -5,7 +5,12 @@
         <meta charset="utf-8" />
         <title>@ViewBag.Title - Mi aplicación ASP.NET MVC</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />      
+        <meta name="viewport" content="width=device-width" />     
+        <script type="text/javascript">
+            function preventBack() { window.history.forward(); }
+            setTimeout("preventBack()", 0);
+            window.onunload = function () { null };
+        </script>
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")  
     </head>

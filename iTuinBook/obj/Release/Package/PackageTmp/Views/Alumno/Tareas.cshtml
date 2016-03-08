@@ -360,7 +360,9 @@
             //parametrizacion enlace iniciar/continuar tarea
             var parametrizacionHecha = false;
             $(".btnGoToTarea").click(function (e) {
-
+                e.preventDefault();
+                console.log("hahechoclick!");
+                alert("hahechoclick");
                 if (parametrizacionHecha === true) {
                     return true;
                 }
