@@ -153,16 +153,13 @@ namespace ReadAndLearn.Controllers
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 1, redirect to PL2_experimentos/PL2_Texto");
                             //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
                             return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, NumAccion = numAccion });
-
-                        /* DEPRECATED CODE 
-                            //return RedirectToAction("PL1_Texto", "PL1_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual});                            
                         case 2:
                             //return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
                         case 3:
-                            break;
+                            return RedirectToAction("PL3_Texto", "PL3_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
+
                         default:
                             break;
-                        end DEPRECATED CODE */
                     }
                     
                     return RedirectToAction("Texto", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, moment = datetimeclient, numAccion = numAccion });                           
