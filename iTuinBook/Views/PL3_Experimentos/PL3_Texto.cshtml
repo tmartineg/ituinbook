@@ -14,13 +14,12 @@
     sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
 </script>
 
-<h1>ESTAS EN LA PLANTILLA PL3 / TEXTO Y PREGUNTAS EN PÁGINAS SEPARADAS CON EXPLICACION</h1>
 <div id="contenedor" style="z-index:10;">
     <!--guirisan / preguntas button-->
     <div id="tools">
         <div id="btnGotoPreguntas" class="fixed">
             
-            @Html.ActionLink("Preguntas", "PL3_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento, preguntaResuelta = ViewBag.preguntaResuelta}, new { @style = "padding: 6px 8px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 15px; background-color: #DB5C04;" })
+            @Html.ActionLink("Preguntas", "PL3_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento, preguntaResuelta = ViewBag.preguntaResuelta}, new { @style = "padding: 6px 8px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 25px; background-color: #DB5C04;" })
         </div>
     </div>
     <!--guirisan / preguntas button-->
@@ -241,7 +240,11 @@
                     });
                 }
             });
-            
+
+
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
             $("#feedback").hide();
 
             $("#btnPregunta").click(function () {

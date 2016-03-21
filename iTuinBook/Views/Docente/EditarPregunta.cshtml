@@ -85,6 +85,10 @@
             @Html.ValidationMessageFor(model => model.Pertinente)
         </div>
         <hr />
+
+        <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
+        <hr />
+
         <div class="editor-label">
             @Html.Label("Explicacion de la respuesta")
         </div>
@@ -93,9 +97,7 @@
             @Html.ValidationMessageFor(model => model.Explicacion)
         </div>
         <hr />
-        <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
         
-        <hr />
         
         <p>
             <input type="submit" value="Guardar" />

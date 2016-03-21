@@ -1722,7 +1722,7 @@ namespace ReadAndLearn.Controllers
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            string mensaje = "";
+            string mensaje = "", explicacion = "";
 
             // ver si es ult o penultimo pertinente (PertinenteStatus)
             // ver porcentaje de pertinente encontrado (PertinenteOrden)
@@ -1755,12 +1755,13 @@ namespace ReadAndLearn.Controllers
             {
                 if (alt.Opcion == respuesta)
                 {
+                    explicacion = pregunta.Explicacion;
                     if (alt.Valor) // Acierto
                     {
                         DatoSimple ds = new DatoSimple();
 
                         // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
+                        mensaje = pregunta.FDBK_Correcto;
 
                         du.Puntos += 100;
 
@@ -1788,7 +1789,7 @@ namespace ReadAndLearn.Controllers
                         DatoSimple ds = new DatoSimple();
 
                         // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
+                        mensaje = pregunta.FDBK_Incorrecto;
 
                         // Registrar respuesta
                         ds.CodeOP = 13;
@@ -1815,8 +1816,7 @@ namespace ReadAndLearn.Controllers
                 }
             }
 
-            // Genera un feedback si no hay feedback de contenido ni de pregunta.
-            mensaje = mensaje == null ? ext.GetFeedback(du) : mensaje;
+            
 
             if (ext.GetModulo(ModuloID).Timings != null && ext.GetModulo(ModuloID).Timings.Count > 0)
             {
@@ -1829,7 +1829,7 @@ namespace ReadAndLearn.Controllers
             }
             else
             {
-                return Json(new { redirect = Url.Action("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+                return Json(new { redirect = Url.Action("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje, explicacionText = explicacion }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
             }
         }
 
@@ -1935,7 +1935,7 @@ namespace ReadAndLearn.Controllers
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            string mensaje = "";
+            string mensaje = "", explicacion = "";  
 
             if (du.PertinenteOrden != null && du.PertinenteOrden != "")
             {
@@ -1951,14 +1951,15 @@ namespace ReadAndLearn.Controllers
             DatoSimple ds = new DatoSimple();
             foreach (Alternativa alt in pregunta.Alternativas)
             {
-                if ( alt.Opcion == respuesta) 
-                    
+                if (alt.Opcion == respuesta)
+
+                    explicacion = pregunta.Explicacion;
                 if (alt.Valor)// Acierto
                 {
                     //comentado para que el feedback tras el segundo intento sea correctivo y no elaborativo
                     // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
                     //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
-                    mensaje = "Has acertado";
+                    mensaje = pregunta.FDBK_Correcto;
                     du.Puntos += 100;
 
                     // Registrar respuesta
@@ -1983,7 +1984,7 @@ namespace ReadAndLearn.Controllers
                     //comentado para que el feedback tras el segundo intento sea correctivo y no elaborativo
                     // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
                     //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
-                    mensaje = "Has fallado";
+                    mensaje = pregunta.FDBK_Incorrecto;
                     // Registrar respuesta
                     ds.CodeOP = 13;
                     ds.Info = respuesta;
@@ -2008,10 +2009,10 @@ namespace ReadAndLearn.Controllers
             //comentado porque borraba el feedback
             //mensaje = ext.GetFeedback(du);
 
-            return Json(new { redirect = Url.Action("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
+            return Json(new { redirect = Url.Action("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje, explicacionText = explicacion }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
         }
 
-        public ActionResult PL3_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText)
+        public ActionResult PL3_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText, string explicacionText ="")
         {
             logger.Debug("PL3_Pregunta_Test_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -2028,6 +2029,9 @@ namespace ReadAndLearn.Controllers
             ViewBag.DatoSimple = ds;
             //guirisan
             ViewBag.feedbackText = feedbackText;
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/60
+            //añadido texto de explicacion al viewbag
+            ViewBag.explicacionText = explicacionText;
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta
 
