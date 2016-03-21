@@ -84,7 +84,15 @@
             @Html.TextAreaFor(model => model.Pertinente)
             @Html.ValidationMessageFor(model => model.Pertinente)
         </div>
-
+        <hr />
+        <div class="editor-label">
+            @Html.Label("Explicacion de la respuesta")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Explicacion)
+            @Html.ValidationMessageFor(model => model.Explicacion)
+        </div>
+        <hr />
         <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
         
         <hr />

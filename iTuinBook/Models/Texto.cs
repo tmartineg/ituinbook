@@ -76,6 +76,10 @@ namespace ReadAndLearn.Models
 
         //guirisan/secuencias
         public int Orden { get; set; }
+
+        //guirisan/issue https://github.com/guirisan/ituinbook/issues/60
+        //added Explicacion to Pregunta model.
+        public string Explicacion { get; set; }
     }
 
     public class TareaOrdenar

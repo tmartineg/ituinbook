@@ -76,7 +76,14 @@
         <span id="undo" style="display:none" class="k-group">Buscar Pertinente (Texto).</span>
         <span id="pertIMG" style="display:none" class="k-group">Buscar Pertinente (Imagen).</span>
         <hr />
-
+        <div class="editor-label">
+            @Html.Label("Explicacion de la respuesta")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Explicacion)
+            @Html.ValidationMessageFor(model => model.Explicacion)
+        </div>
+        <hr />
         <p>
             <input id="btnSend" type="submit" value="Crear" />
         </p>
