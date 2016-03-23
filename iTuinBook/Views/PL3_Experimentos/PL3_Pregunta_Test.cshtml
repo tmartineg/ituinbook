@@ -84,7 +84,12 @@
     </div>
     
     <div style="padding-left: 20px; padding-right: 20px;">
-        <button id="btnValidarTest">Validar</button>                       
+        <button id="btnValidarTest">Validar</button>
+        @if (Model.Texto.ConfigTexto.Busqueda)
+        {
+            <button id="btnBackToTexto"><a href="PL3_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
+        }
+                      
     </div>
 </div> 
 
@@ -93,6 +98,28 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
+            //parametrizar el enlace que permite volver al texto para que incluya el tiempo de cliente
+            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
+            var parametrizacionHecha = false;
+            $("#btnBackToTexto").click(function (e) {
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+
+                //parametrizacion del enlace
+                var oldhref = $("#btnBackToTexto a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnBackToTexto a").attr("href", oldhref + "&moment=" + datetimeclient);
+
+
+                parametrizacionHecha = true;
+                $("#btnBackToTexto").unbind('click');
+                $(this).trigger('click');
+            });
+
+
             var timeStart = new Date();
             var timeFinish = new Date();
 
