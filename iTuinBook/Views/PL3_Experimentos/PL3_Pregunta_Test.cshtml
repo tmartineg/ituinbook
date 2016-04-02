@@ -87,7 +87,12 @@
         <button id="btnValidarTest">Validar</button>
         @if (Model.Texto.ConfigTexto.Busqueda)
         {
-            <button id="btnBackToTexto"><a href="PL3_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
+            
+            <button id="btnBackToTexto"><a href="PL3_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10">Volver al texto</a></button>
+        }
+        else
+        {
+            
         }
                       
     </div>
