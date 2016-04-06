@@ -3944,7 +3944,8 @@ namespace ReadAndLearn.Controllers
                                         linea += acc.Valor + "_" ;
                                         linea += acc.Dato01 + "_" ;
                                         linea += acc.Dato02 + "_" ;
-                                        linea += acc.Dato03 + "_" ;
+                                        linea += acc.Dato03 + "_";
+                                        linea += acc.Info2 + "_";
                                         linea += acc.Info + "\n";
 
                                     }
