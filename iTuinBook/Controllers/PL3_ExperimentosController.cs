@@ -1180,12 +1180,7 @@ namespace ReadAndLearn.Controllers
             DatoSimple ds;
             Grupo gr = db.Grupos.Find(GrupoID);
 
-            if (!preguntaResuelta)
-            {
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
-                SaveChanges();
-
-            }
+            
             
             if (greetingsPage)
             {
@@ -1312,6 +1307,13 @@ namespace ReadAndLearn.Controllers
             */
             try
             {
+                //
+                if (!preguntaResuelta)
+                {
+                    db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+                    SaveChanges();
+
+                }
                 Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
 
                 return Json(new { redirect = Url.Action("PL3_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment, numAccion = numAccion }), Parent = false });
