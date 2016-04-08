@@ -297,7 +297,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
+        protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false, bool primerIntento = false)
         {
             logger.Debug("PL3_Experimentos/RouterPregunta");
             DateTime datetimeclient = DateTime.Parse(moment);
@@ -307,7 +307,7 @@ namespace ReadAndLearn.Controllers
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
             //el primer DS-codeop=10 generado al volver al segundo intento de pregunta se genera desde aquí.
             //comentamos la línea por duplicidad de información
-            if (!segundoIntento && !preguntaResuelta)
+            if (!segundoIntento && !preguntaResuelta && !primerIntento)
             {
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
@@ -323,7 +323,14 @@ namespace ReadAndLearn.Controllers
                 //si es preguntaResuelta, indicamos que se está yendo a una pregunta ya respondida (consulta el texto después de acertar a la primera o acertar/fallar a la segunda
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 132, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
-            
+            else if (primerIntento)
+            {
+                //issue https://github.com/guirisan/ituinbook/issues/67
+                //si es primerIntento, indicamos que está volviendo a la pregunta desde la que llegó al texto 
+                //y que es un primer intento de repuesta
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 135, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+
+            }    
 
             db.SaveChanges();
 
@@ -362,6 +369,17 @@ namespace ReadAndLearn.Controllers
                         {
                             return RedirectToAction("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaID = datosUsuario.PreguntaID }); //int GrupoID, int ModuloID, int preguntaID, string feedbackText
                         }
+
+                            //guirisan/issue https://github.com/guirisan/ituinbook/issues/67
+                            //las siguiente tres lineas son por si hubiera que discernir entre cargar la pregunta de test por primera vez
+                            //y cargarla al volver de consultar el texto en la condición en que pueden (por ejemplo para deshabilitar el botón
+                            //volver al texto y no permitir volver una segunda vez.
+                        else if (primerIntento)
+                        {
+                            return RedirectToAction("PL3_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
+                        }
+
+
                         else
                         {
                             return RedirectToAction("PL3_Pregunta_Test", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = datosUsuario.PreguntaActual, textoID = textoID, moment = moment, numAccion = numAccion });
@@ -1004,7 +1022,7 @@ namespace ReadAndLearn.Controllers
         }
         #endregion
 
-        public ActionResult PL3_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false, bool inicioTexto = false)
+        public ActionResult PL3_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false, bool inicioTexto = false, bool primerIntento = false)
         {
             logger.Debug("PL3_Experimentos/PL3_Texto");
             try
@@ -1034,6 +1052,7 @@ namespace ReadAndLearn.Controllers
                 ViewBag.SegundoIntento = SegundoIntento;
                 ViewBag.PreguntaResuelta = preguntaResuelta;
                 ViewBag.InicioTexto = inicioTexto;
+                ViewBag.PrimerIntento = primerIntento;
                 return View(ext.GetTexto(text.TextoID));
             }
             catch (Exception e)
@@ -1130,7 +1149,7 @@ namespace ReadAndLearn.Controllers
             }
         }
 
-        public ActionResult PL3_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
+        public ActionResult PL3_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false, bool primerIntento = false)
         {
 
             logger.Debug("PL3_Experimentos/PL3_Pregunta");
@@ -1144,7 +1163,7 @@ namespace ReadAndLearn.Controllers
 
             SaveChanges();
 
-            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento, preguntaResuelta);
+            return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento, preguntaResuelta, primerIntento);
         }
 
         public ActionResult PL3_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false, bool preguntaResuelta = false)
