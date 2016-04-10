@@ -3937,7 +3937,6 @@ namespace ReadAndLearn.Controllers
                                         linea += "PR" + preg.Orden + "_" ;
                                         //issue 
                                         //imprimir milisegons en el moment
-                                        //linea += acc.Momento + "_" ;
                                         linea += acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_";
 
                                         linea += acc.CodeOP + "_" ;
@@ -3952,7 +3951,21 @@ namespace ReadAndLearn.Controllers
                                     else
                                     {
                                         //para los datos que NO tienen una pregunta
-                                        linea = (cont++).ToString() + "_" + acc.NumAccion + "_" + acc.DatoSimpleID + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + "NULL" + "_" + acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_" + acc.CodeOP + "_" + acc.Valor + "_" + acc.Dato01 + "_" + acc.Dato02 + "_" + acc.Dato03 + "_" + acc.Info + "\n";
+                                        linea = (cont++).ToString() + "_";
+                                        linea += acc.NumAccion + "_" 
+                                        linea += acc.DatoSimpleID + "_";
+                                        linea += "NULL" + "_";
+                                        linea += "NULL" + "_";
+                                        linea += "NULL" + "_";
+                                        linea += "NULL" + "_";
+                                        linea += acc.Momento.ToString("dd/MM/yyy hh:mm:ss.fff") + "_";
+                                        linea += acc.CodeOP + "_";
+                                        linea += acc.Valor + "_";
+                                        linea += acc.Dato01 + "_";
+                                        linea += acc.Dato02 + "_";
+                                        linea += acc.Dato03 + "_";
+                                        linea += acc.Info2 + "_";
+                                        linea += acc.Info + "\n";
 
                                     }
                                     
