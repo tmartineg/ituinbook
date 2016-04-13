@@ -156,7 +156,7 @@ namespace ReadAndLearn.Controllers
                         case 2:
                             //return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
                         case 3:
-                            return RedirectToAction("PL3_Texto", "PL3_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
+                            return RedirectToAction("PL3_Texto", "PL3_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, inicioTexto = true });                            
 
                         default:
                             break;
