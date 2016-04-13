@@ -224,9 +224,26 @@
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 41, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient, numAccion: numAcc},
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0,  Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient, numAccion: numAcc},
                         //guirisan/secuencias
                         beforeSend: function () {
+                            //guirisan/issues 
+                            /*************************************************
+
+                            REGISTRO DE DESENMASCARAMIENTO
+                            
+                            
+                            */
+                            if ('@primerIntento' == 'True')
+                            {
+                                this.data = this.data + "&CodeOP=40";
+                            }
+                            else
+                            {
+                                this.data = this.data + "&CodeOP=41";
+                            }
+                            
+                            
                             //set datosRaw on sessionStorage
                             var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
                             datosRaw[numAcc] = cadena;

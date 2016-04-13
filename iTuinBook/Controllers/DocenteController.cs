@@ -3952,7 +3952,7 @@ namespace ReadAndLearn.Controllers
                                     {
                                         //para los datos que NO tienen una pregunta
                                         linea = (cont++).ToString() + "_";
-                                        linea += acc.NumAccion + "_" 
+                                        linea += acc.NumAccion + "_";
                                         linea += acc.DatoSimpleID + "_";
                                         linea += "NULL" + "_";
                                         linea += "NULL" + "_";
