@@ -1199,6 +1199,11 @@ namespace ReadAndLearn.Controllers
                 du.TextoActual++;
                 du.PreguntaActual = 0;
 
+                //issue https://github.com/guirisan/ituinbook/issues/69#issuecomment-212217670
+                //aquí insertamos un 11 para indicar el final de la última pregunta que de otra manera no aparecería, está unas cuantas líneas más abajo
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+
+
                 ds = new DatoSimple() { CodeOP = 3, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
 
                 db.DatosSimples.Add(ds);
@@ -1293,6 +1298,16 @@ namespace ReadAndLearn.Controllers
             //eliminada por estar duplicada con la línea de antes del if, remover si faltara un dato al pasar por PL3_Siguiente_Pregunta
             //db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
 
+            //issue https://github.com/guirisan/ituinbook/issues/69#issuecomment-212217670
+            //
+            if (!preguntaResuelta)
+            {
+                db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
+                SaveChanges();
+
+            }
+
+
             ds = new DatoSimple() { CodeOP = 100, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
             db.DatosSimples.Add(ds);
 
@@ -1308,12 +1323,7 @@ namespace ReadAndLearn.Controllers
             try
             {
                 //
-                if (!preguntaResuelta)
-                {
-                    db.DatosSimples.Add(new DatoSimple() { CodeOP = 11, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, PreguntaID = PreguntaID, NumAccion = numAccion });
-                    SaveChanges();
-
-                }
+                
                 Pregunta preguntaTest = db.Textos.Find(TextoID).Preguntas.ToList()[db.SaveChanges()];
 
                 return Json(new { redirect = Url.Action("PL3_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment, numAccion = numAccion }), Parent = false });
