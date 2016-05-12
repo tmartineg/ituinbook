@@ -43,6 +43,13 @@
             @Html.ValidationMessageFor(model => model.Contenido)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Orden)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Orden)
+            @Html.ValidationMessageFor(model => model.Orden)
+        </div>
         <p>
             <input type="submit" value="Crear" name="txt" />                     
         </p>

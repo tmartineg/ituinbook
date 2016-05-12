@@ -23,7 +23,9 @@ namespace ReadAndLearn.Models
 
         public virtual ConfigTexto ConfigTexto { get; set; }
 
-        //guirisan/secuencias
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/20
+        [Display(Name = "Orden del texto en el módulo")]
+        [Required(ErrorMessage = "El orden debe ser mayor o igual a 1")]
         public int Orden { get; set; }
     }
 
@@ -36,7 +38,9 @@ namespace ReadAndLearn.Models
         public virtual Texto Texto { get; set; }
         public virtual ICollection<Pregunta> Preguntas { get; set; }
 
-        //guirisan/secuencias
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/20
+        [Display(Name = "Orden de la página en el texto")]
+        [Required(ErrorMessage = "El orden debe ser mayor o igual a 1")]
         public int Orden { get; set; }
     }
 
@@ -74,7 +78,10 @@ namespace ReadAndLearn.Models
         public virtual ICollection<UserProfile> Usuarios { get; set; }
         public virtual ICollection<SubPregunta> SubPreguntas { get; set; }
 
-        //guirisan/secuencias
+
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/20
+        [Display(Name = "Orden de la pregunta")]
+        [Required(ErrorMessage = "El orden debe ser mayor o igual a 1")]
         public int Orden { get; set; }
 
         //guirisan/issue https://github.com/guirisan/ituinbook/issues/60

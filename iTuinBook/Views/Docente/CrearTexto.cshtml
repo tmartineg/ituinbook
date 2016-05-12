@@ -46,12 +46,15 @@
             @Html.EditorFor(model => model.Descripcion)
             @Html.ValidationMessageFor(model => model.Descripcion)
         </div>
-        <!-- completar model.Orden
-        <div class="editor-field">
-            @//Html.EditorFor(model => model.T)
-            @//Html.ValidationMessageFor(model => model.Descripcion)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Orden) 
         </div>
-        -->
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Orden)
+            @Html.ValidationMessageFor(model => model.Orden)
+        </div>
+        
         <p>
             <input type="submit" value="Crear" />
         </p>

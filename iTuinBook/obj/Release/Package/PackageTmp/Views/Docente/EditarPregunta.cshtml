@@ -88,7 +88,14 @@
 
         <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
         <hr />
-
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Orden)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Orden)
+            @Html.ValidationMessageFor(model => model.Orden)
+        </div>
+        <hr />
         <div class="editor-label">
             @Html.Label("Explicacion de la respuesta")
         </div>

@@ -417,11 +417,17 @@ namespace ReadAndLearn.Controllers
             {
                 nuevoTexto.Modulos = new List<Modulo>();
                 nuevoTexto.Modulos.Add(db.Modulos.Find(ModuloID));
-                
-                //guirisan/secuencias
-                int length = db.Modulos.Find(ModuloID).Textos.Count();
-                nuevoTexto.Orden = length + 1;
-               
+
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/20
+                //Se ha comentado el siguiente bloque de código porque al exigir valor para Orden en el formulario
+                //y ser este numérico no hay que contemplar los casos en que no se declare el orden
+                /*
+                if (nuevoTexto.Orden == null)
+                {
+                    int length = db.Modulos.Find(ModuloID).Textos.Count();
+                    nuevoTexto.Orden = length + 1;
+                }
+                 */
             }
 
             db.Textos.Add(nuevoTexto);
@@ -571,9 +577,11 @@ namespace ReadAndLearn.Controllers
                 nuevaPagina.TextoID = TextoID;
                 nuevaPagina.Texto = db.Textos.Find(TextoID);
 
-                //guirisan/secuencias
-                int length = db.Textos.Find(TextoID).Paginas.Count();
-                nuevaPagina.Orden = length + 1;
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/20
+                /* Comentado por la misma razón que el orden del texto, ya no es necesario al requerir
+                 * valor para el campo Orden en el formulario*/
+                //int length = db.Textos.Find(TextoID).Paginas.Count();
+                //nuevaPagina.Orden = length + 1;
 
                 nuevaPagina.Contenido = HttpUtility.HtmlDecode(nuevaPagina.Contenido);
 
@@ -834,9 +842,10 @@ namespace ReadAndLearn.Controllers
             nuevaPregunta.Texto = db.Textos.Find(TextoID);
             nuevaPregunta.SubPreguntas = new List<SubPregunta>();
 
-            //guirisan/secuencias
-            int length = db.Textos.Find(TextoID).Preguntas.Count();
-            nuevaPregunta.Orden = length + 1;
+            //guirisan/secuencias https://github.com/guirisan/ituinbook/issues/20
+            /* Comentado por la obligatoriedad del campo Orden en el formulario de creación de pregunta*/
+            //int length = db.Textos.Find(TextoID).Preguntas.Count();
+            //nuevaPregunta.Orden = length + 1;
 
             db.Preguntas.Add(nuevaPregunta);
 
