@@ -170,7 +170,7 @@
                             $(".speech_bubble").css("background-color", "#EEE")
                             break;
                         case 7:
-                            var src = "/ReadAndLearn/TextoCompleto?TextoID=" + result.TextoID;
+                            var src = "/ReadAndLearn/TextoCompleto?TextoID=" + result.TextoID + "&moment=" + new Date().toISOString();
                             window.parent.$("#escritorio").attr("src", src);                            
                             break;
                         case 9:
