@@ -187,8 +187,9 @@
                                 break;
                             case 7: // Mostrar Texto Completo
                                 HablaRamiro();
-
-                                src = "TextoCompleto?TextoID=" + result.TextoID;
+                                //guirisan/issues https://github.com/guirisan/ituinbook/issues/77
+                                //parametro moment no estaba incluido en la direccion
+                                src = "TextoCompleto?TextoID=" + result.TextoID + "&moment=" + datetimeclient;
 
                                 window.parent.$("#escritorio").attr("src", src);
                                 break;
@@ -287,7 +288,7 @@
                             mensajeCont = str.substring(1);
                         }
 
-                        src = "TextoCompleto?TextoID=" + '@ViewBag.TextoID';
+                        src = "TextoCompleto?TextoID=" + '@ViewBag.TextoID'+ "&moment="+ new Date().toISOString();
 
                         $("#btnAnterior").hide();
                         $("#btnSiguiente").hide();
@@ -636,7 +637,7 @@
                                     result.Mensaje = str.substring(1);
                                 }
 
-                                src = "TextoCompleto?TextoID=" + result.TextoID;
+                                src = "TextoCompleto?TextoID=" + result.TextoID + "&moment=" + datetimeclient;
 
                                 $("#btnAnterior").hide();
                                 $("#btnSiguiente").hide();

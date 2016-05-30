@@ -62,7 +62,8 @@
         <div class="editor-field">
             @Html.DropDownListFor(model => model.Plantilla , new [] { 
                 new SelectListItem { Text = "Texto y pregunta en la misma página (Pregunta en mitad superior)", Value = "1" },
-                new SelectListItem { Text = "Texto y pregunta en la misma página (Pregunta en mitad inferior)", Value = "2" },
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/74
+                //new SelectListItem { Text = "Texto y pregunta en la misma página (Pregunta en mitad inferior)", Value = "2" },
                 new SelectListItem { Text = "Texto y preguntas en páginas distintas (con feedback)", Value = "0" },
                 new SelectListItem { Text = "Texto y preguntas en páginas distintas (con explicacion)", Value = "3" },
             })  
