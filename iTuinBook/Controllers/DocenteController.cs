@@ -584,7 +584,14 @@ namespace ReadAndLearn.Controllers
                 //nuevaPagina.Orden = length + 1;
 
                 nuevaPagina.Contenido = HttpUtility.HtmlDecode(nuevaPagina.Contenido);
-
+                
+                
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/79
+                //indexación de las palabras en el texto para el correcto funcionamiento
+                //de la tarea de selección
+                nuevaPagina.Contenido = textIndexation(nuevaPagina.Contenido);
+                
+                
                 db.Paginas.Add(nuevaPagina);
 
                 db.SaveChanges();
@@ -596,6 +603,109 @@ namespace ReadAndLearn.Controllers
            
             return View(nuevaPagina);
         }
+
+        /** textIndexation(string source)
+         *  Dado un texto con etiquetas html (el contenido de la página a insertar / modificar), esta función asigna
+         *  un índice a cada palabra o número de 1 a n, encerrando cada palabra a indizar entre etiquetas span del tipo
+         *  <span data-windex="1">palabraX</span>  <span data-windex="2">palabraY</span> 
+         *  - los números se consideran palabras y tienen su propio índice
+         *  - una palabra compuesta (l'atmosfera) se considera una única palabra
+         *  - los signos de puntuació no computan para la indexación. El punto, coma, punto y coma, dos puntos, etc., 
+         *    
+         * 
+         */
+        public string textIndexation(string source)
+        {
+            /***************************************************
+             *           DOTNETFIDDLE.NET                      *
+             ***************************************************/
+
+            /*****variables del algoritmo*/
+            int pos = 0;            //posición del texto actual (de 0 a text.Length);
+            string result = "";     //variable para almacenar el resultado a devolver
+            string aux = "";        //variable auxiliar para almacenar caracteres de una misma etiqueta html, palabra, etc
+            bool endhtmlflag = false;   //variable para indicar si fin o no de la etiqueta html
+            bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
+            int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
+            Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
+            Regex endwordregexp = new Regex(@"[\s.:,;]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
+
+
+            /*****preparación de source para su parseo*/
+            source = source.Trim(); //eliminación de espacios en blanco al principio y final
+            //source = source.RemoveFuckingWordLabels(); //pendiente, buscar función que elimine información estupida de word?
+            char[] text = source.ToCharArray(); //¿arraycialización? del string recibido como parámetro en char[] array
+
+            while (pos < text.Length)
+            {
+                Console.WriteLine("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
+
+                if (text[pos].ToString().CompareTo("<") == 0)                      //start html tag "<"
+                {
+                    Console.WriteLine("start html -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    endhtmlflag = false;
+
+                    aux = "";
+                    aux += text[pos];
+                    pos++;
+                    while (!endhtmlflag)
+                    {
+                        if (text[pos].ToString().CompareTo(">") == 0)
+                        {
+                            endhtmlflag = true;
+                        }
+                        aux += text[pos];
+                        pos++;
+                    }
+                    result += aux;                              //end html tag ">"
+                }
+                else if (text[pos].ToString().CompareTo(" ") == 0)                 //blankspace
+                {
+                    Console.WriteLine("start blankspace -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    result += " ";
+                    pos++;
+                }
+                else if (text[pos].ToString().CompareTo("\\") == 0)               //breakline \r o \n o \r\n
+                {
+                    Console.WriteLine("breaklline -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    pos++;
+                    result += "\\" + text[pos];
+                    pos++;
+                }
+                else if (alphanumericregexp.IsMatch(text[pos].ToString())) //alphanumeric start (palabra, o número)
+                {
+                    Console.WriteLine("start alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    endwordflag = false;
+                    aux = "<span data-windex='" + windex++ + "'>";
+                    aux += text[pos++];
+                    while (!endwordflag)
+                    {
+                        Console.WriteLine("CONTINUE alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
+                        if (!alphanumericregexp.IsMatch(text[pos].ToString()))
+                        {
+                            endwordflag = true;
+                            aux += "</span>";
+                        }
+                        else
+                        {
+                            aux += text[pos++];
+                        }
+                    }
+                    result += aux;
+                }
+                else if (endwordregexp.IsMatch(text[pos].ToString()))		//signo de puntuación
+                {
+                    result += text[pos++];
+                }
+                else
+                {
+                    //ERROR
+                    Console.WriteLine("else NOT CAPTURED -> pos=" + pos + " - text(pos)=[ " + text[pos] + " ]");
+                }
+            }
+            return result;
+        }
+
 
         public ActionResult EliminarPregunta(int TextoID, int PreguntaID)
         {
