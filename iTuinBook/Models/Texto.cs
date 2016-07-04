@@ -51,6 +51,9 @@ namespace ReadAndLearn.Models
         public string Enunciado { get; set; }
         public int Dificultad { get; set; }
         public string Pertinente { get; set; }
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/79
+        public string Distractoras { get; set; }
+
         public int TipoPreguntaID { get; set; }
         public string Claves { get; set; }
         public int TareaID { get; set; }

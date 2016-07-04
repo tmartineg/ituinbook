@@ -67,15 +67,26 @@
         </div>
         <hr />
         <div class="editor-label">
-            @Html.Label("Pertinente (Copia y Pega desde la ventana que encontrarás en \"Buscar Pertinente\")")
+            @Html.Label("Pertinente (Copia y Pega desde la ventana que encontrarás en \"Buscar pertinentes y distractoras\")")
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.Pertinente)
             @Html.ValidationMessageFor(model => model.Pertinente)
         </div>
-        <span id="undo" style="display:none" class="k-group">Buscar Pertinente (Texto).</span>
-        <span id="pertIMG" style="display:none" class="k-group">Buscar Pertinente (Imagen).</span>
+        
+        <div>&nbsp;</div>
+        <!-- guirisan /issues https://github.com/guirisan/ituinbook/issues/79 -->
+        <div class="editor-label">
+            @Html.Label("Distractoras (Copia y Pega desde la ventana que encontrarás en \"Buscar pertinentes y distractoras\")")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Distractoras)
+            @Html.ValidationMessageFor(model => model.Distractoras)
+        </div>
+        <span id="undo" style="display:none" class="k-group">Buscar pertinentes y distractoras (Texto).</span>
+        <span id="pertIMG" style="display:none" class="k-group">Buscar pertinentes y distractoras (Imagen).</span>
         <hr />
+        <!-- end guirisan-->
         <div class="editor-label">
             @Html.LabelFor(model => model.Orden)
         </div>
@@ -137,6 +148,22 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/79
+            //start
+            //capturamos selección del usuario, extraemos id's, y si ninguno tiene ya asignada pertinencia o distraccion,
+            //añadimos la lista de id's a campo pertinentes del formulario (1,2,4,5,6,8,14,16,17,18,19,20
+            $(document).on('click', '#addPertinentes', function () {
+                Console.log("click over addPertinentes");
+            });
+
+            
+            $(document).on('click', '#addDistractoras', function () {
+                Console.log("click over addDistractoras");
+            });
+
+            //end
+
+
 
             var items = [];
             
@@ -152,7 +179,7 @@
             }
 
             window.kendoWindow({               
-                title: "Pertinente",                
+                title: "Pertinentes y distractoras",                
                 close: onClose,
                 visible: false
             });
@@ -192,15 +219,6 @@
 
             $("#datepicker").kendoDatePicker();
             
-            $("#grid").kendoGrid({
-                dataSource: [{ name: "Jane Doe", age: 30 }, { name: "John Doe", age: 33 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 }, { name: "Jane Doe", age: 30 } ],
-                groupable: true,
-                sortable: true,
-                pageable: {
-                    refresh: true,
-                    pageSizes: true
-                }
-            });
             
             $("#menuCategorias").kendoMenu({
                 orientation: "vertical"

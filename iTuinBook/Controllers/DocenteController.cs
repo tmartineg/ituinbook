@@ -638,11 +638,11 @@ namespace ReadAndLearn.Controllers
 
             while (pos < text.Length)
             {
-                Console.WriteLine("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
+                //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
 
                 if (text[pos].ToString().CompareTo("<") == 0)                      //start html tag "<"
                 {
-                    Console.WriteLine("start html -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    System.Diagnostics.Debug.Write("start html -> pos=" + pos + " - text(pos)=" + text[pos]);
                     endhtmlflag = false;
 
                     aux = "";
@@ -657,52 +657,68 @@ namespace ReadAndLearn.Controllers
                         aux += text[pos];
                         pos++;
                     }
+                    //System.Diagnostics.Debug.Write("end html -> pos=" + pos + " - text(pos)=" + text[pos]);
                     result += aux;                              //end html tag ">"
                 }
                 else if (text[pos].ToString().CompareTo(" ") == 0)                 //blankspace
                 {
-                    Console.WriteLine("start blankspace -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    System.Diagnostics.Debug.Write("blankspace -> pos=" + pos);
                     result += " ";
                     pos++;
                 }
                 else if (text[pos].ToString().CompareTo("\\") == 0)               //breakline \r o \n o \r\n
                 {
-                    Console.WriteLine("breaklline -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    System.Diagnostics.Debug.Write("breaklline -> pos=" + pos + " - text(pos)=" + text[pos]);
                     pos++;
                     result += "\\" + text[pos];
                     pos++;
                 }
                 else if (alphanumericregexp.IsMatch(text[pos].ToString())) //alphanumeric start (palabra, o número)
                 {
-                    Console.WriteLine("start alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    System.Diagnostics.Debug.Write("start alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
                     endwordflag = false;
                     aux = "<span data-windex='" + windex++ + "'>";
                     aux += text[pos++];
-                    while (!endwordflag)
+                    while (!endwordflag || pos < text.Length)
                     {
-                        Console.WriteLine("CONTINUE alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
+                        //System.Diagnostics.Debug.Write("CONTINUE alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
                         if (!alphanumericregexp.IsMatch(text[pos].ToString()))
                         {
+                            //el caracter ya no es alphanumeric
                             endwordflag = true;
                             aux += "</span>";
                         }
-                        else
-                        {
+                        else if (text[pos].ToString().CompareTo("&") == 0) {
+                            //el caracter es un & de acento
+                            while (text[pos].ToString().CompareTo(";") != 0)
+                            {
+                                aux += text[pos++];
+                            }
+                            aux += text[pos++];
+                        } else {
+                            //el caracter es alfanumérico
                             aux += text[pos++];
                         }
+
                     }
+                    //System.Diagnostics.Debug.Write("********************end alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
                     result += aux;
+
                 }
                 else if (endwordregexp.IsMatch(text[pos].ToString()))		//signo de puntuación
                 {
+
                     result += text[pos++];
+
                 }
                 else
                 {
                     //ERROR
-                    Console.WriteLine("else NOT CAPTURED -> pos=" + pos + " - text(pos)=[ " + text[pos] + " ]");
+                    System.Diagnostics.Debug.Write("else NOT CAPTURED -> pos=" + pos + " - text(pos)=[ " + text[pos] + " ]");
+
                 }
             }
+
             return result;
         }
 
