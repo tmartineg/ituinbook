@@ -9,11 +9,19 @@ namespace ReadAndLearn
         // Para obtener más información acerca de Bundling, consulte http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/79
+            //plugin para capturar seleccion del usuario
+            bundles.Add(new ScriptBundle("~/bundles/jqselection").Include(
+                        "~/Scripts/jquery.selection.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.unobtrusive*",
@@ -48,6 +56,8 @@ namespace ReadAndLearn
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            
         }
     }
 }

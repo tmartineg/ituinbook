@@ -11,7 +11,7 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    
+
     <fieldset>
         <legend>Pregunta</legend>
 
@@ -19,7 +19,7 @@
             @Html.LabelFor(model => model.Enunciado)
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Enunciado, new { id = "enunciado", style="width:100%;"})
+            @Html.TextAreaFor(model => model.Enunciado, new { id = "enunciado", style = "width:100%;" })
             @Html.ValidationMessageFor(model => model.Enunciado)
         </div>
 
@@ -29,10 +29,10 @@
             @Html.Label("Claves (Separar palabras clave por el carácter \"/\")")
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(model => model.Claves, new { style="width:100%;" })
+            @Html.TextBoxFor(model => model.Claves, new { style = "width:100%;" })
             @Html.ValidationMessageFor(model => model.Claves)
         </div>
-        
+
         <hr />
         <div class="editor-label">
             @Html.Label("Tipo de Pregunta")
@@ -67,74 +67,76 @@
         </div>
         <hr />
         <div class="editor-label">
-            @Html.Label("Pertinente (Copia y Pega desde la ventana que encontrarás en \"Buscar pertinentes y distractoras\")")
+            @Html.Label("Pertinente")
+            <button id="addPertinentes">Añadir pertinentes</button>
+            <button id="cleanPertinentes">Limpiar</button>
+
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.Pertinente)
             @Html.ValidationMessageFor(model => model.Pertinente)
         </div>
-        
-        <div>&nbsp;</div>
+
         <!-- guirisan /issues https://github.com/guirisan/ituinbook/issues/79 -->
         <div class="editor-label">
-            @Html.Label("Distractoras (Copia y Pega desde la ventana que encontrarás en \"Buscar pertinentes y distractoras\")")
+            @Html.Label("Distractoras")
+            <button id="addDistractoras">Añadir distractoras</button>
+            <button id="cleanDistractoras">Limpiar</button>
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.Distractoras)
             @Html.ValidationMessageFor(model => model.Distractoras)
         </div>
-        <span id="undo" style="display:none" class="k-group">Buscar pertinentes y distractoras (Texto).</span>
-        <span id="pertIMG" style="display:none" class="k-group">Buscar pertinentes y distractoras (Imagen).</span>
-        <hr />
-        <!-- end guirisan-->
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Orden)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Orden)
-            @Html.ValidationMessageFor(model => model.Orden)
-        </div>
+        
 
-        <hr />
+        <div id="textraw">
+            @{
+                Texto text = ViewBag.Texto;
+                List<string> list = new List<string>();
+                if (text != null)
+                {
+                    foreach (Pagina pag in text.Paginas)
+                    {
+                        <h3>Pagina @pag.Orden</h3>
+                        <div>
+                            <p>
+                                @Html.Raw(pag.Contenido)
+                            </p>
+                        </div>
+                
+                    }
 
+                }
+            }
+
+        </div>
+        <hr />    
         <div class="editor-label">
-            @Html.Label("Explicacion de la respuesta (sólo para la plantilla con explicación)")
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.Explicacion)
-            @Html.ValidationMessageFor(model => model.Explicacion)
-        </div>
-        <hr />
+                @Html.LabelFor(model => model.Orden)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Orden)
+                @Html.ValidationMessageFor(model => model.Orden)
+            </div>
+
+            <hr />
+
+            <div class="editor-label">
+                @Html.Label("Explicacion de la respuesta (sólo para la plantilla con explicación)")
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Explicacion)
+                @Html.ValidationMessageFor(model => model.Explicacion)
+            </div>
+            <hr />
         <p>
             <input id="btnSend" type="submit" value="Crear" />
         </p>
     </fieldset>
 }
-@{
-    Texto mainText = ViewBag.Texto;
-    <iframe id="window" src="@Url.Action("VisualizarPagina", new { TextoID = mainText.TextoID })" width="800" height="320" ></iframe>
-    
-    <div id="pertinenteIMG">
-        @{
-            Texto text = ViewBag.Texto;
-            List<string> list = new List<string>();
-            if(text != null)
-            {
-                foreach(Pagina pag in text.Paginas)
-                {
-                     /* if(pag.Contenido.IndexOf("coor=\"") > -1)
-                      {
-                          int pos = pag.Contenido.IndexOf("coor=\"") + 6;
-                      }*/
-                }
-            
-            }
-        }
-    </div>
-    
-}
+
 <div>
-    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = mainText.TextoID })
+    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = ViewBag.Texto.TextoID })
 </div>
 
 @section scripts {
@@ -149,20 +151,123 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/79
+
+            //después de añadir las paginas como elementos de textraw, declaramos el acordeon
+            $("#textraw").accordion();
+            
+            /*PERTINENTES*************************/
             //start
             //capturamos selección del usuario, extraemos id's, y si ninguno tiene ya asignada pertinencia o distraccion,
             //añadimos la lista de id's a campo pertinentes del formulario (1,2,4,5,6,8,14,16,17,18,19,20
-            $(document).on('click', '#addPertinentes', function () {
-                Console.log("click over addPertinentes");
-            });
+            $("#addPertinentes").click(function (e) {
+                e.preventDefault()
+                console.log("click over addPertinentes");
 
-            
-            $(document).on('click', '#addDistractoras', function () {
-                Console.log("click over addDistractoras");
-            });
+                var selectedhtml = $.selection('html');
+                var duplicatedSelection = false;
 
+                $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
+                    if (!duplicatedSelection) {
+                        /*
+                        var existingids = $("textbeforeadd").val();
+                        var existingids = existingids + textbeforeadd;*/
+
+                        //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
+                        var textbeforeadd = $("textarea#Pertinente").val();
+
+                        var actualIndex = $(this).attr("data-windex");
+
+
+                        var existingids = $("textarea#Pertinente").val();
+                        if (existingids != null) {
+                            //ya hay palabras pertinentes
+
+                            existingids = existingids.split(",");
+
+
+                            if (existingids.indexOf(actualIndex) > -1) {
+                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
+                                duplicatedSelection = true;
+                            } else {
+                                $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                                $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                            }
+                        } else {
+                            //no hay palabras pertinentes
+                            $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                            $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                        }
+                    }
+                });
+
+
+            });
             //end
 
+            //cleanPertinentes
+            $("#cleanPertinentes").click(function (e) {
+                e.preventDefault();
+                $("textarea#Pertinente").val("");
+                $(".pertinentePalabra").removeClass("pertinentePalabra");
+
+            });
+
+            /*DISTRACTORAS*****************************************/
+            //start
+            //capturamos selección del usuario, extraemos id's, y si ninguno tiene ya asignada pertinencia o distraccion,
+            //añadimos la lista de id's a campo distractoras del formulario (1,2,4,5,6,8,14,16,17,18,19,20
+            $("#addDistractoras").click(function (e) {
+                e.preventDefault()
+                console.log("click over addDistractoras");
+
+                var selectedhtml = $.selection('html');
+                var duplicatedSelection = false;
+
+                $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
+                    if (!duplicatedSelection) {
+                        /*
+                        var existingids = $("textbeforeadd").val();
+                        var existingids = existingids + textbeforeadd;*/
+
+                        //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
+                        var textbeforeadd = $("textarea#Distractoras").val();
+
+                        var actualIndex = $(this).attr("data-windex");
+
+
+                        var existingids = $("textarea#Distractoras").val();
+                        if (existingids != null) {
+                            //ya hay palabras pertinentes
+
+                            existingids = existingids.split(",");
+
+
+                            if (existingids.indexOf(actualIndex) > -1) {
+                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
+                                duplicatedSelection = true;
+                            } else {
+                                $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                                $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+                            }
+                        } else {
+                            //no hay palabras distractoras
+                            $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                            $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+                        }
+                    }
+                });
+
+
+            });
+            //end
+
+            //cleanDistractoras
+            $("#cleanDistractoras").click(function (e) {
+                e.preventDefault();
+                $("textarea#Pertinente").val("");
+                $(".distractoraPalabra").removeClass("distractoraPalabra");
+
+            });
 
 
             var items = [];
@@ -173,7 +278,7 @@
                                     window.data("kendoWindow").open();
                                     undo.hide();
                                 });
-
+            /*
             var onClose = function () {
                 undo.show();
             }
@@ -185,7 +290,7 @@
             });
 
             undo.show();            
-
+            */
             $("#optional").kendoMultiSelect({                
                 dataSource: items
             });

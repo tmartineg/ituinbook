@@ -628,7 +628,7 @@ namespace ReadAndLearn.Controllers
             bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
             Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
-            Regex endwordregexp = new Regex(@"[\s.:,;]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
+            Regex endwordregexp = new Regex(@"[\s.:,;&]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
 
 
             /*****preparación de source para su parseo*/
@@ -679,14 +679,22 @@ namespace ReadAndLearn.Controllers
                     endwordflag = false;
                     aux = "<span data-windex='" + windex++ + "'>";
                     aux += text[pos++];
-                    while (!endwordflag || pos < text.Length)
+                    bool endtextflag = false; //fix this shit. declaracions dins del bucle???
+                    while (!endwordflag && !endtextflag)
                     {
                         //System.Diagnostics.Debug.Write("CONTINUE alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
-                        if (!alphanumericregexp.IsMatch(text[pos].ToString()))
+                        if (pos >= text.Length)
+                        {
+                            endtextflag = true;
+                        }
+                        else if (!alphanumericregexp.IsMatch(text[pos].ToString()))
                         {
                             //el caracter ya no es alphanumeric
                             endwordflag = true;
                             aux += "</span>";
+                            //hay que incluir text[pos] en el resultado o se pierde.
+                            ///////////////////   o no?    /////////////////////////
+                            //si borramos el pos++...
                         }
                         else if (text[pos].ToString().CompareTo("&") == 0) {
                             //el caracter es un & de acento
@@ -760,6 +768,11 @@ namespace ReadAndLearn.Controllers
             if (ModelState.IsValid)
             {
                 nuevaPagina.Contenido = HttpUtility.HtmlDecode(nuevaPagina.Contenido);
+
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/79
+                //indexación de las palabras en el texto para el correcto funcionamiento
+                //de la tarea de selección
+                nuevaPagina.Contenido = textIndexation(nuevaPagina.Contenido);
 
                 this.db.Entry(nuevaPagina).State = EntityState.Modified;
                 this.db.SaveChanges();
