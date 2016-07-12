@@ -687,6 +687,15 @@ namespace ReadAndLearn.Controllers
                         {
                             endtextflag = true;
                         }
+                        else if (text[pos].ToString().CompareTo("&") == 0)
+                        {
+                            //el caracter es un & de acento
+                            while (text[pos].ToString().CompareTo(";") != 0)
+                            {
+                                aux += text[pos++];
+                            }
+                            aux += text[pos++];
+                        }
                         else if (!alphanumericregexp.IsMatch(text[pos].ToString()))
                         {
                             //el caracter ya no es alphanumeric
@@ -695,15 +704,9 @@ namespace ReadAndLearn.Controllers
                             //hay que incluir text[pos] en el resultado o se pierde.
                             ///////////////////   o no?    /////////////////////////
                             //si borramos el pos++...
-                        }
-                        else if (text[pos].ToString().CompareTo("&") == 0) {
-                            //el caracter es un & de acento
-                            while (text[pos].ToString().CompareTo(";") != 0)
-                            {
-                                aux += text[pos++];
-                            }
-                            aux += text[pos++];
-                        } else {
+                        }                        
+                        else
+                        {
                             //el caracter es alfanumérico
                             aux += text[pos++];
                         }
