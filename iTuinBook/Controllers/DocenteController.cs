@@ -628,7 +628,6 @@ namespace ReadAndLearn.Controllers
             bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
             Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
-            Regex endwordregexp = new Regex(@"[\s.:,;&]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
 
 
             /*****preparación de source para su parseo*/

@@ -16,6 +16,7 @@
     <h1>VisualizarPagina</h1>
     <hr />
     <div>
+        
         @{
             Texto text = ViewBag.Texto;
             Pagina pag = ViewBag.Pagina;
@@ -30,15 +31,17 @@
             
             <hr />
             
-            if(pag != null)
-            {
-                @Html.Raw(pag.Contenido);
-            }
-            else            
+                if(pag != null)
+                {
+                <div id="textraw">@Html.Raw(pag.Contenido);</div>
+               }
+            
+            else
             {
                 <h2>Todavía no has creado ninguna página.</h2>
             }
-        }
+}
     </div>
+    
 </body>
 </html>

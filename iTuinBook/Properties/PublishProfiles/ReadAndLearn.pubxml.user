@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>05/25/2016 11:23:45</publishTime>
+      <publishTime>07/20/2016 13:48:36</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -169,7 +169,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>05/25/2016 11:23:45</publishTime>
+      <publishTime>07/20/2016 13:48:36</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -2716,7 +2716,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/21/2013 11:53:11</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>01/03/2016 12:39:35</publishTime>
+      <publishTime>07/07/2016 05:14:41</publishTime>
     </File>
     <File Include="Content/spanish_function_words.txt">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -3057,6 +3057,9 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     <File Include="packages.config">
       <publishTime>01/12/2016 13:16:18</publishTime>
     </File>
+    <File Include="Scripts/jquery-1.9.1.intellisense.js">
+      <publishTime>01/12/2016 13:16:16</publishTime>
+    </File>
     <File Include="Scripts/jquery-1.9.1.js">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
@@ -3087,6 +3090,9 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     <File Include="Scripts/jquery.gallery.js">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
+    <File Include="Scripts/jquery.selection.js">
+      <publishTime>07/13/2016 09:31:39</publishTime>
+    </File>
     <File Include="Scripts/jquery.simplemodal-1.4.4.js">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
@@ -3098,6 +3104,9 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     </File>
     <File Include="Scripts/jquery.unobtrusive-ajax.min.js">
       <publishTime>01/12/2016 13:16:17</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate-vsdoc.js">
+      <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.js">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4492,7 +4501,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/11/2016 11:55:52</publishTime>
     </File>
     <File Include="Views/Docente/CrearPregunta.cshtml">
-      <publishTime>05/12/2016 10:36:37</publishTime>
+      <publishTime>07/12/2016 15:43:48</publishTime>
     </File>
     <File Include="Views/Docente/CrearTarea.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4522,7 +4531,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/12/2016 10:31:23</publishTime>
     </File>
     <File Include="Views/Docente/EditarPregunta.cshtml">
-      <publishTime>05/12/2016 10:36:52</publishTime>
+      <publishTime>05/30/2016 11:42:58</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaCompleja.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4594,7 +4603,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/VisualizarPagina.cshtml">
-      <publishTime>01/12/2016 13:16:17</publishTime>
+      <publishTime>04/07/2016 05:02:59</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4939,7 +4948,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutDocente.cshtml">
-      <publishTime>01/12/2016 13:16:17</publishTime>
+      <publishTime>07/07/2016 04:36:40</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutNada.cshtml">
       <publishTime>03/04/2016 12:23:47</publishTime>

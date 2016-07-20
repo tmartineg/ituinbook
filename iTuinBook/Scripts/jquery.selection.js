@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * jQuery.selection - jQuery Plugin
  *
  * Copyright (c) 2010-2014 IWASAKI Koji (@madapaja).
@@ -24,7 +24,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-(function($, win, doc) {
+(function ($, win, doc) {
     /**
      * get caret status of the selection of the element
      *
@@ -34,7 +34,7 @@
      * @return  {Number}    return.start    start position of the selection
      * @return  {Number}    return.end      end position of the selection
      */
-    var _getCaretInfo = function(element){
+    var _getCaretInfo = function (element) {
         var res = {
             text: '',
             start: 0,
@@ -92,9 +92,9 @@
          * @return  {Number}    return.start    start position for the selection
          * @return  {Number}    return.end      end position for the selection
          */
-        getPos: function(element) {
+        getPos: function (element) {
             var tmp = _getCaretInfo(element);
-            return {start: tmp.start, end: tmp.end};
+            return { start: tmp.start, end: tmp.end };
         },
 
         /**
@@ -106,7 +106,7 @@
          * @param   {Number}    toRange.end     end position for the selection
          * @param   {String}    caret           caret mode: any of the following: "keep" | "start" | "end"
          */
-        setPos: function(element, toRange, caret) {
+        setPos: function (element, toRange, caret) {
             caret = this._caretMode(caret);
 
             if (caret === 'start') {
@@ -144,7 +144,7 @@
          * @param   {Element}   element         target element
          * @return  {String}    return          selected text
          */
-        getText: function(element) {
+        getText: function (element) {
             return _getCaretInfo(element).text;
         },
 
@@ -154,7 +154,7 @@
          * @param   {String}    caret           caret mode
          * @return  {String}    return          any of the following: "keep" | "start" | "end"
          */
-        _caretMode: function(caret) {
+        _caretMode: function (caret) {
             caret = caret || "keep";
             if (caret === false) {
                 caret = 'end';
@@ -180,11 +180,11 @@
          * @param   {String}    text            replacement text
          * @param   {String}    caret           caret mode: any of the following: "keep" | "start" | "end"
          */
-        replace: function(element, text, caret) {
+        replace: function (element, text, caret) {
             var tmp = _getCaretInfo(element),
                 orig = element.value,
                 pos = $(element).scrollTop(),
-                range = {start: tmp.start, end: tmp.start + text.length};
+                range = { start: tmp.start, end: tmp.start + text.length };
 
             element.value = orig.substr(0, tmp.start) + text + orig.substr(tmp.end);
 
@@ -199,11 +199,11 @@
          * @param   {String}    text            insertion text
          * @param   {String}    caret           caret mode: any of the following: "keep" | "start" | "end"
          */
-        insertBefore: function(element, text, caret) {
+        insertBefore: function (element, text, caret) {
             var tmp = _getCaretInfo(element),
                 orig = element.value,
                 pos = $(element).scrollTop(),
-                range = {start: tmp.start + text.length, end: tmp.end + text.length};
+                range = { start: tmp.start + text.length, end: tmp.end + text.length };
 
             element.value = orig.substr(0, tmp.start) + text + orig.substr(tmp.start);
 
@@ -218,11 +218,11 @@
          * @param   {String}    text            insertion text
          * @param   {String}    caret           caret mode: any of the following: "keep" | "start" | "end"
          */
-        insertAfter: function(element, text, caret) {
+        insertAfter: function (element, text, caret) {
             var tmp = _getCaretInfo(element),
                 orig = element.value,
                 pos = $(element).scrollTop(),
-                range = {start: tmp.start, end: tmp.end};
+                range = { start: tmp.start, end: tmp.end };
 
             element.value = orig.substr(0, tmp.end) + text + orig.substr(tmp.end);
 
@@ -239,7 +239,7 @@
          * @param   {String}    mode            selection mode: any of the following: "text" | "html"
          * @return  {String}    return
          */
-        selection: function(mode) {
+        selection: function (mode) {
             var getText = ((mode || 'text').toLowerCase() === 'text');
 
             try {
@@ -280,7 +280,7 @@
 
     /* add selection */
     $.fn.extend({
-        selection: function(mode, opts) {
+        selection: function (mode, opts) {
             opts = opts || {};
 
             switch (mode) {
@@ -295,40 +295,40 @@
                 case 'getPos':
                     return _CaretOperation.getPos(this[0]);
 
-                /**
-                 * selection('setPos', opts)
-                 * set caret position
-                 *
-                 * @param   {Number}    opts.start      start position for the selection
-                 * @param   {Number}    opts.end        end position for the selection
-                 */
+                    /**
+                     * selection('setPos', opts)
+                     * set caret position
+                     *
+                     * @param   {Number}    opts.start      start position for the selection
+                     * @param   {Number}    opts.end        end position for the selection
+                     */
                 case 'setPos':
-                    return this.each(function() {
+                    return this.each(function () {
                         _CaretOperation.setPos(this, opts);
                     });
 
-                /**
-                 * selection('replace', opts)
-                 * replace the selected text
-                 *
-                 * @param   {String}    opts.text            replacement text
-                 * @param   {String}    opts.caret           caret mode: any of the following: "keep" | "start" | "end"
-                 */
+                    /**
+                     * selection('replace', opts)
+                     * replace the selected text
+                     *
+                     * @param   {String}    opts.text            replacement text
+                     * @param   {String}    opts.caret           caret mode: any of the following: "keep" | "start" | "end"
+                     */
                 case 'replace':
-                    return this.each(function() {
+                    return this.each(function () {
                         _CaretOperation.replace(this, opts.text, opts.caret);
                     });
 
-                /**
-                 * selection('insert', opts)
-                 * insert before/after the selected text
-                 *
-                 * @param   {String}    opts.text            insertion text
-                 * @param   {String}    opts.caret           caret mode: any of the following: "keep" | "start" | "end"
-                 * @param   {String}    opts.mode            insertion mode: any of the following: "before" | "after"
-                 */
+                    /**
+                     * selection('insert', opts)
+                     * insert before/after the selected text
+                     *
+                     * @param   {String}    opts.text            insertion text
+                     * @param   {String}    opts.caret           caret mode: any of the following: "keep" | "start" | "end"
+                     * @param   {String}    opts.mode            insertion mode: any of the following: "before" | "after"
+                     */
                 case 'insert':
-                    return this.each(function() {
+                    return this.each(function () {
                         if (opts.mode === 'before') {
                             _CaretOperation.insertBefore(this, opts.text, opts.caret);
                         } else {
@@ -336,12 +336,12 @@
                         }
                     });
 
-                /**
-                 * selection('get')
-                 * get selected text
-                 *
-                 * @return  {String}    return
-                 */
+                    /**
+                     * selection('get')
+                     * get selected text
+                     *
+                     * @return  {String}    return
+                     */
                 case 'get':
                     /* falls through */
                 default:

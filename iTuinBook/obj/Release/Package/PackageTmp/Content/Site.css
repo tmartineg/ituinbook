@@ -1008,3 +1008,16 @@ img.imgEnunciadoIzquierda{
     left:0; 
     z-index:2
 }
+
+/*guirisan issues 
+    https://github.com/guirisan/ituinbook/issues/79
+    asignamos color de fondo a palabras pertinentes en verde y distractoras en rojo
+    para la asignación de pertinentes y correctoras por el docente, 
+    y para mostrar al usuario el acierto o fallo de su selección*/
+.pertinentePalabra {
+    background-color: #97e580;
+}
+
+.distractoraPalabra {
+    background-color: #ef8f8f;
+}
