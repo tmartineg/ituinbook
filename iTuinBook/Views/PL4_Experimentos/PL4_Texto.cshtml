@@ -1,0 +1,700 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Texto
+
+@{
+    ViewBag.Title = "Texto";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    bool segundoIntento = ViewBag.SegundoIntento;
+    bool preguntaResuelta = ViewBag.PreguntaResuelta;
+    bool inicioTexto = ViewBag.InicioTexto;
+}
+<script>
+    //guirisan/secuencias
+    sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
+</script>
+
+<div id="contenedor" style="z-index:10;">
+    <!--guirisan / preguntas button-->
+    <div id="tools">
+        <div id="btnGotoPreguntas" class="fixed">
+            
+            @Html.ActionLink("Preguntas", "PL4_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento, preguntaResuelta = ViewBag.preguntaResuelta}, new { @style = "padding: 6px 8px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 15px; background-color: #DB5C04;" })
+        </div>
+    </div>
+    <!--guirisan / preguntas button-->
+
+
+    @{
+        /* en esta plantilla solo necesitamos el botón de arriba para mostar las preguntas, ya que cargan en otra página*/
+    }
+    @{/*if(Model.Preguntas != null && Model.Preguntas.Count > 0)
+    {
+        <div id="pregunta" style="z-index:5; position: fixed; width:100%; margin-top: -12px; visibility:hidden;">
+            
+            <iframe id="addIframe" onload="autofitIframe(this)" src="@Url.Action("PL4_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe> 
+        </div>
+        
+        <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;">PREGUNTAS</button></div>
+    }
+    else
+    {
+        <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
+    }
+    */}
+    
+    <div style="position: relative;">           
+        @foreach (Pagina pag in Model.Paginas)
+        {
+            <div class="paginas" style="padding: 0px 50px; position: absolute;">@Html.Raw(Model.Paginas.First().Contenido)</div>
+        }
+    </div>
+
+    <div id="feedAvatar" style="float: left; z-index:100; margin: 0 auto; text-align: left; position:fixed; top:50%; left:50%; margin-top:-100px; margin-left:-375px;">
+        <div style="float: left;">
+            <img id="ramiro" width="200" src="~/Content/images/Ramiro.png" style="margin-top: 15px; margin-right: 8px;" />
+            <img id="lue" width="200" src="~/Content/images/Lue.png" style="margin-top: 15px; margin-right: 8px;" />
+        </div>
+        <div class="speech_bubble" style="float: left;">
+            <textarea readonly="readonly" id="tbAvatar" style="background-color:#eee"></textarea>
+            <div class="arrow_border_left"></div>
+        </div>
+        <button class="btnCerrarFDBK">X</button>
+    </div>
+    
+    <div id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">        
+        <h2 id="mensaje" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
+        <button class="btnCerrarFDBK">X</button>
+    </div>    
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script type="text/javascript">
+        var ini_LecIni = $.now();
+        var flag_LecIni = false;
+        var ini_PregActual = 0;
+        var ini_LecFDBK = 0;
+        var flag_blur = false;
+        var flag_busqueda = false;
+        var flag_revision = false;
+
+        $(document).ready(function () {
+            $('reg').addClass("difuminado");
+            
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/56
+
+            if ('@inicioTexto' == 'True'){
+                //peticion ajax para registrar accion con codeop = 2
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID',PreguntaID: '@du.PreguntaID', TextoID: '@Model.TextoID', CodeOP: 2, moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+            }
+
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
+            //parametrizacion enlace vuelta a preguntas
+            var parametrizacionHecha = false;
+            $("#btnGotoPreguntas").click(function (e) {
+
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+                
+                //parametrizacion del enlace
+                var oldhref = $("#btnGotoPreguntas a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnGotoPreguntas a").attr("href", oldhref + "&moment=" + datetimeclient);
+                
+
+                parametrizacionHecha = true;
+                $("#btnGotoPreguntas").unbind('click');
+                $(this).trigger('click');
+            });
+
+
+
+
+
+            $(document).on("click", "reg", function () {
+                if (flag_LecIni) {
+                    if (flag_blur || !flag_busqueda) {                        
+                        $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                        $(this).removeClass("difuminado").addClass("no_difuminado");
+                    }
+                    else {
+                        $(this).removeClass("difuminado").addClass("no_difuminado");
+                    }
+                    
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+                    
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 40, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient, numAccion: numAcc},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                    });
+                }
+                else {                    
+                    $('reg').removeClass("no_difuminado").addClass("difuminado");
+
+                    $(this).removeClass("difuminado").addClass("no_difuminado");
+                    
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 41, Param: $(this).attr("pagina").toString() + "/" + $(this).attr("region").toString() , moment: datetimeclient, numAccion: numAcc},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                    });
+                }
+            });
+            
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+
+            $("#btnPregunta").click(function () {
+                
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 5, Param: ($.now() - ini_LecIni).toString() , moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+                
+                
+                //guirisan/secuencias
+                //no necesitamos recalcular datetime, numAcc, o añadir a datosRaw, ya que las dos llamadas ajax se corresponden con una sola acción del usuario
+
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 6, Param: ((($.now() - ini_LecIni) / 1000) / $('.paginas:First').text().split(' ').length).toString() , moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+
+                flag_LecIni = true;
+                flag_busqueda = true;
+
+                $("#divBoton").hide();
+                $("#pregunta").css("visibility", "visible");
+
+                if (flag_blur) {
+                    $('.paginas').css("-webkit-filter", "blur(5px)");
+                    $('.paginas').css("filter", "url(#example-one)");
+                    $('reg').removeClass("no_difuminado").addClass("difuminado");
+                }
+                else {                    
+                    $('.paginas').css("-webkit-filter", "");
+                    $('.paginas').css("filter", "");
+                    $('reg').removeClass("difuminado").addClass("no_difuminado");
+                }
+
+                var id = document.getElementById("addIframe");
+
+                $('.paginas').css("padding", "1px 50px")
+
+                autofitIframe(id)
+
+                ini_PregActual = $.now();
+            });
+
+            $("#btnPasar").click(function () {
+                
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+                $.ajax({
+                    url: "PL4_Texto_Cambiar",
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID' , moment: datetimeclient, numAccion:numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    success: function (result) {
+                        window.parent.window.location.href = result.redirect;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+            });
+        });
+
+        $(".btnCerrarFDBK").click(function () {
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+            
+            var tmpNow = $.now();
+            
+            //guirisan/secuencias
+            //datetime set in client
+            var datetimeclient = new Date().toISOString();
+
+            //NUMACC
+
+            //get and add+1 numAcc
+            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+            numAcc++;
+            sessionStorage.setItem("numAccion", numAcc);
+
+            //DATOSRAW
+            //get datosRaw to add row in ajax.beforeSend
+            var datosRaw;
+            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                datosRaw = {};
+            }
+
+            if ($("#tbAvatar").text() != "") {
+
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#tbAvatar").text().split(' ').length).toString() , moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+            }
+            else {
+                if ($("#mensaje").text() != "") {
+                                        
+
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#mensaje").text().split(' ').length).toString() , moment: datetimeclient, numAccion: numAcc},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción.");
+                        }
+                    });
+                }
+            }
+
+            $("#tbAvatar").text("");
+            $("#mensaje").text("");
+
+            // Fin lectura Feedback
+            
+            $.ajax({ 
+                url: "RegistrarAccion",
+                type: 'POST',
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 44, Param: ($.now() - ini_LecFDBK).toString() , moment: datetimeclient, numAccion: numAcc},
+                //guirisan/secuencias
+                beforeSend: function () {
+                    //set datosRaw on sessionStorage
+                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                    datosRaw[numAcc] = cadena;
+                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                    //set datosRaw on ajax petition
+                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                },
+                error: function () {
+                    alert("Error: Hubo un problema con tu última acción.");
+                }
+            });
+
+            if ($('#addIframe').contents().find('#btnSiguientePregunta').length) {
+                //Ejecutar si existe el elemento                
+                $('#addIframe').contents().find('#btnSiguientePregunta').removeAttr("disabled");
+            }
+            else {                
+                $('#addIframe').contents().find(':radio').removeAttr("disabled");
+            }
+        });
+
+        $('.paginas').click(function () {
+            if (document.getElementById("addIframe").contentWindow.ClickPagina())
+                document.getElementById("addIframe").contentWindow.ClickPagina();
+            
+            if ($('.paginas').css("-webkit-filter") == "blur(5px)") {
+                $.ajax({
+                    url: "GetPreguntaID",
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID' },
+                    success: function (result) {
+                        
+                        //guirisan/secuencias
+                        //datetime set in client
+                        var datetimeclient = new Date().toISOString();
+
+                        //NUMACC
+
+                        //get and add+1 numAcc
+                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                        numAcc++;
+                        sessionStorage.setItem("numAccion", numAcc);
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
+                        }
+
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: result.result, CodeOP: 24 , moment: datetimeclient, numAccion: numAcc},
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
+                            error: function () {
+                                alert("Error: Hubo un problema con tu última acción. (RegistrarAccion)");
+                            }
+                        });
+                    },
+                    error: function (result) {
+                        alert("Error: GetPreguntaID");
+                    }
+                });
+
+                $('.paginas').css("-webkit-filter", "");
+                $('.paginas').css("filter", "");                
+            }
+        });
+        
+        function IniciarBlur()
+        {
+            if (valor == "True") {
+                flag_blur = true;
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+                $('reg').removeClass("no_difuminado").addClass("difuminado");
+            }
+            else {
+                flag_blur = false;
+                $('.paginas').css("-webkit-filter", "");
+                $('.paginas').css("filter", "");
+                $('reg').removeClass("difuminado").addClass("no_difuminado");
+            }
+        }
+
+        function BlurPagina(valor)
+        {
+            if (valor == "True") {
+                flag_blur = true;                
+            }
+            else {
+                flag_blur = false;                
+            }
+        }
+        
+        function BlurRevision(valor) {
+            if (valor == "True") {
+                flag_blur = true;
+            }
+            else {
+                flag_blur = false;
+            }
+        }
+
+        function IniciarTiempoPregunta()
+        {
+            ini_PregActual = $.now();
+        }
+
+        //codigo sin usar?
+        function FinalizarTiempoPregunta() {
+            
+            //guirisan/secuencias
+            //datetime set in client
+            var datetimeclient = new Date().toISOString();
+
+            //NUMACC
+
+            //get and add+1 numAcc
+            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+            numAcc++;
+            sessionStorage.setItem("numAccion", numAcc);
+
+            //DATOSRAW
+            //get datosRaw to add row in ajax.beforeSend
+            var datosRaw;
+            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                datosRaw = {};
+            }
+            $.ajax({
+                url: "RegistrarAccion",
+                type: 'POST',
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 8, Param: ($.now() - ini_PregActual).toString() , moment: datetimeclient, numAccion: numAcc},
+                //guirisan/secuencias
+                beforeSend: function () {
+                    //set datosRaw on sessionStorage
+                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                    datosRaw[numAcc] = cadena;
+                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                    //set datosRaw on ajax petition
+                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                },
+                error: function () {
+                    alert("Error: Hubo un problema con tu última acción.");
+                }
+            });
+        }
+
+        function feedbackAvatar(sms, avatar) // avatar: true = Ramiro ; false = Lue
+        {
+            if (sms != null)
+            {
+                ini_LecFDBK = $.now();
+                
+                if (avatar == "True") {
+                    $("#ramiro").show();
+                    $("#lue").hide();
+                    $("#feedAvatar").show();
+                    $("#feedback").hide();
+                }
+                else {
+                    $("#ramiro").hide();
+                    $("#lue").show();
+                    $("#feedAvatar").show();
+                    $("#feedback").hide();
+                }
+
+                $("#tbAvatar").text(sms);
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+
+
+                
+                $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
+                $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
+                $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
+            }
+        }
+
+        function feedbackVentana(sms)
+        {   
+            if (sms != null)
+            {
+                ini_LecFDBK = $.now();
+
+                $("#ramiro").hide();
+                $("#lue").hide();
+                $("#feedAvatar").hide();
+                $("#feedback").show();
+                $("#feedback").css("visibility", "visible")
+
+                $("#mensaje").html(sms);
+                $('.paginas').css("-webkit-filter", "blur(5px)");
+                $('.paginas').css("filter", "url(#example-one)");
+
+                $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
+                $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
+                $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
+            }            
+        }
+
+        //Ajusta el tamaño de un iframe al de su contenido interior para evitar scroll
+        function autofitIframe(id) {            
+            if ($('.paginas').css("padding") != "0px 50px") {
+                id.style.height = "0px";
+
+                if (!window.opera && document.all && document.getElementById) {
+                    id.style.height = id.contentWindow.document.body.scrollHeight;
+                } else if (document.getElementById) {
+                    id.style.height = id.contentDocument.body.scrollHeight + "px";
+                }
+
+                $('.paginas').css("padding", id.style.height + " 50px 0px 50px");
+            }
+        }
+
+        $("#addIframe").load(function () {
+            var id = document.getElementById("addIframe");
+            
+            if (!window.opera && document.all && document.getElementById) {
+                id.style.height = id.contentWindow.document.body.scrollHeight;
+            } else if (document.getElementById) {
+                id.style.height = id.contentDocument.body.scrollHeight + "px";
+            }           
+        });
+    </script>        
+}

@@ -1,0 +1,82 @@
+﻿
+@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
+
+@{
+    ViewBag.Title = "Agradecimiento";
+    DatosUsuario du = (DatosUsuario)ViewBag.du;
+
+    /*
+    int GrupoID = ViewBag.GrupoID;
+    int ModuloID = ViewBag.ModuloID;
+     */
+}
+
+<h2>Gracias por participar</h2>
+
+
+
+<div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+    <button id="btnSiguientePregunta" style="float:left;">Salir</button>
+</div> 
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $("#btnSiguientePregunta").click(function () {
+
+        
+            var datetimeclient = new Date().toISOString();
+
+            //NUMACC
+            //get and add+1 numAcc
+            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+            numAcc++;
+            sessionStorage.setItem("numAccion", numAcc);
+
+            //DATOSRAW
+            //get datosRaw to add row in ajax.beforeSend
+            var datosRaw;
+            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                datosRaw = {};
+            }
+
+
+            $.ajax({
+                url: "PL4_Siguiente_Pregunta", //url: 'Validar',
+                type: 'POST',
+                data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID' , PreguntaID: '@du.PreguntaID', TextoID: '@du.TextoID', moment: datetimeclient, numAccion: numAcc, greetingsPage: true },
+                //guirisan/secuencias
+                beforeSend: function () {
+                    //set datosRaw on sessionStorage
+                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                    datosRaw[numAcc] = cadena;
+                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                    //set datosRaw on ajax petition
+                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                },
+                success: function (result) {
+
+                    if (result.Parent) {
+                        // data.redirect contains the string URL to redirect to
+                        window.parent.window.location.href = result.redirect;
+                    }
+                    else {
+                        // data.redirect contains the string URL to redirect to
+                        window.location.href = result.redirect;
+                    }
+
+                },
+                error: function () {
+                    alert("Error en la petición al servidor");
+                }
+            });
+
+
+        });
+    </script>
+
+}
