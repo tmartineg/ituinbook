@@ -631,9 +631,14 @@ namespace ReadAndLearn.Controllers
             Regex endwordregexp = new Regex(@"[\s.:,;&\(\)\[\]]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
 
 
-            /*****preparación de source para su parseo*/
+            //preparación de source para su parseo
             source = source.Trim(); //eliminación de espacios en blanco al principio y final
+
+            //replace &nbsp; with " " (blankspace)
+            source = source.Replace("&nbsp;", " ");
+
             //source = source.RemoveFuckingWordLabels(); //pendiente, buscar función que elimine información estupida de word?
+            
             char[] text = source.ToCharArray(); //¿arraycialización? del string recibido como parámetro en char[] array
 
             while (pos < text.Length)

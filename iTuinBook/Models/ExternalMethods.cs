@@ -192,6 +192,8 @@ namespace ReadAndLearn.Models
         //guirisan/secuencias
         //los siguientes métodos permiten conocer el árbol de pertenencia de una pregunta - texto - modulo
         //end guirisan/secuencias
+
+
         public string GetFeedback(DatosUsuario du)
         {
             Modulo modulo = db.Modulos.Find(du.ModuloID);
