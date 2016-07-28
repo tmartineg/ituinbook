@@ -195,7 +195,7 @@ namespace ReadAndLearn.Controllers
             var user = getCurrentUser();
 
             ViewBag.GrupoID = GrupoID;
-
+            ViewBag.ModuloID = ModuloID;
             List<SelectListItem> TipoTimings = new List<SelectListItem>();
 
             TipoTimings.Add(new SelectListItem { Text = "Simple / Acumulativo", Value = "0" });
