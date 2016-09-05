@@ -1538,6 +1538,7 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.DatosUsuario = du;
             ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
+            ViewBag.Texto = texto;
 
             ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
 
