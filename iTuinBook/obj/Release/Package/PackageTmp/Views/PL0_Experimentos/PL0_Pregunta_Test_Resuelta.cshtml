@@ -124,7 +124,11 @@
     </div>
     
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
+        <div class="hiddenDebug">
+            <!-- https://github.com/guirisan/ituinbook/issues/86 -->
+            <!-- botón para volver al texto -->
+            <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
+        </div>
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
 </div>

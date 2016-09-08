@@ -24,16 +24,21 @@
         </div>
 
         <hr />
+        <div class="hiddenDebug">
 
-        <div class="editor-label">
-            @Html.Label("Claves (Separar palabras clave por el carácter \"/\")")
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.Claves, new { style = "width:100%;" })
-            @Html.ValidationMessageFor(model => model.Claves)
-        </div>
 
-        <hr />
+            <div class="editor-label">
+                @Html.Label("Claves (Separar palabras clave por el carácter \"/\")")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Claves, new { style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.Claves)
+            </div>
+
+            <hr />
+
+
+        </div>
         <div class="editor-label">
             @Html.Label("Tipo de Pregunta")
         </div>
@@ -178,9 +183,9 @@
                         var actualIndex = $(this).attr("data-windex");
 
 
-                        var existingids = $("textarea#Pertinente").val();
+                        var existingids = $("textarea#Pertinente").val() + $("textarea#Distractoras").val();
                         if (existingids != null) {
-                            //ya hay palabras pertinentes
+                            //ya hay palabras pertinentes o distractoras
 
                             existingids = existingids.split(",");
 
@@ -193,7 +198,7 @@
                                 $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
                             }
                         } else {
-                            //no hay palabras pertinentes
+                            //no hay palabras asignadas
                             $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
                             $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
                         }
@@ -235,22 +240,22 @@
                         var actualIndex = $(this).attr("data-windex");
 
 
-                        var existingids = $("textarea#Distractoras").val();
+                        var existingids = $("textarea#Distractoras").val() + $("textarea#Pertinentes").val();
                         if (existingids != null) {
-                            //ya hay palabras pertinentes
+                            //ya hay palabras pertinentes o distractoras
 
                             existingids = existingids.split(",");
 
 
-                            if (existingids.indexOf(actualIndex) > -1) {
-                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
-                                duplicatedSelection = true;
+                                if (existingids.indexOf(actualIndex) > -1) {
+                                    alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
+                                    duplicatedSelection = true;
                             } else {
                                 $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
                                 $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
                             }
                         } else {
-                            //no hay palabras distractoras
+                            //no hay palabras asignadas
                             $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
                             $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
                         }

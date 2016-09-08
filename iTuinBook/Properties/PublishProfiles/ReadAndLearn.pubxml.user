@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>07/20/2016 13:48:36</publishTime>
+      <publishTime>09/06/2016 10:53:30</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -169,7 +169,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>07/20/2016 13:48:36</publishTime>
+      <publishTime>09/06/2016 10:53:30</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4393,7 +4393,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarGrupo.cshtml">
-      <publishTime>01/12/2016 13:16:17</publishTime>
+      <publishTime>07/24/2016 11:58:42</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarModulo.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4468,7 +4468,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarModulo.cshtml">
-      <publishTime>05/24/2016 03:40:24</publishTime>
+      <publishTime>07/22/2016 13:01:44</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarPregunta.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4501,7 +4501,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/11/2016 11:55:52</publishTime>
     </File>
     <File Include="Views/Docente/CrearPregunta.cshtml">
-      <publishTime>07/12/2016 15:43:48</publishTime>
+      <publishTime>07/28/2016 11:17:40</publishTime>
     </File>
     <File Include="Views/Docente/CrearTarea.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4717,10 +4717,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/29/2016 11:24:48</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_2.cshtml">
-      <publishTime>03/04/2016 13:24:52</publishTime>
+      <publishTime>05/09/2016 11:03:41</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>03/04/2016 13:29:54</publishTime>
+      <publishTime>05/09/2016 11:04:56</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Seleccion.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -4877,6 +4877,72 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     </File>
     <File Include="Views/PL3_Experimentos/PL3_Texto_Seleccion.cshtml">
       <publishTime>03/09/2016 14:58:57</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/Agradecimiento.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/Error.cshtml">
+      <publishTime>07/22/2016 12:42:24</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Abierta.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Abierta_2.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Abierta_Resuelta.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Abierta_Seleccion.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Abierta_Seleccion_2.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Ordenar.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Ordenar_Resuelta.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Seleccion.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Seleccion_2.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Seleccion_Resuelta.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_2.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Resuelta.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion_2.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion_Simultaneo.cshtml">
+      <publishTime>07/28/2016 13:04:02</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Texto.cshtml">
+      <publishTime>07/22/2016 15:00:30</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Texto_Busca.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Texto_Revisa.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
+    </File>
+    <File Include="Views/PL4_Experimentos/PL4_Texto_Seleccion.cshtml">
+      <publishTime>07/22/2016 12:43:53</publishTime>
     </File>
     <File Include="Views/ReadAndLearn/Area.cshtml">
       <publishTime>05/27/2016 12:26:42</publishTime>

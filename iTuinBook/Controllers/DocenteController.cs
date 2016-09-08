@@ -600,6 +600,7 @@ namespace ReadAndLearn.Controllers
 
                 return RedirectToAction("AdministrarTexto", new { TextoID = TextoID });
             }
+
            
             return View(nuevaPagina);
         }
@@ -628,7 +629,7 @@ namespace ReadAndLearn.Controllers
             bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
             Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
-            Regex endwordregexp = new Regex(@"[\s.:,;&\(\)\[\]]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
+            Regex endwordregexp = new Regex(@"[\s.:,;&\(\)\[\]\\\/\-_¿\?¡\!]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
 
 
             //preparación de source para su parseo
@@ -645,7 +646,8 @@ namespace ReadAndLearn.Controllers
             {
                 //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
 
-                if (text[pos].ToString().CompareTo("<") == 0)                      //start html tag "<"
+                /************** START HTML TAG****************/
+                if (text[pos].ToString().CompareTo("<") == 0)  
                 {
                     System.Diagnostics.Debug.Write("start html -> pos=" + pos + " - text(pos)=" + text[pos]);
                     endhtmlflag = false;
@@ -665,12 +667,16 @@ namespace ReadAndLearn.Controllers
                     //System.Diagnostics.Debug.Write("end html -> pos=" + pos + " - text(pos)=" + text[pos]);
                     result += aux;                              //end html tag ">"
                 }
+
+                /************** BLANK SPACE **************/ 
                 else if (text[pos].ToString().CompareTo(" ") == 0)                 //blankspace
                 {
                     System.Diagnostics.Debug.Write("blankspace -> pos=" + pos);
                     result += " ";
                     pos++;
                 }
+
+                /************** SALTO DE LÍNEA *************/
                 else if (text[pos].ToString().CompareTo("\\") == 0)               //breakline \r o \n o \r\n
                 {
                     System.Diagnostics.Debug.Write("breaklline -> pos=" + pos + " - text(pos)=" + text[pos]);
@@ -678,6 +684,8 @@ namespace ReadAndLearn.Controllers
                     result += "\\" + text[pos];
                     pos++;
                 }
+
+                /************** PALABRA (ALFANUMÉRICO) *******/
                 else if (alphanumericregexp.IsMatch(text[pos].ToString())) //alphanumeric start (palabra, o número)
                 {
                     System.Diagnostics.Debug.Write("start alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
