@@ -34,7 +34,7 @@
         
         <button id="btnIniciarSeleccion">Seleccionar información pertinente</button>
         <button id="btnValidarSimultaneo" class="hiddenDebug">Validar</button>    
-        <button id="btnBorrarSeleccion">Borrar</button>
+        <button id="btnBorrarSeleccion" class="hiddenDebug">Borrar</button>
     </div>
 
     <div id="ayudas" style="float:right; visibility: hidden;">    
@@ -58,7 +58,14 @@
     </div>
     
     <div id="divTareaSeleccion" class="hiddenDebug">
-        <textarea id="seleccion" class="hiddenDebug"></textarea>
+        <strong>Mi selección:</strong>
+        <div id="pertinentesAlumno"></div>
+        
+
+        <div>
+            <textarea id="seleccion" class=""></textarea>
+        </div>
+
 
         <button id="agregarPertinentes">Agregar pertinentes</button>
         <button id="borrarPertinentes">Limpiar seleccion</button>
@@ -114,7 +121,9 @@
 
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/83
-            $("#textraw").accordion()
+            $("#textraw").accordion({
+                heightStyle: "content"
+            });
 
             //al pulsar iniciar seleccion, ocultamos dicho boton, mostramos el de validar pregunta y la tarea de seleccion
             $("#btnIniciarSeleccion").click(function (e) {
@@ -131,19 +140,17 @@
                 var selectedhtml = $.selection('html');
                 var duplicatedSelection = false;
 
+
                 $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
                     if (!duplicatedSelection) {
-                        /*
-                        var existingids = $("textbeforeadd").val();
-                        var existingids = existingids + textbeforeadd;*/
-
+                       
                         //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
-                        var textbeforeadd = $("textarea#Pertinente").val();
-
+                        var existingids = $("textarea#seleccion").val();
+                        var existingidsraw = existingids;
                         var actualIndex = $(this).attr("data-windex");
 
+                        
 
-                        var existingids = $("textarea#Pertinente").val() + $("textarea#Distractoras").val();
                         if (existingids != null) {
                             //ya hay palabras pertinentes o distractoras
 
@@ -151,21 +158,35 @@
 
 
                             if (existingids.indexOf(actualIndex) > -1) {
-                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
-                                duplicatedSelection = true;
+                                //alert("Algunas palabras ya han sido seleccionadas. Revisa tu selección.");
+                                //duplicatedSelection = true;
                             } else {
-                                $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
-                                $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                                $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
+
+                                $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                                $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
+
+                                $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
                             }
                         } else {
                             //no hay palabras asignadas
-                            $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
-                            $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                            $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
+                           
+                            $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                            $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
+
+                            $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
+                            
                         }
                     }
                 });
             });
-            $("#borrarPertinentes").click(function (e) { });
+            $("#borrarPertinentes").click(function (e) {
+                e.preventDefault();
+                $("textarea#seleccion").val("");
+                $(".pertinentePalabra").removeClass(".pertinentePalabra");
+                $("#pertinentesAlumno").html("");
+            });
 
 
 

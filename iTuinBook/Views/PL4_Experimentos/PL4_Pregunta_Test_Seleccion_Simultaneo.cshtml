@@ -140,6 +140,7 @@
                 var selectedhtml = $.selection('html');
                 var duplicatedSelection = false;
 
+
                 $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
                     if (!duplicatedSelection) {
                        
@@ -148,7 +149,7 @@
                         var existingidsraw = existingids;
                         var actualIndex = $(this).attr("data-windex");
 
-                        $("#pertinentesAlumno").append(selectedhtml);
+                        
 
                         if (existingids != null) {
                             //ya hay palabras pertinentes o distractoras
@@ -161,15 +162,21 @@
                                 //duplicatedSelection = true;
                             } else {
                                 $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
-                                $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
-                                
+
+                                $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                                $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
+
+                                $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
                             }
                         } else {
                             //no hay palabras asignadas
                             $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
-                            $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
-                            //$("#pertinentesAlumno").append(selectedhtml);
+                           
+                            $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                            $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
+                            $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
+                            
                         }
                     }
                 });
@@ -178,7 +185,7 @@
                 e.preventDefault();
                 $("textarea#seleccion").val("");
                 $(".pertinentePalabra").removeClass(".pertinentePalabra");
-                $("#pertinentesAlumno").val("");
+                $("#pertinentesAlumno").html("");
             });
 
 
