@@ -4543,8 +4543,10 @@ namespace ReadAndLearn.Controllers
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/96
             //variables 48 y 49 comentadas por ser de subtarea
-            //Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea)", Value = "48" });
-            //Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea)", Value = "49" });
+            //edit del anterior: si eliminamos esta, los conteos luego salen mal por no corresponder el campo Value con el numero de variables posibles
+            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea)", Value = "48" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea)", Value = "49" });
+            
             Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección", Value = "50" });
             Variables.Add(new SelectListItem { Text = "Porcentaje de distractor de selección", Value = "51" });
 
