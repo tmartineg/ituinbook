@@ -40,11 +40,57 @@ namespace ReadAndLearn.Controllers
 
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Pagina pagina = pregunta.Texto.Paginas.First();
-            string respOriginal = respuesta;
+            
+            //eliminamos espacios en blanco y convertimos la respuesta "1,4,5,6," en [1],[2]...
+            respuesta = respuesta.Trim();
+            string[] idsRespuesta = respuesta.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries);
 
+            string[] idsPert = pregunta.Pertinente.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids pertinentes de la pregunta
+            string[] idsDist = pregunta.Distractoras.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids distractores de la pregunta
+            
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
+            DatoSimple dsControl = new DatoSimple() {CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta };
+            db.DatosSimples.Add(dsControl); 
+            
+            
+            
+            //generar dsPert
+            /* obtener % de pertinente en la respuesta
+             * generar ds incluyendo la seleccion del usuario, los id's pertinentes de la pregunta, y el porcentaje calculado
+             */
+            int countPert = 0;
+            float porcPert;
+            for(int i = 0; i < idsRespuesta.Length; i++){
+                if (idsPert.Contains(idsRespuesta[i]))
+                {
+                    countPert++;
+                }
+            }
+            porcPert = (countPert / idsRespuesta.Length) * 100;
+
+            DatoSimple dsPert = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Pertinente, Dato01 = porcPert};
+            db.DatosSimples.Add(dsPert);
+      
+
+            //generar dsDist
+
+            int countDist = 0;
+            float porcDist;
+            for (int i = 0; i < idsRespuesta.Length; i++)
+            {
+                if (idsDist.Contains(idsRespuesta[i]))
+                {
+                    countDist++;
+                }
+            }
+            porcDist = (countDist / idsRespuesta.Length) * 100;
+
+            DatoSimple dsDist = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Distractoras, Dato01 = porcDist };
+            db.DatosSimples.Add(dsDist);
+            
+            /*
             // SELECCION PERTINENTE //
             int CharPertPregunta = 0;
             string contenido = "";
@@ -207,9 +253,10 @@ namespace ReadAndLearn.Controllers
             {
                 porcPert = 100;
             }
+             */
 
 
-
+            /*
             if (subtarea)
             {
                 DatoSimple ds = new DatoSimple() { CodeOP = 123, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, Info2 = pertTmp, TextoID = TextoID, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert, NumAccion = numAccion };
@@ -221,9 +268,10 @@ namespace ReadAndLearn.Controllers
                 db.DatosSimples.Add(ds);
             }
 
-            pert = porcPert;
-            noPert = porcNoPert;
-
+            */
+            pert = 0;
+            noPert = 0;
+            
             db.SaveChanges();
         }
 
@@ -1553,6 +1601,8 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL4_Pregunta_Test_Seleccion_Simultaneo_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuestaTest, string respuestaSel, string moment, int numAccion = -1, string dataRow = "")
         {
+            //aliminar
+            int valor;
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -1560,21 +1610,25 @@ namespace ReadAndLearn.Controllers
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Double pert = 0, noPert = 0;
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
-            bool flag_fallo = false;
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
-            float valor = 0;
-            string mensaje = "";
+
+            bool flag_fallo = false;
+            string mensaje = ""; //variable para almacenar el mensaje de feedback
 
             ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuestaSel, out pert, out noPert, true, moment);
 
-            DatoSimple dsP = new DatoSimple() { CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)pert, NumAccion = numAccion };
-            DatoSimple dsNP = new DatoSimple() { CodeOP = 48, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)noPert, NumAccion = numAccion };
-
-            db.DatosSimples.Add(dsP);
-            db.DatosSimples.Add(dsNP);
+            //estos datosimples se generan dentro de ValidarSeleccion, asi que, ¿podemos obviarlos?
+            //DatoSimple dsP = new DatoSimple() { CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)pert, NumAccion = numAccion };
+            //DatoSimple dsNP = new DatoSimple() { CodeOP = 48, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)noPert, NumAccion = numAccion };
+            //db.DatosSimples.Add(dsP);
+            //db.DatosSimples.Add(dsNP);
 
             SaveChanges();
-
+            /*
+             * 
+             * *******************************************************
+             *                  ELIMINABLE??????
+             * *******************************************************
             // ver si es ult o penultimo pertinente (PertinenteStatus)
             // ver porcentaje de pertinente encontrado (PertinenteOrden)
             if (du.PertinenteStatus == 2) // Último
@@ -1599,7 +1653,7 @@ namespace ReadAndLearn.Controllers
 
                 db.DatosSimples.Add(new DatoSimple() { CodeOP = 30, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc2, Momento = datetimeclient, NumAccion = numAccion });
             }
-
+            */
             foreach (Alternativa alt in pregunta.Alternativas)
             {
                 if (alt.Opcion == respuestaTest)
@@ -1671,10 +1725,14 @@ namespace ReadAndLearn.Controllers
             // Genera un feedback si no hay feedback de contenido ni de pregunta.
             mensaje = mensaje == null ? ext.GetFeedback(du) : mensaje;
 
+            /*
+             * *******  OBVIABLE?  *********
+             * 
             if (ext.GetModulo(ModuloID).Timings != null && ext.GetModulo(ModuloID).Timings.Count > 0)
             {
                 mensaje = ProcesarTimings(mensaje, du, valor);
             }
+             */
 
             if (configPreg != null && (configPreg.DosIntentosTest && flag_fallo))
             {

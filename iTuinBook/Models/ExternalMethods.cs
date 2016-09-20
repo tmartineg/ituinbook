@@ -282,6 +282,8 @@ namespace ReadAndLearn.Models
             }
         }
 
+
+        //param i: variable de regla simple 
         public double getDato(int i, DatosUsuario du)
         {
             IQueryable<DatoSimple> ds;
