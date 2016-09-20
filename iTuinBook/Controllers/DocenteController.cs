@@ -4541,10 +4541,12 @@ namespace ReadAndLearn.Controllers
             Variables.Add(new SelectListItem { Text = "Tiempo de Lectura de revisión en la pregunta anterior", Value = "46" });
             Variables.Add(new SelectListItem { Text = "Velocidad de Lectura de revisión en la pregunta anterior", Value = "47" });
 
-            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea)", Value = "48" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea)", Value = "49" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (Tarea)", Value = "50" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (Tarea)", Value = "51" });
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/96
+            //variables 48 y 49 comentadas por ser de subtarea
+            //Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea)", Value = "48" });
+            //Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea)", Value = "49" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección", Value = "50" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de distractor de selección", Value = "51" });
 
             Variables.Add(new SelectListItem { Text = "Feedback en Tarea de responder", Value = "52" });
             #endregion

@@ -1529,7 +1529,7 @@ namespace ReadAndLearn.Controllers
             }
             else
             {
-                return Json(new { redirect = Url.Action("PL4_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+                return Json(new { redirect = Url.Action("PL4_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
             }
         }
 

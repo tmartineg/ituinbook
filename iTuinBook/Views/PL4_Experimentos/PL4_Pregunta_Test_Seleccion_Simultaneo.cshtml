@@ -288,6 +288,7 @@
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuestaTest: alter, respuestaSel: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
                     success: function (result) {
+                        window.location.href = result.redirect;
                         // data.redirect contains the string URL to redirect to                        
                         if (result.mensaje != null && result.mensaje != "") {
                             @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
@@ -299,7 +300,6 @@
                                 @: parent.feedbackVentana(result.mensaje);
                             }
                         }
-                        window.location.href = result.redirect;
                     },
                     //guirisan/secuencias
                     beforeSend: function () {

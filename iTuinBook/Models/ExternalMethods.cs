@@ -332,11 +332,11 @@ namespace ReadAndLearn.Models
                 case 48:
                 case 49:
                 case 50:
+                    //porcentaje de acierto en la selección
+                    return ds.ToList().Last().Dato01;
                 case 51:
-                    if (ds.ToList().Count > 0)
-                        return ds.ToList().Last().Dato01;
-                    else
-                        return -1.0;   
+                    //porcentaje de distractoras en la selección
+                    return ds.ToList().Last().Dato01;
                 case 52:
                     if (ds.ToList().Count > 0)
                         return 1.0;
