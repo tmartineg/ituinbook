@@ -31,7 +31,7 @@ namespace ReadAndLearn.Controllers
         }
 
 
-        public void ValidarSeleccion(int ModuloID, int GrupoID, int PreguntaID, int TextoID, string respuesta, out double pert, out double noPert, bool subtarea, string moment, int numAccion = -1)
+        public void ValidarSeleccion(int ModuloID, int GrupoID, int PreguntaID, int TextoID, string respuesta, out double pert, out double dist, bool subtarea, string moment, int numAccion = -1)
         {
             //guirisan
             logger.Debug("PL4_Experimentos/ValidarSeleccion");
@@ -68,7 +68,7 @@ namespace ReadAndLearn.Controllers
                     countPert++;
                 }
             }
-            porcPert = (countPert / idsRespuesta.Length) * 100;
+            porcPert = (countPert / (float)idsRespuesta.Length) * 100;
 
             DatoSimple dsPert = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Pertinente, Dato01 = porcPert};
             db.DatosSimples.Add(dsPert);
@@ -85,28 +85,17 @@ namespace ReadAndLearn.Controllers
                     countDist++;
                 }
             }
-            porcDist = (countDist / idsRespuesta.Length) * 100;
+            porcDist = (countDist / (float)idsRespuesta.Length) * 100;
 
-            DatoSimple dsDist = new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Distractoras, Dato01 = porcDist };
+            DatoSimple dsDist = new DatoSimple() { CodeOP = 51, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Distractoras, Dato01 = porcDist };
             db.DatosSimples.Add(dsDist);
             
             
 
-            /*
-            if (subtarea)
-            {
-                DatoSimple ds = new DatoSimple() { CodeOP = 123, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, Info2 = pertTmp, TextoID = TextoID, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert, NumAccion = numAccion };
-                db.DatosSimples.Add(ds);
-            }
-            else
-            {
-                DatoSimple ds = new DatoSimple() { CodeOP = 124, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, Info = respOriginal, Info2 = pertTmp, TextoID = TextoID, PreguntaID = PreguntaID, Dato01 = (float)porcPert, Dato02 = (float)porcNoPert, NumAccion = numAccion };
-                db.DatosSimples.Add(ds);
-            }
+            
 
-            */
-            pert = 0;
-            noPert = 0;
+            pert = porcPert;
+            dist = porcDist;
             
             db.SaveChanges();
         }
@@ -1324,21 +1313,21 @@ namespace ReadAndLearn.Controllers
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-            Double pert = 0, noPert = 0;
+            Double pert = 0, dist = 0; 
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
 
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment);
-
+            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out dist, true, moment);
+            /*
             DatoSimple dsP = new DatoSimple() { CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)pert, NumAccion = numAccion };
             DatoSimple dsNP = new DatoSimple() { CodeOP = 48, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)noPert, NumAccion = numAccion };
 
             db.DatosSimples.Add(dsP);
             db.DatosSimples.Add(dsNP);
-
+            
             SaveChanges();
-
+            */
             if (configPreg != null && configPreg.DosSeleccionarPertinente)
             {
                 return Json(new { redirect = Url.Action("PL4_Pregunta_Test_Seleccion_2", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = du.TextoID }), Puntos = du.Puntos, mensaje = ext.GetFeedback(du), PreguntaID = pregunta.PreguntaID });
@@ -1444,52 +1433,15 @@ namespace ReadAndLearn.Controllers
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-            Double pert = 0, noPert = 0;
+            Double pert = 0, dist = 0;
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
             bool flag_fallo = false;
             string mensaje = ""; //variable para almacenar el mensaje de feedback
 
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuestaSel, out pert, out noPert, true, moment);
-
-            //estos datosimples se generan dentro de ValidarSeleccion, asi que, ¿podemos obviarlos?
-            //DatoSimple dsP = new DatoSimple() { CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)pert, NumAccion = numAccion };
-            //DatoSimple dsNP = new DatoSimple() { CodeOP = 48, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Momento = datetimeclient, Dato01 = (float)noPert, NumAccion = numAccion };
-            //db.DatosSimples.Add(dsP);
-            //db.DatosSimples.Add(dsNP);
-
-            SaveChanges();
-            /*
-             * 
-             * *******************************************************
-             *                  ELIMINABLE??????
-             * *******************************************************
-            // ver si es ult o penultimo pertinente (PertinenteStatus)
-            // ver porcentaje de pertinente encontrado (PertinenteOrden)
-            if (du.PertinenteStatus == 2) // Último
-            {
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 28, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = du.PreguntaID, Momento = datetimeclient, NumAccion = numAccion });
-            }
-            else
-            {
-                if (du.PertinenteStatus == 1)
-                {
-                    db.DatosSimples.Add(new DatoSimple() { CodeOP = 42, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = du.PreguntaID, Momento = datetimeclient, NumAccion = numAccion });
-                }
-            }
-
-            if (du.PertinenteOrden != null && du.PertinenteOrden != "")
-            {
-                double porc = CalculoPertinente(du.PertinenteOrden);
-
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 29, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc, Momento = datetimeclient, NumAccion = numAccion });
-
-                double porc2 = CalculoPertinenteSobreBusqueda(du.PertinenteOrden);
-
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 30, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc2, Momento = datetimeclient, NumAccion = numAccion });
-            }
-            */
+            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuestaSel, out pert, out dist, true, moment);
+            
             foreach (Alternativa alt in pregunta.Alternativas)
             {
                 if (alt.Opcion == respuestaTest)
@@ -1499,9 +1451,9 @@ namespace ReadAndLearn.Controllers
                         DatoSimple ds = new DatoSimple();
 
                         // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
-
-                        du.Puntos += 100;
+                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/95
+                        //comentada la línea porque el fdbk de estas preguntas SIEMPRE se va a calcular mediante reglas
+                        //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto) : alt.FeedbackContenido);
 
                         // Registrar respuesta
                         ds.CodeOP = 13;
@@ -1513,7 +1465,7 @@ namespace ReadAndLearn.Controllers
                         ds.PreguntaID = PreguntaID;
                         ds.TextoID = pregunta.Texto.TextoID;
                         ds.DatosUsuarioID = du.DatosUsuarioID;
-                        ds.Dato01 = 100;
+                        
                         ds.Dato03 = 1; // Indica intento
                         db.DatosSimples.Add(ds);
                         du.DatoSimple.Add(ds);
@@ -1529,7 +1481,9 @@ namespace ReadAndLearn.Controllers
                         DatoSimple ds = new DatoSimple();
 
                         // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                        mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
+                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/95
+                        //comentada la línea porque el fdbk de estas preguntas SIEMPRE se va a calcular mediante reglas
+                        //mensaje = (alt.FeedbackContenido == null ? (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto) : alt.FeedbackContenido);
 
                         // Registrar respuesta
                         ds.CodeOP = 13;
@@ -1541,7 +1495,6 @@ namespace ReadAndLearn.Controllers
                         ds.PreguntaID = PreguntaID;
                         ds.TextoID = pregunta.Texto.TextoID;
                         ds.DatosUsuarioID = du.DatosUsuarioID;
-                        ds.Dato01 = 0;
                         ds.Dato03 = 1; // Indica intento
                         db.DatosSimples.Add(ds);
                         du.DatoSimple.Add(ds);
@@ -1549,7 +1502,7 @@ namespace ReadAndLearn.Controllers
                         valor = 0;
 
                         SaveChanges();
-                        // Registrar respuesta CodeOP = 15
+                        
 
                         flag_fallo = true;
                     }
@@ -1559,14 +1512,14 @@ namespace ReadAndLearn.Controllers
             }
 
             // Genera un feedback si no hay feedback de contenido ni de pregunta.
-            mensaje = mensaje == null ? ext.GetFeedback(du) : mensaje;
+            mensaje = ext.GetFeedback(du);
 
             /*
              * *******  OBVIABLE?  *********
              * 
             if (ext.GetModulo(ModuloID).Timings != null && ext.GetModulo(ModuloID).Timings.Count > 0)
             {
-                mensaje = ProcesarTimings(mensaje, du, valor);
+                mensaje = ProcesarTimings(mensaje, du, !flag_fallo);
             }
              */
 
