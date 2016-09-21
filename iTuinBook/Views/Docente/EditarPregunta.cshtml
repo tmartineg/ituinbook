@@ -168,7 +168,7 @@
 
             //asignacion de clase .pertinentePalabra a las palabras cuyo ID aparece en #Pertinente
             $("#Distractoras").val().split(",").filter(v => v != '').forEach(function(actualIndex){
-                $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+                $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra'); 
             });
             
 
