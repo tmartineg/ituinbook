@@ -788,7 +788,11 @@ namespace ReadAndLearn.Controllers
                 //guirisan/issue https://github.com/guirisan/ituinbook/issues/79
                 //indexación de las palabras en el texto para el correcto funcionamiento
                 //de la tarea de selección
-                nuevaPagina.Contenido = textIndexation(nuevaPagina.Contenido);
+                //*****************************************************
+                //********************IMPOSIBLE**********************
+                //REASIGNAR los valores data-windex después de eliminar o añadir palabras, es básicamente imposible.
+                //opción de eliminar la opción de editar las páginas a cambio de eliminar la vieja y crear una nueva.
+                //nuevaPagina.Contenido = textIndexation(nuevaPagina.Contenido);
 
                 this.db.Entry(nuevaPagina).State = EntityState.Modified;
                 this.db.SaveChanges();

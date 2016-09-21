@@ -37,18 +37,9 @@
 
         <hr />
 
+        
         <div class="editor-label">
-            @Html.LabelFor(model => model.Dificultad)
-        </div>
-        <div class="editor-field" style="padding-bottom: 15px">
-            @Html.DropDownListFor(m => m.Dificultad, new SelectList(ViewBag.Dificultad))            
-            @Html.ValidationMessageFor(model => model.Dificultad)
-        </div>
-
-        <hr />
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.TipoPreguntaID)
+            @Html.Label("Tipo de pregunta")
         </div>
         <div class="editor-field">
             @Html.DropDownListFor(m => m.TipoPreguntaID, new SelectList(ViewBag.Tipos, "TipoPreguntaID", "Tipo"), new { id = "tipoPreg" })
@@ -58,7 +49,7 @@
         <hr />
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.FDBK_Correcto)
+            @Html.Label("Feedback de acierto")
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.FDBK_Correcto)
@@ -68,7 +59,7 @@
         <hr />
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.FDBK_Incorrecto)
+            @Html.Label("Feedback de fallo")
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.FDBK_Incorrecto)
@@ -78,15 +69,55 @@
         <hr />
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Pertinente)
+            @Html.Label("Pertinente")
+            <button id="addPertinentes">Añadir pertinentes</button>
+            <button id="cleanPertinentes">Limpiar</button>
+
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => model.Pertinente)
             @Html.ValidationMessageFor(model => model.Pertinente)
         </div>
         <hr />
+        <!-- guirisan /issues https://github.com/guirisan/ituinbook/issues/79 -->
+        <div class="editor-label">
+            @Html.Label("Distractoras")
+            <button id="addDistractoras">Añadir distractoras</button>
+            <button id="cleanDistractoras">Limpiar</button>
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Distractoras)
+            @Html.ValidationMessageFor(model => model.Distractoras)
+        </div>
 
-        <span id="undo" style="display:none" class="k-group">Buscar Pertinente.</span>
+
+        <div id="textraw">
+            @{
+                Texto text = ViewBag.Texto;
+                List<string> list = new List<string>();
+                if (text != null)
+                {
+                    foreach (Pagina pag in text.Paginas)
+                    {
+                        <h3>Pagina @pag.Orden</h3>
+                            <div>
+                                <p>
+                                    @Html.Raw(pag.Contenido)
+                                </p>
+                            </div>
+
+                    }
+
+                }
+            }
+
+        </div>
+
+
+
+
+
+
         <hr />
         <div class="editor-label">
             @Html.LabelFor(model => model.Orden)
@@ -113,14 +144,8 @@
 }
 
 
-
-@{
-    Texto mainText = ViewBag.Texto;
-    <iframe id="window" src="@Url.Action("VisualizarPagina", new { TextoID = mainText.TextoID })" width="800" height="320" ></iframe>
-}
-
 <div>
-    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = mainText.TextoID })
+    @Html.ActionLink("Volver", "AdministrarTexto", new { TextoID = ViewBag.Texto.TextoID })
 </div>
 
 @section scripts {
@@ -134,6 +159,142 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/98
+            
+            //asignacion de clase .pertinentePalabra a las palabras cuyo ID aparece en #Pertinente
+            $("#Pertinente").val().split(",").filter(v => v != '').forEach(function(actualIndex){
+                $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+            });
+
+            //asignacion de clase .pertinentePalabra a las palabras cuyo ID aparece en #Pertinente
+            $("#Distractoras").val().split(",").filter(v => v != '').forEach(function(actualIndex){
+                $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+            });
+            
+
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/79
+
+            //después de añadir las paginas como elementos de textraw, declaramos el acordeon
+            $("#textraw").accordion();
+
+            
+            /*PERTINENTES*************************/
+            //start
+            //capturamos selección del usuario, extraemos id's, y si ninguno tiene ya asignada pertinencia o distraccion,
+            //añadimos la lista de id's a campo pertinentes del formulario (1,2,4,5,6,8,14,16,17,18,19,20
+            $("#addPertinentes").click(function (e) {
+                e.preventDefault()
+                console.log("click over addPertinentes");
+
+                var selectedhtml = $.selection('html');
+                var duplicatedSelection = false;
+
+                $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
+                    if (!duplicatedSelection) {
+                        /*
+                        var existingids = $("textbeforeadd").val();
+                        var existingids = existingids + textbeforeadd;*/
+
+                        //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
+                        var textbeforeadd = $("textarea#Pertinente").val();
+
+                        var actualIndex = $(this).attr("data-windex");
+
+
+                        var existingids = $("textarea#Pertinente").val() + $("textarea#Distractoras").val();
+                        if (existingids != null) {
+                            //ya hay palabras pertinentes o distractoras
+
+                            existingids = existingids.split(",");
+
+
+                            if (existingids.indexOf(actualIndex) > -1) {
+                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
+                                duplicatedSelection = true;
+                            } else {
+                                $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                                $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                            }
+                        } else {
+                            //no hay palabras asignadas
+                            $("textarea#Pertinente").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                            $("[data-windex='" + actualIndex + "']").addClass('pertinentePalabra');
+                        }
+                    }
+                });
+
+
+            });
+            //end
+
+            //cleanPertinentes
+            $("#cleanPertinentes").click(function (e) {
+                e.preventDefault();
+                $("textarea#Pertinente").val("");
+                $(".pertinentePalabra").removeClass("pertinentePalabra");
+
+            });
+
+            /*DISTRACTORAS*****************************************/
+            //start
+            //capturamos selección del usuario, extraemos id's, y si ninguno tiene ya asignada pertinencia o distraccion,
+            //añadimos la lista de id's a campo distractoras del formulario (1,2,4,5,6,8,14,16,17,18,19,20
+            $("#addDistractoras").click(function (e) {
+                e.preventDefault()
+                console.log("click over addDistractoras");
+
+                var selectedhtml = $.selection('html');
+                var duplicatedSelection = false;
+
+                $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
+                    if (!duplicatedSelection) {
+                        /*
+                        var existingids = $("textbeforeadd").val();
+                        var existingids = existingids + textbeforeadd;*/
+
+                        //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
+                        var textbeforeadd = $("textarea#Distractoras").val();
+
+                        var actualIndex = $(this).attr("data-windex");
+
+
+                        var existingids = $("textarea#Distractoras").val() + $("textarea#Pertinente").val();
+                        if (existingids != null) {
+                            //ya hay palabras pertinentes o distractoras
+
+                            existingids = existingids.split(",");
+
+
+                            if (existingids.indexOf(actualIndex) > -1) {
+                                alert("ERROR: algunas palabras seleccionadas ya están asignadas como pertinentes o distractoras.");
+                                duplicatedSelection = true;
+                            } else {
+                                $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                                $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+                            }
+                        } else {
+                            //no hay palabras asignadas
+                            $("textarea#Distractoras").val(textbeforeadd + $(this).attr("data-windex") + ",");
+                            $("[data-windex='" + actualIndex + "']").addClass('distractoraPalabra');
+                        }
+                    }
+                });
+
+
+            });
+            //end
+
+            //cleanDistractoras
+            $("#cleanDistractoras").click(function (e) {
+                e.preventDefault();
+                $("textarea#Distractoras").val("");
+                $(".distractoraPalabra").removeClass("distractoraPalabra");
+
+            });
+
+
+
             var window = $("#window"),
                     undo = $("#undo")
                             .bind("click", function () {

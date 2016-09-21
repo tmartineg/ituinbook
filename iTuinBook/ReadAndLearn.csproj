@@ -1784,8 +1784,6 @@
     <Content Include="Views\Alumno\Index.cshtml" />
     <Content Include="Views\Alumno\Grupos.cshtml" />
     <Content Include="Views\Shared\_LayoutDocente.cshtml" />
-    <Content Include="Views\Docente\Copia de CrearPagina.cshtml" />
-    <Content Include="Views\Docente\Copia de EditarPagina.cshtml" />
     <Content Include="Views\Docente\AgregarCriterioCorreccion.cshtml" />
     <Content Include="Views\Alumno\Tareas.cshtml" />
     <Content Include="Views\Shared\_LayoutVacio.cshtml" />
