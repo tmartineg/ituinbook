@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
+using System.Web;
 using System.Web.Security;
 
 namespace ReadAndLearn.Models
@@ -117,7 +118,6 @@ namespace ReadAndLearn.Models
         public int Descripcion { get; set; }
         public string Nom { get; set; }
         public string Descripcio { get; set; }
-
         public int UserProfileID { get; set; }
         public virtual UserProfile UserProfile { get; set; }
                 
@@ -126,6 +126,7 @@ namespace ReadAndLearn.Models
         public int Regla_2 { get; set; }
         public int OpCode { get; set; }
         public string Feedback { get; set; }
+        public byte[] FeedbackAudio { get; set; }
 
         public virtual ICollection<Modulo> Modulos { get; set; }
     }

@@ -163,7 +163,7 @@
                             } else {
                                 $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
 
-                                $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                                $("[data-windex='" + actualIndex + "']", "#textraw").clone().appendTo("#pertinentesAlumno");
                                 $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
                                 $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
@@ -172,7 +172,7 @@
                             //no hay palabras asignadas
                             $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
                            
-                            $("[data-windex='" + actualIndex + "']", "#textraw").appendTo("#pertinentesAlumno");
+                            $("[data-windex='" + actualIndex + "']", "#textraw").clone().appendTo("#pertinentesAlumno");
                             $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
                             $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
@@ -184,7 +184,7 @@
             $("#borrarPertinentes").click(function (e) {
                 e.preventDefault();
                 $("textarea#seleccion").val("");
-                $(".pertinentePalabra").removeClass(".pertinentePalabra");
+                $(".pertinentePalabra").removeClass("pertinentePalabra");
                 $("#pertinentesAlumno").html("");
             });
 
@@ -284,10 +284,11 @@
                 }
 
                 $.ajax({
-                    url: "/PL4_Experimentos/PL4_Pregunta_Test_Seleccion_Simultaneo_Validar", //url: 'Validar',
+                    url: "PL4_Pregunta_Test_Seleccion_Simultaneo_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuestaTest: alter, respuestaSel: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
                     success: function (result) {
+                        window.location.href = result.redirect;
                         // data.redirect contains the string URL to redirect to                        
                         if (result.mensaje != null && result.mensaje != "") {
                             @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
@@ -299,7 +300,6 @@
                                 @: parent.feedbackVentana(result.mensaje);
                             }
                         }
-                        window.location.href = result.redirect;
                     },
                     //guirisan/secuencias
                     beforeSend: function () {
@@ -347,7 +347,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL4_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120, moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -365,7 +365,7 @@
                     }
                 });
                         /*$.ajax({
-                            url: "/PL4_Experimentos/UsoAyudasIndependiente",
+                            url: "UsoAyudasIndependiente",
                             type: 'POST',
                             data: { Ayuda: 1 }
                         });*/
@@ -402,7 +402,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL4_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -458,7 +458,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL4_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 121, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
@@ -547,7 +547,7 @@
                                 }
 
                                 $.ajax({
-                                    url: "/PL4_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
                                     //guirisan/secuencias
@@ -625,7 +625,7 @@
                                 }
 
                                 $.ajax({
-                                    url: "/PL4_Experimentos/RegistrarAccion",
+                                    url: "RegistrarAccion",
                                     type: 'POST',
                                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
@@ -699,7 +699,7 @@
                 }
 
                 $.ajax({
-                    url: "/PL4_Experimentos/RegistrarAccion",
+                    url: "RegistrarAccion",
                     type: 'POST',
                     data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient, numAccion: numAcc, Param: $(this).val() },
                     //guirisan/secuencias

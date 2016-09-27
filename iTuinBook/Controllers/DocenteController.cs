@@ -2236,9 +2236,24 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarReglaCompleja(ReglaCompleja RC)
+        public ActionResult AgregarReglaCompleja(ReglaCompleja RC, HttpPostedFile file)
         {
             var user = getCurrentUser();
+
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/99
+
+            if (file != null && file.ContentLength > 0)
+            {
+                // extract only the fielname
+                var fileName = Path.GetFileName(file.FileName);
+                // store the file inside ~/App_Data/uploads folder
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                file.SaveAs(path);
+            }
+
+            RC.FeedbackAudio = new byte[file.ContentLength];
+            file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
+           
 
             RC.UserProfile = user;
             RC.UserProfileID = user.UserId;

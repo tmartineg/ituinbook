@@ -1799,7 +1799,7 @@
     <Content Include="Views\Docente\AgregarImagen.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\uploads\" />
     <Folder Include="Views\Experimentos\" />
   </ItemGroup>
   <ItemGroup>
