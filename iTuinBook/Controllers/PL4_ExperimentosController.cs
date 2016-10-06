@@ -56,7 +56,7 @@ namespace ReadAndLearn.Controllers
             
             
             
-            //generar dsPert
+        //generar dsPertSel
             /* obtener % de pertinente en la respuesta
              * generar ds incluyendo la seleccion del usuario, los id's pertinentes de la pregunta, y el porcentaje calculado
              */
@@ -74,8 +74,10 @@ namespace ReadAndLearn.Controllers
             db.DatosSimples.Add(dsPert);
       
 
-            //generar dsDist
-
+        //generar dsDistSel
+            /* obtener % de distractor en la respuesta
+             * generar ds incluyendo la sel del usuario, id's distractores de la pregunta y porcentaje calculad
+             */
             int countDist = 0;
             float porcDist;
             for (int i = 0; i < idsRespuesta.Length; i++)
@@ -86,11 +88,38 @@ namespace ReadAndLearn.Controllers
                 }
             }
             porcDist = (countDist / (float)idsRespuesta.Length) * 100;
-
+            
             DatoSimple dsDist = new DatoSimple() { CodeOP = 51, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Distractoras, Dato01 = porcDist };
             db.DatosSimples.Add(dsDist);
             
-            
+        //generar dsPertTotal
+            float porcPertTot = (countPert / (float)idsPert.Length) * 100;
+            DatoSimple dsPertTot = new DatoSimple { CodeOP = 53, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Pertinente, Dato01 = porcPertTot };
+            db.DatosSimples.Add(dsPertTot);
+        
+        //generar dsDistTotal
+            //porcentaje de distractoras seleccionadas sobre el total de distractoras
+            float porcDistTot = (countDist / (float)idsDist.Length) * 100;
+            DatoSimple dsDistTot = new DatoSimple { CodeOP = 54, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Info2 = pregunta.Distractoras, Dato01 = porcDistTot };
+            db.DatosSimples.Add(dsDistTot);
+
+        //dsNeutSel
+            //porcentaje de neutras en la seleccion
+            float porcNeutSel = ((idsRespuesta.Length - countDist - countPert) / (float)idsRespuesta.Length) * 100;
+            DatoSimple dsNeutSel = new DatoSimple { CodeOP = 55, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Dato01 = porcNeutSel };
+            db.DatosSimples.Add(dsNeutSel);
+
+        //dsNoPertSel
+            //porcentaje de distractoras mas neutras en la seleccion
+            float porcNoPertSel = ((idsRespuesta.Length - countPert) / (float)idsRespuesta.Length) * 100;
+            DatoSimple dsNoPertSel = new DatoSimple { CodeOP = 56, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Dato01 = porcNoPertSel };
+            db.DatosSimples.Add(dsNoPertSel);
+
+        //dsTest01
+            //OJO CUIDAO: este dato debe generarse y guardarse donde se corrige la alternativa.
+        //generar dsSelSobreTotal
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/104
+            // que sentido tiene eso? habria que calcular el % sobre el total que es la seleccion ideal...
 
             
 
@@ -1426,8 +1455,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL4_Pregunta_Test_Seleccion_Simultaneo_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuestaTest, string respuestaSel, string moment, int numAccion = -1, string dataRow = "")
         {
-            //aliminar
-            int valor;
+            //int valor; BORRAR?
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -1458,9 +1486,13 @@ namespace ReadAndLearn.Controllers
                         // Registrar respuesta
                         ds.CodeOP = 13;
                         ds.Info = respuestaTest;
+                        ds.Info2 = "1"; //indica acierto (1 = true)
+
                         //guirisan/secuencias
                         ds.Momento = datetimeclient;
                         ds.NumAccion = numAccion;
+
+                        
 
                         ds.PreguntaID = PreguntaID;
                         ds.TextoID = pregunta.Texto.TextoID;
@@ -1470,7 +1502,7 @@ namespace ReadAndLearn.Controllers
                         db.DatosSimples.Add(ds);
                         du.DatoSimple.Add(ds);
                         du.PertinenteOrden = "";
-                        valor = 1;
+                        //valor = 1;
 
                         SaveChanges();
 
@@ -1487,6 +1519,7 @@ namespace ReadAndLearn.Controllers
 
                         // Registrar respuesta
                         ds.CodeOP = 13;
+                        ds.Info2 = "0"; //indica fallo (0 = false)
                         ds.Info = respuestaTest;
                         //guirisan/secuencias
                         ds.Momento = datetimeclient;
@@ -1499,7 +1532,7 @@ namespace ReadAndLearn.Controllers
                         db.DatosSimples.Add(ds);
                         du.DatoSimple.Add(ds);
                         du.PertinenteOrden = "";
-                        valor = 0;
+                        //valor = 0;
 
                         SaveChanges();
                         

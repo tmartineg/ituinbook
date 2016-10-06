@@ -2236,23 +2236,25 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarReglaCompleja(ReglaCompleja RC, HttpPostedFile file)
+        public ActionResult AgregarReglaCompleja(ReglaCompleja RC) //, HttpPostedFile file = null
         {
             var user = getCurrentUser();
 
             //guirisan/issue https://github.com/guirisan/ituinbook/issues/99
 
-            if (file != null && file.ContentLength > 0)
+            /*if (file != null && file.ContentLength > 0)
             {
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
                 // store the file inside ~/App_Data/uploads folder
                 var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
                 file.SaveAs(path);
+                RC.FeedbackAudio = new byte[file.ContentLength];
+                file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
             }
+             * */
 
-            RC.FeedbackAudio = new byte[file.ContentLength];
-            file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
+            
            
 
             RC.UserProfile = user;
@@ -4523,7 +4525,9 @@ namespace ReadAndLearn.Controllers
             Variables.Add(new SelectListItem { Text = "Momento (fecha) en el que inició la pregunta", Value = "10" });
             Variables.Add(new SelectListItem { Text = "Momento (fecha) en el que finalizó la pregunta", Value = "11" });
             Variables.Add(new SelectListItem { Text = "Tipo de pregunta (Abierta, test, ect)", Value = "12" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de acierto", Value = "13" });
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/103
+            //cambio a variable 13. Antes registraba "porcentaje de acierto". ahora 0 (fallo) o 1 (acierto)
+            Variables.Add(new SelectListItem { Text = "Acierto (1) o fallo (0) en eleccion multiple", Value = "13" });
             Variables.Add(new SelectListItem { Text = "Número de veces modificada la respuesta", Value = "14" });
             Variables.Add(new SelectListItem { Text = "Respuesta dada", Value = "15" });
             Variables.Add(new SelectListItem { Text = "Número de veces abierto el enunciado", Value = "16" });
@@ -4563,13 +4567,22 @@ namespace ReadAndLearn.Controllers
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/96
             //variables 48 y 49 comentadas por ser de subtarea
             //edit del anterior: si eliminamos esta, los conteos luego salen mal por no corresponder el campo Value con el numero de variables posibles
-            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea)", Value = "48" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea)", Value = "49" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea) - deprecated", Value = "48" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea) - deprecated", Value = "49" });
             
             Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección", Value = "50" });
             Variables.Add(new SelectListItem { Text = "Porcentaje de distractor de selección", Value = "51" });
 
-            Variables.Add(new SelectListItem { Text = "Feedback en Tarea de responder", Value = "52" });
+            Variables.Add(new SelectListItem { Text = "SIN USO", Value = "52" }); //ponia "Feedback en tarea de responder"
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/101
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente en la selección sobre el total", Value = "53" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de distractor en la selección sobre el total", Value = "54" });
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/103
+            Variables.Add(new SelectListItem { Text = "Porcentaje de neutro en la selección", Value = "55"});
+            Variables.Add(new SelectListItem { Text = "Porcentaje de no pertinente (dist + neut) en seleccion", Value = "56"});
+            
             #endregion
 
             return Variables;

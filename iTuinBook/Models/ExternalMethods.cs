@@ -310,6 +310,11 @@ namespace ReadAndLearn.Models
 
             switch (i) // Todo se calcula a nivel de pregunta y no como computo global de todas las preguntas. Las variables de texto van a parte...
             {
+                /******************************************************************************************
+                 * ****************************************************************************************
+                 * ****** I = codeop en https://docs.google.com/spreadsheets/d/1YLiGMUn1XTluUPOgGNVYMQW2JUUyGxm-euywYARER6Y/
+                 * ****************************************************************************************
+                 * ****************************************************************************************/
                 case 5: // Lectura inicial
                     return ds.ToList().LastOrDefault() != null ? (Convert.ToDouble(ds.ToList().LastOrDefault().Info) / 1000.0) : -1.0;        
                 case 6:
@@ -318,9 +323,15 @@ namespace ReadAndLearn.Models
                     if (ds.ToList().Count > 0)
                         return 2.0;
                     else
-                        return -1.0;                    
+                        return -1.0;
                 case 13:
-                    return ds.ToList().LastOrDefault() != null ? Convert.ToDouble(ds.ToList().LastOrDefault().Dato01) : -1.0;
+                    //CODIGO ORIGNAL DE CASE13
+                    //return ds.ToList().LastOrDefault() != null ? Convert.ToDouble(ds.ToList().LastOrDefault().Dato01) : -1.0;
+                    //DEVUELVE ALGO ASÍ COMO EL PORCENTAJE DE ACIERTO EN PREGUNTAS DE TEST SOBRE EL MÓDULO ACTUAL. PARECE INUTILIZABLE
+
+                    //return 0 -> error
+                    //return 1 -> acierto
+                    return Convert.ToDouble(ds.ToList().LastOrDefault().Info2);
                 case 16: // Número de lecturas de enunciado
                     return Convert.ToDouble(ds.ToList().Count);
                 case 17: // Número de lecturas de alternativas
@@ -330,7 +341,9 @@ namespace ReadAndLearn.Models
                 case 34: // Número de Ayudas Parafraseo
                     return Convert.ToDouble(ds.ToList().Count);  
                 case 48:
+                    return 0;
                 case 49:
+                    return 0;
                 case 50:
                     //porcentaje de acierto en la selección
                     return ds.ToList().Last().Dato01;
@@ -342,6 +355,18 @@ namespace ReadAndLearn.Models
                         return 1.0;
                     else
                         return 0.0;
+                case 53:
+                    return ds.ToList().Last().Dato01;
+                case 54:
+                    return ds.ToList().Last().Dato01;
+                case 55:
+                    return ds.ToList().Last().Dato01;
+                case 56:
+                    return ds.ToList().Last().Dato01;
+                case 58:
+                    return ds.ToList().Last().Dato01;
+
+
                 default:
                     return 0;
             }

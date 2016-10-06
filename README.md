@@ -1,10 +1,12 @@
-# ituinbook
+# Read&Learn
 
-Author
+@author
 Carlos Navarro Navarro http://lectura.uv.es/carlos.navarro.navarro/
 
-Contributor
+@author
 Guillem Rivas Sanchis https://github.com/guirisan/
 
 
-2015
+http://creativecommons.org/licenses/by-nc-nd/3.0/
+
+2016

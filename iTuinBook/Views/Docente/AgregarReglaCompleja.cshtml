@@ -15,12 +15,13 @@
 <h2>Agregar Regla Compleja</h2>
 <hr />
 <br />
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>Regla Compleja</legend>
+        <legend>Regla Complejaa</legend>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Nombre)
@@ -42,7 +43,7 @@
             @Html.LabelFor(model => model.OpCode)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.OpCode, Reglas, "Selecciona combinación", new { @id = "OpCodeID"})    
+            @Html.DropDownListFor(model => model.OpCode, Reglas, "Selecciona combinación", new { @id = "OpCodeID" })    
             @Html.ValidationMessageFor(model => model.OpCode)
         </div>
 
@@ -51,7 +52,7 @@
             @Html.Label("Regla 1")
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Regla_1, new List<SelectListItem> () , "Selecciona un regla", new{ @id = "Regla1ID"})
+            @Html.DropDownListFor(model => model.Regla_1, new List<SelectListItem>(), "Selecciona un regla", new { @id = "Regla1ID" })
             @Html.ValidationMessageFor(model => model.Regla_1)
         </div>
         </div>
@@ -61,7 +62,7 @@
             @Html.LabelFor(model => model.Operador)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Operador, Operadores, "Selecciona un operador", new { @id = "OperadorID"})            
+            @Html.DropDownListFor(model => model.Operador, Operadores, "Selecciona un operador", new { @id = "OperadorID" })            
             @Html.ValidationMessageFor(model => model.Operador)
         </div>
         </div>
@@ -71,7 +72,7 @@
             @Html.Label("Regla 2")
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Regla_2, new List<SelectListItem> () , "Selecciona un regla", new{ @id = "Regla2ID"})
+            @Html.DropDownListFor(model => model.Regla_2, new List<SelectListItem>(), "Selecciona un regla", new { @id = "Regla2ID" })
             @Html.ValidationMessageFor(model => model.Regla_2)
         </div>
         </div>
@@ -84,8 +85,17 @@
             @Html.ValidationMessageFor(model => model.Feedback)
         </div>
 
+        <div class="editor-label">
+            @Html.Label("Audio feedback")
+        </div>
+        <div class="editor-field">
+            <input type="file" name="FeedbackAudio" id="FeedbackAudio"/>
+        </div>
+
+
+
         <p>
-            <input type="submit" value="Crear" />
+            <input type="submit" value="Crearr" />
         </p>
     </fieldset>
 }

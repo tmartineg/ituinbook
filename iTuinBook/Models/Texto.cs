@@ -33,6 +33,10 @@ namespace ReadAndLearn.Models
     {
         public int PaginaID { get; set; }
         public string Contenido { get; set; }
+        
+        //guirisan/issues https://github.com/guirisan/ituinbook/issues/104
+        //public int ContenidoLength { get; set; }
+
         public int TextoID { get; set; }
                 
         public virtual Texto Texto { get; set; }
