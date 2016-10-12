@@ -4567,11 +4567,11 @@ namespace ReadAndLearn.Controllers
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/96
             //variables 48 y 49 comentadas por ser de subtarea
             //edit del anterior: si eliminamos esta, los conteos luego salen mal por no corresponder el campo Value con el numero de variables posibles
-            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente de selección (SubTarea) - deprecated", Value = "48" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección (SubTarea) - deprecated", Value = "49" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de NO pertinente en la selección (SubTarea) - deprecated", Value = "48" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente en la selección (SubTarea) - deprecated", Value = "49" });
             
-            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente de selección", Value = "50" });
-            Variables.Add(new SelectListItem { Text = "Porcentaje de distractor de selección", Value = "51" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de pertinente en la selección", Value = "50" });
+            Variables.Add(new SelectListItem { Text = "Porcentaje de distractor en la selección", Value = "51" });
 
             Variables.Add(new SelectListItem { Text = "SIN USO", Value = "52" }); //ponia "Feedback en tarea de responder"
 
