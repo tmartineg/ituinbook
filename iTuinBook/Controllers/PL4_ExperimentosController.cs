@@ -1904,10 +1904,16 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
             ViewBag.ConfigPregunta = ext.GetConfigPregunta((int)preguntaID);
-
+            ViewBag.Texto = pregunta.Texto;
             ViewBag.DatosUsuario = du;
             ViewBag.DatoSimple = ds;
-            //guirisan
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
+            ViewBag.idsUser = du.DatoSimple.Last(p => p.CodeOP == 49).Info; //ids selected by user
+            ViewBag.idsTrue = pregunta.Pertinente; //correct ids
+            //ViewBag.idsFalse = pregunta.Distractoras; //incorrectids
+            ViewBag.idsFalse = pregunta.Distractoras; //incorrectids
+
+
             ViewBag.feedbackText = feedbackText;
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta
