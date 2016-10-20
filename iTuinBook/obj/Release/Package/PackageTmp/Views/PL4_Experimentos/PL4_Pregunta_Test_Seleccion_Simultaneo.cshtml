@@ -15,10 +15,6 @@
     
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)    
-        @if (Model.Ayuda != null)
-        {
-            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
-        }
     </div>
      
     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
@@ -33,7 +29,7 @@
     <div style="padding-left: 20px; padding-right: 20px;">
         
         <button id="btnIniciarSeleccion">Seleccionar información pertinente</button>
-        <button id="btnValidarSimultaneo" class="hiddenDebug">Validar</button>    
+        <button id="btnValidarSimultaneo" class="hiddenDebug" disabled="disabled">Validar</button>    
         <button id="btnBorrarSeleccion" class="hiddenDebug">Borrar</button>
     </div>
 
@@ -69,12 +65,13 @@
         </div>
 
 
-        <button id="agregarPertinentes">Agregar pertinentes</button>
-        <button id="borrarPertinentes">Limpiar seleccion</button>
+        <div>
+            <button id="agregarPertinentes">Agregar pertinentes</button>
+            <button id="borrarPertinentes">Limpiar seleccion</button>
 
-        <div id="textraw">
+            <div id="textraw">
 
-            @{
+                @{
                 Texto text = ViewBag.Texto;
                 List<string> list = new List<string>();
                 if (text != null)
@@ -91,8 +88,9 @@
                     }
 
                 }
-            }
+                }
 
+            </div>
         </div>
     </div>
 
@@ -127,11 +125,15 @@
                 heightStyle: "content"
             });
 
+
+            $("input.radio").attr("disabled", "disabled");
+
             //al pulsar iniciar seleccion, ocultamos dicho boton, mostramos el de validar pregunta y la tarea de seleccion
             $("#btnIniciarSeleccion").click(function (e) {
                 e.preventDefault();
                 $("#btnValidarSimultaneo").removeClass("hiddenDebug");
                 $("#divTareaSeleccion").removeClass("hiddenDebug");
+                
                 $(this).addClass("hiddenDebug");
                 //to-do crear datosimple que indique comienzo de tarea de selección
             });
@@ -141,7 +143,7 @@
 
                 var selectedhtml = $.selection('html');
                 var duplicatedSelection = false;
-
+                $("input.radio").removeAttr("disabled");
 
                 $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
                     if (!duplicatedSelection) {
@@ -218,42 +220,7 @@
                 </text>
             }
 
-            jQuery("#btnValidarSimultaneo").attr('disabled', true);
-
-            $('#seleccion').focus(function () {
-                $(this).blur();
-            });
-
-            $('#btnBorrarSeleccion').click(function () {
-                $('#seleccion').val("");
-                jQuery("#btnValidarSimultaneo").attr('disabled', true);
-            });
-
-            $('#seleccion').bind("drop", function (event, ui) {
-                if (event.stopPropagation) event.stopPropagation();
-
-                $.ajax({
-                    url: 'Algoritmo',
-                    type: 'POST',
-                    data: { Pertinente: $('#seleccion').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString(), PreguntaID: '@Model.PreguntaID' },
-                    success: function (result) {
-                        $('#seleccion').val(result.result);
-
-                        if ($(".radio:checked").length > 0) {
-                            if ($('#seleccion').val() == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
-                                jQuery("#btnValidarSimultaneo").attr('disabled', true);
-                            }
-                            else {
-                                jQuery("#btnValidarSimultaneo").attr('disabled', false);
-                            }
-                        }
-                    },
-                    error: function () {
-                        alert("No selecciones espacios entre párrafos. Haz dos selecciones.");
-                    }
-                });
-            });
-
+            
             $("#btnValidarSimultaneo").click(function () {
                 $("#btnValidarSimultaneo").attr("disabled", "disabled");
 
@@ -675,12 +642,9 @@
             /**************************************/
 
             $(":radio").change(function () {
-                if ($('#seleccion').val() == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
-                    jQuery("#btnValidarSimultaneo").attr('disabled', true);
-                }
-                else {
-                    jQuery("#btnValidarSimultaneo").attr('disabled', false);
-                }
+                
+                jQuery("#btnValidarSimultaneo").attr('disabled', false);
+               
 
                 //guirisan/secuencias
                 //datetime set in client

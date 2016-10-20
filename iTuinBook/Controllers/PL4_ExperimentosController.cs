@@ -1200,6 +1200,7 @@ namespace ReadAndLearn.Controllers
                 return Json(new { redirect = Url.Action("PL4_Pregunta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, textoID = TextoID, moment = moment, numAccion = numAccion }), Parent = false });
             }
             catch (Exception e)
+                //cambio de texto
             {
                 du.TextoActual++;
                 du.PreguntaActual = 0;

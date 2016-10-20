@@ -8,6 +8,7 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     DatoSimple ds = (DatoSimple)ViewBag.DatoSimple;
     DatoSimple dsel = (DatoSimple)ViewBag.Seleccion;
+    string idsUser = (string)ViewBag.idsUser;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
     bool flag_Flota = (bool)ViewBag.AyudaFlota;
@@ -25,10 +26,7 @@
 
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)      
-        @if (Model.Ayuda != null)
-        {  
-            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>                
-        }
+       
     </div>
      
     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
@@ -101,30 +99,38 @@
         </ul>
     </div>
     
-    @if (ViewBag.TareaSel)
-    {
-        if(configPregunta != null && configPregunta.CorregirSeleccion)
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
-            </div>
-        }
-        else
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
-            </div>
-        }
-    }
+   <!-- texto donde resaltar seleccion-->
 
+    <div id="textraw">
+
+        @{
+            Texto text = ViewBag.Texto;
+            List<string> list = new List<string>();
+            if (text != null)
+            {
+                foreach (Pagina pag in text.Paginas)
+                {
+                    <h3>Texto</h3>
+                    <div>
+                        <p>
+                            @Html.Raw(pag.Contenido)
+                        </p>
+                    </div>
+
+                }
+
+            }
+        }
+
+    </div>
+    
     <div id="fdbkDialog">
         @ViewBag.feedbackText
     </div>
-    
-    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <button id="btnBackToTexto"><a href="PL4_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
+   
+    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
+        <button id="btnResaltarSeleccionUsuario" class="hiddenDebug">Ver mi selección</button>
+        <button id="btnResaltarSeleccionIdeal">Ver seleccion ideal</button>
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
 </div>
@@ -134,56 +140,65 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
+            $("#textraw").accordion({
+                heightStyle: "content"
+            });
+            
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
+            //resaltarSeleccionUsuario al cargar la página
+            var idsUser = $.trim("@ViewBag.idsUser").split(",");
+            var idsTrue = $.trim("@ViewBag.idsTrue").split(",");
+            var idsFalse = $.trim("@ViewBag.idsFalse").split(",");
 
-            //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
-            //parametrizar el enlace que permite volver al texto para que incluya el tiempo de cliente
-            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
-            var parametrizacionHecha = false;
-            $("#btnBackToTexto").click(function (e) {
-                if (parametrizacionHecha === true) {
-                    return true;
+            limpiarResaltado();
+            $.each(idsUser, function (index, value) {
+                if (idsTrue.indexOf(value) >= 0) {
+                    $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
+                } else { //if (idsFalse.indexOf(value) >= 0) {
+                    $("[data-windex='" + value + "']", "#textraw").addClass('distractoraPalabra');
                 }
+            });
 
-                //parametrizacion del enlace
-                var oldhref = $("#btnBackToTexto a").attr("href");
-                var datetimeclient = new Date().toISOString();
-                $("#btnBackToTexto a").attr("href", oldhref + "&moment=" + datetimeclient);
+            //resaltar seleccion corregida
+            $("#btnResaltarSeleccionUsuario").click(function () {
+                $("#btnResaltarSeleccionUsuario").addClass("hiddenDebug");
+                $("#btnResaltarSeleccionIdeal").removeClass("hiddenDebug");
+                limpiarResaltado()
+                var idsUser = $.trim("@ViewBag.idsUser").split(",");
+                var idsTrue = $.trim("@ViewBag.idsTrue").split(",");
+                var idsFalse = $.trim("@ViewBag.idsFalse").split(",");
 
-
-                parametrizacionHecha = true;
-                $("#btnBackToTexto").unbind('click');
-                $(this).trigger('click');
+                limpiarResaltado();
+                $.each(idsUser, function (index, value) {
+                    if (idsTrue.indexOf(value) >= 0) {
+                        $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
+                    } else { //if (idsFalse.indexOf(value) >= 0) {
+                        $("[data-windex='" + value + "']", "#textraw").addClass('distractoraPalabra');
+                    }
+                });
             });
 
 
-            var timeStart = new Date();
-            var timeFinish = new Date();
+            //resaltar seleccion ideal
+            $("#btnResaltarSeleccionIdeal").click(function () {
+                $("#btnResaltarSeleccionUsuario").removeClass("hiddenDebug");
+                $("#btnResaltarSeleccionIdeal").addClass("hiddenDebug");
+                limpiarResaltado();
+                var idsTrue = $.trim("@ViewBag.idsTrue").split(",");
+                $.each(idsTrue, function (i, value) {
+                    $("[data-windex='" + value + "']", "#textraw").addClass('idealPalabra');
+                });
+            });
 
-            @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
-            {
-                <text>
-            //parent.BlurRevision("True");            
-            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-            window.parent.$('.paginas').css("filter", "url(#example-one)");                
-            </text>
-            }
-            else
-            {
-                <text>
-            //parent.BlurRevision("False");
-            window.parent.$('.paginas').css("-webkit-filter", "");
-            window.parent.$('.paginas').css("filter", "");                
-            </text>
+            
+            //limpiar resaltados
+            function limpiarResaltado() {
+                $(".pertinentePalabra").removeClass("pertinentePalabra");
+                $(".distractoraPalabra").removeClass("distractoraPalabra");
+                $(".idealPalabra").removeClass("idealPalabra");
             }
 
-            if (parent.$("#feedback").is(":visible") || parent.$("#feedAvatar").is(":visible")) {
-                $('#btnSiguientePregunta').attr("disabled", "disabled");
-                $(':radio').attr("disabled", "disabled");
-            }
-            else {
-                $('#btnSiguientePregunta').removeAttr("disabled");
-                $(':radio').attr("disabled", "disabled");
-            }
 
             
 
