@@ -129,7 +129,7 @@
     </div>
    
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
-        <button id="btnResaltarSeleccionUsuario" class="hiddenDebug">Ver mi selección</button>
+        <button id="btnResaltarSeleccionUsuario" class="hiddenDebug">Ver MI selección</button>
         <button id="btnResaltarSeleccionIdeal">Ver seleccion ideal</button>
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
@@ -162,6 +162,47 @@
 
             //resaltar seleccion corregida
             $("#btnResaltarSeleccionUsuario").click(function () {
+                //generamos el datosimple de que se ha pulsado 'Ver mi seleccion' (137)
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                // cambio de CodeOP para lectura de fdbk
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 137, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+
+
                 $("#btnResaltarSeleccionUsuario").addClass("hiddenDebug");
                 $("#btnResaltarSeleccionIdeal").removeClass("hiddenDebug");
                 limpiarResaltado()
@@ -182,6 +223,46 @@
 
             //resaltar seleccion ideal
             $("#btnResaltarSeleccionIdeal").click(function () {
+                //generamos el datosimple de que se ha pulsado 'Ver mi seleccion' (137)
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                // cambio de CodeOP para lectura de fdbk
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 136, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+
                 $("#btnResaltarSeleccionUsuario").removeClass("hiddenDebug");
                 $("#btnResaltarSeleccionIdeal").addClass("hiddenDebug");
                 limpiarResaltado();

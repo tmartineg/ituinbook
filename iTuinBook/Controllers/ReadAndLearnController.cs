@@ -147,19 +147,16 @@ namespace ReadAndLearn.Controllers
                     { 
                         case 0:
                             logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 0, redirect to PL0_experimentos/PL0_Texto");
-                            //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
                             return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db, NumAccion = numAccion, inicioTexto = true });
-                        case 1:
-                            logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 1, redirect to PL2_experimentos/PL2_Texto");
-                            //guirisan/secuencias: añadido numAccion al RedirectToAction como parámetro
-                            return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, NumAccion = numAccion });
                         case 2:
-                            //return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual });                            
+                            logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 1, redirect to PL2_experimentos/PL2_Texto");
+                            return RedirectToAction("PL2_Texto", "PL2_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, NumAccion = numAccion });
                         case 3:
                             return RedirectToAction("PL3_Texto", "PL3_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, inicioTexto = true });
-                        //guirisan/issues https://github.com/guirisan/ituinbook/issues/83
-                        //ruta añadida para la nueva plantilla de fdbk auditivo
+                        
                         case 4:
+                            //guirisan/issues https://github.com/guirisan/ituinbook/issues/83
+                            //ruta añadida para la nueva plantilla de fdbk auditivo
                             return RedirectToAction("PL4_Texto", "PL4_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, inicioTexto = true });
 
                         default:

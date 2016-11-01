@@ -82,6 +82,12 @@
     <textarea id="temp"></textarea>
 </div>
 
+<!-- modal tools-->
+<div id="addQuestion-modal">
+    <h3>Pregunta a enlazar (introduce el número de pregunta)</h3>
+    <textarea cols="20" id="addQuestion-content"></textarea>
+</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
  
@@ -222,6 +228,7 @@
                     {
                         name: "addReg",
                         tooltip: "Agregar Región",
+                        title: "Agregar Región",
                         exec: function (e) {
                             var editor = $("#editor").data("kendoEditor");
                             var selectedText = editor.getSelection();
@@ -251,6 +258,7 @@
                     {
                         name: "addToolTip",
                         tooltip: "Agregar Etiqueta",
+                        title: "Agregar Etiqueta",
                         exec: function (e) {
                             $("#addTooltip-modal").dialog({
                                 height: 230,
@@ -261,13 +269,39 @@
                                         var editor = $("#editor").data("kendoEditor");
                                         var content = $("#tooltipContent").val();
                                         var selectedText = editor.getSelection();
-                                        var selectedHtml = editor.selectedHtml();                                        
+                                        var selectedHtml = editor.selectedHtml();
 
                                         editor.clipboard.paste("<a content=\"" + content + "\"class=\"tooltip\">" + selectedHtml + "</a>");
-                                       
+
                                         $(this).dialog("close");
                                     },
-                                    "Cancelar": function () {                                       
+                                    "Cancelar": function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        name: "addOndemandQuestion",
+                        tooltip: "Insertar enlace a pregunta",
+                        title: "Insertar enlace a pregunta",
+                        exec: function (e) {
+                            $("#addQuestion-modal").dialog({
+                                height: 230,
+                                width: 540,
+                                modal: true,
+                                buttons: {
+
+                                    "Aceptar": function () {
+                                        $("#addQuestion-content").val()
+                                        var editor = $("#editor").data("kendoEditor");
+                                        var content = $("#addQuestion-content").val();
+                                        
+                                        editor.clipboard.paste("<strong><a href=\"/ReadAndLearn/PL4_Experimentos/PL4_Pregunta/btnPreguntas?GrupoID=247&amp;ModuloID=1218&amp;preguntaActual=0&amp;textoID=403&amp;segundoIntento=False&amp;preguntaResuelta=False\">Pregunta " + content + "</a><strong>");
+                                        $(this).dialog("close");
+                                    },
+                                    "Cancelar": function () {
                                         $(this).dialog("close");
                                     }
                                 }
@@ -277,6 +311,7 @@
                     {
                         name: "addImage",
                         tooltip: "Agregar Imagen",
+                        title: "Agregar Imagen",
                         exec: function (e) {
                             editor_ = $("#editor").data("kendoEditor");
 

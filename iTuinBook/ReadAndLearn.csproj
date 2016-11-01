@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AlumnoController.cs" />
     <Compile Include="Controllers\DocenteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PL5_ExperimentosController.cs" />
     <Compile Include="Controllers\PL4_ExperimentosController.cs" />
     <Compile Include="Controllers\PL3_ExperimentosController.cs" />
     <Compile Include="Controllers\ReadAndLearnController.cs" />
@@ -1638,6 +1639,28 @@
     <Content Include="Views\PL0_Experimentos\PL0_Pregunta_Test_Seleccion_2.cshtml" />
     <Content Include="Views\PL0_Experimentos\PL0_Pregunta_Test_Seleccion_Simultaneo.cshtml" />
     <Content Include="Views\PL0_Experimentos\PL0_Texto.cshtml" />
+    <Content Include="Views\PL5_Experimentos\Agradecimiento.cshtml" />
+    <Content Include="Views\PL5_Experimentos\Error.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Abierta.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Abierta_2.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Abierta_Resuelta.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Abierta_Seleccion.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Abierta_Seleccion_2.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Ordenar.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Ordenar_Resuelta.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Seleccion.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Seleccion_2.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Seleccion_Resuelta.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test_2.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test_Resuelta.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test_Seleccion.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test_Seleccion_2.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Pregunta_Test_Seleccion_Simultaneo.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Texto.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Texto_Busca.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Texto_Revisa.cshtml" />
+    <Content Include="Views\PL5_Experimentos\PL4_Texto_Seleccion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
