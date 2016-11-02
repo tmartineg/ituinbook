@@ -120,13 +120,12 @@ namespace ReadAndLearn.Models
         public string Descripcio { get; set; }
         public int UserProfileID { get; set; }
         public virtual UserProfile UserProfile { get; set; }
-                
         public int Regla_1 { get; set; }
         public int Operador { get; set; }
         public int Regla_2 { get; set; }
         public int OpCode { get; set; }
         public string Feedback { get; set; }
-        public byte[] FeedbackAudio { get; set; }
+        public string FeedbackAudio { get; set; }
 
         public virtual ICollection<Modulo> Modulos { get; set; }
     }

@@ -2,7 +2,7 @@
 @using ReadAndLearn.Models;
 
 @{
-    ViewBag.Title = "Agregar Regla Compleja";
+    ViewBag.Title = "Agregar regla compleja";
     List<SelectListItem> Operadores = ViewBag.Operadores;
     List<SelectListItem> Reglas = ViewBag.Reglas;
     Layout = "~/Views/Shared/_LayoutDocente.cshtml";
@@ -17,7 +17,8 @@
 <br />
 
     
-    
+@using (Html.BeginForm("AgregarReglaCompleja", "Docente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -90,14 +91,13 @@
             @Html.Label("Audio feedback")
         </div>
         <div class="editor-field">
-            <input type="file" name="FeedbackAudio" id="FeedbackAudio"/>
+            <input type="file" name="file" id="file"/>
         </div>
 
 
-
-        <p>
-            <input type="submit" value="Crear" />
-        </p>
+        <div>
+            <input type="submit" value="Agregar regla" />
+        </div> 
     </fieldset>
 }
 
@@ -198,7 +198,8 @@
                 <td>
                     <b> @Html.ActionLink("Modificar", "ModificarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, null)</b>                                
                     <b> @Html.ActionLink("Eliminar", "EliminarReglaSimple", "Docente", new { ReglaSimpleID = rs.ReglaSimpleID }, null)</b>                                
-                </td>      
+                </td>     
+                
             </tr>
         } 
     }    
@@ -206,7 +207,7 @@
 
 </table>
 <hr />
-    @Html.ActionLink("Agregar Regla", "AgregarReglaSimple")
+    @Html.ActionLink("Agregar Regla OLD", "AgregarReglaSimple")
 <hr />
 </div>
 

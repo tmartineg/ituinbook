@@ -2236,24 +2236,22 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarReglaCompleja(ReglaCompleja RC) //, HttpPostedFile file = null
+        public ActionResult AgregarReglaCompleja(ReglaCompleja RC, HttpPostedFileBase file = null)
         {
             var user = getCurrentUser();
 
             //guirisan/issue https://github.com/guirisan/ituinbook/issues/99
-
-            /*if (file != null && file.ContentLength > 0)
+            if (file != null && file.ContentLength > 0)
             {
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
                 // store the file inside ~/App_Data/uploads folder
                 var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
                 file.SaveAs(path);
-                RC.FeedbackAudio = new byte[file.ContentLength];
-                file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
+                RC.FeedbackAudio = path;
+                //RC.FeedbackAudio = new byte[file.ContentLength];
+                //file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
             }
-             * */
-
             
            
 
@@ -2529,6 +2527,8 @@ namespace ReadAndLearn.Controllers
         }
 
         #endregion
+
+        #region Seguimiento / secuencias
 
         public ActionResult Seguimientos()
         {
@@ -3875,12 +3875,6 @@ namespace ReadAndLearn.Controllers
             return View(Lista.ToList());
         }
 
-        /*
-         *                         
-                <td>
-                    <div class="container"><div id="@id" class="progressbar"></div></div>
-                </td>
-         * */
 
         [HttpPost]
         public ActionResult ActualizarSeguimiento(int GrupoID, int ModuloID)
@@ -4053,6 +4047,9 @@ namespace ReadAndLearn.Controllers
 
             return Json(new { datos = Lista.ToList(), redirect = Url.Action("SeguimientosAlumnos", "Docente", new { GrupoID = GrupoID, ModuloID = ModuloID }) });            
         }
+        #endregion //seguimiento / secuencias
+
+        #region Funciones Extras
 
         public ActionResult SacarSecuencias()
         {
@@ -4505,7 +4502,7 @@ namespace ReadAndLearn.Controllers
             return arrayDatos;
         }
 
-        #region Funciones Extras
+        
         private List<SelectListItem> GetVariables()
         {
             #region Variables
