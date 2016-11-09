@@ -2246,11 +2246,10 @@ namespace ReadAndLearn.Controllers
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
                 // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                var path = Path.Combine(Server.MapPath("~/Content/fdbk-audiofiles"), fileName);
                 file.SaveAs(path);
-                RC.FeedbackAudio = path;
-                //RC.FeedbackAudio = new byte[file.ContentLength];
-                //file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
+                
+                RC.Feedback = path;
             }
             
            
@@ -2323,9 +2322,22 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditarReglaCompleja(ReglaCompleja updateReglaCompleja)
+        public ActionResult EditarReglaCompleja(ReglaCompleja updateReglaCompleja, HttpPostedFileBase file)
         {
             UserProfile user = getCurrentUser();
+
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/99
+            if (file != null && file.ContentLength > 0)
+            {
+                // extract only the fielname
+                var fileName = Path.GetFileName(file.FileName);
+                // store the file inside ~/App_Data/uploads folder
+                var path = Path.Combine(Server.MapPath("~/Content/fdbk-audiofiles"), fileName);
+                file.SaveAs(path);
+                updateReglaCompleja.FeedbackAudio = path;
+                //RC.FeedbackAudio = new byte[file.ContentLength];
+                //file.InputStream.Read(RC.FeedbackAudio, 0, file.ContentLength);
+            }
 
             var reglasComplejas = from r in db.ReglasComplejas
                                   where r.UserProfileID == user.UserId
@@ -2377,15 +2389,15 @@ namespace ReadAndLearn.Controllers
             ViewBag.ReglasSimples = reglasSimples.ToList();
             ViewBag.ReglasComplejas = reglasComplejas.ToList();
 
-            if (ModelState.IsValid)
-            {
-                this.db.Entry(updateReglaCompleja).State = EntityState.Modified;
-                this.db.SaveChanges();
+            updateReglaCompleja.UserProfile = user;
 
-                return this.RedirectToAction("Feedback");
-            }
+           
+            this.db.Entry(updateReglaCompleja).State = EntityState.Modified;
+            this.db.SaveChanges();
 
-            return View(updateReglaCompleja);
+            return this.RedirectToAction("Feedback");
+            
+            
         }
 
         public ActionResult EliminarReglaCompleja(int ReglaComplejaID)

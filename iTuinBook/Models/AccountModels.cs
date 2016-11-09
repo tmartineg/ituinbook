@@ -125,7 +125,10 @@ namespace ReadAndLearn.Models
         public int Regla_2 { get; set; }
         public int OpCode { get; set; }
         public string Feedback { get; set; }
+
+        //eliminar este parametro cuando funcione OK
         public string FeedbackAudio { get; set; }
+        
 
         public virtual ICollection<Modulo> Modulos { get; set; }
     }

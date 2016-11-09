@@ -1,0 +1,272 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.TareaOrdenar
+
+@{
+    ViewBag.Title = "PL5_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    DatoSimple ds = (DatoSimple)ViewBag.DatoSimple;
+    DatoSimple dsel = (DatoSimple)ViewBag.Seleccion;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+    bool flag_Flota = (bool)ViewBag.AyudaFlota;
+    Pregunta pregunta = (Pregunta)ViewBag.Pregunta;
+}
+
+<div style="margin: 15px 20px;" id="areaPregunta">
+    <div style="float:right;">
+        <b>PUNTOS:</b>
+        <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
+    </div>
+    
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @Html.Raw(Model.Enunciado)              
+    </div>
+     
+    <div id=tarea style="padding-left: 20px; padding-right: 20px;">
+    @{
+        string div, drag;
+        int i = 0;
+        string[] param;
+        
+        switch ((int)Model.Tipo)
+        {
+            case 0:
+        <div>
+            @{
+                <p><button class="btnCorregida">Mi respuesta</button><button class="btnCorrecta">Solución</button></p>
+                
+                <div class="areaCorrecta">
+                @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                { 
+                    <div style="text-align:center; min-width:24px; min-height:24px; display:inline-block; border: 1px solid #aaaaaa; padding-left: 3px; padding-right: 3px;">
+                        <label>@Model.ItemsOrdenados.First(item => item.Order == j).Item</label>
+                    </div>  
+                }                  
+                </div>
+            
+                if(ds != null)
+                {
+                    param = dsel.Info.Split(new string[] { "s3p4r40r" }, StringSplitOptions.None);
+
+                    <div class="areaCorregida">
+                    @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                    {
+                        if (param[j - 1] == Model.ItemsOrdenados.First(item => item.Order == j).Item) // Bien
+                        {
+                            <div style="text-align:center; min-width:24px; min-height:24px; display:inline-block; border: 3px solid green; padding-left: 3px; padding-right: 3px;">
+                                <label>@param[j - 1]</label>                            
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="text-align:center; min-width:24px; min-height:24px; display:inline-block; border: 3px solid red; padding-left: 3px; padding-right: 3px;">
+                                <label>@param[j - 1]</label>                            
+                            </div>
+                        }
+                    }
+                    </div>              
+                }
+        }    
+        </div>
+                break;
+            case 1:
+        <div>
+             @{
+             <p><button class="btnCorregida">Mi respuesta</button><button class="btnCorrecta">Solución</button></p>
+                
+                <div class="areaCorrecta">
+                @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                { 
+                    <div style="height: 24px; border: 1px solid #aaaaaa;  margin-bottom: 10px;">
+                        <label>@Model.ItemsOrdenados.First(item => item.Order == j).Item</label>
+                    </div>  
+                }                  
+                </div>
+            
+                if(ds != null)
+                    {
+                    param = dsel.Info.Split(new string[] { "s3p4r40r" }, StringSplitOptions.None);
+
+                    <div class="areaCorregida">
+                    @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                    {
+                        if (param[j - 1] == Model.ItemsOrdenados.First(item => item.Order == j).Item) // Bien
+                        {
+                            <div style="height: 24px; border: 3px solid green; margin-bottom: 10px;">
+                                <label>@param[j - 1]</label>                            
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="height: 24px; border: 3px solid red; margin-bottom: 10px;" >
+                                <label>@param[j - 1]</label>                            
+                            </div>
+                        }
+                    }
+                    </div>
+                 }
+        }      
+        </div>
+
+                break;
+
+            case 2:
+        <div>
+        @{
+             <p><button class="btnCorregida">Mi respuesta</button><button class="btnCorrecta">Solución</button></p>
+                
+                <div class="areaCorrecta">
+                @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                { 
+                    <div style="width: 150px; height: 150px; border: 1px solid #aaaaaa; display: inline-block;">
+                        <img src="@Model.ItemsOrdenados.First(item => item.Order == j).Item" draggable="true" ondragstart="drag(event)" width="150" height="150" />
+                    </div>  
+                }                  
+                </div>
+            
+                if(ds != null)
+                    {
+                    param = ds.Info.Split(new string[] { "s3p4r40r" }, StringSplitOptions.None);
+
+                    <div class="areaCorregida">
+                    @for (int j = 1; j <= Model.ItemsOrdenados.Count; j++)
+                    {
+                        if (param[j - 1] == Model.ItemsOrdenados.First(item => item.Order == j).Item) // Bien
+                        {
+                            <div style="width: 150px; height: 150px; border: 3px solid green; display: inline-block;">
+                                <img src="@param[j - 1]" draggable="true" ondragstart="drag(event)" width="150" height="150" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="width: 150px; height: 150px; border: 3px solid red; display: inline-block;">
+                                <img src="@param[j - 1]" draggable="true" ondragstart="drag(event)" width="150" height="150" />
+                            </div>
+                        }
+                    }
+                    </div>
+                }
+        }        
+        </div>
+                break;
+            default:
+        <b>La tarea no se pudo cargar por falta de tipo.</b>
+                break;
+        }
+    }
+    </div>
+    <br />
+    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
+    </div> 
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".btnCorregida").attr("disabled", "disabled");
+
+            $(".areaCorrecta").hide();
+            $(".areaCorregida").show();
+
+            $(".btnCorrecta").click(function () {
+                $(".btnCorrecta").attr("disabled", "disabled");
+                $(".btnCorregida").removeAttr("disabled");
+                $(".areaCorregida").hide();
+                $(".areaCorrecta").show();
+
+                parent.autofitIframe(parent.document.getElementById("addIframe"));
+            });
+
+            $(".btnCorregida").click(function () {
+                $(".btnCorregida").attr("disabled", "disabled");
+                $(".btnCorrecta").removeAttr("disabled");
+                $(".areaCorregida").show();
+                $(".areaCorrecta").hide();
+
+                parent.autofitIframe(parent.document.getElementById("addIframe"));
+            });
+
+            $("#btnSiguientePregunta").click(function () {
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+
+                $.ajax({
+                    url: "/PL5_Experimentos/PL5_Siguiente_Pregunta", //url: 'Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@pregunta.PreguntaID', TextoID: '@du.TextoID', moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    success: function (result) {
+                        $('.paginas', window.parent.document).each(function () {
+                            $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));
+                            $(this).html($(this).html().replace(/<\/lupa>/g, ""));
+                            $(this).html($(this).html().replace(/<prismaticos style=\"border:1px solid red;\">/g, ""));
+                            $(this).html($(this).html().replace(/<\/prismaticos>/g, ""));
+                        });                
+
+                        window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+                        window.parent.$('.paginas').css("filter", "url(#example-one)");
+
+                        window.parent.$('#feedback').css("visibility", "hidden");
+                        window.parent.$('#fdbkSMS').text("");
+
+                        if (result.Parent)
+                        {   
+                            // data.redirect contains the string URL to redirect to
+                            window.parent.window.location.href = result.redirect;                        
+                        }
+                        else
+                        {  
+                            // data.redirect contains the string URL to redirect to
+                            window.location.href = result.redirect;                                                    
+                        }
+                        
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+
+
+            @if ((bool)ViewBag.AyudaFlota)
+            {
+                @: $('#ayuFlotador').show();
+            }
+
+            parent.autofitIframe(parent.document.getElementById("addIframe"));
+        });
+
+
+    </script>
+}
