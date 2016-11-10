@@ -2249,7 +2249,7 @@ namespace ReadAndLearn.Controllers
                 var path = Path.Combine(Server.MapPath("~/Content/fdbk-audiofiles"), fileName);
                 file.SaveAs(path);
                 
-                RC.Feedback = path;
+                RC.Feedback = "lectura.uv.es/ReadAndLearn/Content/fdbk-audiofiles/" + fileName;
             }
             
            

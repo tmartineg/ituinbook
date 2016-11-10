@@ -125,7 +125,41 @@
     </div>
     
     <div id="fdbkDialog">
-        @ViewBag.feedbackText
+        <div id="fdbkText">
+            @ViewBag.feedbackText
+        </div>
+
+        <form id="audioPlayer" class="hiddenDebug">
+            <div>
+                <button id="back" type="button" class="hiddenDebug">&lt;&lt;</button>
+                <button id="play" type="button">
+                    Play
+                </button>                
+                <button id="pause" type="button">
+                    Pause
+                </button>
+                <button id="stop" type="button" class="hiddenDebug">Stop</button>
+                <button id="forward" type="button" class="hiddenDebug">&gt;&gt;</button>
+            </div>
+            <div class="hiddenDebug">
+                <button id="volumeUp" type="button">Vol +</button>
+                <button id="volumeDown" type="button">Vol -</button>
+                <button id="mute" type="button">Mute</button>
+            </div>
+            <div class="hiddenDebug">
+                Volume: <input type="range" id="volume" min="0" max="10" value="10" />
+            </div>
+            <div class="hiddenDebug">
+                Song: <span id="title"></span>
+            </div>
+            <div class="hiddenDebug">
+                Time: <span id="currentTime"></span>/<span id="duration"></span>
+            </div>
+            <div class="hiddenDebug">
+                Position: <input type="range" id="position" min="0" value="0" />
+            </div>
+        </form>
+        
     </div>
    
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
@@ -283,9 +317,27 @@
 
             
 
+
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
-            if ($.trim(dialog.html()) != "") {
+            var msg = $.trim($("#fdbkText").html());
+            if (msg != "") {
+
+                //guirisan/issue https://github.com/guirisan/ituinbook/issues/99
+                //si el mensaje empieza por "lectura" el fdbk es auditivo
+                if (msg.substr(0, 7) === "lectura") {
+                    //hidden text feedback
+                    $("#fdbkText").addClass("hiddenDebug");
+                    //load audio files
+                    var audioList = { 'file': 'http://' + msg, 'title': 'Feedback-title' };
+                    //launch player
+                    var audiocontrols = new audioControls(audioList);
+                    //show player
+                    $("#audioPlayer").removeClass("hiddenDebug");
+                }
+
+
+
 
                 //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
                 //generamos el datosimple de que se ha empezado a leer el feedback
@@ -335,6 +387,8 @@
                         {
                             text: "Cerrar",
                             click: function () {
+                                //to-do stop reproduction
+                                audiocontrols.engine.stop();
 
                                 var datetimeclient = new Date().toISOString();
 
@@ -630,5 +684,329 @@
                 $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
             }
         }
+
+        //guirisan/issue 
+        /********************************************************************/
+        //******************AUDIO PLAYER WITH JQUERY ************************
+        /********************************************************************/
+        var stepVolume = 0.1;
+
+        // MODEL
+        function audioEngine(audioList) {
+
+            // Properties
+            this.audioList = $.parseJSON(JSON.stringify(audioList));
+            this.audio = {};
+            this.title = null;
+            this.timeStep = 5;
+
+            // Engine methods
+            this.init = function () {
+                var audioData = this.audioList;
+                this.audio = new Audio();
+                this.audio.src = audioData.file;
+                this.title = audioData.title;
+                this.audio.load();
+                console.log("Loaded audio '" + this.title + "'");
+            }
+
+            this.play = function () {
+                this.audio.play();
+            }
+
+            this.pause = function () {
+                this.audio.pause();
+            }
+
+            this.stop = function () {
+                this.audio.pause();
+                this.audio.currentTime = 0;
+            }
+
+            this.forward = function () {
+                this.audio.currentTime += this.timeStep;
+            }
+
+            this.back = function () {
+                this.audio.currentTime -= this.timeStep;
+            }
+
+            this.volumeUp = function () {
+                this.audio.volume += (this.audio.volume <= (1 - stepVolume)) ? stepVolume : null;
+                this.audio.volume = this.audio.volume.toFixed(1);
+            }
+
+            this.volumeDown = function () {
+                this.audio.volume -= (this.audio.volume >= stepVolume) ? stepVolume : null;
+                this.audio.volume = this.audio.volume.toFixed(1);
+            }
+        }
+
+        // CONTROLLER
+        function audioControls(audioList) {
+
+            // Hooks
+            var container = $("#audioPlayer");
+            var playButton = $("#play");
+            var pauseButton = $("#pause");
+            var stopButton = $("#stop");
+            //unused
+            var backButton = $("#back");
+            var forwardButton = $("#forward");
+            var volumeUpButton = $("#volumeUp");
+            var volumeDownButton = $("#volumeDown");
+            //unused
+            var volumeSlider = $("#volume");
+            var muteButton = $("#mute");
+            var positionSlider = $("#position");
+            var self = this;
+
+            // Properties
+            this.engine = new audioEngine(audioList);
+            this.engine.init();
+
+            this.display = new audioDisplay(this.engine.audio, this.engine.title);
+
+            // Interface Actions Listeners
+            playButton.click(function () {
+                self.engine.play();
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/99
+                //añadir evento para registrar play en BD to-do
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                // cambio de CodeOP para lectura de fdbk
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 70, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+
+            });
+
+            pauseButton.click(function () {
+                self.engine.pause();
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/99
+                //añadir evento para registrar pause en BD to-do
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                // cambio de CodeOP para lectura de fdbk
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 71, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+            });
+
+            stopButton.click(function () {
+                self.engine.stop();
+            });
+
+            forwardButton.click(function () {
+                self.engine.forward();
+            });
+
+            backButton.click(function () {
+                self.engine.back();
+            });
+
+            volumeUpButton.click(function () {
+                self.engine.volumeUp();
+            });
+
+            volumeDownButton.click(function () {
+                self.engine.volumeDown();
+            });
+
+            muteButton.click(function () {
+                self.engine.audio.muted = (self.engine.audio.muted != true) ? true : false;
+            });
+
+            volumeSlider.change(function () {
+                self.engine.audio.volume = ($(this).val() / 10).toFixed(1);
+            });
+
+            positionSlider.change(function () {
+                self.engine.audio.currentTime = $(this).val();
+            });
+
+        }
+
+        // VIEW
+        function audioDisplay(audioObject, title) {
+
+            // Hooks
+            var currentTimeShow = $("#currentTime");
+            var durationShow = $("#duration");
+            var positionSlider = $("#position");
+            var titleAudio = $("#title");
+            var volumeSlider = $("#volume");
+            var self = this;
+
+            // Properties
+            this.audioObject = audioObject;
+            this.title = title;
+
+            // Events Listeners while playing
+            this.audioObject.addEventListener("playing", function () {
+                setInterval(function () {
+                    self.updatePlayer();
+                }, 1000);
+            });
+
+            this.audioObject.addEventListener("loadedmetadata", function () {
+                self.updatePlayer();
+                self.showDuration();
+                self.showTitle();
+                self.setFinalPositionSlider();
+            });
+
+            this.audioObject.addEventListener("volumechange", function () {
+                volumeSlider.val(self.audioObject.volume * 10).val();
+            });
+
+            this.audioObject.addEventListener("ended", function () {
+                self.audioObject.currentTime = 0;
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/99
+                //añadir evento para registrar fin de escucha de audio en BD to-do
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                // cambio de CodeOP para lectura de fdbk
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 72, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+            });
+
+            // Display methods
+
+            this.updatePlayer = function () {
+                var currentTime = parseTime(self.audioObject.currentTime);
+                currentTimeShow.html(currentTime);
+                self.updatePositionSlider();
+            }
+
+            this.updatePositionSlider = function () {
+                var currentTime = Math.round(self.audioObject.currentTime);
+                positionSlider.val(currentTime).val();
+            }
+
+            this.showDuration = function () {
+                var duration = parseTime(self.audioObject.duration)
+                durationShow.html(duration);
+            }
+
+            this.showTitle = function () {
+                titleAudio.html(self.title);
+            }
+
+            this.setFinalPositionSlider = function () {
+                positionSlider.attr("max", self.audioObject.duration);
+            }
+
+            function parseTime(time) {
+                var currentTime = new Date(time * 1000);
+                var min = currentTime.getMinutes();
+                var sec = currentTime.getSeconds();
+                min = (min < 10) ? "0" + min : min;
+                sec = (sec < 10) ? "0" + sec : sec;
+                return min + ':' + sec;
+            }
+        }
+
+
+        /*********************end audio player*******************************/
+        /********************************************************************/
+
     </script>
 }

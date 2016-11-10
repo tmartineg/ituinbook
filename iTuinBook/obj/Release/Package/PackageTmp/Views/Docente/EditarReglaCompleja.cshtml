@@ -14,7 +14,9 @@
 
 <h2>Editar Regla Compleja</h2>
 <hr />
-@using (Html.BeginForm()) {
+
+@using (Html.BeginForm("EditarReglaCompleja", "Docente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    { 
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -89,9 +91,17 @@
             @Html.EditorFor(model => model.UserProfileID)
         </div>
 
-        <p>
-            <input type="submit" value="Guardar" />
-        </p>
+        <div class="editor-label">
+            @Html.Label("Audio feedback")
+        </div>
+        <div class="editor-field">
+            <input type="file" name="file" id="file" />
+        </div>
+
+
+        <div>
+            <input type="submit" value="Editar regla" />
+        </div> 
     </fieldset>
 }
 

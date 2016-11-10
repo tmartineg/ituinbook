@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>11/02/2016 10:13:54</publishTime>
+      <publishTime>09/11/2016 14:23:00</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -169,7 +169,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>11/02/2016 10:13:54</publishTime>
+      <publishTime>09/11/2016 14:22:59</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4438,7 +4438,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaCompleja.cshtml">
-      <publishTime>02/11/2016 10:06:16</publishTime>
+      <publishTime>02/11/2016 12:01:02</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaSimple.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4534,7 +4534,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>09/21/2016 02:28:58</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaCompleja.cshtml">
-      <publishTime>01/12/2016 13:16:17</publishTime>
+      <publishTime>02/11/2016 10:20:38</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaSimple.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4921,7 +4921,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>07/22/2016 12:43:53</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>10/18/2016 12:26:42</publishTime>
+      <publishTime>11/10/2016 13:14:29</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion.cshtml">
       <publishTime>07/22/2016 12:43:53</publishTime>
@@ -4930,7 +4930,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>07/22/2016 12:43:53</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion_Simultaneo.cshtml">
-      <publishTime>10/12/2016 17:53:38</publishTime>
+      <publishTime>03/11/2016 13:51:14</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Texto.cshtml">
       <publishTime>07/22/2016 15:00:30</publishTime>

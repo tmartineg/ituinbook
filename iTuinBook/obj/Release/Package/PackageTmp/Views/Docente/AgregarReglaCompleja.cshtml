@@ -78,22 +78,34 @@
             @Html.ValidationMessageFor(model => model.Regla_2)
         </div>
         </div>
+        <!-- select para discernir entre fdbk auditivo y fdbk textual-->
+        <hr />
+        <div>
+            <p>Tipo de feedback</p>
+            <select id="fdbk-type-select">
+                <option disabled selected>Escoge una opción</option>
+                <option value="0">Texto</option>
+                <option value="1">Audio</option>
+            </select>
+        </div>
+        <div id="fdbk-input-text" class="hiddenDebug">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Feedback)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Feedback)
+                @Html.ValidationMessageFor(model => model.Feedback)
+            </div>
+        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Feedback)
+        <div id="fdbk-input-audio" class="hiddenDebug">
+            <div class="editor-label">
+                @Html.Label("Feedback")
+            </div>
+            <div class="editor-field">
+                <input type="file" name="file" id="file" />
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Feedback)
-            @Html.ValidationMessageFor(model => model.Feedback)
-        </div>
-
-        <div class="editor-label">
-            @Html.Label("Audio feedback")
-        </div>
-        <div class="editor-field">
-            <input type="file" name="file" id="file"/>
-        </div>
-
 
         <div>
             <input type="submit" value="Agregar regla" />
@@ -222,6 +234,21 @@
     
     <script type="text/javascript">
         $(document).ready(function () { 
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/99
+            $("#fdbk-type-select").change(function () {
+                if ($(this).val() == 0) {
+                    //tipo texto seleccionado
+                    $("#fdbk-input-audio").addClass("hiddenDebug");
+                    $("#fdbk-input-text").removeClass("hiddenDebug");
+                }else if ($(this).val() == 1){
+                    //tipo audio seleccionado
+                    $("#fdbk-input-text").addClass("hiddenDebug");
+                    $("#fdbk-input-audio").removeClass("hiddenDebug");
+                }
+            });
+
+
+
             $("#OpCodeID").change(function () {
                 if ($(this).val() == "1" || $(this).val() == "3") {
                     $("#regla2").hide();

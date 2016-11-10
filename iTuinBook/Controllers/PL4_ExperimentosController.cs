@@ -46,8 +46,14 @@ namespace ReadAndLearn.Controllers
             string[] idsRespuesta = respuesta.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries);
 
             string[] idsPert = pregunta.Pertinente.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids pertinentes de la pregunta
-            string[] idsDist = pregunta.Distractoras.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids distractores de la pregunta
-            
+            string[] idsDist;
+            try { 
+                idsDist = pregunta.Distractoras.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids distractores de la pregunta
+            }
+            catch (Exception e)
+            {
+                idsDist = new string[] {""};
+            }
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
