@@ -45,12 +45,21 @@ namespace ReadAndLearn.Controllers
             respuesta = respuesta.Trim();
             string[] idsRespuesta = respuesta.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries);
 
-            string[] idsPert = pregunta.Pertinente.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids pertinentes de la pregunta
+            string[] idsPert;
+            try
+            {
+                idsPert = pregunta.Pertinente.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries); //ids pertinentes de la pregunta
+            }
+            catch (Exception e1) {
+                idsPert = new string[] { "" };
+            } 
+            
+            
             string[] idsDist;
             try { 
                 idsDist = pregunta.Distractoras.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids distractores de la pregunta
             }
-            catch (Exception e)
+            catch (Exception e2)
             {
                 idsDist = new string[] {""};
             }

@@ -331,7 +331,7 @@
                     //load audio files
                     var audioList = { 'file': 'http://' + msg, 'title': 'Feedback-title' };
                     //launch player
-                    new audioControls(audioList);
+                    var audiocontrols = new audioControls(audioList);
                     //show player
                     $("#audioPlayer").removeClass("hiddenDebug");
                 }
@@ -387,6 +387,8 @@
                         {
                             text: "Cerrar",
                             click: function () {
+                                //to-do stop reproduction
+                                audiocontrols.engine.stop();
 
                                 var datetimeclient = new Date().toISOString();
 
