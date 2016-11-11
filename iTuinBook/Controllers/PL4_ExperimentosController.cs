@@ -955,7 +955,7 @@ namespace ReadAndLearn.Controllers
             }
             catch (Exception e)
             {
-                return RedirectToAction("Error", new { error = "Error al intentar mostrar el texto.", excepcion = e.InnerException, GrupoID = GrupoID, ModuloID = ModuloID });
+                return RedirectToAction("Error", new { error = "Error al intentar mostrar el texto.", excepcion = e.InnerException.Message, GrupoID = GrupoID, ModuloID = ModuloID });
             }
         }
 

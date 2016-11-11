@@ -43,7 +43,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>11/11/2016 10:20:53</publishTime>
+      <publishTime>11/11/2016 11:01:50</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -169,7 +169,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>11/11/2016 10:20:53</publishTime>
+      <publishTime>11/11/2016 11:01:49</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4399,7 +4399,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarPregunta.cshtml">
-      <publishTime>01/12/2016 13:16:17</publishTime>
+      <publishTime>11/11/2016 11:03:28</publishTime>
     </File>
     <File Include="Views/Docente/AdministrarTexto.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>

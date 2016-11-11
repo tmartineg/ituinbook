@@ -796,7 +796,9 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.Texto = db.Textos.Find(TextoID);
 
-            return RedirectToAction("EditarPagina", new { TextoID = TextoID, PaginaID = PaginaID });            
+            return RedirectToAction("AdministrarTexto", new { TextoID = TextoID });
+            //eliminar cuando vuelva ok a AdministrarTexto
+            //return RedirectToAction("EditarPagina", new { TextoID = TextoID, PaginaID = PaginaID });            
         }
         public ActionResult VerPagina(int TextoID, int PaginaID)
         {
