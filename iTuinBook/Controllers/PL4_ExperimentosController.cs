@@ -59,7 +59,7 @@ namespace ReadAndLearn.Controllers
             try { 
                 idsDist = pregunta.Distractoras.Split(new Char[] {','}, StringSplitOptions.RemoveEmptyEntries); //ids distractores de la pregunta
             }
-            catch (Exception e2)
+            catch (Exception e)
             {
                 idsDist = new string[] {""};
             }
