@@ -630,7 +630,8 @@ namespace ReadAndLearn.Controllers
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
             Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
             Regex endwordregexp = new Regex(@"[\s.:,;&\(\)\[\]\\\/\-_¿\?¡\!]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
-
+            Regex ampchar = new Regex(@"(&.acute;|&.grave;|&.tilde;)"); //regexp para ver si lo siguiente en el texto es una letra con acento o ñ
+            bool hastilde = false; //indica a if (alphanumeric | hastilde) si debe contar lo que viene como palabra aunque empiece por &
 
             //preparación de source para su parseo
             source = source.Trim(); //eliminación de espacios en blanco al principio y final
@@ -645,6 +646,17 @@ namespace ReadAndLearn.Controllers
             while (pos < text.Length)
             {
                 //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/89
+                //see if text[pos,pos+6] = caracter con acento
+                if (pos+8 > text.Length){
+                    hastilde = false;
+                }else if (ampchar.IsMatch(source.Substring(pos,8))){
+                    hastilde = true;
+                }else{
+                    hastilde = false;
+                }
+                    
 
                 /************** START HTML TAG****************/
                 if (text[pos].ToString().CompareTo("<") == 0)  
@@ -686,7 +698,7 @@ namespace ReadAndLearn.Controllers
                 }
 
                 /************** PALABRA (ALFANUMÉRICO) *******/
-                else if (alphanumericregexp.IsMatch(text[pos].ToString())) //alphanumeric start (palabra, o número)
+                else if (alphanumericregexp.IsMatch(text[pos].ToString()) || hastilde) //alphanumeric start (palabra, o número)
                 {
                     System.Diagnostics.Debug.Write("start alphanumeric -> pos=" + pos + " - text(pos)=" + text[pos]);
                     endwordflag = false;
@@ -700,7 +712,7 @@ namespace ReadAndLearn.Controllers
                         {
                             endtextflag = true;
                         }
-                        else if (text[pos].ToString().CompareTo("&") == 0)
+                        else if (text[pos].ToString().CompareTo("&") == 0 || hastilde)
                         {
                             //el caracter es un & de acento
                             while (text[pos].ToString().CompareTo(";") != 0)
@@ -708,6 +720,7 @@ namespace ReadAndLearn.Controllers
                                 aux += text[pos++];
                             }
                             aux += text[pos++];
+                            hastilde = false;
                         }
                         else if (!alphanumericregexp.IsMatch(text[pos].ToString()))
                         {
