@@ -1488,7 +1488,7 @@ namespace ReadAndLearn.Controllers
             
             foreach (Alternativa alt in pregunta.Alternativas)
             {
-                if (alt.Opcion == respuestaTest)
+                if (String.Compare(alt.Opcion.Trim(), respuestaTest.Trim()) == 0)
                 {
                     if (alt.Valor) // Acierto
                     {
