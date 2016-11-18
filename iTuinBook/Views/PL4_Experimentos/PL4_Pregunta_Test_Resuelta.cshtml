@@ -46,7 +46,7 @@
 
                     if (alt.Opcion != null)
                     {
-                        if (alt.Opcion == ds.Info)
+                        if (String.Compare(alt.Opcion.Trim(), ds.Info.Trim()) == 0)
                         { 
                             @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
                         }

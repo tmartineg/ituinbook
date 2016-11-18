@@ -629,7 +629,7 @@ namespace ReadAndLearn.Controllers
             bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
             Regex alphanumericregexp = new Regex(@"[a-zA-Z0-9áéíóúñ]");     //regexp para ver si un caracter es alfanumérico o no
-            Regex endwordregexp = new Regex(@"[\s.:,;&\(\)\[\]\\\/\-_¿\?¡\!]");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
+            Regex endwordregexp = new Regex(@"[\s.:,;&""\(\)\[\]\\\/\-_\¿\?\¡\!']");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
             Regex ampchar = new Regex(@"(&.acute;|&.grave;|&.tilde;)"); //regexp para ver si lo siguiente en el texto es una letra con acento o ñ
             bool hastilde = false; //indica a if (alphanumeric | hastilde) si debe contar lo que viene como palabra aunque empiece por &
 
@@ -744,8 +744,20 @@ namespace ReadAndLearn.Controllers
                 }
                 else if (endwordregexp.IsMatch(text[pos].ToString()))		//signo de puntuación
                 {
-
+                    
                     result += text[pos++];
+                    if (text[pos].ToString().CompareTo(" ") != 0)
+                    {
+                        //el caracter es un & de simbolo (", !, '...)
+                        while (text[pos].ToString().CompareTo(";") != 0)
+                        {
+                            aux += text[pos++];
+                            if (pos >= text.Length)
+                                break;
+                        }
+                        aux += text[pos++];
+                    
+                    }
 
                 }
                 else
@@ -1224,7 +1236,7 @@ namespace ReadAndLearn.Controllers
         public ActionResult AgregarAlternativa(Alternativa nuevaAltenativa, int? TextoID, int? PaginaID, int PreguntaID)
         {
             ViewBag.Pregunta = db.Preguntas.Find(PreguntaID);
-
+            nuevaAltenativa.Opcion = nuevaAltenativa.Opcion.Trim();
             db.Preguntas.Find(PreguntaID).Alternativas.Add(nuevaAltenativa);
 
             db.SaveChanges();
