@@ -1,0 +1,10 @@
+*.svn*
+*.DS_Store*
+exclude.lst
+*exclude.lst
+todo.js
+_*
+.*
+._*
+*._*
+*.zip

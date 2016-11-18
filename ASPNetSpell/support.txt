@@ -1,0 +1,11 @@
+Quickstart Guide
+====================
+1 Download and unzip AspNetSpell to a convenient location on your hard disk.
+2 Add the ASPNetSpell.dll to your Visual Studio toolbox.   You can double click Installer.vscontent to do this. 
+3 Drag the directory called "AspNetSpellInclude" to the root folder of your website project.   
+4 Drag the SpellTextBox or SpellButton into your Web Page in Visual Studio
+
+
+* Troubleshooting Guide: http://www.aspnetspell.com/Troubleshooting
+* Support: http://aspnetspell.com/Support if you need help with anything!
+

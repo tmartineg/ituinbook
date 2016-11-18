@@ -1,0 +1,9 @@
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005">
+    <Content>
+        <FileName>ASPNetSpell.dll</FileName>
+        <DisplayName>ASPNetSpell</DisplayName>
+        <Description>ASPNetSpell - the Popular Spell Checking Component for Microsoft ASP.Net</Description>
+        <FileContentType>Toolbox Control</FileContentType>
+        <ContentVersion>1.0</ContentVersion>
+    </Content>
+</VSContent>
