@@ -101,3 +101,4 @@ E:\guirisan\software-development\ituinbook\iTuinBook\obj\Release\ReadAndLearn.cs
 E:\guirisan\software-development\ituinbook\iTuinBook\obj\Release\en\Read&Learn.resources.dll
 E:\guirisan\software-development\ituinbook\iTuinBook\obj\Release\Read&Learn.dll
 E:\guirisan\software-development\ituinbook\iTuinBook\obj\Release\Read&Learn.pdb
+E:\guirisan\software-development\ituinbook\iTuinBook\bin\ASPNetSpell.dll

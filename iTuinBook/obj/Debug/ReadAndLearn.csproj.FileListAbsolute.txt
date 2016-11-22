@@ -204,3 +204,4 @@ E:\guirisan\software-development\readandlearnproject\iTuinBook\obj\Debug\ReadAnd
 E:\guirisan\software-development\readandlearnproject\iTuinBook\obj\Debug\en\Read&Learn.resources.dll
 E:\guirisan\software-development\readandlearnproject\iTuinBook\obj\Debug\Read&Learn.dll
 E:\guirisan\software-development\readandlearnproject\iTuinBook\obj\Debug\Read&Learn.pdb
+E:\guirisan\software-development\ituinbook\iTuinBook\bin\ASPNetSpell.dll

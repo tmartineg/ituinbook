@@ -2426,11 +2426,9 @@ namespace ReadAndLearn.Controllers
             //guirisan/secuencias
             ds.Momento = datetimeclient;
             ds.NumAccion = numAccion;
-
             ds.PreguntaID = PreguntaID;
             ds.TextoID = pregunta.Texto.TextoID;
             ds.DatosUsuarioID = du.DatosUsuarioID;
-            ds.Info = respuesta;
             ds.Dato03 = 1; // Indica intento
             db.DatosSimples.Add(ds);
             du.DatoSimple.Add(ds);

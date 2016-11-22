@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASPNetSpell">
+      <HintPath>..\ASPNetSpell\ASPNetSpell.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
@@ -223,6 +226,95 @@
       <DependentUpon>Multi.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\ASPNetSpellInclude\core\Default.aspx" />
+    <Content Include="Content\ASPNetSpellInclude\core\dialog.js" />
+    <Content Include="Content\ASPNetSpellInclude\dialog.html" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\custom.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\banned-words.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\common-mistakes.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\enforced-corrections.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\README.txt" />
+    <Content Include="Content\ASPNetSpellInclude\include.js" />
+    <Content Include="Content\ASPNetSpellInclude\license.txt" />
+    <Content Include="Content\ASPNetSpellInclude\support.txt" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\buttons\spellicon.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\buttons\spelliconover.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\xp.gif" />
+    <Content Include="Content\ASPNetSpellInclude\translations\af.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ar.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\be.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\bg.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ca.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cn.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cs.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cy.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\da.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\de.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\el.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\en.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\es.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\et.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fa.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ga.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\gl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hu.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\id.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\is.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\it.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\iw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ja.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ko.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\lt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\lv.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\mk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ms.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\mt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\nl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\no.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\pl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\pt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ro.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ru.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\simple.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sq.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\template.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\th.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\uk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\vi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\yi.js" />
     <Content Include="Content\aspa.png" />
     <Content Include="Content\Ayudas\ayuda_flotador.jpg" />
     <Content Include="Content\Ayudas\ayuda_texto_1.png" />
@@ -1072,6 +1164,15 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\ASPNetSpellInclude\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\core\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\core\default.ashx" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\English %28International%29.dic" />
+    <Content Include="Content\ASPNetSpellInclude\themes\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\.DS_Store" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -15,50 +15,77 @@
         <b>PUNTOS:</b>
         <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
     </div>
+    <!-- ************************************************************ -->
+    @{
 
-    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
-        @Html.Raw(Model.Enunciado)    
-        @if (Model.Ayuda != null)
-        {
-            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
-        }
-    </div>
-     
-    <div style="padding-left: 20px; padding-right: 20px;">
-        <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras"></textarea>
-    </div>
 
-    @if(ViewBag.TareaSel)
-    {
-        <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
-            <b>Selección:</b>
-            <p style="color: red;">@Html.Raw(ds.Info2)</p>
-        </div>
+        /// Create a ASPNetSpell spell- as-you-type feature for any textarea
+        //ASPNetSpell.Razor.SpellAsYouType mySpell = new ASPNetSpell.Razor.SpellAsYouType();
+        //mySpell.InstallationPath = ("/ReadAndLearn/Content/ASPNetSpellInclude");
+        //mySpell.FieldsToSpellCheck = "respuesta";
+
+
+        /// Create a ASPNetSpell spellchecker button
+        ASPNetSpell.Razor.SpellButton mySpellButton = new ASPNetSpell.Razor.SpellButton();
+        mySpellButton.InstallationPath = ("/ReadAndLearn/Content/ASPNetSpellInclude");
+        mySpellButton.FieldsToSpellCheck = "respuesta";
+        mySpellButton.DictionaryLanguage = "Espanol";
+        mySpellButton.ButtonType = 0;
     }
 
-    <div id="ayudas" style="float:right; visibility: hidden;">    
-        @if (Model.Ayuda != null)
+        @{
+            //Html.Raw(mySpell.getHtml());
+          
+        }}
+
+        
+        
+        
+        <!-- ************************************************-->
+        <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+            @Html.Raw(Model.Enunciado)
+            @if (Model.Ayuda != null)
+            {
+                <div id="ayuFlotador" hidden="hidden" ; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
+            }
+        </div>
+
+        <div style="padding-left: 20px; padding-right: 20px;">
+            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras"></textarea>
+        </div>
+
+        @if (ViewBag.TareaSel)
         {
-            if (Model.Ayuda.ParafraseoN1 != null)
-            {
-                <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
-            }
+            <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
+                <b>Selección:</b>
+                <p style="color: red;">@Html.Raw(ds.Info2)</p>
+            </div>
+        }
 
-            if (Model.Ayuda.Prismaticos != null)
+        <div id="ayudas" style="float:right; visibility: hidden;">
+            @if (Model.Ayuda != null)
             {
-                <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
-            }
+                if (Model.Ayuda.ParafraseoN1 != null)
+                {
+                    <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
+                }
 
-            if (Model.Ayuda.Lupa != null)
-            {
-                <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+                if (Model.Ayuda.Prismaticos != null)
+                {
+                    <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
+                }
+
+                if (Model.Ayuda.Lupa != null)
+                {
+                    <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+                }
             }
-        } 
-    </div>
-    
-    <div style="padding-left: 20px; padding-right: 20px;">
-        <button disabled="disabled" id="btnValidarAbierta">Validar</button>                       
-    </div>
+        </div>
+
+        <div style="padding-left: 20px; padding-right: 20px;">
+            <button disabled="disabled" id="btnValidarAbierta">Validar</button>
+            @Html.Raw(mySpellButton.getHtml())
+        </div>
 </div>
 
 @section Scripts {
