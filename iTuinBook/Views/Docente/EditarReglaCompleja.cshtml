@@ -238,8 +238,11 @@
                 $("#OperadorID").val("0");
 
                 $("#regla1").show();
-                $("#Regla1ID").val("@Model.Regla_1");
-                
+
+                //$("#Regla1ID").val("@@Model.Regla_1"); 
+                //comentado porque no tiene sentido cargar el id de la regla antes de cargar el <select>
+                //revisar doble @@
+
                 if ($("#OpCodeID").val() == "1") {
                     $("#ReglaS").show();
                     $("#ReglaC").hide();

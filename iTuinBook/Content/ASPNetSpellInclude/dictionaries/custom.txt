@@ -8,3 +8,12 @@ JavaScript
 iFrame
 Textarea
 Textareas
+Torricelli
+hectopascal
+milibar
+Hg
+mb
+hPa
+atm
+m
+mm

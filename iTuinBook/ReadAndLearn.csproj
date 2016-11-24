@@ -1173,6 +1173,7 @@
     <Content Include="Content\ASPNetSpellInclude\themes\classic\.DS_Store" />
     <Content Include="Content\ASPNetSpellInclude\themes\clean\.DS_Store" />
     <Content Include="Content\ASPNetSpellInclude\themes\modern\.DS_Store" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\Espanol.dic" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

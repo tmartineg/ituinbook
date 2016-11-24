@@ -46,7 +46,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>11/22/2016 19:15:55</publishTime>
+      <publishTime>11/24/2016 13:23:59</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -172,7 +172,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>11/22/2016 19:15:55</publishTime>
+      <publishTime>11/24/2016 13:23:59</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -271,10 +271,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>11/18/2016 14:11:15</publishTime>
     </File>
     <File Include="Content/ASPNetSpellInclude/dictionaries/custom.txt">
-      <publishTime>11/18/2016 14:11:15</publishTime>
+      <publishTime>11/24/2016 13:33:41</publishTime>
     </File>
     <File Include="Content/ASPNetSpellInclude/dictionaries/English %28International%29.dic">
       <publishTime>11/18/2016 14:11:15</publishTime>
+    </File>
+    <File Include="Content/ASPNetSpellInclude/dictionaries/Espanol.dic">
+      <publishTime>11/24/2016 13:32:37</publishTime>
     </File>
     <File Include="Content/ASPNetSpellInclude/dictionaries/language-rules/banned-words.txt">
       <publishTime>11/18/2016 14:11:15</publishTime>
@@ -289,7 +292,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>11/18/2016 14:11:15</publishTime>
     </File>
     <File Include="Content/ASPNetSpellInclude/include.js">
-      <publishTime>11/18/2016 14:11:15</publishTime>
+      <publishTime>11/22/2016 20:10:31</publishTime>
     </File>
     <File Include="Content/ASPNetSpellInclude/license.txt">
       <publishTime>11/18/2016 14:11:15</publishTime>
@@ -4831,7 +4834,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>09/21/2016 02:28:58</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaCompleja.cshtml">
-      <publishTime>11/02/2016 10:20:38</publishTime>
+      <publishTime>11/23/2016 12:33:58</publishTime>
     </File>
     <File Include="Views/Docente/EditarReglaSimple.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4978,7 +4981,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>11/22/2016 19:14:31</publishTime>
+      <publishTime>11/24/2016 13:22:29</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_2.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
