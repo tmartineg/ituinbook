@@ -388,8 +388,9 @@
                             text: "Cerrar",
                             click: function () {
                                 //to-do stop reproduction
-                                audiocontrols.engine.stop();
-
+                                if (msg.substr(0, 7) === "lectura") {
+                                    audiocontrols.engine.stop();
+                                }
                                 var datetimeclient = new Date().toISOString();
 
                                 //NUMACC

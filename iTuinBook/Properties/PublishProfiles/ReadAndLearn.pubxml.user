@@ -46,7 +46,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>11/24/2016 13:23:59</publishTime>
+      <publishTime>12/05/2016 12:56:27</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -172,7 +172,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>11/24/2016 13:23:59</publishTime>
+      <publishTime>12/05/2016 12:56:27</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4768,7 +4768,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarModulo.cshtml">
-      <publishTime>10/26/2016 12:32:09</publishTime>
+      <publishTime>12/01/2016 12:22:58</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarPregunta.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4981,7 +4981,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>11/24/2016 13:22:29</publishTime>
+      <publishTime>11/24/2016 13:37:01</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_2.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -5221,7 +5221,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>07/22/2016 12:43:53</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>11/17/2016 13:13:40</publishTime>
+      <publishTime>12/05/2016 12:47:56</publishTime>
     </File>
     <File Include="Views/PL4_Experimentos/PL4_Pregunta_Test_Seleccion.cshtml">
       <publishTime>07/22/2016 12:43:53</publishTime>

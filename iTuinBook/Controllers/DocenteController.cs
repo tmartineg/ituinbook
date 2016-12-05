@@ -746,6 +746,9 @@ namespace ReadAndLearn.Controllers
                 {
                     
                     result += text[pos++];
+                    if (pos >= text.Length)
+                                break;
+
                     if (text[pos].ToString().CompareTo(" ") != 0)
                     {
                         //el caracter es un & de simbolo (", !, '...)

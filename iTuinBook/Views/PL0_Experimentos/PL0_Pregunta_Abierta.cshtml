@@ -19,85 +19,77 @@
     @{
 
 
-        /// Create a ASPNetSpell spell- as-you-type feature for any textarea
-        //ASPNetSpell.Razor.SpellAsYouType mySpell = new ASPNetSpell.Razor.SpellAsYouType();
-        //mySpell.InstallationPath = ("/ReadAndLearn/Content/ASPNetSpellInclude");
-        //mySpell.FieldsToSpellCheck = "respuesta";
 
-
-        /// Create a ASPNetSpell spellchecker button
+        ASPNetSpell.Razor.SpellAsYouType mySpell = new ASPNetSpell.Razor.SpellAsYouType();
+        mySpell.InstallationPath = ("/ReadAndLearn/Content/ASPNetSpellInclude");
+        mySpell.FieldsToSpellCheck = "respuesta";
+        mySpell.UserInterfaceLanguage = "es";
+        mySpell.DictionaryLanguage = "Espanol";
+        mySpell.CaseSensitive = false; //no corregir maYÚscUlas fuera del sitio
+        mySpell.CheckGrammar = false;  //no corregir gramatica (palabras repetidas, mayuscula de frase...)
+        mySpell.IgnoreAllCaps = true;  //ignorar palabras en mayúsculas
+        mySpell.IgnoreNumeric = true;  //ignorar palabras que contengan números
+        //mySpell.AddWordsToDictionary = new Enum ('2') ; //deshabilita la inserción en diccionario //puta mierda de opcion, no acepta 0-1-2 como parametros com o hace myspellbutton
+        
+        /*comentado por descartar corrección mediante popup 23/11/2016*/
+        /*
         ASPNetSpell.Razor.SpellButton mySpellButton = new ASPNetSpell.Razor.SpellButton();
         mySpellButton.InstallationPath = ("/ReadAndLearn/Content/ASPNetSpellInclude");
+        mySpellButton.UserInterfaceLanguage = "es";
         mySpellButton.FieldsToSpellCheck = "respuesta";
         mySpellButton.DictionaryLanguage = "Espanol";
         mySpellButton.ButtonType = 0;
+        mySpellButton.ModalDialog = true;
+        */
+        
     }
 
         @{
-            //Html.Raw(mySpell.getHtml());
-          
-        }}
+            
+            
+            //utilizar en caso de rehabilitar el botón
+            //Html.Raw(mySpellButton.getHtml())
+        }
 
         
         
         
         <!-- ************************************************-->
-        <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        <div id="enunciado" style="padding-left: 20px; padding-right: 20px;">
             @Html.Raw(Model.Enunciado)
-            @if (Model.Ayuda != null)
-            {
-                <div id="ayuFlotador" hidden="hidden" ; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
-            }
+        </div>
+
+        <div id="placeholder" style="padding-left: 20px; padding-right: 20px; color: rgba(160, 160, 160, 0.68);">
+            <!-- keeps message 'Debes escribir al menos dos palabras-->
+            Debes escribir al menos dos palabras
         </div>
 
         <div style="padding-left: 20px; padding-right: 20px;">
-            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras"></textarea>
+            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" cols="100" rows="10"></textarea>
         </div>
 
-        @if (ViewBag.TareaSel)
-        {
-            <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color: red;">@Html.Raw(ds.Info2)</p>
-            </div>
-        }
-
-        <div id="ayudas" style="float:right; visibility: hidden;">
-            @if (Model.Ayuda != null)
-            {
-                if (Model.Ayuda.ParafraseoN1 != null)
-                {
-                    <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
-                }
-
-                if (Model.Ayuda.Prismaticos != null)
-                {
-                    <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
-                }
-
-                if (Model.Ayuda.Lupa != null)
-                {
-                    <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
-                }
-            }
-        </div>
-
+       
         <div style="padding-left: 20px; padding-right: 20px;">
             <button disabled="disabled" id="btnValidarAbierta">Validar</button>
-            @Html.Raw(mySpellButton.getHtml())
+            
         </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    
+    <!--render script for spell as you type-->
+    @Html.Raw(mySpell.getHtml());
 
     <script type="text/javascript">        
+
         $(document).ready(function () {
             var timeStart = new Date();
             var timeFinish = new Date();
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/41
             //exige un mínimo de 5 palabras para activar el botón de validar
+            /********************************************************
             $("textarea#respuesta").bind('input propertychange', function () {
                 //capturamos el evento de cambio en el textarea, 
                 //si hay más de 5 palabras activamos el boton
@@ -109,6 +101,25 @@
 
                 }
             });
+            *******************************************************/
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/120
+            //al usar el as-you-type spellcheck se desactiva el textarea y ya no sirve
+            //la comprobación de numero de palabras hecha arriba. hay que trabajar sobre div#respuesta__livespell_proxy.livespell_textarea
+            $(document).on("keyup", function () {
+                var respuesta = $("#respuesta___livespell_proxy");
+                /* no se puede hacer un placeholder para el div#respuesta___livespell_proxy*/
+
+                if (($.trim(respuesta.html())).split(' ').length > 1) {
+                    $("button#btnValidarAbierta").removeAttr("disabled");
+                    $("#placeholder").addClass("hiddenDebug");
+                } else {
+                    $("button#btnValidarAbierta").attr("disabled", "disabled");
+                    $("#placeholder").removeClass("hiddenDebug");
+
+                }
+            });
+
 
 
 
@@ -202,13 +213,7 @@
                         });
 
 
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-
-
+        
 
                     },
                     error: function () {
@@ -479,5 +484,6 @@
             
             
         });
+
     </script>
 }
