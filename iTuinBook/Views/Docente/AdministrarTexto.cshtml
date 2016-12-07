@@ -67,7 +67,12 @@
         }   
     </table>
     <hr />
-    @Html.ActionLink("Crear Página", "CrearPagina", new { TextoID = Model.TextoID })
+    
+    @{
+        if (Model.Paginas.Count == 0) { 
+            Html.ActionLink("Crear Página", "CrearPagina", new { TextoID = Model.TextoID });
+        }
+    }
     <hr />
     <h3>Sus Preguntas</h3>
     <hr />

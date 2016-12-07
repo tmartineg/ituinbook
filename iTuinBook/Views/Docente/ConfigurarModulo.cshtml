@@ -15,25 +15,26 @@
         <legend>ConfigModulo</legend>
 
         @Html.HiddenFor(model => model.ConfigModuloID)
+        <div class="hiddenDebug">
+            <div class="editor-label">
+                @Html.Label("¿Quieres usar avatares?")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.Avatares, new[] {
+                    new SelectListItem { Text = "Sí", Value = bool.TrueString },
+                    new SelectListItem { Text = "No", Value = bool.FalseString } })
+                @Html.ValidationMessageFor(model => model.Avatares)
+            </div>
 
-        <div class="editor-label">
-            @Html.Label("¿Quieres usar avatares?")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.Avatares, new [] { 
-                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
-                new SelectListItem { Text = "No", Value = bool.FalseString } })            
-            @Html.ValidationMessageFor(model => model.Avatares)
-        </div>
-
-        <div class="editor-label">
-            @Html.Label("¿Quieres usar sistema de puntos?")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.Puntos, new [] { 
-                new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
-                new SelectListItem { Text = "No", Value = bool.FalseString } })   
-            @Html.ValidationMessageFor(model => model.Puntos)
+            <div class="editor-label">
+                @Html.Label("¿Quieres usar sistema de puntos?")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.Puntos, new[] {
+                    new SelectListItem { Text = "Sí", Value = bool.TrueString },
+                    new SelectListItem { Text = "No", Value = bool.FalseString } })
+                @Html.ValidationMessageFor(model => model.Puntos)
+            </div>
         </div>
 
         <div class="editor-label">
@@ -44,7 +45,7 @@
                 new SelectListItem { Text = "Sí", Value = bool.TrueString }, 
                 new SelectListItem { Text = "No", Value = bool.FalseString } })   
             @Html.ValidationMessageFor(model => model.Feedback)
-        @*</div>*@
+        </div>
 
         <div class="editor-label">
             @Html.Label("¿Quieres usar ayudas?")
