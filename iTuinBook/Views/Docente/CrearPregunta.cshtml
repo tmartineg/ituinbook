@@ -46,13 +46,16 @@
             @Html.DropDownListFor(m => m.TipoPreguntaID, new SelectList(ViewBag.Tipos, "TipoPreguntaID", "Tipo"), new { id = "tipoPreg" })
             @Html.ValidationMessageFor(model => model.TipoPreguntaID)
         </div>
-        <hr />
-        <div class="editor-label">
-            @Html.Label("Identificador de Tarea")
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.TareaID)
-            @Html.ValidationMessageFor(model => model.TareaID)
+        <div class="hiddenDebug">
+            <hr />
+
+            <div class="editor-label">
+                @Html.Label("Identificador de Tarea")
+            </div>
+
+            <div class="editor-field">
+                <textarea  data-val="true" data-val-number="El campo TareaID debe ser un número." data-val-required="El campo TareaID es obligatorio." id="TareaID" name="TareaID" rows="2">0</textarea>
+            </div>
         </div>
         <hr />
         <div class="editor-label">

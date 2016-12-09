@@ -54,6 +54,13 @@
             
             foreach (Grupo gru in Model)
             {
+                // añadido para evitar ERROR dado al matricularse en un grupo sin módulos e intentar listar las tareas
+                if (gru.Orden.CompareTo("") == 0)
+                {
+                    break;
+                }
+                
+                
                 var param = gru.Orden.Split(':');
                 bool flag_empezar = false;
 

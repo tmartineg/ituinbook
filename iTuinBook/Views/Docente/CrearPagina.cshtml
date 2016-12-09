@@ -301,7 +301,7 @@
                                         var editor = $("#editor").data("kendoEditor");
                                         var content = $("#addQuestion-content").val();
                                         
-                                        editor.clipboard.paste("<strong><a href=\"/ReadAndLearn/PL4_Experimentos/PL4_Pregunta/btnPreguntas?GrupoID=247&amp;ModuloID=1218&amp;preguntaActual=0&amp;textoID=403&amp;segundoIntento=False&amp;preguntaResuelta=False\">Pregunta " + content + "</a><strong>");
+                                        editor.clipboard.paste("<strong><a href=\"/ReadAndLearn/PL4_Experimentos/PL4_Pregunta/btnPreguntas?GrupoID=@ViewBag.Grupo&ModuloID=@ViewBag.Modulo&preguntaActual=" + (content-1) + "&textoID=@ViewBag.Texto&segundoIntento=False&preguntaResuelta=False\">Pregunta " + content + "</a><strong>");
                                         $(this).dialog("close");
                                     },
                                     "Cancelar": function () {

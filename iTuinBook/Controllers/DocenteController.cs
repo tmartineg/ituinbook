@@ -645,6 +645,7 @@ namespace ReadAndLearn.Controllers
 
             while (pos < text.Length)
             {
+                aux = "";
                 //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
 
                 //guirisan/issues https://github.com/guirisan/ituinbook/issues/89
@@ -749,16 +750,15 @@ namespace ReadAndLearn.Controllers
                     if (pos >= text.Length)
                                 break;
 
-                    if (text[pos].ToString().CompareTo(" ") != 0)
+                    if (text[pos].ToString().CompareTo("&") == 0)
                     {
                         //el caracter es un & de simbolo (", !, '...)
                         while (text[pos].ToString().CompareTo(";") != 0)
                         {
                             aux += text[pos++];
-                            if (pos >= text.Length)
-                                break;
                         }
                         aux += text[pos++];
+                        result += aux;
                     
                     }
 
