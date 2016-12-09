@@ -2029,7 +2029,6 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.DatosUsuario = du;
             ViewBag.DatoSimple = ds;
-            //guirisan
             ViewBag.feedbackText = feedbackText;
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta

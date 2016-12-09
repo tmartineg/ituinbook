@@ -77,47 +77,51 @@
     </table>
     <hr />
     @Html.ActionLink("Crear Texto", "CrearTexto", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
-    <hr />
-    <h3>Sus Escenas</h3>
-    <hr />
+    
+    <div class="hiddenDebug">
+        <hr />
+        <h3>Sus Escenas</h3>
+        <hr />
 
-    <table id="grid2">
-        <tr>            
-            <th>
-                Escena
-            </th>
-            <th>
-                Descripción
-            </th>        
-            <th>
-                Comandos
-            </th>
-        </tr>
-        @{var escenas = Model.Escenas;
-
-          if (escenas != null)
-        {
-            foreach (Escena esc in escenas)
-            {
+        <table id="grid2">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => esc.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => esc.Descripcion)
-                </td>     
-                <td>            
-                    <b>@Html.ActionLink("Administrar", "AdministrarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, null)</b>
-                    <b>@Html.ActionLink("Eliminar", "EliminarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar la escena?');"})</b>   
-                </td>                    
+                <th>
+                    Escena
+                </th>
+                <th>
+                    Descripción
+                </th>
+                <th>
+                    Comandos
+                </th>
             </tr>
-            } 
-        }
-    }   
-    </table>
-    <hr />
-    @Html.ActionLink("Crear Escena", "CrearEscena", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
-    <hr />
+            @{var escenas = Model.Escenas;
+
+            if (escenas != null)
+            {
+                foreach (Escena esc in escenas)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => esc.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => esc.Descripcion)
+                        </td>
+                        <td>
+                            <b>@Html.ActionLink("Administrar", "AdministrarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, null)</b>
+                            <b>@Html.ActionLink("Eliminar", "EliminarEscena", "Docente", new { EscenaID = esc.EscenaID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar la escena?');" })</b>
+                        </td>
+                    </tr>
+                }
+            }
+            }
+        </table>
+
+        <hr />
+        @Html.ActionLink("Crear Escena", "CrearEscena", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
+        <hr />
+    </div>
     <h3>Sus Reglas de FEEDBACK</h3>
     <hr />
 

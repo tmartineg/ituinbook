@@ -136,12 +136,16 @@
     
     <div style="padding-left: 20px; padding-right: 20px;">
 
-        <div class="hiddenDebug">
-            <!-- https://github.com/guirisan/ituinbook/issues/86 -->
-            <!-- botón para volver al texto -->
-            <!--peticion a pl0_texto inicial: PL0_Texto?GrupoID=163&ModuloID=174&textoActual=0&db=ReadAndLearn.Models.Contexto&NumAccion=1 -->
-            <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&SegundoIntento=true">Volver al texto</a></button>
-        </div>
+        @{
+
+            if (Model.Texto.ConfigTexto.Indice)
+            {
+                <!-- https://github.com/guirisan/ituinbook/issues/86 DEPRECATED-->
+                <!-- botón para volver al texto -->
+                <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&SegundoIntento=true">Volver al texto</a></button>
+            }
+        }
+
         <button id="btnValidarTest">Validar</button>                       
         
     </div>

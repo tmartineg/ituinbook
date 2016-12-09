@@ -15,13 +15,6 @@
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    @if (configModulo != null && configModulo.Puntos)
-    {
-        <div style="float:right;">
-            <b>PUNTOS:</b>
-            <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
-        </div>
-    }
 
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)      
@@ -124,11 +117,17 @@
     </div>
     
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <div class="hiddenDebug">
-            <!-- https://github.com/guirisan/ituinbook/issues/86 -->
-            <!-- botón para volver al texto -->
-            <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>
-        </div>
+        @{
+            
+            if (Model.Texto.ConfigTexto.Indice) { 
+                <!-- https://github.com/guirisan/ituinbook/issues/86 DEPRECATED-->
+                <!-- botón para volver al texto -->
+                <button id="btnBackToTexto"><a href="PL0_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&NumAccion=10&preguntaResuelta=true">Volver al texto</a></button>    
+            }
+        }
+
+
+
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
 </div>
