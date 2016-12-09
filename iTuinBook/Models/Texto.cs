@@ -198,7 +198,7 @@ namespace ReadAndLearn.Models
         public bool Marcado { get; set; }
         [Display(Name = "Permitir Hacer notas:")]
         public bool Notas { get; set; }
-        [Display(Name = "Mostrar Índice automático:")]
+        [Display(Name = "Permitir Revisar en el texto:")]
         public bool Indice { get; set; }
         [Display(Name = "Permitir Buscar en el texto:")]
         public bool Busqueda { get; set; }

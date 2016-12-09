@@ -2024,6 +2024,9 @@ namespace ReadAndLearn.Controllers
             ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
             ViewBag.ConfigPregunta = ext.GetConfigPregunta((int)preguntaID);
 
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/125
+            ViewBag.ConfigTexto = pregunta.Texto.ConfigTexto;
+
             ViewBag.DatosUsuario = du;
             ViewBag.DatoSimple = ds;
             //guirisan
