@@ -228,11 +228,11 @@ namespace ReadAndLearn.Models
                 case 1: // RS vs null
                     var Regla1 = getReglaS(Regla.Regla_1);
 
-                    return analisisReglaSimple(Regla1.Variable, Regla1.Operador, Convert.ToDouble(Regla1.Param), du);
+                    return analisisReglaSimple(Regla1.Variable, Regla1.Operador, Convert.ToDouble(Regla1.Param), du, Regla1.ReglaSimpleID);
                 case 2: // null vs RS
                     var Regla2 = getReglaS(Regla.Regla_2);
 
-                    return analisisReglaSimple(Regla2.Variable, Regla2.Operador, Convert.ToDouble(Regla2.Param), du);
+                    return analisisReglaSimple(Regla2.Variable, Regla2.Operador, Convert.ToDouble(Regla2.Param), du, Regla2.ReglaSimpleID);
                 case 3: // RC vs null
                     return analisisReglaCompleja(Regla.Regla_1, du);
                 case 4: // null vs RC
@@ -241,15 +241,15 @@ namespace ReadAndLearn.Models
                     var Regla5a = getReglaS(Regla.Regla_1);
                     var Regla5b = getReglaS(Regla.Regla_2);
 
-                    return operadorLogico(analisisReglaSimple(Regla5a.Variable, Regla5a.Operador, Convert.ToDouble(Regla5a.Param), du), analisisReglaSimple(Regla5b.Variable, Regla5b.Operador, Convert.ToDouble(Regla5b.Param), du), Regla.Operador);
+                    return operadorLogico(analisisReglaSimple(Regla5a.Variable, Regla5a.Operador, Convert.ToDouble(Regla5a.Param), du, Regla5a.ReglaSimpleID), analisisReglaSimple(Regla5b.Variable, Regla5b.Operador, Convert.ToDouble(Regla5b.Param), du, Regla5b.ReglaSimpleID), Regla.Operador);
                 case 6: // RS vs RC
                     var Regla6 = getReglaS(Regla.Regla_1);
 
-                    return operadorLogico(analisisReglaSimple(Regla6.Variable, Regla6.Operador, Convert.ToDouble(Regla6.Param), du), analisisReglaCompleja(Regla.Regla_2, du), Regla.Operador);
+                    return operadorLogico(analisisReglaSimple(Regla6.Variable, Regla6.Operador, Convert.ToDouble(Regla6.Param), du, Regla6.ReglaSimpleID), analisisReglaCompleja(Regla.Regla_2, du), Regla.Operador);
                 case 7: // RC vs RS
                     var Regla7 = getReglaS(Regla.Regla_2);
 
-                    return operadorLogico(analisisReglaCompleja(Regla.Regla_1, du), analisisReglaSimple(Regla7.Variable, Regla7.Operador, Convert.ToDouble(Regla7.Param), du), Regla.Operador);
+                    return operadorLogico(analisisReglaCompleja(Regla.Regla_1, du), analisisReglaSimple(Regla7.Variable, Regla7.Operador, Convert.ToDouble(Regla7.Param), du, Regla7.ReglaSimpleID), Regla.Operador);
                 case 8: // RC vs RC
                     return operadorLogico(analisisReglaCompleja(Regla.Regla_1, du), analisisReglaCompleja(Regla.Regla_2, du), Regla.Operador);
                 default: // Others
@@ -257,9 +257,10 @@ namespace ReadAndLearn.Models
             }
         }
 
-        public bool analisisReglaSimple(int VarID, int OpS, double Param, DatosUsuario du)
+        public bool analisisReglaSimple(int VarID, int OpS, double Param, DatosUsuario du, int ReglaSimpleID = 0)
         {
-            var regla = db.ReglasSimples.Find(VarID);
+            //var regla = db.ReglasSimples.Find(ReglaSimpleID);
+
             var dato = getDato(VarID, du); // Para sacar el dato que queremos
 
 

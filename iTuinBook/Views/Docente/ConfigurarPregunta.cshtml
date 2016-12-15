@@ -228,32 +228,33 @@
         <div class="editor-label" style="position:relative">
             @Html.LabelFor(model => model.ResaltarClaves)
         </div>
-        <p></p>   
-        <h3>Feedback (Quién dará el feedback. Pop-Up por defecto)</h3>
-        <hr />
+        <div class="hiddenDebug">
 
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.FeedbackProfesor)
-            @Html.ValidationMessageFor(model => model.FeedbackProfesor)
-        </div>
-        
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.FeedbackProfesor)
-        </div>
-        <p></p>   
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.FeedbackAlumno)
-            @Html.ValidationMessageFor(model => model.FeedbackAlumno)
-        </div>
-        
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.FeedbackAlumno)
-        </div>
+            <h3>Feedback (Quién dará el feedback. Pop-Up por defecto)</h3>
+            <hr />
 
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.FeedbackProfesor)
+                @Html.ValidationMessageFor(model => model.FeedbackProfesor)
+            </div>
+
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.FeedbackProfesor)
+            </div>
+            <p></p>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.FeedbackAlumno)
+                @Html.ValidationMessageFor(model => model.FeedbackAlumno)
+            </div>
+
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.FeedbackAlumno)
+            </div>
+        </div>
         <h3>Comportamiento (Obligar a...)</h3>
         <hr />
 
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
+        <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
             @Html.EditorFor(model => model.EnunciadoActivaRadio)
             @Html.ValidationMessageFor(model => model.EnunciadoActivaRadio)
         </div>
@@ -262,7 +263,7 @@
             @Html.LabelFor(model => model.EnunciadoActivaRadio)
         </div>
         <p></p>
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
+        <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
             @Html.EditorFor(model => model.ForzarTarea)
             @Html.ValidationMessageFor(model => model.ForzarTarea)
         </div>
@@ -271,7 +272,7 @@
             @Html.LabelFor(model => model.ForzarTarea)
         </div>
         <p></p>
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
+        <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
             @Html.EditorFor(model => model.ForzarNoTarea)
             @Html.ValidationMessageFor(model => model.ForzarNoTarea)
         </div>
@@ -279,59 +280,59 @@
         <div class="editor-label" style="position:relative">
             @Html.LabelFor(model => model.ForzarNoTarea)
         </div>
-        <p></p>
-        <h3>Simulación (Usado en modelado, permite visualizar la pregunta en sus diferentes estados)</h3>
-        <hr />
+        <div class="hiddenDebug">
+            <h3>Simulación (Usado en modelado, permite visualizar la pregunta en sus diferentes estados)</h3>
+            <hr />
 
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.SeñalarCorrecta)
-            @Html.ValidationMessageFor(model => model.SeñalarCorrecta)
-        </div>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.SeñalarCorrecta)
+                @Html.ValidationMessageFor(model => model.SeñalarCorrecta)
+            </div>
 
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.SeñalarCorrecta)
-        </div>
-        <p></p>   
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.SeñalarIncorrecta)
-            @Html.ValidationMessageFor(model => model.SeñalarIncorrecta)
-        </div>
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.SeñalarCorrecta)
+            </div>
+            <p></p>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.SeñalarIncorrecta)
+                @Html.ValidationMessageFor(model => model.SeñalarIncorrecta)
+            </div>
 
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.SeñalarIncorrecta)
-        </div>
-        <p></p>           
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.CorregirCorrecta)
-            @Html.ValidationMessageFor(model => model.CorregirCorrecta)
-        </div>
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.SeñalarIncorrecta)
+            </div>
+            <p></p>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.CorregirCorrecta)
+                @Html.ValidationMessageFor(model => model.CorregirCorrecta)
+            </div>
 
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.CorregirCorrecta)
-        </div>
-        <p></p>   
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.CorregirIncorrecta)
-            @Html.ValidationMessageFor(model => model.CorregirIncorrecta)
-        </div>
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.CorregirCorrecta)
+            </div>
+            <p></p>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.CorregirIncorrecta)
+                @Html.ValidationMessageFor(model => model.CorregirIncorrecta)
+            </div>
 
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.CorregirIncorrecta)
-        </div>
-        <p></p>   
-        <div class="editor-field" style="float:left; padding-top:3px; width:20px;" >
-            @Html.EditorFor(model => model.SeñalarClaves)
-            @Html.ValidationMessageFor(model => model.SeñalarClaves)
-        </div>
-        
-        <div class="editor-label" style="position:relative">
-            @Html.LabelFor(model => model.SeñalarClaves)
-        </div>
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.CorregirIncorrecta)
+            </div>
+            <p></p>
+            <div class="editor-field" style="float:left; padding-top:3px; width:20px;">
+                @Html.EditorFor(model => model.SeñalarClaves)
+                @Html.ValidationMessageFor(model => model.SeñalarClaves)
+            </div>
 
+            <div class="editor-label" style="position:relative">
+                @Html.LabelFor(model => model.SeñalarClaves)
+            </div>
+        </div>
         <p>
             <input type="submit" value="Guardar" />
         </p>
-    </fieldset>
+</fieldset>
 }
 
 <div>

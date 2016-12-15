@@ -11,7 +11,8 @@
 }
 <script>
     //guirisan/secuencias
-    sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
+    sessionStorage.setItem("numAccion", @(ViewBag.numAccion) );
+    
 </script>
 
 <div id="contenedor" style="z-index:10;">
@@ -82,8 +83,30 @@
         $(document).ready(function () {
             $('reg').addClass("difuminado");
             
-            //guirisan/issue https://github.com/guirisan/ituinbook/issues/56
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/107
+            $(".paginas").html($(".paginas").html().replace("valuegrupoid","@(du.GrupoID)"));
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/38#issuecomment-181284162
+            //parametrizacion enlace vuelta a preguntas
+            var parametrizacionHecha = false;
+            $("#btnGotoPreguntas").click(function (e) {
 
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+                
+                //parametrizacion del enlace
+                var oldhref = $("#btnGotoPreguntas a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnGotoPreguntas a").attr("href", oldhref + "&moment=" + datetimeclient);
+                
+
+                parametrizacionHecha = true;
+                $("#btnGotoPreguntas").unbind('click');
+                $(this).trigger('click');
+            });
+
+
+            //guirisan/issue https://github.com/guirisan/ituinbook/issues/56
             if ('@inicioTexto' == 'True'){
                 //peticion ajax para registrar accion con codeop = 2
 

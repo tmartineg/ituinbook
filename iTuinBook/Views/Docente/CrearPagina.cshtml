@@ -86,9 +86,18 @@
 </div>
 
 <!-- modal tools-->
-<div id="addQuestion-modal">
-    <h3>Pregunta a enlazar (introduce el número de pregunta)</h3>
-    <textarea cols="20" id="addQuestion-content"></textarea>
+<div id="addQuestion-modal" class="hiddenDebug">
+    <input type="text" placeholder="Número de pregunta a enlazar" id="addQuestion-content"/>
+
+    
+    <select id="numPlantilla">
+        <option disabled="disabled" selected>Plantilla utilizada en el experimento</option>
+        <option value="2">Texto y pregunta en la misma página (Pregunta en mitad superior)</option>
+        <option value="0">Texto y preguntas en páginas distintas (con feedback)</option>
+        <option value="3">Texto y preguntas en páginas distintas (con explicacion)</option>
+        <option value="4">Texto y preguntas en páginas distintas (con audio)</option>
+        <option value="5">Texto y preguntas en páginas distintas (preguntas en texto)</option>
+    </select>
 </div>
 
 @section Scripts {
@@ -286,11 +295,14 @@
                         }
                     },
                     {
+/***********ON DEMAND QUESTION*****************
+***********************************************
+**********************************************/
                         name: "addOndemandQuestion",
                         tooltip: "Insertar enlace a pregunta",
                         title: "Insertar enlace a pregunta",
                         exec: function (e) {
-                            $("#addQuestion-modal").dialog({
+                            $("#addQuestion-modal").removeClass("hiddenDebug").dialog({
                                 height: 230,
                                 width: 540,
                                 modal: true,
@@ -299,9 +311,10 @@
                                     "Aceptar": function () {
                                         $("#addQuestion-content").val()
                                         var editor = $("#editor").data("kendoEditor");
-                                        var content = $("#addQuestion-content").val();
-                                        
-                                        editor.clipboard.paste("<strong><a href=\"/ReadAndLearn/PL4_Experimentos/PL4_Pregunta/btnPreguntas?GrupoID=@ViewBag.Grupo&ModuloID=@ViewBag.Modulo&preguntaActual=" + (content-1) + "&textoID=@ViewBag.Texto&segundoIntento=False&preguntaResuelta=False\">Pregunta " + content + "</a><strong>");
+                                        var numPregunta = $("#addQuestion-content").val();
+                                        var numPlantilla = $("#numPlantilla").val();
+
+                                        editor.clipboard.paste("<strong><a class='btnPreguntas' href=\"/ReadAndLearn/PL" + numPlantilla + "_Experimentos/PL" + numPlantilla + "_Pregunta/btnPreguntas?GrupoID=valuegrupoid&ModuloID=@ViewBag.modulo.ModuloID&preguntaActual=" + (numPregunta - 1) + "&textoID=@ViewBag.Texto.TextoID&segundoIntento=False&preguntaResuelta=False\">Pregunta " + numPregunta + "</a><strong>");
                                         $(this).dialog("close");
                                     },
                                     "Cancelar": function () {

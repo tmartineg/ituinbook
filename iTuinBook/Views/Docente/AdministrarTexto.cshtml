@@ -70,7 +70,7 @@
     
     @{
         if (Model.Paginas.Count == 0) {
-            @Html.ActionLink("Crear Página", "CrearPagina", new { TextoID = Model.TextoID });
+            @Html.ActionLink("Crear Página", "CrearPagina", new { TextoID = Model.TextoID, ModuloID = Model.Modulos.First().ModuloID });
         <hr />
         }
 

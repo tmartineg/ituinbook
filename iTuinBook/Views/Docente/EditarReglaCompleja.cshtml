@@ -264,6 +264,7 @@
                                     .text(this)
                                     .appendTo(ddl);
                             });
+                            $("#Regla1ID").val("@Model.Regla_1");
                         },
                         error: function () {
                             alert("Error al cargar las reglas simples");
@@ -289,6 +290,7 @@
                                     .text(this)
                                     .appendTo(ddl);
                             });
+                            $("#Regla1ID").val("@Model.Regla_1");
                         },
                         error: function () {
                             alert("Error al cargar las reglas complejas");
@@ -326,6 +328,8 @@
                                         .text(this)
                                         .appendTo(ddl);
                                 });
+                                $("#Regla1ID").val("@Model.Regla_1");
+
                             },
                             error: function () {
                                 alert("Error al cargar las reglas complejas");
@@ -351,6 +355,8 @@
                                         .text(this)
                                         .appendTo(ddl);
                                 });
+                                $("#Regla2ID").val("@Model.Regla_2");
+
                             },
                             error: function () {
                                 alert("Error al cargar las reglas complejas");
@@ -360,14 +366,7 @@
                 }
                 else {
 
-                    $("#regla1").show();
-                    $("#Regla1ID").val("@Model.Regla_1");
-
-                    $("#regla2").show();
-                    $("#Regla2ID").val("@Model.Regla_2");
-
-                    $("#operador").show();
-                    $("#OperadorID").val("@Model.Operador");
+                    
 
                     if ($("#OpCodeID").val() == "5" || $("#OpCodeID").val() == "6") {
                         $.ajax({
@@ -497,6 +496,14 @@
                             });
                         }
                     }
+                    $("#regla1").show();
+                    $("#Regla1ID").val("@Model.Regla_1");
+
+                    $("#regla2").show();
+                    $("#Regla2ID").val("@Model.Regla_2");
+
+                    $("#operador").show();
+                    $("#OperadorID").val("@Model.Operador");
                 }
             }
 

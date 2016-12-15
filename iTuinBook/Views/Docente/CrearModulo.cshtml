@@ -48,15 +48,11 @@ Crear Modulo</h2>
             @Html.EditorFor(model => model.Publico)
             @Html.ValidationMessageFor(model => model.Publico)
         </div>
-                
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Condicion)
+        <div class="">
+            <div class="editor-field">
+                <input type="text" id="Condicion" name="Condicion" value="1" />
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(m => m.Condicion, new SelectList(ViewBag.Tipos, "TipoCondicionID", "Tipo"))
-            @Html.ValidationMessageFor(model => model.Condicion)
-        </div>
-
         <p>
             <input type="submit" value="Crear" />
         </p>
