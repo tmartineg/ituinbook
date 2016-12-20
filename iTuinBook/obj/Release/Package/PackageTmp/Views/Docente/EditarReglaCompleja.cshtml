@@ -230,146 +230,26 @@
         $(document).ready(function () {
             //$("#identificador").hide();
 
-            if ($("#OpCodeID").val() == "1" || $("#OpCodeID").val() == "3") {
-                $("#regla2").hide();
-                $("#Regla2ID").val("0");
+                if ($("#OpCodeID").val() == "1" || $("#OpCodeID").val() == "3") {
+                    $("#regla2").hide();
+                    $("#Regla2ID").val("0");
 
-                $("#operador").hide();
-                $("#OperadorID").val("0");
-
-                $("#regla1").show();
-
-                //$("#Regla1ID").val("@@Model.Regla_1"); 
-                //comentado porque no tiene sentido cargar el id de la regla antes de cargar el <select>
-                //revisar doble @@
-
-                if ($("#OpCodeID").val() == "1") {
-                    $("#ReglaS").show();
-                    $("#ReglaC").hide();
-
-                    var ddl = $('#Regla2ID');
-                    ddl.empty();
-                    
-                    $.ajax({
-                        url: "GetSimples", //url: 'Validar',
-                        type: 'POST',
-                        success: function (result) {
-                            var ddl = $('#Regla1ID');
-
-                            ddl.empty();
-
-                            $(result.Reglas).each(function () {
-                                $(document.createElement('option'))
-                                    .attr('value', this)
-                                    .text(this)
-                                    .appendTo(ddl);
-                            });
-                        },
-                        error: function () {
-                            alert("Error al cargar las reglas simples");
-                        }
-                    });
-                }
-                else {
-                    var ddl = $('#Regla2ID');
-
-                    ddl.empty();
-
-                    $.ajax({
-                        url: "GetComplejas", //url: 'Validar',
-                        type: 'POST',
-                        success: function (result) {
-                            var ddl = $('#Regla1ID');
-
-                            ddl.empty();
-
-                            $(result.Reglas).each(function () {
-                                $(document.createElement('option'))
-                                    .attr('value', this)
-                                    .text(this)
-                                    .appendTo(ddl);
-                            });
-                        },
-                        error: function () {
-                            alert("Error al cargar las reglas complejas");
-                        }
-                    });
-                }
-            }
-            else {
-                $("#regla2").show();
-                $("#Regla2ID").val("@Model.Regla_2");
-
-                if ($("#OpCodeID").val() == "2" || $("#OpCodeID").val() == "4") {
                     $("#operador").hide();
                     $("#OperadorID").val("0");
 
-                    $("#regla1").hide();
-                    $("#Regla1ID").val("@Model.Regla_1");
-
-                    if ($("#OpCodeID").val() == "2") {
-                        var ddl = $('#Regla1ID');
-
-                        ddl.empty();
-
-                        $.ajax({
-                            url: "GetSimples", //url: 'Validar',
-                            type: 'POST',
-                            success: function (result) {
-                                var ddl = $('#Regla2ID');
-
-                                ddl.empty();
-
-                                $(result.Reglas).each(function () {
-                                    $(document.createElement('option'))
-                                        .attr('value', this)
-                                        .text(this)
-                                        .appendTo(ddl);
-                                });
-                            },
-                            error: function () {
-                                alert("Error al cargar las reglas complejas");
-                            }
-                        });
-                    }
-                    else {
-                        var ddl = $('#Regla1ID');
-
-                        ddl.empty();
-
-                        $.ajax({
-                            url: "GetComplejas", //url: 'Validar',
-                            type: 'POST',
-                            success: function (result) {
-                                var ddl = $('#Regla2ID');
-
-                                ddl.empty();
-
-                                $(result.Reglas).each(function () {
-                                    $(document.createElement('option'))
-                                        .attr('value', this)
-                                        .text(this)
-                                        .appendTo(ddl);
-                                });
-                            },
-                            error: function () {
-                                alert("Error al cargar las reglas complejas");
-                            }
-                        });
-                    }
-                }
-                else {
-
                     $("#regla1").show();
-                    $("#Regla1ID").val("@Model.Regla_1");
 
-                    $("#regla2").show();
-                    $("#Regla2ID").val("@Model.Regla_2");
+                    //$("#Regla1ID").val("@@Model.Regla_1"); 
+                    //comentado porque no tiene sentido cargar el id de la regla antes de cargar el <select>
+                    //revisar doble @@
 
-                    $("#operador").show();
-                    $("#OperadorID").val("@Model.Operador");
+                    if ($("#OpCodeID").val() == "1") {
+                        $("#ReglaS").show();
+                        $("#ReglaC").hide();
 
-                    if ($("#OpCodeID").val() == "5" || $("#OpCodeID").val() == "6") {
+                        var ddl = $('#Regla2ID');
+                        ddl.empty();
+                    
                         $.ajax({
                             url: "GetSimples", //url: 'Validar',
                             type: 'POST',
@@ -381,59 +261,21 @@
                                 $(result.Reglas).each(function () {
                                     $(document.createElement('option'))
                                         .attr('value', this)
-                                        .text(this)                                        
+                                        .text(this)
                                         .appendTo(ddl);
                                 });
+                                $("#Regla1ID").val("@Model.Regla_1");
                             },
                             error: function () {
                                 alert("Error al cargar las reglas simples");
                             }
                         });
-
-                        if ($("#OpCodeID").val() == "5") {
-                            $.ajax({
-                                url: "GetSimples", //url: 'Validar',
-                                type: 'POST',
-                                success: function (result) {
-                                    var ddl = $('#Regla2ID');
-
-                                    ddl.empty();
-
-                                    $(result.Reglas).each(function () {
-                                        $(document.createElement('option'))
-                                            .attr('value', this)
-                                            .text(this)
-                                            .appendTo(ddl);
-                                    });
-                                },
-                                error: function () {
-                                    alert("Error al cargar las reglas simples");
-                                }
-                            });
-                        }
-                        else {
-                            $.ajax({
-                                url: "GetComplejas", //url: 'Validar',
-                                type: 'POST',
-                                success: function (result) {
-                                    var ddl = $('#Regla2ID');
-
-                                    ddl.empty();
-
-                                    $(result.Reglas).each(function () {
-                                        $(document.createElement('option'))
-                                            .attr('value', this)
-                                            .text(this)
-                                            .appendTo(ddl);
-                                    });
-                                },
-                                error: function () {
-                                    alert("Error al cargar las reglas complejas");
-                                }
-                            });
-                        }
                     }
                     else {
+                        var ddl = $('#Regla2ID');
+
+                        ddl.empty();
+
                         $.ajax({
                             url: "GetComplejas", //url: 'Validar',
                             type: 'POST',
@@ -448,13 +290,30 @@
                                         .text(this)
                                         .appendTo(ddl);
                                 });
+                                $("#Regla1ID").val("@Model.Regla_1");
                             },
                             error: function () {
                                 alert("Error al cargar las reglas complejas");
                             }
                         });
+                    }
+                }
+                else {
+                    $("#regla2").show();
+                    $("#Regla2ID").val("@Model.Regla_2");
 
-                        if ($("#OpCodeID").val() == "7") {
+                    if ($("#OpCodeID").val() == "2" || $("#OpCodeID").val() == "4") {
+                        $("#operador").hide();
+                        $("#OperadorID").val("0");
+
+                        $("#regla1").hide();
+                        $("#Regla1ID").val("@Model.Regla_1");
+
+                        if ($("#OpCodeID").val() == "2") {
+                            var ddl = $('#Regla1ID');
+
+                            ddl.empty();
+
                             $.ajax({
                                 url: "GetSimples", //url: 'Validar',
                                 type: 'POST',
@@ -469,13 +328,19 @@
                                             .text(this)
                                             .appendTo(ddl);
                                     });
+                                    $("#Regla1ID").val("@Model.Regla_1");
+
                                 },
                                 error: function () {
-                                    alert("Error al cargar las reglas simples");
+                                    alert("Error al cargar las reglas complejas");
                                 }
                             });
                         }
                         else {
+                            var ddl = $('#Regla1ID');
+
+                            ddl.empty();
+
                             $.ajax({
                                 url: "GetComplejas", //url: 'Validar',
                                 type: 'POST',
@@ -490,6 +355,8 @@
                                             .text(this)
                                             .appendTo(ddl);
                                     });
+                                    $("#Regla2ID").val("@Model.Regla_2");
+
                                 },
                                 error: function () {
                                     alert("Error al cargar las reglas complejas");
@@ -497,8 +364,148 @@
                             });
                         }
                     }
+                    else {
+
+                    
+
+                        if ($("#OpCodeID").val() == "5" || $("#OpCodeID").val() == "6") {
+                            $.ajax({
+                                url: "GetSimples", //url: 'Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla1ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)                                        
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas simples");
+                                }
+                            });
+
+                            if ($("#OpCodeID").val() == "5") {
+                                $.ajax({
+                                    url: "GetSimples", //url: 'Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas simples");
+                                    }
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: "GetComplejas", //url: 'Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas complejas");
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            $.ajax({
+                                url: "GetComplejas", //url: 'Validar',
+                                type: 'POST',
+                                success: function (result) {
+                                    var ddl = $('#Regla1ID');
+
+                                    ddl.empty();
+
+                                    $(result.Reglas).each(function () {
+                                        $(document.createElement('option'))
+                                            .attr('value', this)
+                                            .text(this)
+                                            .appendTo(ddl);
+                                    });
+                                },
+                                error: function () {
+                                    alert("Error al cargar las reglas complejas");
+                                }
+                            });
+
+                            if ($("#OpCodeID").val() == "7") {
+                                $.ajax({
+                                    url: "GetSimples", //url: 'Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas simples");
+                                    }
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: "GetComplejas", //url: 'Validar',
+                                    type: 'POST',
+                                    success: function (result) {
+                                        var ddl = $('#Regla2ID');
+
+                                        ddl.empty();
+
+                                        $(result.Reglas).each(function () {
+                                            $(document.createElement('option'))
+                                                .attr('value', this)
+                                                .text(this)
+                                                .appendTo(ddl);
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("Error al cargar las reglas complejas");
+                                    }
+                                });
+                            }
+                        }
+                        $("#regla1").show();
+                        $("#Regla1ID").val("@Model.Regla_1");
+
+                        $("#regla2").show();
+                        $("#Regla2ID").val("@Model.Regla_2");
+
+                        $("#operador").show();
+                        $("#OperadorID").val("@Model.Operador");
+                    }
                 }
-            }
 
            
 

@@ -1025,3 +1025,8 @@ img.imgEnunciadoIzquierda{
 .idealPalabra {
     background-color: #a4d4e6;
 }
+
+/* guirisan issues https://github.com/guirisan/ituinbook/issues/137 */
+.neutraPalabra {
+    background-color: #e0e263;
+}

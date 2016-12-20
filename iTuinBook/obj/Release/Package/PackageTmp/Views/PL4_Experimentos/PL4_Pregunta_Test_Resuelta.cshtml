@@ -187,7 +187,10 @@
 
             limpiarResaltado();
             $.each(idsUser, function (index, value) {
-                if (idsTrue.indexOf(value) >= 0) {
+                
+                if ('@configPregunta.CorregirSeleccion' == 'False'){//correccion con colores DESACTIVADA
+                    $("[data-windex='" + value + "']", "#textraw").addClass('neutraPalabra');
+                }else if (idsTrue.indexOf(value) >= 0) { //correccion con colores ACTIVADA
                     $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
                 } else { //if (idsFalse.indexOf(value) >= 0) {
                     $("[data-windex='" + value + "']", "#textraw").addClass('distractoraPalabra');
@@ -246,6 +249,11 @@
 
                 limpiarResaltado();
                 $.each(idsUser, function (index, value) {
+                    if ('@configPregunta.CorregirSeleccion' == 'False') {
+                        //correccion con colores DESACTIVADA
+                        $("[data-windex='" + value + "']", "#textraw").addClass('neutraPalabra');
+                    } else
+                        //correccion con colores ACTIVADA
                     if (idsTrue.indexOf(value) >= 0) {
                         $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
                     } else { //if (idsFalse.indexOf(value) >= 0) {
@@ -312,6 +320,7 @@
                 $(".pertinentePalabra").removeClass("pertinentePalabra");
                 $(".distractoraPalabra").removeClass("distractoraPalabra");
                 $(".idealPalabra").removeClass("idealPalabra");
+                $(".neutraPalabra").removeClass("neutraPalabra");
             }
 
 

@@ -170,7 +170,7 @@
                                 $("[data-windex='" + actualIndex + "']", "#textraw").clone().appendTo("#pertinentesAlumno");
                                 $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
-                                $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
+                                $("[data-windex='" + actualIndex + "']", "#textraw").addClass('neutraPalabra');
                             }
                         } else {
                             //no hay palabras asignadas
@@ -179,7 +179,7 @@
                             $("[data-windex='" + actualIndex + "']", "#textraw").clone().appendTo("#pertinentesAlumno");
                             $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
-                            $("[data-windex='" + actualIndex + "']", "#textraw").addClass('pertinentePalabra');
+                            $("[data-windex='" + actualIndex + "']", "#textraw").addClass('neutraPalabra');
                             
                         }
                     }
@@ -188,7 +188,7 @@
             $("#borrarPertinentes").click(function (e) {
                 e.preventDefault();
                 $("textarea#seleccion").val("");
-                $(".pertinentePalabra").removeClass("pertinentePalabra");
+                $(".neutraPalabra").removeClass("neutraPalabra");
                 $("#pertinentesAlumno").html("");
             });
 
