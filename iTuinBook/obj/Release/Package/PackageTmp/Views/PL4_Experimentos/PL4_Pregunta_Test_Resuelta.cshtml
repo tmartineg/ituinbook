@@ -101,7 +101,7 @@
     
    <!-- texto donde resaltar seleccion-->
 
-    <div id="textraw">
+    <div id="textraw" class="tareaSeleccion">
 
         @{
             Texto text = ViewBag.Texto;
@@ -163,8 +163,8 @@
     </div>
    
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
-        <button id="btnResaltarSeleccionUsuario" class="hiddenDebug">Ver MI selección</button>
-        <button id="btnResaltarSeleccionIdeal">Ver seleccion ideal</button>
+        <button id="btnResaltarSeleccionUsuario" class="hiddenDebug tareaSeleccion">Ver MI selección</button>
+        <button id="btnResaltarSeleccionIdeal" class="tareaSeleccion">Ver seleccion ideal</button>
         <button id="btnSiguientePregunta">Siguiente pregunta</button>                       
     </div> 
 </div>
@@ -174,28 +174,34 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
-            $("#textraw").accordion({
-                heightStyle: "content"
-            });
-            
-            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
-            //resaltarSeleccionUsuario al cargar la página
-            var idsUser = $.trim("@ViewBag.idsUser").split(",");
-            var idsTrue = $.trim("@ViewBag.idsTrue").split(",");
-            var idsFalse = $.trim("@ViewBag.idsFalse").split(",");
 
-            limpiarResaltado();
-            $.each(idsUser, function (index, value) {
-                
-                if ('@configPregunta.CorregirSeleccion' == 'False'){//correccion con colores DESACTIVADA
-                    $("[data-windex='" + value + "']", "#textraw").addClass('neutraPalabra');
-                }else if (idsTrue.indexOf(value) >= 0) { //correccion con colores ACTIVADA
-                    $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
-                } else { //if (idsFalse.indexOf(value) >= 0) {
-                    $("[data-windex='" + value + "']", "#textraw").addClass('distractoraPalabra');
-                }
-            });
+            
+            if ('@configPregunta.SimultanearTareas' === 'True') {
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
+                $("#textraw").accordion({
+                    heightStyle: "content"
+                });
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
+                //resaltarSeleccionUsuario al cargar la página
+                var idsUser = $.trim("@ViewBag.idsUser").split(",");
+                var idsTrue = $.trim("@ViewBag.idsTrue").split(",");
+                var idsFalse = $.trim("@ViewBag.idsFalse").split(",");
+
+                limpiarResaltado();
+                $.each(idsUser, function (index, value) {
+
+                    if ('@configPregunta.CorregirSeleccion' == 'False') {//correccion con colores DESACTIVADA
+                        $("[data-windex='" + value + "']", "#textraw").addClass('neutraPalabra');
+                    } else if (idsTrue.indexOf(value) >= 0) { //correccion con colores ACTIVADA
+                        $("[data-windex='" + value + "']", "#textraw").addClass('pertinentePalabra');
+                    } else { //if (idsFalse.indexOf(value) >= 0) {
+                        $("[data-windex='" + value + "']", "#textraw").addClass('distractoraPalabra');
+                    }
+                });
+            } else {
+                $(".tareaSeleccion").addClass("hiddenDebug");
+            }
 
             //resaltar seleccion corregida
             $("#btnResaltarSeleccionUsuario").click(function () {

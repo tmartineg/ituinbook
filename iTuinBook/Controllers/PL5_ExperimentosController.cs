@@ -1908,10 +1908,20 @@ namespace ReadAndLearn.Controllers
             ViewBag.Texto = pregunta.Texto;
             ViewBag.DatosUsuario = du;
             ViewBag.DatoSimple = ds;
-            //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
-            ViewBag.idsUser = du.DatoSimple.Last(p => p.CodeOP == 49).Info; //ids selected by user
+            
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/142 error si no hay tarea de selección
+            try
+            {
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/100 workflow respuesta
+                ViewBag.idsUser = du.DatoSimple.Last(p => p.CodeOP == 49).Info; //ids selected by user
+            }
+            catch (Exception)
+            {
+                ViewBag.idsUser = "";
+            }
+
+
             ViewBag.idsTrue = pregunta.Pertinente; //correct ids
-            //ViewBag.idsFalse = pregunta.Distractoras; //incorrectids
             ViewBag.idsFalse = pregunta.Distractoras; //incorrectids
 
 

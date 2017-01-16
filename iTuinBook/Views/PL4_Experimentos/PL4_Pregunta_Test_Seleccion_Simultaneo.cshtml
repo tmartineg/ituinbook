@@ -8,32 +8,33 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
-    
+
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    
+
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
-        @Html.Raw(Model.Enunciado)    
+        @Html.Raw(Model.Enunciado)
     </div>
-     
+
     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
         <ul>
-        @foreach (Alternativa alt in Model.Alternativas)
-        {
-            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @alt.Opcion <br />
-        }
+            @foreach (Alternativa alt in Model.Alternativas)
+            {
+                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @alt.Opcion
+                <br />
+            }
         </ul>
     </div>
 
     <div style="padding-left: 20px; padding-right: 20px;">
-        
+
         <button id="btnIniciarSeleccion">Seleccionar información pertinente</button>
-        <button id="btnValidarSimultaneo" class="hiddenDebug" disabled="disabled">Validar</button>    
+        <button id="btnValidarSimultaneo" class="hiddenDebug" disabled="disabled">Validar</button>
         <button id="btnBorrarSeleccion" class="hiddenDebug">Borrar</button>
     </div>
 
-    <div id="ayudas" style="float:right; visibility: hidden;">    
+    <div id="ayudas" style="float:right; visibility: hidden;">
         @if (Model.Ayuda != null)
         {
             if (Model.Ayuda.ParafraseoN1 != null)
@@ -50,15 +51,15 @@
             {
                 <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
             }
-        } 
+        }
     </div>
-    
+
     <div id="divTareaSeleccion" class="hiddenDebug">
         <div class="hiddenDebug">
             <strong>Mi selección:</strong>
             <div id="pertinentesAlumno"></div>
         </div>
-        
+
 
         <div class="hiddenDebug">
             <textarea id="seleccion" class=""></textarea>
@@ -72,30 +73,30 @@
             <div id="textraw">
 
                 @{
-                Texto text = ViewBag.Texto;
-                List<string> list = new List<string>();
-                if (text != null)
-                {
-                    foreach (Pagina pag in text.Paginas)
+                    Texto text = ViewBag.Texto;
+                    List<string> list = new List<string>();
+                    if (text != null)
                     {
-                        <h3>Pagina @pag.Orden</h3>
-                        <div>
-                            <p>
-                                @Html.Raw(pag.Contenido)
-                            </p>
-                        </div>
+                        foreach (Pagina pag in text.Paginas)
+                        {
+                            <h3>Pagina @pag.Orden</h3>
+                            <div>
+                                <p>
+                                    @Html.Raw(pag.Contenido)
+                                </p>
+                            </div>
+
+                        }
 
                     }
-
-                }
                 }
 
             </div>
         </div>
     </div>
 
-                       
-</div> 
+
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -133,7 +134,7 @@
                 e.preventDefault();
                 $("#btnValidarSimultaneo").removeClass("hiddenDebug");
                 $("#divTareaSeleccion").removeClass("hiddenDebug");
-                
+
                 $(this).addClass("hiddenDebug");
                 //to-do crear datosimple que indique comienzo de tarea de selección
             });
@@ -147,13 +148,13 @@
 
                 $('<div />').html(selectedhtml).find("[data-windex]").each(function (id, val) {
                     if (!duplicatedSelection) {
-                       
+
                         //esta variable solo se usa para añdir los valores seleccionados si procede más adelante
                         var existingids = $("textarea#seleccion").val();
                         var existingidsraw = existingids;
                         var actualIndex = $(this).attr("data-windex");
 
-                        
+
 
                         if (existingids != null) {
                             //ya hay palabras pertinentes o distractoras
@@ -175,12 +176,12 @@
                         } else {
                             //no hay palabras asignadas
                             $("textarea#seleccion").val(existingidsraw + $(this).attr("data-windex") + ",");
-                           
+
                             $("[data-windex='" + actualIndex + "']", "#textraw").clone().appendTo("#pertinentesAlumno");
                             $("#pertinentesAlumno").append(document.createTextNode('\u00A0'));
 
                             $("[data-windex='" + actualIndex + "']", "#textraw").addClass('neutraPalabra');
-                            
+
                         }
                     }
                 });
@@ -220,7 +221,7 @@
                 </text>
             }
 
-            
+
             $("#btnValidarSimultaneo").click(function () {
                 $("#btnValidarSimultaneo").attr("disabled", "disabled");
 
@@ -258,10 +259,10 @@
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuestaTest: alter, respuestaSel: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
                     success: function (result) {
                         window.location.href = result.redirect;
-                        // data.redirect contains the string URL to redirect to                        
+                        // data.redirect contains the string URL to redirect to
                         if (result.mensaje != null && result.mensaje != "") {
                             @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
-                            {   
+                            {
                                 @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
                             }
                             else
@@ -292,7 +293,7 @@
             @if (Model.Ayuda != null)
             {
                 if (Model.Ayuda.ParafraseoN1 != null)
-                {   
+                {
                     <text>
             $('#btnFlotador').click(function () {
                 $("#btnFlotador").attr("disabled", "disabled");
@@ -620,7 +621,7 @@
             }
 
             @if (configModulo.Ayudas)
-            {   
+            {
                 @: $('#ayudas').show();
                             @: $('#ayudas').css("visibility", "visible")
             }
@@ -642,9 +643,9 @@
             /**************************************/
 
             $(":radio").change(function () {
-                
+
                 jQuery("#btnValidarSimultaneo").attr('disabled', false);
-               
+
 
                 //guirisan/secuencias
                 //datetime set in client
