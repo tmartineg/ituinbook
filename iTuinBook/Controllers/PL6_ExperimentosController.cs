@@ -1890,7 +1890,7 @@ namespace ReadAndLearn.Controllers
                     if (du.ContadorFDBCAcum == (tim.PregLanzada - 1))
                     {
                         sms += du.FeedbackAcumulado;
-                        sms += "<br />" + mensaje;
+                        sms +=  mensaje;
                         du.FeedbackAcumulado = "";
                         du.ContadorFDBCAcum = 0;
                     }
@@ -1935,7 +1935,7 @@ namespace ReadAndLearn.Controllers
                             if (Convert.ToDouble(inf) <= porc && Convert.ToDouble(sup) >= porc)
                             {
                                 if (sms == null || sms == "")
-                                    sms += "<br />";
+                                    //sms += "<br />";
 
                                 sms += tmp.Substring(posInf + 1, posSup - 1);
 

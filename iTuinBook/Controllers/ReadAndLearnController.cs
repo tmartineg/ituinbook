@@ -164,6 +164,11 @@ namespace ReadAndLearn.Controllers
                             //ruta añadida para la nueva plantilla de preguntas discrecionales 
                             return RedirectToAction("PL5_Texto", "PL5_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, inicioTexto = true });
 
+                        case 6:
+                            //guirisan/issues https://github.com/guirisan/ituinbook/issues/107
+                            //ruta añadida para la nueva plantilla de preguntas discrecionales 
+                            return RedirectToAction("PL6_Texto", "PL6_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, inicioTexto = true });
+
                         default:
                             break;
                     }

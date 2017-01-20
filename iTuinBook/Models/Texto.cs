@@ -273,7 +273,7 @@ namespace ReadAndLearn.Models
         public bool ResaltarPertinenteTexto { get; set; }
         [Display(Name = " Marcar las palabras claves")]
         public bool ResaltarClaves { get; set; }
-        
+
         // Feedback
         [Display(Name = " Dado por profesor")]
         public bool FeedbackProfesor { get; set; }
@@ -297,7 +297,7 @@ namespace ReadAndLearn.Models
         public bool CorregirCorrecta { get; set; }
         [Display(Name = " Mostrar selección con respuesta incorrecta")]
         public bool CorregirIncorrecta { get; set; }
-        [Display(Name = " Mostrar palabras clave")]
+        [Display(Name = " Reducir alternativas mostradas")]
         public bool SeñalarClaves { get; set; }
 
 

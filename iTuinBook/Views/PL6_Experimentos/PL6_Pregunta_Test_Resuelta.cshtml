@@ -37,35 +37,37 @@
             {
                 foreach (Alternativa alt in Model.Alternativas)
                 {
-                    if (alt.Valor)
-                    {
-                        <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />   
-                    }
-                    else
-                    {
-                        <img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
-                    }
+                    if (configPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info)) { 
+                        if (alt.Valor)
+                        {
+                            <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />   
+                        }
+                        else
+                        {
+                            <img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
+                        }
 
-                    if (alt.Opcion != null)
-                    {
-                        if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                        if (alt.Opcion != null)
+                        {
+                            if (alt.Opcion == ds.Info)
+                            { 
+                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            }
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
-                        }
-                    }
-                    else
-                    {
-                        if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
-                        }
-                        else
-                        {
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            if (alt.Opcion == ds.Info)
+                            { 
+                                @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            }
                         }
                     }
                 }
@@ -74,28 +76,31 @@
             {
                 foreach (Alternativa alt in Model.Alternativas)
                 {
-                    if (alt.Opcion != null)
-                    {
-                        if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                    if (configPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info)) { 
+                        if (alt.Opcion != null)
+                        {
+                            if (alt.Opcion == ds.Info)
+                            { 
+                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            }
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            if (alt.Opcion == ds.Info)
+                            { 
+                                @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            }
                         }
                     }
-                    else
-                    {
-                        if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
-                        }
-                        else
-                        {
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
-                        }
-                    }
+                    
                 }
             }
         </ul>
@@ -119,14 +124,16 @@
         }
     }
 
-    <div id="fdbkDialog">
+    <div id="fdbkDialog" class="hiddenDebug">
         @ViewBag.feedbackText
     </div>
-    <div id="explicacionDialog" class="hiddenDebug">
+
+    <div id="explicacionDialog" class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         @ViewBag.explicacionText
     </div>
     
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+        <button id="btnVerExplicacion">Ver explicación</button>                       
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
 </div>
@@ -173,7 +180,68 @@
 
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
-            if ($.trim(dialog.html()) != "") {
+            $("#btnVerExplicacion").click(function () {
+                $(this).addClass("hiddenDebug");
+                $("#explicacionDialog").removeClass("hiddenDebug");
+                
+                //DatoSimple lectura explicacion
+                    //guirisan/issue https://github.com/guirisan/ituinbook/issues/60
+                    //generamos el datosimple de que se ha empezado a leer la explicacion
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+
+                    // cambio de CodeOP para lectura de explicacion
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 133, moment: datetimeclient, numAccion: numAcc },
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                        }
+                    });
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/146
+            //añadimos el false al IF para no ejecutar nada de dialogs, 
+            //pero conservamos el código en la página por si acaso
+            if (false && $.trim(dialog.html()) != "") {
 
                 //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
                 //generamos el datosimple de que se ha empezado a leer el feedback
@@ -272,47 +340,7 @@
                                 expDialog.removeClass("hiddenDebug");
                                 if ($.trim(expDialog.html()) != "") {
 
-                                    //guirisan/issue https://github.com/guirisan/ituinbook/issues/60
-                                    //generamos el datosimple de que se ha empezado a leer la explicacion
-                                    //guirisan/secuencias
-                                    //datetime set in client
-                                    var datetimeclient = new Date().toISOString();
-
-                                    //NUMACC
-
-                                    //get and add+1 numAcc
-                                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                                    numAcc++;
-                                    sessionStorage.setItem("numAccion", numAcc);
-
-                                    //DATOSRAW
-                                    //get datosRaw to add row in ajax.beforeSend
-                                    var datosRaw;
-                                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                                        datosRaw = {};
-                                    }
-
                                     
-                                    // cambio de CodeOP para lectura de explicacion
-                                    $.ajax({
-                                        url: "RegistrarAccion",
-                                        type: 'POST',
-                                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 133, moment: datetimeclient, numAccion: numAcc },
-                                        //guirisan/secuencias
-                                        beforeSend: function () {
-                                            //set datosRaw on sessionStorage
-                                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                                            datosRaw[numAcc] = cadena;
-                                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                                            //set datosRaw on ajax petition
-                                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                                        },
-                                        error: function () {
-                                            //alert("Error: Hubo un error con tu última acción. Codeop:128");
-                                        }
-                                    });
-
                                     expDialog.dialog({
                                         modal: true,
                                         dialogClass: "noclose",

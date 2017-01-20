@@ -1892,7 +1892,7 @@ namespace ReadAndLearn.Controllers
                         sms += du.FeedbackAcumulado;
                         
                         //da error por contener contenido 'peligroso' (el html)
-                        //sms += "<br />" + mensaje; 
+                        //sms +=  mensaje; 
                         sms += mensaje;
                         du.FeedbackAcumulado = "";
                         du.ContadorFDBCAcum = 0;
@@ -1939,7 +1939,7 @@ namespace ReadAndLearn.Controllers
                             {
                                 //guirisan/issues https://github.com/guirisan/ituinbook/issues/141
                                 //if (sms == null || sms == "")
-                                //    sms += "<br />";
+                                //    //sms += "<br />";
 
                                 sms += tmp.Substring(posInf + 1, posSup - 1);
 
