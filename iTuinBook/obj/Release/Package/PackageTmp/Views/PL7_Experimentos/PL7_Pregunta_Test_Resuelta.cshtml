@@ -3,7 +3,7 @@
 @using System.Text.RegularExpressions;
 
 @{
-    ViewBag.Title = "PL6_Pregunta";
+    ViewBag.Title = "PL7_Pregunta";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     DatoSimple ds = (DatoSimple)ViewBag.DatoSimple;
@@ -15,8 +15,7 @@
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    
-
+   
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)      
         @if (Model.Ayuda != null)
@@ -100,24 +99,7 @@
         </ul>
     </div>
     
-    @if (ViewBag.TareaSel)
-    {
-        if(configPregunta != null && configPregunta.CorregirSeleccion)
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
-            </div>
-        }
-        else
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
-            </div>
-        }
-    }
-
+   
     <div id="fdbkDialog" class="hiddenDebug">
         @ViewBag.feedbackText
     </div>
@@ -161,22 +143,14 @@
             </text>
             }
 
-            if (parent.$("#feedback").is(":visible") || parent.$("#feedAvatar").is(":visible")) {
-                $('#btnSiguientePregunta').attr("disabled", "disabled");
-                $(':radio').attr("disabled", "disabled");
-            }
-            else {
-                $('#btnSiguientePregunta').removeAttr("disabled");
-                $(':radio').attr("disabled", "disabled");
-            }
 
             
 
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
             $("#btnVerExplicacion").click(function () {
-                $("#btnSiguientePregunta").removeAttr("disabled");
                 $(this).addClass("hiddenDebug");
+                $("#btnSiguientePregunta").removeAttr("disabled");
                 $("#explicacionDialog").removeClass("hiddenDebug");
                 
                 //DatoSimple lectura explicacion
@@ -466,7 +440,7 @@
 
                 ////
                 $.ajax({
-                    url: "PL6_Siguiente_Pregunta", //url: 'Validar',
+                    url: "PL7_Siguiente_Pregunta", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', TextoID: '@du.TextoID', moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias

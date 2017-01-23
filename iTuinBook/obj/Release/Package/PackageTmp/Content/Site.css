@@ -19,7 +19,11 @@ a {
     outline: none;
     padding-left: 3px;
     padding-right: 3px;
-    text-decoration: underline;
+    
+}
+
+button > a {
+    text-decoration: none !important;
 }
 
 a:link, a:visited,
