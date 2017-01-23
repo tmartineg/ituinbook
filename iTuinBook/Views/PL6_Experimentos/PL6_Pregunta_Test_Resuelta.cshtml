@@ -15,13 +15,7 @@
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    @if (configModulo != null && configModulo.Puntos)
-    {
-        <div style="float:right;">
-            <b>PUNTOS:</b>
-            <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
-        </div>
-    }
+    
 
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)      
@@ -134,7 +128,7 @@
     
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <button id="btnVerExplicacion">Ver explicación</button>                       
-        <button id="btnSiguientePregunta">Siguiente</button>                       
+        <button id="btnSiguientePregunta" disabled="disabled">Siguiente</button>                       
     </div> 
 </div>
 
@@ -181,6 +175,7 @@
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
             $("#btnVerExplicacion").click(function () {
+                $("#btnSiguientePregunta").removeAttr("disabled");
                 $(this).addClass("hiddenDebug");
                 $("#explicacionDialog").removeClass("hiddenDebug");
                 

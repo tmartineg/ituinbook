@@ -1852,6 +1852,19 @@ namespace ReadAndLearn.Controllers
             if (ext.GetModulo(ModuloID).Timings != null && ext.GetModulo(ModuloID).Timings.Count > 0)
             {
                 mensaje = ProcesarTimings(mensaje, du, valor);
+
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/145
+                //Si mensaje es = "", 
+                int n = ext.GetModulo(ModuloID).Timings.First().PregLanzada;
+                if (du.PreguntaActual > 0 && (((du.PreguntaActual + 1) % n) == 0))
+                {
+                    //pregunta múltiplo de N
+                    return Json(new { redirect = Url.Action("PL7_Pregunta_Test_Resueltas", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje, explicacionText = explicacion, preguntaActual = du.PreguntaActual, nPreg = n }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
+                }
+                else
+                {
+                    return Json(new { redirect = Url.Action("PL7_Pregunta_Test_Resuelta_Directa", new { GrupoID = GrupoID, ModuloID = ModuloID, TextoID = du.TextoID, preguntaID = PreguntaID }) });
+                }
             }
 
             if (configPreg != null && (configPreg.DosIntentosTest && flag_fallo))
@@ -2043,7 +2056,7 @@ namespace ReadAndLearn.Controllers
             return Json(new { redirect = Url.Action("PL7_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje, explicacionText = explicacion }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
         }
 
-        public ActionResult PL7_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText, string explicacionText ="")
+        public ActionResult PL7_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText, string explicacionText = "")
         {
             logger.Debug("PL7_Pregunta_Test_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -2066,25 +2079,74 @@ namespace ReadAndLearn.Controllers
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta
 
-            var seleccion = from dsa in db.DatosSimples
-                            where dsa.PreguntaID == pregunta.PreguntaID &&
-                            dsa.TextoID == pregunta.Texto.TextoID &&
-                            dsa.CodeOP == 123 &&
-                            du.DatosUsuarioID == du.DatosUsuarioID
-                            select dsa;
-
-
-            if (seleccion != null && seleccion.Count() > 0)
-            {
-                ViewBag.TareaSel = true;
-                ViewBag.Seleccion = seleccion.AsEnumerable().Last();
-            }
-            else
-            {
-                ViewBag.TareaSel = false;
-            }
-
             return View(pregunta);
+        }
+
+        public ActionResult PL7_Pregunta_Test_Resuelta_Directa(int GrupoID, int ModuloID, int preguntaID)
+        {
+            logger.Debug("PL7_Pregunta_Test_Resuelta");
+            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+            Pregunta pregunta = new Pregunta();
+
+            DatoSimple ds = du.DatoSimple.Last(p => p.CodeOP == 13);
+
+            pregunta = ext.GetPregunta((int)preguntaID);
+
+            ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
+            ViewBag.ConfigPregunta = ext.GetConfigPregunta((int)preguntaID);
+
+            ViewBag.DatosUsuario = du;
+            ViewBag.DatoSimple = ds;
+            
+            return View(pregunta);
+        }
+
+        public ActionResult PL7_Pregunta_Test_Resueltas(int GrupoID, int ModuloID, int preguntaID, string feedbackText, string explicacionText = "", int preguntaActual = 0, int nPreg = 0)
+        {
+            logger.Debug("PL7_Pregunta_Test_Resueltas");
+            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+            Pregunta[] preguntas = new Pregunta[nPreg]; //variable para cebar el modelo
+            ViewBag.Preguntas = new Pregunta[nPreg]; //array para preguntas en ViewBag
+            ViewBag.DatosSimples = new DatoSimple[nPreg]; //array para los datossimples correspondientes
+            preguntaActual = preguntaActual - (nPreg - 1);     //ajustamos preguntaActual a la primera de las que ha realizado
+                                                         //para mostrar 5 6 7 8, en lugar de 8 7 6 5 (poder hacer el for sumando)
+
+            ICollection<DatoSimple> ds = du.DatoSimple.Where(x => x.CodeOP == 13).ToList();
+            //guirisan/issues
+            //cargar y asociar a cada pregunta el datosimple para saber que se ha respondido. si, esto tenía que pasar...
+
+            for (int i = 0; i < nPreg; i++)
+            {
+                Pregunta p = ext.GetPreguntaActual(ext.GetTexto(du.TextoID),preguntaActual);
+                p.ConfigPregunta = ext.GetConfigPregunta(p.PreguntaID);
+
+                ViewBag.Preguntas[i] = p;
+                preguntas[i] = p;
+                
+                preguntaActual++;
+
+                //datossimples
+                ViewBag.DatosSimples[i] = ds.FirstOrDefault(x => x.PreguntaID == p.PreguntaID);
+            }
+
+            if (explicacionText != "")
+            {
+                ViewBag.explicacionIntegrada = explicacionText;
+            }
+            
+            
+
+
+            ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
+
+            ViewBag.DatosUsuario = du;
+            
+            ViewBag.feedbackText = feedbackText;
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/60
+            //añadido texto de explicacion al viewbag
+            ViewBag.explicacionText = explicacionText;
+
+            return View(preguntas.ToList());
         }
         
         #endregion //region pregunta_test

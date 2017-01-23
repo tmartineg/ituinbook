@@ -1847,13 +1847,13 @@ namespace ReadAndLearn.Controllers
                 }
             }
 
-            
+
 
             if (ext.GetModulo(ModuloID).Timings != null && ext.GetModulo(ModuloID).Timings.Count > 0)
             {
                 mensaje = ProcesarTimings(mensaje, du, valor);
             }
-
+            
             if (configPreg != null && (configPreg.DosIntentosTest && flag_fallo))
             {
                 return Json(new { redirect = Url.Action("PL6_Pregunta_Test_2", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
