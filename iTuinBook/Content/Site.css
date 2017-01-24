@@ -1034,3 +1034,8 @@ img.imgEnunciadoIzquierda{
 .neutraPalabra {
     background-color: #e0e263;
 }
+
+/*guirisan issues */
+.largerFont{
+    font-size: 1em;
+}
