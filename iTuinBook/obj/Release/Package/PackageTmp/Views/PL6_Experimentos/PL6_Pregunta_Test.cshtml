@@ -21,7 +21,7 @@
         </div>
     }
 
-    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;" class="largerFont">
         @Html.Raw(Model.Enunciado)    
         @if (Model.Ayuda != null)
         {
@@ -29,19 +29,21 @@
         }
     </div>
      
-    <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
+    <div id=alternativas style="padding-left: 20px; padding-right: 20px;" class="largerFont">
         <ul>
-        @foreach (Alternativa alt in Model.Alternativas)
-        {
-            if(alt.Opcion != null)
+            @foreach (Alternativa alt in Model.Alternativas)
             {
-                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
+                if (alt.Opcion != null)
+                {
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion)
+                    <br />
+                }
+                else
+                {
+                    @Html.RadioButtonFor(r => alt, "null", new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion)
+                    <br />
+                }
             }
-            else
-            {
-                @Html.RadioButtonFor(r => alt, "null", new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
-            }
-        }
         </ul>
     </div>
 
@@ -86,14 +88,10 @@
     <div style="padding-left: 20px; padding-right: 20px;">
         <button id="btnValidarTest">Validar</button>
         @if (Model.Texto.ConfigTexto.Busqueda)
-        {
-            
+        {            
             <button id="btnBackToTexto"><a href="PL6_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&primerIntento=true">Volver al texto</a></button>
         }
-        else
-        {
-            
-        }
+
                       
     </div>
 </div> 

@@ -85,9 +85,8 @@
     
     <div style="padding-left: 20px; padding-right: 20px;">
         <button id="btnValidarTest">Validar</button>
-        @if (Model.Texto.ConfigTexto.Busqueda)
+        @if (Model.ConfigPregunta.Busqueda)
         {
-            
             <button id="btnBackToTexto"><a href="PL3_Texto?GrupoID=@du.GrupoID&ModuloID=@du.ModuloID&textoActual=@du.TextoActual&primerIntento=true">Volver al texto</a></button>
         }
         else
