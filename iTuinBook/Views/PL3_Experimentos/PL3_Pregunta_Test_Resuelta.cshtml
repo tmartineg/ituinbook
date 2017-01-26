@@ -127,8 +127,12 @@
     }
 
     <div id="fdbkDialog">
-        <p>@ViewBag.feedbackText</p>
-        <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;" />@ViewBag.AlternativaCorrectaText</p>
+        @ViewBag.feedbackText
+        @{if (ViewBag.AlternativaCorrectaText != ""){
+              
+        <p>Respuesta correcta: @ViewBag.AlternativaCorrectaText</p>
+        }
+        }
     </div>
     <div id="explicacionDialog" class="hiddenDebug">
         @ViewBag.explicacionText
