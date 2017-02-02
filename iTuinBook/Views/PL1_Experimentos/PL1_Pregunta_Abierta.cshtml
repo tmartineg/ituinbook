@@ -1,0 +1,370 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
+
+@{
+    ViewBag.Title = "PL1_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+    DatoSimple ds = (DatoSimple)ViewBag.Seleccion;
+}
+
+<div style="margin: 15px 20px;" id="areaPregunta">
+    <div style="float:right;" class="hiddenDebug">
+        <b>PUNTOS:</b>
+        <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
+    </div>
+
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @Html.Raw(Model.Enunciado)    
+        @if (Model.Ayuda != null)
+        {
+            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
+        }
+    </div>
+     
+    <div style="padding-left: 20px; padding-right: 20px;">
+        <textarea id="respuesta"></textarea>
+    </div>
+
+    @if(ViewBag.TareaSel)
+    {
+        <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
+            <b>Selección:</b>
+            <p style="color: red;">@Html.Raw(ds.Info2)</p>
+        </div>
+    }
+
+    <div id="ayudas" style="float:right; visibility: hidden;">    
+        @if (Model.Ayuda != null)
+        {
+            if (Model.Ayuda.ParafraseoN1 != null)
+            {
+                <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
+            }
+
+            if (Model.Ayuda.Prismaticos != null)
+            {
+                <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
+            }
+
+            if (Model.Ayuda.Lupa != null)
+            {
+                <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
+            }
+        } 
+    </div>
+    
+    <div style="padding-left: 20px; padding-right: 20px;">
+        <button id="btnValidarAbierta">Validar</button>                       
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">        
+        $(document).ready(function () {
+            var timeStart = new Date();
+            var timeFinish = new Date();
+
+            $("#btnValidarAbierta").click(function () {
+                $("#btnValidarAbierta").attr("disabled", "disabled");
+                //guirisan: datetime set in client
+                var datetimeclient = new Date();
+                datetimeclient = datetimeclient.toISOString();
+
+                $.ajax({
+                    url: "PL1_Pregunta_Abierta_Validar", //url: 'Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient},
+                    success: function (result) {
+                        // result.redirect contains the string URL to redirect to   
+                        if (!(result.mensaje == null || result.mensaje == "")) {                            
+                            @if (configPregunta != null && (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno))
+                            {
+                                //guirisan/abiertas
+                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
+                                //@: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
+                            }
+                            else
+                            {
+                                //guirisan/abiertas
+                                //comentado para no mostrar el feedback hasta que las preguntas abiertas funcionen correctamente
+                                //@: parent.feedbackVentana(result.mensaje);
+                            }
+                        }
+            
+                        window.location.href = result.redirect;                        
+                    },
+                    error: function () {
+                        alert("error");
+                    }                    
+                });
+            });
+
+            /**************/
+            /*** AYUDAS ***/
+            /**************/
+            @if (Model.Ayuda != null)
+            {
+                if (Model.Ayuda.ParafraseoN1 != null)
+                {   
+                    <text>
+                    $('#btnFlotador').click(function () {
+                        $("#btnFlotador").attr("disabled", "disabled");
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
+
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120, moment: datetimeclient },
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
+                        /*$.ajax({
+                            url: "PL1_Experimentos/UsoAyudasIndependiente",
+                            type: 'POST',
+                            data: { Ayuda: 1 }
+                        });*/
+
+                        $('#ayuFlotador').show();
+
+                        parent.autofitIframe(parent.document.getElementById("addIframe"));
+                    });
+                    </text>
+                }
+
+                if (Model.Ayuda.Lupa != null)
+                {
+                    <text>
+                    $("#btnLupa").click(function () {
+                        $("#btnLupa").attr("disabled", "disabled");
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
+
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient },
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
+
+                        var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+                                
+                        $('.paginas', window.parent.document).each(function () {
+                            var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+
+                            for (var i = 0; i < param.length; i++) {                        
+                                $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));                        
+                            }
+                        });                                
+                    });
+                    </text>
+                }
+
+                if (Model.Ayuda.Prismaticos != null)
+                {
+                    <text>
+                    $('#btnPrismaticos').click(function () {
+                        $("#btnPrismaticos").attr("disabled", "disabled");
+                        //guirisan: datetime set in client
+                        var datetimeclient = new Date();
+                        datetimeclient = datetimeclient.toISOString();
+
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 121 , moment: datetimeclient},
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
+
+                        $('.paginas', window.parent.document).each(function () {
+                            var param = '@Html.Raw(@Model.Ayuda.Prismaticos)'.split('/');
+
+                            for (var i = 0; i < param.length; i++) {
+                                $(this).html($(this).html().replace(param[i], "<prismaticos style=\"border:1px solid red;\">" + param[i] + "</prismaticos>"));
+                            }
+                        });
+                    });
+                    </text>
+                }
+            }
+            /**************************************/
+            /**************************************/
+            /******* CONFIGURACIÓN PREGUNTA *******/
+            /**************************************/
+            /**************************************/
+            @if (configPregunta != null && configPregunta.EnmascararEnunciado == true) {
+                <text>
+                $('#enunciado').addClass("difuminado");
+                
+                $('#enunciado').click(function () {                    
+                    if ($('#enunciado').hasClass("difuminado")) {
+                        $(":radio").attr("disabled", false);
+
+                        $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararAlternativas' == 'True') {
+                            if ($('#alternativas').hasClass("difuminado")) {
+                                
+                            }
+                            else {
+                                $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
+
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
+                                    error: function () {
+                                        alert("Error: Hubo un error con tu última acción.");
+                                    }
+                                });
+                            }
+
+                        }
+                              
+                        timeStart = jQuery.now();                        
+                    }
+                });     
+                </text>
+            }
+
+            @if (configPregunta != null && configPregunta.EnmascararAlternativas == true) {
+                <text>            
+                $('#alternativas').addClass("difuminado");
+
+                $('#alternativas').click(function () {
+                    if ($('#alternativas').hasClass("difuminado")) {
+                        $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararEnunciado' == 'True') {
+                            if ($('#enunciado').hasClass("difuminado")) {
+
+                            }
+                            else {
+                                $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
+
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() , moment: datetimeclient, numAccion: numAcc},
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
+                                    error: function () {
+                                        alert("Error: Hubo un problema con tu última acción.");
+                                    }
+                                });
+                            }
+                        }
+
+                        timeStart = jQuery.now();
+                    }
+                });
+                </text>
+            }
+
+            @if (configPregunta != null && configModulo.Ayudas)
+            {   
+                @: $('#ayudas').show();
+                @: $('#ayudas').css("visibility", "visible")
+            }
+            else
+            {
+                if (configPregunta != null && configPregunta.Ayuda)
+                {
+                    @: $('#ayudas').show();
+                    @: $('#ayudas').css("visibility", "visible")
+                }
+                else
+                {
+                    @: $('#ayudas').hide();
+                    @: $('#ayudas').css("visibility", "hidden")
+                }
+            }                
+
+            $(":radio").change(function () {
+                $("#btnValidarTest").removeAttr("disabled");
+            });
+
+            $("#btnValidarTest").attr("disabled", "disabled");
+
+            /**************************************/
+            /**************************************/
+            
+            
+        });
+    </script>
+}

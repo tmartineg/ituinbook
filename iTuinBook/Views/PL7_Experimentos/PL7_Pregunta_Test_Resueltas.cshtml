@@ -120,20 +120,21 @@
     </div>
 
     
-    @if (preg.Explicacion != null && preg.Explicacion != "") { 
-       
+    @if (preg.Explicacion != null && preg.Explicacion != "")
+{
+
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;" class="largerFont">
-        
-       @{
-       string btnId = "btnVerExplicacion" + preg.PreguntaID;
-       string divId = "explicacionDialog" + preg.PreguntaID;
+
+        @{
+    string btnId = "btnVerExplicacion" + preg.PreguntaID;
+    string divId = "explicacionDialog" + preg.PreguntaID;
         }
-        <button id="@btnId" preguntaID="@preg.PreguntaID">Ver explicación</button>      
+        <button id="@btnId" preguntaid="@preg.PreguntaID">Ver explicación</button>
         <div id="@divId" class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
             @preg.Explicacion
-        </div>                 
+        </div>
     </div>
-    }
+}
     </div> //end div.classPregunta
    } 
     
@@ -162,7 +163,7 @@
         $("[id^='btnVerExplicacion'").click(function () {
 
 
-            $(this).addClass("hiddenDebug").next("[id^='explicacionDialog']").removeClass("hiddenDebug");
+            $(this).addClass("hiddenDebug").next("[id^='explicacionDialog']").removeClass("hiddenDebug").addClass("explicacionVerde");
             if ($("[id^='btnVerExplicacion'").not(".hiddenDebug").length == 0) {
                 $('#btnSiguientePregunta').removeAttr("disabled");
             }

@@ -1,0 +1,171 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.Pregunta
+@using System.Text.RegularExpressions;
+
+@{
+    ViewBag.Title = "PL0_Pregunta";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    DatoSimple ds = (DatoSimple)ViewBag.DatoSimple;
+    DatoSimple dsel = (DatoSimple)ViewBag.Seleccion;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+    bool flag_Flota = (bool)ViewBag.AyudaFlota;
+    Regex regex = new Regex(string.Format("\\{0}.*?\\{1}", '<', '>'));
+}
+
+<div style="margin: 15px 20px;" id="areaPregunta">
+    <div style="float:right;">
+        <b>PUNTOS:</b>
+        <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
+    </div>
+
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        @Html.Raw(Model.Enunciado)      
+        @if (Model.Ayuda != null)
+        {  
+            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>                
+        }
+    </div>
+     
+
+    @if (ViewBag.TareaSel)
+    {
+        if(configPregunta != null && configPregunta.CorregirSeleccion)
+        {
+            <div style="padding-left: 20px; padding-right: 20px;">
+                <b>Selección:</b>
+                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
+            </div>
+        }
+        else
+        {
+            <div style="padding-left: 20px; padding-right: 20px;">
+                <b>Selección:</b>
+                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
+            </div>
+        }
+    }
+
+    <div style="padding-left: 20px; padding-right: 20px;">
+        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
+    </div> 
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @if(configPregunta != null && configPregunta.EnmascararTextoRevisa)
+            {
+                <text>
+            parent.BlurPagina("True");
+            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+            window.parent.$('.paginas').css("filter", "url(#example-one)");
+                </text>
+            }
+            else
+            {
+                <text>
+            parent.BlurPagina("False");
+            window.parent.$('.paginas').css("-webkit-filter", "");
+            window.parent.$('.paginas').css("filter", "");
+                </text>
+            }
+
+            if (parent.$("#feedback").is(":visible") || parent.$("#feedAvatar").is(":visible")) {
+                $('#btnSiguientePregunta').attr("disabled", "disabled");
+            }
+            else {
+                $('#btnSiguientePregunta').removeAttr("disabled");                
+            }
+
+            $("#btnSiguientePregunta").click(function () {
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                $.ajax({
+                    url: "PL1_Siguiente_Pregunta", //url: 'Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', TextoID: '@du.TextoID', moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    success: function (result) {
+                        $('.paginas', window.parent.document).each(function () {
+                            $(this).html($(this).html().replace(/<lupa style=\"background-color:yellow;\">/g, ""));
+                            $(this).html($(this).html().replace(/<\/lupa>/g, ""));
+                            $(this).html($(this).html().replace(/<prismaticos style=\"border:1px solid red;\">/g, ""));
+                            $(this).html($(this).html().replace(/<\/prismaticos>/g, ""));
+                        });                
+
+                        window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+                        window.parent.$('.paginas').css("filter", "url(#example-one)");
+
+                        window.parent.$('#feedback').css("visibility", "hidden");
+                        window.parent.$('#fdbkSMS').text("");
+
+                        if (result.Parent)
+                        {   
+                            // data.redirect contains the string URL to redirect to
+                            window.parent.window.location.href = result.redirect;                        
+                        }
+                        else
+                        {  
+                            // data.redirect contains the string URL to redirect to
+                            window.location.href = result.redirect;                                                    
+                        }
+                        
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                return false;
+            });
+            
+            @if((bool)ViewBag.AyudaFlota)
+            {
+                @: $('#ayuFlotador').show();
+            }
+
+            @if(configPregunta != null && configPregunta.ResaltarPertinenteTexto)
+            {
+                <text>                                
+                $('.paginas', window.parent.document).each(function () {
+                    var param = '@Html.Raw(@Model.Pertinente)'.split('/');
+
+                    for (var i = 0; i < param.length; i++) {                        
+                        $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));                        
+                    }
+                });              
+                </text>
+            }
+        });
+
+
+    </script>
+}

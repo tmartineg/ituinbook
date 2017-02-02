@@ -1005,6 +1005,12 @@ img.imgEnunciadoIzquierda{
     margin: 20px;
 }
 
+/* Alinea la imagen a la izquierda del enunciado y le da margen*/
+img.imgEnunciadoDerecha{
+    float: right;
+    margin: 20px;
+}
+
 /* Fija en la esquina superir izquierda del navegador el DIV indicado (para boton preguntas en PL0*/
 .fixed {
     position:fixed; 
@@ -1037,5 +1043,10 @@ img.imgEnunciadoIzquierda{
 
 /*guirisan issues */
 .largerFont{
-    font-size: 1em;
+    font-size: 1.2em !important;
+}
+
+/* add background-color to explicacion div*/
+.explicacionVerde {
+    background-color: #dbf2de;
 }

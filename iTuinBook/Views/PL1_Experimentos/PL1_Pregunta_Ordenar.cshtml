@@ -1,0 +1,266 @@
+﻿@using ReadAndLearn.Models;
+@model ReadAndLearn.Models.TareaOrdenar
+
+@{
+    ViewBag.Title = "VerTareaOrdenar";
+    Layout = "~/Views/Shared/_LayoutNada.cshtml";
+    DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
+    ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
+    ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+}
+
+<div style="margin: 15px 20px;" id="areaPregunta">
+    <div style="float:right;">
+        <b>PUNTOS:</b>
+        <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
+    </div>
+
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
+        <p>@Html.Raw(Model.Enunciado)</p>
+    </div>
+     
+    <div id=tarea style="padding-left: 20px; padding-right: 20px;">
+    @{
+    string div, drag;
+    int i = 0;
+
+    switch ((int)Model.Tipo)
+    {
+        case 0:
+        <div>
+            @{
+            foreach (Items item in Model.ItemsOrdenados)
+            {
+                div = "div" + i.ToString();
+                drag = "drag" + i.ToString();
+                
+                <div id="@div" style="text-align:center; min-width:24px; min-height:24px; display:inline-block; border: 1px solid #aaaaaa; padding-left: 3px; padding-right: 3px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <label id="@drag" draggable="true" ondragstart="drag(event)">@item.Item</label>
+                </div>
+                
+                i++;
+            }
+            
+            <hr />
+            <br />
+            for (int j = 0; j < i; j++)
+            {
+                div = "res" + j.ToString();
+                
+                <div id="@div" class="respuesta" style="text-align:center; min-width:24px; min-height:24px; display:inline-block; border: 1px solid #aaaaaa; padding-left: 3px; padding-right: 3px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+                </div> 
+            }
+        }    
+        </div>
+            break;
+        case 1:
+        <div>
+            @{
+            foreach (Items item in Model.ItemsOrdenados)
+            {
+                div = "div" + i.ToString();
+                drag = "drag" + i.ToString();
+                
+                <div id="@div" style="height: 24px; border: 1px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <label id="@drag" draggable="true" ondragstart="drag(event)">@item.Item</label>
+                </div>  <br />
+                
+                i++;
+            }
+            
+            <hr />
+            <br />
+            for (int j = 0; j < i; j++)
+            {
+                div = "res" + j.ToString();
+                
+                <div id="@div" class="respuesta" style="height: 24px; border: 1px solid #aaaaaa;" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+                </div> <br />
+            }
+        }    
+        </div>
+
+            break;
+
+        case 2:
+        <div>
+        @{
+            foreach (Items item in Model.ItemsOrdenados)
+            {
+                div = "div" + i.ToString();
+                drag = "drag" + i.ToString();
+            
+                <div id="@div" style="width: 150px; height: 150px; border: 1px solid #aaaaaa; display: inline-block;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <img id="@drag" src="@item.Item" draggable="true" ondragstart="drag(event)" width="150" height="150" />
+
+                </div>  
+            
+                i++;
+            }
+
+            <hr />
+            <br />
+            for (int j = 0; j < i; j++)
+            {
+                div = "res" + j.ToString();
+                
+                <div id="@div" class="respuesta" style="width: 150px; height: 150px; border: 1px solid #aaaaaa; display: inline-block;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
+            }
+        }        
+        </div>
+            break;
+        default:
+        <b>La tarea no se pudo cargar por falta de tipo.</b>
+            break;
+        }
+    }
+    </div>
+    <br />
+
+    <div style="padding-left: 20px; padding-right: 20px;">
+        <button id="btnValidarOrdenar">Validar</button>                       
+    </div>
+</div> 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     
+    <script src="~/Content/KendoUI/js/kendo.web.min.js"></script>
+    
+    <link href="~/Content/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/Content/KendoUI/styles/kendo.all.min.js" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("Parent", document.getElementById(ev.target.id).parentNode.id);
+
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("Text");
+
+            if (ev.target.id.length == 5) { // Ya contiene una imagen
+                var parent = ev.dataTransfer.getData("Parent"); // Origen
+
+                var reemplazo = ev.target.id; // Viejodisplay
+
+                document.getElementById(reemplazo).parentNode.appendChild(document.getElementById(data));
+
+                document.getElementById(parent).appendChild(document.getElementById(reemplazo))
+            }
+            else {
+                ev.target.appendChild(document.getElementById(data));                
+            }
+        }
+
+        $(document).ready(function () {
+            $("#btnValidarOrdenar").click(function () {
+                //$("#btnValidarOrdenar").attr("disabled", "disabled");
+
+                var resp = "";
+                
+                @switch ((int)Model.Tipo)
+                {
+                    case 0:
+                    case 1:
+                        <text>
+                            $(".respuesta").each(function () {
+                                resp = resp + $(this).find('label').html() + "s3p4r40r";
+                                
+                            });
+                        </text>
+                        break;
+                    case 2:
+                        <text>
+                            $(".respuesta").each(function () {
+                                resp = resp + $(this).find('img').attr('src') + "s3p4r40r";
+                            });
+                        </text>
+                        break;
+                    default:
+                        break;
+                }
+
+                resp = resp.substring(0, resp.length - 8);
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+
+
+                $.ajax({
+                    url: "PL1_Pregunta_Ordenar_Validar",
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@configPregunta.PreguntaID', TareaOrdenarID: '@Model.TareaOrdenarID', respuesta: resp, moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    success: function (result) {
+                        if (!(result.mensaje == null || result.mensaje == "")) {
+                        @if (configPregunta != null)
+                        {
+                            if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
+                            {
+                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
+                                                            }
+                            else
+                            {
+                                @: parent.feedbackVentana(result.mensaje);
+                                                            }
+                        }
+                        else
+                        {
+                            @: parent.feedbackVentana(result.mensaje);
+                                                        }
+                        }
+
+                        window.location.href = result.redirect;
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+                
+            });
+
+            $("#menuCategorias").kendoMenu({
+                orientation: "vertical"
+            }).css({
+                width: auto,
+                marginRight: "220px"
+            });
+        });
+    </script>
+}

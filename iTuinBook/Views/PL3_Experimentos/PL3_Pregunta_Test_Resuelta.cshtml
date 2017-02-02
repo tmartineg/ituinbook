@@ -127,11 +127,13 @@
     }
 
     <div id="fdbkDialog">
-        @ViewBag.feedbackText
-        @{if (ViewBag.AlternativaCorrectaText != ""){
+        @Html.Raw(ViewBag.feedbackText)
+        @{/*
+            if (ViewBag.AlternativaCorrectaText != ""){
               
         <p>Respuesta correcta: @ViewBag.AlternativaCorrectaText</p>
         }
+        */
         }
     </div>
     <div id="explicacionDialog" class="hiddenDebug">

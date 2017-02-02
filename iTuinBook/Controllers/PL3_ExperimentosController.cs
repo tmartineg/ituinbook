@@ -2047,6 +2047,7 @@ namespace ReadAndLearn.Controllers
             return Json(new { redirect = Url.Action("PL3_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje, explicacionText = explicacion }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
         }
 
+        [ValidateInput(false)]
         public ActionResult PL3_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText, string explicacionText ="")
         {
             logger.Debug("PL3_Pregunta_Test_Resuelta");
