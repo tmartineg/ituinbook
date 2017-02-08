@@ -89,10 +89,13 @@
 <div id="addQuestion-modal" class="hiddenDebug">
     <input type="text" placeholder="Número de pregunta a enlazar" id="addQuestion-content"/>
 
-    
-    <select id="numPlantilla">
+    <!--esto porque?????**************************************************************
+        ****************************************************************************-->
+    <select id="numPlantilla" class="hiddenDebug">
         <option disabled="disabled" selected>Plantilla utilizada en el experimento</option>
         <option value="2">Texto y pregunta en la misma página (Pregunta en mitad superior)</option>
+        <option value="1">Texto y pregunta en la misma página (Pregunta en mitad inferior)</option>
+        <option value="2">Texto y pregunta en la misma página (Preguntas en texto)</option>
         <option value="0">Texto y preguntas en páginas distintas (con feedback)</option>
         <option value="3">Texto y preguntas en páginas distintas (con explicacion)</option>
         <option value="4">Texto y preguntas en páginas distintas (con audio)</option>
@@ -312,8 +315,8 @@
                                         $("#addQuestion-content").val()
                                         var editor = $("#editor").data("kendoEditor");
                                         var numPregunta = $("#addQuestion-content").val();
-                                        var numPlantilla = $("#numPlantilla").val();
-
+                                        //var numPlantilla = $("#numPlantilla").val();
+                                        numPlantilla = 5;
                                         editor.clipboard.paste("<strong><a class='btnPreguntas' href=\"/ReadAndLearn/PL" + numPlantilla + "_Experimentos/PL" + numPlantilla + "_Pregunta/btnPreguntas?GrupoID=valuegrupoid&ModuloID=@ViewBag.modulo.ModuloID&preguntaActual=" + (numPregunta - 1) + "&textoID=@ViewBag.Texto.TextoID&segundoIntento=False&preguntaResuelta=False\">Pregunta " + numPregunta + "</a><strong>");
                                         $(this).dialog("close");
                                     },
