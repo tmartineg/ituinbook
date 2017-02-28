@@ -89,18 +89,6 @@
 <div id="addQuestion-modal" class="hiddenDebug">
     <input type="text" placeholder="Número de pregunta a enlazar" id="addQuestion-content"/>
 
-    <!--esto porque?????**************************************************************
-        ****************************************************************************-->
-    <select id="numPlantilla" class="hiddenDebug">
-        <option disabled="disabled" selected>Plantilla utilizada en el experimento</option>
-        <option value="2">Texto y pregunta en la misma página (Pregunta en mitad superior)</option>
-        <option value="1">Texto y pregunta en la misma página (Pregunta en mitad inferior)</option>
-        <option value="2">Texto y pregunta en la misma página (Preguntas en texto)</option>
-        <option value="0">Texto y preguntas en páginas distintas (con feedback)</option>
-        <option value="3">Texto y preguntas en páginas distintas (con explicacion)</option>
-        <option value="4">Texto y preguntas en páginas distintas (con audio)</option>
-        <option value="5">Texto y preguntas en páginas distintas (preguntas en texto)</option>
-    </select>
 </div>
 
 @section Scripts {
@@ -113,241 +101,245 @@
     <link href="~/Content/KendoUI/styles/kendo.default.min.css" rel="stylesheet" />
     
     <script type="text/javascript">
-        $(document).ready(function () {
-            var regX1, regY1, regX2, regY2;
+    $(document).ready(function () {
+        var regX1, regY1, regX2, regY2;
 
-            $("#agregarRegion").click(function () {
-                $("#regiones").append("<li>" + regX1 + "," + regY1 + "," + regX2 + "," + regY2 + "</li>");
-                
-                $('ol').listview('refresh');
-            });
+        $("#agregarRegion").click(function () {
+            $("#regiones").append("<li>" + regX1 + "," + regY1 + "," + regX2 + "," + regY2 + "</li>");
 
-            $("#window").hide();
-            $("#addRegionImagen-modal").hide();
-            $("#addTable-modal").hide();
-            $("#addTooltip-modal").hide();
-
-            $("#temp").hide();
-            var editor_;
-            var numReg = 1;
-            var html;
-            var window = $("#window"),
-                        undo = $("#undo")
-                                .bind("click", function () {
-                                    window.data("kendoWindow").open();
-                                    undo.hide();
-                                });
-
-            var regionImagen = $("#addRegionImagen-modal"),
-                        undo = $("#undo")
-                                .bind("click", function () {
-                                    window.data("kendoWindow").open();
-                                    undo.hide();
-                                });
-
-            var onClose = function () {                
-                editor_.clipboard.paste("<img class=\"regIM\" coor=\"\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");                
-            }
-
-            var onClose2 = function () {
-                $('.regIM').imgAreaSelect({ remove: true });
-                var image = $("#workspace").children("img");
-                image.remove();
-                var phrase = "";
-                $('#regiones').find('li').each(function(){
-                    // cache jquery var
-                    var current = $(this);
-                    // check if our current li has children (sub elements)
-                    // if it does, skip it
-                    // ps, you can work with this by seeing if the first child
-                    // is a UL with blank inside and odd your custom BLANK text
-                    if(current.children().size() > 0) {return true;}
-                    // add current text to our current phrase
-
-                    if (phrase == "") {
-                        phrase += current.text();
-                    }
-                    else {
-                        phrase += ":" + current.text();
-                    }
-                    
-                })                
-
-                editor_.clipboard.paste("<img class=\"imagen\" coor=\"" + phrase + "\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");
-            }
-              
-            if (!regionImagen.data("kendoWindow")) {
-                regionImagen.kendoWindow({
-                    width: "800px",
-                    title: "Regiones en imagen...",
-                    actions: [
-                        "Minimize",
-                        "Maximize",
-                        "Close"
-                    ],
-
-                    close: onClose2
-                });
-            }
-
-            if (!window.data("kendoWindow")) {
-                window.kendoWindow({
-                    width: "800px",
-                    title: "Selecciona una imagen...",
-                    actions: [                       
-                        "Minimize",
-                        "Maximize",
-                        "Close"
-                    ],
-                    
-                    close: onClose
-                });
-            }
-
-            //$("#addTooltip-modal").hide();
-            $("#addTable-modal").hide();
-            $("#addImage-modal").hide();
-            
-            $("#editor").kendoEditor({
-                tools: [
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strikethrough",
-                    "justifyLeft",
-                    "justifyCenter",
-                    "justifyRight",
-                    "justifyFull",
-                    "insertUnorderedList",
-                    "insertOrderedList",
-                    "indent",
-                    "outdent",
-                    "createLink",
-                    "unlink",
-                    "insertImage",
-                    "subscript",
-                    "superscript",
-                    "createTable",
-                    "addRowAbove",
-                    "addRowBelow",
-                    "addColumnLeft",
-                    "addColumnRight",
-                    "deleteRow",
-                    "deleteColumn",
-                    "viewHtml",
-                    "formatting",
-                    "fontName",
-                    "fontSize",
-                    "foreColor",
-                    "backColor",
-                    {
-                        name: "addReg",
-                        tooltip: "Agregar Región",
-                        title: "Agregar Región",
-                        exec: function (e) {
-                            var editor = $("#editor").data("kendoEditor");
-                            var selectedText = editor.getSelection();
-                            var selectedHtml = editor.selectedHtml();
-
-                            if (selectedHtml.toLowerCase().indexOf("<img") >= 0) {                               
-                                $('#workspace').prepend(selectedHtml)
-
-                                editor_ = $("#editor").data("kendoEditor");
-                                regionImagen.data("kendoWindow").center().open();
-                                $('.regIM').imgAreaSelect({
-                                    aspectRatio: '4:3', handles: true,
-                                    onSelectEnd: function (img, selection) {
-                                        regX1 = selection.x1;
-                                        regY1 = selection.y1;
-                                        regX2 = selection.x2;
-                                        regY2 = selection.y2;                                        
-                                    }
-                                });
-                            }
-                            else {
-                                editor.clipboard.paste("<reg pagina=\"@(texto.Paginas.Count + 1)" + "" + "\" region=\"" + numReg.toString() + "\">" + selectedHtml + "</reg>");
-                                numReg++;
-                            }
-                        }
-                    },
-                    {
-                        name: "addToolTip",
-                        tooltip: "Agregar Etiqueta",
-                        title: "Agregar Etiqueta",
-                        exec: function (e) {
-                            $("#addTooltip-modal").dialog({
-                                height: 230,
-                                width: 540,
-                                modal: true,
-                                buttons: {
-                                    "Aceptar": function () {
-                                        var editor = $("#editor").data("kendoEditor");
-                                        var content = $("#tooltipContent").val();
-                                        var selectedText = editor.getSelection();
-                                        var selectedHtml = editor.selectedHtml();
-
-                                        editor.clipboard.paste("<a content=\"" + content + "\"class=\"tooltip\">" + selectedHtml + "</a>");
-
-                                        $(this).dialog("close");
-                                    },
-                                    "Cancelar": function () {
-                                        $(this).dialog("close");
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    {
-/***********ON DEMAND QUESTION*****************
-***********************************************
-**********************************************/
-                        name: "addOndemandQuestion",
-                        tooltip: "Insertar enlace a pregunta",
-                        title: "Insertar enlace a pregunta",
-                        exec: function (e) {
-                            $("#addQuestion-modal").removeClass("hiddenDebug").dialog({
-                                height: 230,
-                                width: 540,
-                                modal: true,
-                                buttons: {
-
-                                    "Aceptar": function () {
-                                        $("#addQuestion-content").val()
-                                        var editor = $("#editor").data("kendoEditor");
-                                        var numPregunta = $("#addQuestion-content").val();
-                                        //var numPlantilla = $("#numPlantilla").val();
-                                        numPlantilla = 5;
-                                        editor.clipboard.paste("<strong><a class='btnPreguntas' href=\"/ReadAndLearn/PL" + numPlantilla + "_Experimentos/PL" + numPlantilla + "_Pregunta/btnPreguntas?GrupoID=valuegrupoid&ModuloID=@ViewBag.modulo.ModuloID&preguntaActual=" + (numPregunta - 1) + "&textoID=@ViewBag.Texto.TextoID&segundoIntento=False&preguntaResuelta=False\">Pregunta " + numPregunta + "</a><strong>");
-                                        $(this).dialog("close");
-                                    },
-                                    "Cancelar": function () {
-                                        $(this).dialog("close");
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    {
-                        name: "addImage",
-                        tooltip: "Agregar Imagen",
-                        title: "Agregar Imagen",
-                        exec: function (e) {
-                            editor_ = $("#editor").data("kendoEditor");
-
-                            window.data("kendoWindow").center().open();                          
-                        }
-                    }
-                ]
-            });
-
-            
-
-            $("#menuCategorias").kendoMenu({
-                orientation: "vertical"
-            }).css({
-                width: auto,
-                marginRight: "220px"
-            });
+            $('ol').listview('refresh');
         });
+
+        $("#window").hide();
+        $("#addRegionImagen-modal").hide();
+        $("#addTable-modal").hide();
+        $("#addTooltip-modal").hide();
+
+        $("#temp").hide();
+        var editor_;
+        var numReg = 1;
+        var html;
+        var window = $("#window"),
+                    undo = $("#undo")
+                            .bind("click", function () {
+                                window.data("kendoWindow").open();
+                                undo.hide();
+                            });
+
+        var regionImagen = $("#addRegionImagen-modal"),
+                    undo = $("#undo")
+                            .bind("click", function () {
+                                window.data("kendoWindow").open();
+                                undo.hide();
+                            });
+
+        var onClose = function () {
+            editor_.clipboard.paste("<img class=\"regIM\" coor=\"\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");
+        }
+
+        var onClose2 = function () {
+            $('.regIM').imgAreaSelect({ remove: true });
+            var image = $("#workspace").children("img");
+            image.remove();
+            var phrase = "";
+            $('#regiones').find('li').each(function () {
+                // cache jquery var
+                var current = $(this);
+                // check if our current li has children (sub elements)
+                // if it does, skip it
+                // ps, you can work with this by seeing if the first child
+                // is a UL with blank inside and odd your custom BLANK text
+                if (current.children().size() > 0) { return true; }
+                // add current text to our current phrase
+
+                if (phrase == "") {
+                    phrase += current.text();
+                }
+                else {
+                    phrase += ":" + current.text();
+                }
+
+            })
+
+            editor_.clipboard.paste("<img class=\"imagen\" coor=\"" + phrase + "\" src=\"data:image/jpg;base64," + $("#temp").val() + "\" />");
+        }
+
+        if (!regionImagen.data("kendoWindow")) {
+            regionImagen.kendoWindow({
+                width: "800px",
+                title: "Regiones en imagen...",
+                actions: [
+                    "Minimize",
+                    "Maximize",
+                    "Close"
+                ],
+
+                close: onClose2
+            });
+        }
+
+        if (!window.data("kendoWindow")) {
+            window.kendoWindow({
+                width: "800px",
+                title: "Selecciona una imagen...",
+                actions: [
+                    "Minimize",
+                    "Maximize",
+                    "Close"
+                ],
+
+                close: onClose
+            });
+        }
+
+        //$("#addTooltip-modal").hide();
+        $("#addTable-modal").hide();
+        $("#addImage-modal").hide();
+
+        $("#editor").kendoEditor({
+            tools: [
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "justifyLeft",
+                "justifyCenter",
+                "justifyRight",
+                "justifyFull",
+                "insertUnorderedList",
+                "insertOrderedList",
+                "indent",
+                "outdent",
+                "createLink",
+                "unlink",
+                "insertImage",
+                "subscript",
+                "superscript",
+                "createTable",
+                "addRowAbove",
+                "addRowBelow",
+                "addColumnLeft",
+                "addColumnRight",
+                "deleteRow",
+                "deleteColumn",
+                "viewHtml",
+                "formatting",
+                "fontName",
+                "fontSize",
+                "foreColor",
+                "backColor",
+                {
+                    name: "addReg",
+                    tooltip: "Agregar Región",
+                    title: "Agregar Región",
+                    exec: function (e) {
+                        var editor = $("#editor").data("kendoEditor");
+                        var selectedText = editor.getSelection();
+                        var selectedHtml = editor.selectedHtml();
+
+                        if (selectedHtml.toLowerCase().indexOf("<img") >= 0) {
+                            $('#workspace').prepend(selectedHtml)
+
+                            editor_ = $("#editor").data("kendoEditor");
+                            regionImagen.data("kendoWindow").center().open();
+                            $('.regIM').imgAreaSelect({
+                                aspectRatio: '4:3', handles: true,
+                                onSelectEnd: function (img, selection) {
+                                    regX1 = selection.x1;
+                                    regY1 = selection.y1;
+                                    regX2 = selection.x2;
+                                    regY2 = selection.y2;
+                                }
+                            });
+                        }
+                        else {
+                            editor.clipboard.paste("<reg pagina=\"@(texto.Paginas.Count + 1)" + "" + "\" region=\"" + numReg.toString() + "\">" + selectedHtml + "</reg>");
+                            numReg++;
+                        }
+                    }
+                },
+                {
+                    name: "addToolTip",
+                    tooltip: "Agregar Etiqueta",
+                    title: "Agregar Etiqueta",
+                    exec: function (e) {
+                        $("#addTooltip-modal").dialog({
+                            height: 230,
+                            width: 540,
+                            modal: true,
+                            buttons: {
+                                "Aceptar": function () {
+                                    var editor = $("#editor").data("kendoEditor");
+                                    var content = $("#tooltipContent").val();
+                                    var selectedText = editor.getSelection();
+                                    var selectedHtml = editor.selectedHtml();
+
+                                    editor.clipboard.paste("<a content=\"" + content + "\"class=\"tooltip\">" + selectedHtml + "</a>");
+
+                                    $(this).dialog("close");
+                                },
+                                "Cancelar": function () {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    /***********ON DEMAND QUESTION*****************
+                    ***********************************************
+                    **********************************************/
+                    name: "addOndemandQuestion",
+                    tooltip: "Insertar enlace a pregunta",
+                    title: "Insertar enlace a pregunta",
+                    exec: function (e) {
+                        $("#addQuestion-modal").removeClass("hiddenDebug").dialog({
+                            height: 230,
+                            width: 540,
+                            modal: true,
+                            buttons: {
+
+                                "Aceptar": function () {
+                                    $("#addQuestion-content").val()
+                                    var editor = $("#editor").data("kendoEditor");
+                                    var numPregunta = $("#addQuestion-content").val();
+                                    if (numPregunta < 10) {
+                                        numPregunta = "0" + numPregunta;
+                                    }
+                                    editor.clipboard.paste("rlpregunta" + numPregunta + " ");
+                                    //ADD moduloid y textoid
+
+                                    //editor.clipboard.paste("<span class='btnGotoPreguntas'><strong><a class='btnPreguntas' href=\"/ReadAndLearn/PL" + numPlantilla + "_Experimentos/PL" + numPlantilla + "_Pregunta/btnPreguntas?GrupoID=1275&ModuloID=@modulo.ModuloID&preguntaActual=" + (numPregunta - 1) + "&textoID=@ViewBag.Texto.TextoID&segundoIntento=False&preguntaResuelta=False\">Pregunta " + numPregunta + "</a><strong></span>");
+                                    $(this).dialog("close");
+                                },
+                                "Cancelar": function () {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    name: "addImage",
+                    tooltip: "Agregar Imagen",
+                    title: "Agregar Imagen",
+                    exec: function (e) {
+                        editor_ = $("#editor").data("kendoEditor");
+
+                        window.data("kendoWindow").center().open();
+                    }
+                }
+            ]
+        });
+
+
+
+        $("#menuCategorias").kendoMenu({
+            orientation: "vertical"
+        }).css({
+            width: auto,
+            marginRight: "220px"
+        });
+    });
     </script>
 }

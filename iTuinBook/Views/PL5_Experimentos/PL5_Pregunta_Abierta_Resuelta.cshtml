@@ -52,32 +52,14 @@
         //cuando no se ha hecho el segundo intento.
         //esto ayuda a cerrar https://github.com/guirisan/readandlearn/issues/16
     {
-        <div style="padding-left: 20px; padding-right: 20px;">
-        @if (configPregunta != null && configPregunta.MarcarCorrecto)
-        {
-            if (ds2.Dato01 > 0)
-            {
-                <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>  
-            }
-            else
-            { 
-                <p><img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>
-            }
-            <p>@ds2.Info</p>
-        }
+        
 
     </div>
     }
     
     
 
-    @if (ViewBag.TareaSel)
-    {
-        <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
-            <b>Selección:</b>
-            <p>@Html.Raw(dsel.Info2)</p>            
-        </div>
-    }
+    
 
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
@@ -88,6 +70,9 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
         $(document).ready(function () {
+
+            
+
             $("#btnSiguientePregunta").click(function () {
                 //guirisan/secuencias
                 //datetime set in client

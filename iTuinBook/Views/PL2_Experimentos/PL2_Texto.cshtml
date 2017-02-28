@@ -18,7 +18,7 @@
     {
         <div id="pregunta" style="z-index:5; position: fixed; width:100%; margin-top: -12px; visibility:hidden;">
             @{
-                string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
+                string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");                
             }
             <iframe id="addIframe" onload="autofitIframe(this)" src="@Url.Action("PL2_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe> 
         </div>
@@ -185,6 +185,9 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
+
+
+                // CODEOP = 5  ***************************************************************************
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
@@ -207,7 +210,7 @@
                 
                 //guirisan/secuencias
                 //no necesitamos recalcular datetime, numAcc, o añadir a datosRaw, ya que las dos llamadas ajax se corresponden con una sola acción del usuario
-
+                //CODEOP 6 ***************************************************************************
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
@@ -499,9 +502,9 @@
             ini_PregActual = $.now();
         }
 
-        //codigo sin usar?
-        function FinalizarTiempoPregunta() {
-            
+        
+        function FinalizarTiempoPregunta() 
+        {   
             //guirisan/secuencias
             //datetime set in client
             var datetimeclient = new Date().toISOString();

@@ -25,7 +25,7 @@
     </div>
      
     <div style="padding-left: 20px; padding-right: 20px;">
-        <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras"></textarea>
+        <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" class="textarea100w"></textarea>
     </div>
 
     @if(ViewBag.TareaSel)
@@ -79,15 +79,56 @@
                     $("button#btnValidarAbierta").removeAttr("disabled")
                 } else {
                     $("button#btnValidarAbierta").attr("disabled", "disabled");
-
                 }
             });
 
 
 
 
-
             $("#btnValidarAbierta").click(function () {
+                //registra respuesta en servidor
+                var textarea = $(this).parent().parent().find("textarea#respuesta");
+                textarea.attr("disabled", "disabled");
+                var btnValidar = $("#btnValidarAbierta");
+                btnValidar.attr("disabled", "disabled");
+                btnValidar.html("Enviando...");
+                //guirisan: datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                $.ajax({
+                    url: "PL5_Pregunta_Abierta_Validar", //url: 'Validar',
+                    type: 'POST',
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: textarea.val(), moment: datetimeclient },
+                    success: function (result) {
+                        //aplicar clase textareaEnviado
+                        textarea.addClass("backgroundVerde");
+                        //mostrar algo como "recibido"
+                        $("#btnValidarAbierta").html("Guardado");
+
+                        //habilitamos el botón de la siguiente pregunta
+                        var idPreguntaAbierta = $(".rlpregunta", window.parent.document).not(".hiddenDebug").attr("pregInsertada");
+                        $("span.btnPreguntaInsertada[pregInsertada=" + parseInt(parseInt(idPreguntaAbierta) + 1) + "]", window.parent.document).removeClass("spanBtnDisabled");
+
+                    }
+                });
+
+            });
+            //OLD WAS btnValidarAbierta
+            $("#btnValidarAbiertaOLD").click(function () {
                 $("#btnValidarAbierta").attr("disabled", "disabled");
                 //guirisan: datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -115,7 +156,7 @@
 
                         /*DESCOMENTAR ESTO PARA NO SALTAR DIRECTAMENTE A LA SIGUIENTE PREGUNTA*/
                         // result.redirect contains the string URL to redirect to   
-                        //window.location.href = result.redirect;          
+                        window.location.href = result.redirect;          
 
 
                         //guirisan/issues https://github.com/guirisan/ituinbook/issues/39
@@ -175,12 +216,7 @@
                         });
 
 
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-                        //AQUI HABIA UN GRAN BLOQUE DE CODIGO, CONSULTAR EN COMMITS ANTERIORES
-
+                       
 
 
                     },
@@ -220,7 +256,7 @@
 
                         $('#ayuFlotador').show();
 
-                        parent.autofitIframe(parent.document.getElementById("addIframe"));
+                        //parent.autofitIframe(parent.document.getElementById("addIframe"));
                     });
                     </text>
                 }

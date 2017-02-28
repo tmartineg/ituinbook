@@ -1043,7 +1043,7 @@ namespace ReadAndLearn.Controllers
 
             du.PreguntaID = pregunta.PreguntaID;
             du.TextoID = textoID;
-
+            du.PreguntaActual = preguntaActual;
             SaveChanges();
 
             return RouterPregunta(GrupoID, ModuloID, pregunta, du, texto.TextoID, moment, numAccion, segundoIntento, preguntaResuelta);

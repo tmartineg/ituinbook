@@ -147,53 +147,55 @@
     <hr />
     @Html.ActionLink("Crear Pregunta", "CrearPregunta", new { TextoID = Model.TextoID })
     <hr />
-    <legend>Tareas Ordenar</legend>
+    <div class="hiddenDebug">
+        <legend>Tareas Ordenar</legend>
 
-    <h3>Sus Tareas</h3>
-    <hr />
-    <legend>Tareas</legend>
+        <h3>Sus Tareas</h3>
+        <hr />
+        <legend>Tareas</legend>
 
-    <table id="tar">
-        <tr>
-            <th>
-                Comandos
-            </th>
-            <th>
-                Preguntas
-            </th>
-            <th>
-                ID
-            </th>
-        </tr>
-        @{
-            var tareas = Model.TareasOrdenar;
-            i = 0;
-            if (tareas != null)
-            {
-                foreach (TareaOrdenar tar in tareas)
+        <table id="tar">
+            <tr>
+                <th>
+                    Comandos
+                </th>
+                <th>
+                    Preguntas
+                </th>
+                <th>
+                    ID
+                </th>
+            </tr>
+            @{
+                var tareas = Model.TareasOrdenar;
+                i = 0;
+                if (tareas != null)
                 {
-                    i = i + 1;
+                    foreach (TareaOrdenar tar in tareas)
+                    {
+                        i = i + 1;
                     
-                    <tr>
-                        <td>            
-                            <b>@Html.ActionLink("Editar", "EditarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, null)</b>
-                            <b>@Html.ActionLink("Ver", "VerTareaOrdenar", "Docente", new { TareaOrdenarID = tar.TareaOrdenarID }, null)</b> 
-                            <b>@Html.ActionLink("Eliminar", "EliminarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, new { onclick = "return confirm('¿Estás seguro de eliminar la tarea de ordenar?');"})</b>   
-                        </td>
-                        <td>
-                            Tarea @i                   
-                        </td>   
-                        <td style="text-align:center">
-                            @tar.TareaOrdenarID
-                        </td>                                  
-                    </tr>
-                } 
-            }
-        }   
-    </table>
-    <hr />
-    @Html.ActionLink("Crear Tarea", "CrearTarea", new { TextoID = Model.TextoID })
-    <hr />
+                        <tr>
+                            <td>            
+                                <b>@Html.ActionLink("Editar", "EditarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, null)</b>
+                                <b>@Html.ActionLink("Ver", "VerTareaOrdenar", "Docente", new { TareaOrdenarID = tar.TareaOrdenarID }, null)</b> 
+                                <b>@Html.ActionLink("Eliminar", "EliminarTareaOrdenar", "Docente", new { TextoID = Model.TextoID, TareaOrdenarID = tar.TareaOrdenarID }, new { onclick = "return confirm('¿Estás seguro de eliminar la tarea de ordenar?');"})</b>   
+                            </td>
+                            <td>
+                                Tarea @i                   
+                            </td>   
+                            <td style="text-align:center">
+                                @tar.TareaOrdenarID
+                            </td>                                  
+                        </tr>
+                    } 
+                }
+            }   
+        </table>
+        <hr />
+        @Html.ActionLink("Crear Tarea", "CrearTarea", new { TextoID = Model.TextoID })
+        <hr />
+    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Editar Texto", "EditarTexto", new { TextoID = Model.TextoID }) |

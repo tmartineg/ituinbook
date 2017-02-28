@@ -625,6 +625,7 @@ namespace ReadAndLearn.Controllers
             int pos = 0;            //posición del texto actual (de 0 a text.Length);
             string result = "";     //variable para almacenar el resultado a devolver
             string aux = "";        //variable auxiliar para almacenar caracteres de una misma etiqueta html, palabra, etc
+            string auxDivPregunta = ""; //variable auxiliar para almacenar el/los div con las preguntas e insertarlos al cerrar el párrafo
             bool endhtmlflag = false;   //variable para indicar si fin o no de la etiqueta html
             bool endwordflag = false;   //variable para indicar el fin de la palabra (a la que asignamos índice)
             int windex = 1;         //variable para asignar índices a las palabras del texto como atributos de tag span (usar atributo data-windex)
@@ -632,6 +633,9 @@ namespace ReadAndLearn.Controllers
             Regex endwordregexp = new Regex(@"[\s.:,;&""\(\)\[\]\\\/\-_\¿\?\¡\!=']");  //regexp para ver si un caracter es un signo de puntuación que indique el fin de palabra
             Regex ampchar = new Regex(@"(&.acute;|&.grave;|&.tilde;)"); //regexp para ver si lo siguiente en el texto es una letra con acento o ñ
             bool hastilde = false; //indica a if (alphanumeric | hastilde) si debe contar lo que viene como palabra aunque empiece por &
+            bool inrange = false;   //true si quedan más de 11 caracteres para el final del texto (para buscar etiquetas de pregunta <rlpreguntaxx>)
+            int pregInsertada = 0;  //recoge que pregunta del módulo se quiere insertar
+            
 
             //preparación de source para su parseo
             source = source.Trim(); //eliminación de espacios en blanco al principio y final
@@ -646,7 +650,7 @@ namespace ReadAndLearn.Controllers
             while (pos < text.Length)
             {
                 logger.Debug("pos = " + pos);
-                aux = "";
+                aux = "";//cadena a añadir al resultado
                 //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
 
                 //guirisan/issues https://github.com/guirisan/ituinbook/issues/89
@@ -658,15 +662,39 @@ namespace ReadAndLearn.Controllers
                 }else{
                     hastilde = false;
                 }
-                    
+                
 
-                /************** START HTML TAG****************/
-                if (text[pos].ToString().CompareTo("<") == 0)  
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/107#issuecomment-279478712
+
+                if (pos + 10 > text.Length)
                 {
+                    inrange = false;
+                }
+                else
+                {
+                    inrange = true;
+                }
+                    
+                if (inrange && source.Substring(pos, 10).CompareTo("rlpregunta") == 0 )
+                {
+                    pregInsertada = int.Parse(source.Substring(pos+10,2));
+                    pregInsertada -= 1;
+                    aux += "<span pregInsertada='" + pregInsertada + "'class='btnPreguntaInsertada btnClass spanBtnDisabled'>Pregunta " + (pregInsertada + 1) + "</span>";
+                    aux += "<span pregInsertada='" + pregInsertada + "'class='btnPreguntaInsertadaHide btnClass hiddenDebug'>Ocultar pregunta " + (pregInsertada + 1) + "</span>";
+                    auxDivPregunta += "<div pregInsertada='" + pregInsertada + "' class='rlpregunta hiddenDebug'><iframe id='addIframe"+pregInsertada+"' src=PL5_Pregunta?GrupoID=_grupoid_&ModuloID=_moduloid_&preguntaActual=" + pregInsertada + "&textoID=_textoid_&moment=2017-02-13T11:37:40.367Z style='width:100%;height:250px;'></iframe></div>"; 
+                    pos += 12;
+
+                    result += aux;    
+                }
+                else if (text[pos].ToString().CompareTo("<") == 0)  
+                {
+                    /************** START HTML TAG****************/
                     System.Diagnostics.Debug.Write("start html -> pos=" + pos + " - text(pos)=" + text[pos]);
+                    
+                    
                     endhtmlflag = false;
 
-                    aux = "";
+                    
                     aux += text[pos];
                     pos++;
                     while (!endhtmlflag)
@@ -676,9 +704,18 @@ namespace ReadAndLearn.Controllers
                             endhtmlflag = true;
                         }
                         aux += text[pos];
+
+                        //si se está cerrando párrafo y hay algo en auxDivPregunta
+                        //lo insertamos después de la etiqueta </p> y vaciamos la variable
+                        if (aux.CompareTo("</p>") == 0 && auxDivPregunta.CompareTo("")!=0)
+                        {
+                            aux += auxDivPregunta;
+                            auxDivPregunta = "";
+                        }
                         pos++;
                     }
-                    //System.Diagnostics.Debug.Write("end html -> pos=" + pos + " - text(pos)=" + text[pos]);
+
+                    
                     result += aux;                              //end html tag ">"
                 }
 

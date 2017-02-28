@@ -101,7 +101,7 @@
     
    <!-- texto donde resaltar seleccion-->
 
-    <div id="textraw">
+    <div id="textraw" class="hiddenDebug">
 
         @{
             Texto text = ViewBag.Texto;
@@ -124,13 +124,13 @@
 
     </div>
     
-    <div id="fdbkDialog">
+    <div id="fdbkDialog" class="backgroundVerde">
         @ViewBag.feedbackText
     </div>
    
-    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
+    <div class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; padding-top: 20px;">
         <button id="btnResaltarSeleccionUsuario" class="hiddenDebug">Ver MI selección</button>
-        <button id="btnResaltarSeleccionIdeal">Ver seleccion ideal</button>
+        <button id="btnResaltarSeleccionIdeal" class="hiddenDebug">Ver seleccion ideal</button>
         <button id="btnSiguientePregunta">Siguiente</button>                       
     </div> 
 </div>
@@ -139,7 +139,7 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
         $(document).ready(function () {
-
+            
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/100
             $("#textraw").accordion({
                 heightStyle: "content"
@@ -285,7 +285,8 @@
 
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
-            if ($.trim(dialog.html()) != "") {
+            //modificado en PL5 para que no saque dialog
+            if (false && $.trim(dialog.html()) != "") {
 
                 //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
                 //generamos el datosimple de que se ha empezado a leer el feedback
