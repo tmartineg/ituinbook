@@ -490,6 +490,11 @@ namespace ReadAndLearn.Controllers
                         SaveChanges();
                     }
                     break;
+
+                case 102: //fin de módulo
+                    du.Cerrada = true;
+                    SaveChanges();
+                    break;
             }
         }
 
@@ -920,7 +925,7 @@ namespace ReadAndLearn.Controllers
                     DateTime datetimeclient = DateTime.Parse(moment);
                     DatoSimple ds = new DatoSimple() { CodeOP = 127, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, NumAccion = numAccion };
                     db.DatosSimples.Add(ds);
-                    SaveChanges();
+
                 }
                 
                 
@@ -928,6 +933,8 @@ namespace ReadAndLearn.Controllers
                 Texto text = ext.GetTextoActual(ModuloID, textoActual);
                 Pregunta preg = ext.GetPreguntaActual(text, du.PreguntaActual);
 
+                du.TextoID = text.TextoID;
+                SaveChanges();
                 ViewBag.DatosUsuario = du;
                 ViewBag.Pregunta = preg;
                 ViewBag.ModuloID = ModuloID;
@@ -1034,7 +1041,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL5_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
         {
-
+            
             logger.Debug("PL5_Experimentos/PL5_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 

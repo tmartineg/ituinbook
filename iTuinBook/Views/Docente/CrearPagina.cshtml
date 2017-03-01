@@ -286,40 +286,6 @@
                     }
                 },
                 {
-                    /***********ON DEMAND QUESTION*****************
-                    ***********************************************
-                    **********************************************/
-                    name: "addOndemandQuestion",
-                    tooltip: "Insertar enlace a pregunta",
-                    title: "Insertar enlace a pregunta",
-                    exec: function (e) {
-                        $("#addQuestion-modal").removeClass("hiddenDebug").dialog({
-                            height: 230,
-                            width: 540,
-                            modal: true,
-                            buttons: {
-
-                                "Aceptar": function () {
-                                    $("#addQuestion-content").val()
-                                    var editor = $("#editor").data("kendoEditor");
-                                    var numPregunta = $("#addQuestion-content").val();
-                                    if (numPregunta < 10) {
-                                        numPregunta = "0" + numPregunta;
-                                    }
-                                    editor.clipboard.paste("rlpregunta" + numPregunta + " ");
-                                    //ADD moduloid y textoid
-
-                                    //editor.clipboard.paste("<span class='btnGotoPreguntas'><strong><a class='btnPreguntas' href=\"/ReadAndLearn/PL" + numPlantilla + "_Experimentos/PL" + numPlantilla + "_Pregunta/btnPreguntas?GrupoID=1275&ModuloID=@modulo.ModuloID&preguntaActual=" + (numPregunta - 1) + "&textoID=@ViewBag.Texto.TextoID&segundoIntento=False&preguntaResuelta=False\">Pregunta " + numPregunta + "</a><strong></span>");
-                                    $(this).dialog("close");
-                                },
-                                "Cancelar": function () {
-                                    $(this).dialog("close");
-                                }
-                            }
-                        });
-                    }
-                },
-                {
                     name: "addImage",
                     tooltip: "Agregar Imagen",
                     title: "Agregar Imagen",

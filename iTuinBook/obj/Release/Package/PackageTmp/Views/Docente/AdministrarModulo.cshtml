@@ -39,12 +39,12 @@
         
     @Html.ActionLink("Configurar", "ConfigurarModulo", "Docente", new { ModuloID = @Model.ModuloID }, null) 
     <hr />
-    <h3>Sus Textos</h3>
+    <h3>Sus Unidades</h3>
     <hr />
     <table id="grid">
         <tr>            
             <th>
-                Texto
+                Unidad
             </th>
             <th>
                 Descripción
@@ -76,7 +76,7 @@
     }   
     </table>
     <hr />
-    @Html.ActionLink("Crear Texto", "CrearTexto", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
+    @Html.ActionLink("Crear Unidad", "CrearTexto", new { GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID })
     
     <div class="hiddenDebug">
         <hr />

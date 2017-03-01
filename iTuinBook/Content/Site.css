@@ -1079,3 +1079,17 @@ img.imgEnunciadoDerecha{
     pointer-events: none;
     color: #b7b7b7 !important;
 }
+
+#preguntaAligner{
+    position:fixed;
+    height:auto;
+    /*background-color:red;*/
+    bottom:120px;
+    left:0px;
+    right:0px;
+    margin-bottom:0px;
+}
+
+.marginBottom50{
+    margin-bottom: 50px !important;
+}

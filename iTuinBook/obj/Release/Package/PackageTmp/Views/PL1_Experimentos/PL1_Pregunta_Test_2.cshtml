@@ -1,6 +1,6 @@
 ﻿@using ReadAndLearn.Models;
 @model ReadAndLearn.Models.Pregunta
-
+@using System.Text.RegularExpressions;
 
 @{
     ViewBag.Title = "PL0_Pregunta";
@@ -8,14 +8,26 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
+    DatoSimple dsel = (DatoSimple)ViewBag.Seleccion;
+    DatoSimple dsResp = (DatoSimple)ViewBag.Respuesta;
+    Regex regex = new Regex(string.Format("\\{0}.*?\\{1}", '<', '>'));
     
+    IOrderedEnumerable<Alternativa> lista = Model.Alternativas.ToList().OrderBy(item => item.PreguntaID);
+
+    if (configPregunta != null && configPregunta.AleatorizarAlternaitvasIntento2Test)
+    {
+        lista = Model.Alternativas.OrderBy(item => Guid.NewGuid());
+    }
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
-    <div style="float:right;">
-        <b>PUNTOS:</b>
-        <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
-    </div>
+    @if (configModulo != null && configModulo.Puntos)
+    {
+        <div style="float:right;">
+            <b>PUNTOS:</b>
+            <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
+        </div>
+    }
 
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)    
@@ -27,21 +39,73 @@
      
     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
         <ul>
-        @foreach (Alternativa alt in Model.Alternativas)
+        @foreach (Alternativa alt in lista)
         {
-            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @alt.Opcion <br />
+            if (dsResp.Info == alt.Opcion)
+            {
+                if (configPregunta != null && configPregunta.MarcarPrimerCorrecto)
+                {
+                    <img src="~/Content/aspa.png" style="width: 15px; height: 15px; margin-left: -19px;" />
+                }
+
+                if (configPregunta != null && configPregunta.SegundoIntentosOriginal)
+                {
+                    if (alt.Opcion != null)
+                    {
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
+                    }
+                    else
+                    {
+                    @Html.RadioButtonFor(r => alt, "null", new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
+                    }
+                }
+                else // No funciona SegundoIntentoNoOriginal. Habilitas los radiobuttom desde PL1_Texto y no tiene en cuenta cuál es la respuesta anterior
+                {
+                    if (alt.Opcion != null)
+                    {
+                        @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px", disabled = "disabled" }) @Html.Raw(alt.Opcion) <br />
+                    }
+                    else
+                    {
+                        @Html.RadioButtonFor(r => alt, "null", new { @class = "radio", @style = "width:20px", disabled = "disabled" }) @Html.Raw(alt.Opcion) <br />
+                    }
+                }
+            }
+            else
+            {
+                if (alt.Opcion != null)
+                {
+                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
+                }
+                else
+                {
+                    @Html.RadioButtonFor(r => alt, "null", new { @class = "radio", @style = "width:20px" }) @Html.Raw(alt.Opcion) <br />
+                }
+            }
         }
         </ul>
     </div>
 
-    <div style="padding-left: 20px; padding-right: 20px;">
-        <b>Selecciona en el texto la información importante para la pregunta:</b> 
-        <textarea id="seleccion" style="width: 100%;"></textarea>
-        <button id="btnValidarSimultaneo">Validar</button>    
-        <button id="btnBorrarSeleccion">Borrar</button>
-    </div>
+    
+    @if (ViewBag.TareaSel)
+    {
+        if (configPregunta != null && configPregunta.CorregirSeleccion)
+        {
+            <div style="padding-left: 20px; padding-right: 20px;">
+                <b>Selección:</b>
+                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
+            </div>
+        }
+        else
+        {
+            <div style="padding-left: 20px; padding-right: 20px;">
+                <b>Selección:</b>
+                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
+            </div>
+        }
+    }
 
-    <div id="ayudas" style="float:right; visibility: hidden;">    
+    <div id="ayudas" style="float:right; visibility: hidden;">     
         @if (Model.Ayuda != null)
         {
             if (Model.Ayuda.ParafraseoN1 != null)
@@ -61,89 +125,43 @@
         } 
     </div>
     
-                       
+    <div style="padding-left: 20px; padding-right: 20px;">
+        <button id="btnValidarTest">Validar</button>                       
+    </div>
 </div> 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("Text", ev.target.id);
-        }
-
-        function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("Text");
-
-            if (ev.target.id.indexOf("drag") == -1)
-                ev.target.appendChild(document.getElementById(data));
-        }
-
         $(document).ready(function () {
             var timeStart = new Date();
             var timeFinish = new Date();
-            var respTest = "";
 
             @if(configPregunta != null && configPregunta.EnmascararTexto)
             {
                 <text>
             parent.BlurPagina("True");
-            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-            window.parent.$('.paginas').css("filter", "url(#example-one)");
                 </text>
             }
             else
             {
                 <text>
             parent.BlurPagina("False");
-            window.parent.$('.paginas').css("-webkit-filter", "");
-            window.parent.$('.paginas').css("filter", "");
                 </text>
             }
 
-            jQuery("#btnValidarSimultaneo").attr('disabled', true);
+            if (parent.$("#feedback").is(":visible") || parent.$("#feedAvatar").is(":visible")) {
+                $('#btnValidarTest').attr("disabled", "disabled");
+                $(':radio').attr("disabled", "disabled");
+            }
+            else {
+                $('#btnValidarTest').attr("disabled", "disabled");
+                $(':radio').removeAttr("disabled");
+            }
 
-            $('#seleccion').focus(function () {
-                $(this).blur();
-            });
-
-            $('#btnBorrarSeleccion').click(function () {
-                $('#seleccion').val("");
-                jQuery("#btnValidarSimultaneo").attr('disabled', true);
-            });
-
-            $('#seleccion').bind("drop", function (event, ui) {
-                if (event.stopPropagation) event.stopPropagation();
-
-                $.ajax({
-                    url: 'Algoritmo',
-                    type: 'POST',
-                    data: { Pertinente: $('#seleccion').val(), TextoID: '@Model.Texto.TextoID', NuevaSeleccion: event.originalEvent.dataTransfer.getData('Text').toString(), PreguntaID: '@Model.PreguntaID' },
-                    success: function (result) {
-                        $('#seleccion').val(result.result);
-
-                        if ($(".radio:checked").length > 0) {
-                            if ($('#seleccion').val() == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
-                                jQuery("#btnValidarSimultaneo").attr('disabled', true);
-                            }
-                            else {
-                                jQuery("#btnValidarSimultaneo").attr('disabled', false);
-                            }
-                        }
-                    },
-                    error: function () {
-                        alert("No selecciones espacios entre párrafos. Haz dos selecciones.");
-                    }
-                });
-            });
-
-            $("#btnValidarSimultaneo").click(function () {
-                $("#btnValidarSimultaneo").attr("disabled", "disabled");
+            $("#btnValidarTest").click(function () {
+                $("#btnValidarTest").attr("disabled", "disabled");
 
                 var alter = "";
 
@@ -154,7 +172,6 @@
                         return false;
                     }
                 });
-
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -172,25 +189,10 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
-
                 $.ajax({
-                    url: "PL2_Pregunta_Test_Seleccion_Simultaneo_Validar", //url: 'Validar',
+                    url: "PL1_Pregunta_Test_2_Validar", //url: 'Validar',
                     type: 'POST',
-                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuestaTest: alter, respuestaSel: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
-                    success: function (result) {
-                        // data.redirect contains the string URL to redirect to                        
-                        if (result.mensaje != null && result.mensaje != "") {
-                            @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
-                            {   
-                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
-                            }
-                            else
-                            {
-                                @: parent.feedbackVentana(result.mensaje);
-                            }
-                        }
-                        window.location.href = result.redirect;
-                    },
+                    data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: alter, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
                     beforeSend: function () {
                         //set datosRaw on sessionStorage
@@ -200,6 +202,21 @@
 
                         //set datosRaw on ajax petition
                         this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    success: function (result) {
+                        // data.redirect contains the string URL to redirect to   
+                        if (!(result.mensaje == null || result.mensaje == "")) {
+                            @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
+                            {
+                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
+                            }
+                            else
+                            {
+                                @: parent.feedbackVentana(result.mensaje);
+                            }
+                        }
+
+                        window.location.href = result.redirect;
                     },
                     error: function () {
                         alert("error");
@@ -217,7 +234,6 @@
                     <text>
             $('#btnFlotador').click(function () {
                 $("#btnFlotador").attr("disabled", "disabled");
-
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -235,11 +251,10 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
-
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120, moment: datetimeclient, numAccion: numAcc},
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 34, moment: datetimeclient , numAccion: numAcc},
                     //guirisan/secuencias
                     beforeSend: function () {
                         //set datosRaw on sessionStorage
@@ -254,16 +269,16 @@
                         alert("Error: Hubo un error con tu última acción.");
                     }
                 });
-                        /*$.ajax({
-                            url: "UsoAyudasIndependiente",
-                            type: 'POST',
-                            data: { Ayuda: 1 }
-                        });*/
+                    /*$.ajax({
+                        url: "UsoAyudasIndependiente",
+                        type: 'POST',
+                        data: { Ayuda: 1 }
+                    });*/
 
-                        $('#ayuFlotador').show();
+                    $('#ayuFlotador').show();
 
-                        parent.autofitIframe(parent.document.getElementById("addIframe"));
-                    });
+                    parent.autofitIframe(parent.document.getElementById("addIframe"));
+                });
                     </text>
                 }
 
@@ -272,7 +287,6 @@
                     <text>
             $("#btnLupa").click(function () {
                 $("#btnLupa").attr("disabled", "disabled");
-
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -290,11 +304,10 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
-
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient, numAccion: numAcc },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 36, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
                     beforeSend: function () {
                         //set datosRaw on sessionStorage
@@ -310,16 +323,16 @@
                     }
                 });
 
-                        var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
+                    var array = '@Html.Raw(@Model.Ayuda.Lupa)'.split('+');
 
-                        $('.paginas', window.parent.document).each(function () {
-                            var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
+                    $('.paginas', window.parent.document).each(function () {
+                        var param = '@Html.Raw(@Model.Ayuda.Lupa)'.split('/');
 
-                            for (var i = 0; i < param.length; i++) {
-                                $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
-                            }
-                        });
+                        for (var i = 0; i < param.length; i++) {
+                            $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
+                        }
                     });
+                });
                     </text>
                 }
 
@@ -328,7 +341,6 @@
                     <text>
             $('#btnPrismaticos').click(function () {
                 $("#btnPrismaticos").attr("disabled", "disabled");
-
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -346,11 +358,10 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
-
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 121, moment: datetimeclient, numAccion: numAcc },
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 35, moment: datetimeclient, numAccion: numAcc },
                     //guirisan/secuencias
                     beforeSend: function () {
                         //set datosRaw on sessionStorage
@@ -374,7 +385,7 @@
                             }
                         });
                     });
-                    </text>
+            </text>
                 }
             }
             /**************************************/
@@ -382,6 +393,9 @@
             /******* CONFIGURACIÓN PREGUNTA *******/
             /**************************************/
             /**************************************/
+            @if (configPregunta != null)
+            {
+            <text>
             if ('@configPregunta.EnmascararEnunciado' == 'True') {
                 $('#enunciado').addClass("difuminado");
 
@@ -401,6 +415,42 @@
                         window.parent.$('.paginas').css("filter", "");
                             </text>
                         }
+                        //guirisan/secuencias
+                        //datetime set in client
+                        var datetimeclient = new Date().toISOString();
+
+                        //NUMACC
+
+                        //get and add+1 numAcc
+                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                        numAcc++;
+                        sessionStorage.setItem("numAccion", numAcc);
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
+                        }
+
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 16, moment: datetimeclient, numAccion: numAcc },
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
 
                         $(":radio").attr("disabled", false);
 
@@ -417,7 +467,6 @@
                                 timeFinish = jQuery.now();
 
                                 var diff = timeFinish - timeStart;
-
                                 //guirisan/secuencias
                                 //datetime set in client
                                 var datetimeclient = new Date().toISOString();
@@ -435,11 +484,10 @@
                                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                                     datosRaw = {};
                                 }
-
                                 $.ajax({
                                     url: "RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
                                     beforeSend: function () {
                                         //set datosRaw on sessionStorage
@@ -480,8 +528,43 @@
                             <text>
                         window.parent.$('.paginas').css("-webkit-filter", "");
                         window.parent.$('.paginas').css("filter", "");
-                            </text>
+                        </text>
                         }
+                        //guirisan/secuencias
+                        //datetime set in client
+                        var datetimeclient = new Date().toISOString();
+
+                        //NUMACC
+
+                        //get and add+1 numAcc
+                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                        numAcc++;
+                        sessionStorage.setItem("numAccion", numAcc);
+
+                        //DATOSRAW
+                        //get datosRaw to add row in ajax.beforeSend
+                        var datosRaw;
+                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                            datosRaw = {};
+                        }
+                        $.ajax({
+                            url: "RegistrarAccion",
+                            type: 'POST',
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient, numAccion: numAcc },
+                            //guirisan/secuencias
+                            beforeSend: function () {
+                                //set datosRaw on sessionStorage
+                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                datosRaw[numAcc] = cadena;
+                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                //set datosRaw on ajax petition
+                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                            },
+                            error: function () {
+                                alert("Error: Hubo un error con tu última acción.");
+                            }
+                        });
 
                         $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
 
@@ -495,7 +578,6 @@
                                 timeFinish = jQuery.now();
 
                                 var diff = timeFinish - timeStart;
-
                                 //guirisan/secuencias
                                 //datetime set in client
                                 var datetimeclient = new Date().toISOString();
@@ -513,11 +595,10 @@
                                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                                     datosRaw = {};
                                 }
-
                                 $.ajax({
                                     url: "RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
                                     beforeSend: function () {
                                         //set datosRaw on sessionStorage
@@ -539,73 +620,74 @@
                     }
                 });
             }
-
-            @if (configModulo.Ayudas)
-            {   
-                @: $('#ayudas').show();
-                            @: $('#ayudas').css("visibility", "visible")
+            </text>
             }
-            else
+
+            @if (configModulo != null)
             {
-                if (configPregunta.Ayuda)
-                {
+                if (configModulo.Ayudas)
+                {   
                     @: $('#ayudas').show();
                                 @: $('#ayudas').css("visibility", "visible")
                 }
                 else
                 {
-                    @: $('#ayudas').hide();
-                                @: $('#ayudas').css("visibility", "hidden")
+                    if (configPregunta.Ayuda)
+                    {
+                        @: $('#ayudas').show();
+                                    @: $('#ayudas').css("visibility", "visible")
+                    }
+                    else
+                    {
+                        @: $('#ayudas').hide();
+                                    @: $('#ayudas').css("visibility", "hidden")
+                    }
                 }
             }
 
-            /**************************************/
-            /**************************************/
-
             $(":radio").change(function () {
-                if ($('#seleccion').val() == "") { // Comprueba que no está vacío ni contiene únicamente espacios en blanco.
-                    jQuery("#btnValidarSimultaneo").attr('disabled', true);
-                }
-                else {
-                    jQuery("#btnValidarSimultaneo").attr('disabled', false);
-                }
+                $("#btnValidarTest").removeAttr("disabled");
+            });
 
+            $("#btnValidarTest").attr("disabled", "disabled");
+
+            /**************************************/
+            /**************************************/
+            
+            //guirisan/secuencias
+            //datetime set in client
+            var datetimeclient = new Date().toISOString();
+
+            //NUMACC
+
+            //get and add+1 numAcc
+            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+            numAcc++;
+            sessionStorage.setItem("numAccion", numAcc);
+
+            //DATOSRAW
+            //get datosRaw to add row in ajax.beforeSend
+            var datosRaw;
+            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                datosRaw = {};
+            }
+            $.ajax({
+                url: "RegistrarAccion",
+                type: 'POST',
+                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 9, moment: datetimeclient, numAccion: numAcc },
                 //guirisan/secuencias
-                //datetime set in client
-                var datetimeclient = new Date().toISOString();
+                beforeSend: function () {
+                    //set datosRaw on sessionStorage
+                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                    datosRaw[numAcc] = cadena;
+                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
 
-                //NUMACC
-
-                //get and add+1 numAcc
-                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                numAcc++;
-                sessionStorage.setItem("numAccion", numAcc);
-
-                //DATOSRAW
-                //get datosRaw to add row in ajax.beforeSend
-                var datosRaw;
-                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                    datosRaw = {};
+                    //set datosRaw on ajax petition
+                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                },
+                error: function () {
+                    alert("Error: Hubo un error con tu última acción.");
                 }
-
-                $.ajax({
-                    url: "RegistrarAccion",
-                    type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 14, moment: datetimeclient, numAccion: numAcc },
-                    //guirisan/secuencias
-                    beforeSend: function () {
-                        //set datosRaw on sessionStorage
-                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                        datosRaw[numAcc] = cadena;
-                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                        //set datosRaw on ajax petition
-                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                    },
-                    error: function () {
-                        alert("Error: Hubo un problema con tu última acción.");
-                    }
-                });
             });
         });
 

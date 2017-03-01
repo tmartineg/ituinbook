@@ -12,28 +12,30 @@
     sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
 </script>
 
-<div id="contenedor" style="z-index:10;">
+<div id="contenedor" style="z-index:10;" class="marginBottom50">
     
     
     
     <div style="position: relative;">           
         @foreach (Pagina pag in Model.Paginas)
         {
-            <div class="paginas" style="/*padding: 0px 50px; position: absolute;*/">@Html.Raw(Model.Paginas.First().Contenido)</div>
+            <div class="paginas" style="padding: 10px;">@Html.Raw(Model.Paginas.First().Contenido)</div>
         }
     </div>
 
     
     @if (Model.Preguntas != null && Model.Preguntas.Count > 0)
 {
-    <div id="pregunta" style="z-index:5; width:100%;" class="hiddenDebug">
-        @{
+    <div id="preguntaAligner">
+        <div id="pregunta" style="z-index:5; width:100%;" class="hiddenDebug">
+            @{
     string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
-        }
-        <iframe id="addIframe" onload="//autofitIframe(this)" src="@Url.Action("PL1_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe>
-    </div>
+            }
+            <iframe id="addIframe" onload="//autofitIframe(this)" src="@Url.Action("PL1_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe>
+        </div>
 
-    <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;">PREGUNTAS</button></div>
+        <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;height:50px">PREGUNTAS</button></div>
+    </div>
 }
 else
 {
@@ -52,11 +54,16 @@ else
         var flag_LecIni = false;
         var ini_PregActual = 0;
         var ini_LecFDBK = 0;
-        var flag_blur = false;
-        var flag_busqueda = false;
+        var flag_blur = true;
+        var flag_busqueda = true;
         var flag_revision = false;
 
         $(document).ready(function () {
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+
             $('reg').addClass("difuminado");
 
             $(document).on("click", "reg", function () {
@@ -151,10 +158,7 @@ else
                 }
             });
             
-            $("#ramiro").hide();
-            $("#lue").hide();
-            $("#feedAvatar").hide();
-            $("#feedback").hide();
+            
 
             $("#btnPregunta").click(function () {
                 
@@ -220,11 +224,15 @@ else
                     }
                 });
 
-                flag_LecIni = true;
-                flag_busqueda = true;
 
                 $("#divBoton").hide();
                 $("#pregunta").removeClass("hiddenDebug")
+
+                /*
+                flag_LecIni = true;
+                flag_busqueda = true;
+                
+                
 
                 if (flag_blur) {
                     $('.paginas').css("-webkit-filter", "blur(5px)");
@@ -236,12 +244,13 @@ else
                     $('.paginas').css("filter", "");
                     $('reg').removeClass("difuminado").addClass("no_difuminado");
                 }
+                */
 
                 var id = document.getElementById("addIframe");
 
                 $('.paginas').css("padding", "1px 50px")
 
-                //autofitIframe(id)
+                autofitIframe(id)
 
                 ini_PregActual = $.now();
             });
@@ -596,7 +605,7 @@ else
                     id.style.height = id.contentDocument.body.scrollHeight + "px";
                 }
 
-                $('.paginas').css("padding", id.style.height + " 50px 0px 50px");
+                $('.paginas').css("padding", "10px 1px "+ id.style.height +  +" 10px");
             }
         }
 

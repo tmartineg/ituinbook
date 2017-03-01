@@ -444,6 +444,14 @@ textarea {
     width: 500px;
 }
 
+.textarea100w{
+    width: 90% !important;
+}
+
+.textareaEnviado {
+    background-color:  
+}
+
     input:focus, textarea:focus {
         border: 1px solid #7ac0da;
     }
@@ -456,13 +464,25 @@ textarea {
 
     input[type="submit"],
     input[type="button"],
-    button {
+    button
+    {
         background-color: #d3dce0;
         border: 1px solid #787878;
         cursor: pointer;
         font-size: 1.1em;
         font-weight: 600;
         padding: 5px;
+        margin-right: 8px;
+        width: auto;
+    }
+    
+    .btnClass {
+        background-color: #d3dce0;
+        border: 1px solid #787878;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 600;
+        padding: 2px;
         margin-right: 8px;
         width: auto;
     }
@@ -1047,6 +1067,29 @@ img.imgEnunciadoDerecha{
 }
 
 /* add background-color to explicacion div*/
-.explicacionVerde {
+.backgroundVerde {
     background-color: #dbf2de;
+}
+
+.pagina100width {
+    width: 90%
+}
+
+.spanBtnDisabled {
+    pointer-events: none;
+    color: #b7b7b7 !important;
+}
+
+#preguntaAligner{
+    position:fixed;
+    height:auto;
+    /*background-color:red;*/
+    bottom:120px;
+    left:0px;
+    right:0px;
+    margin-bottom:0px;
+}
+
+.marginBottom50{
+    margin-bottom: 50px !important;
 }

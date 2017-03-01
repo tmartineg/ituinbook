@@ -2,7 +2,7 @@
 @model ReadAndLearn.Models.Texto
 
 @{
-    ViewBag.Title = "Texto";
+    ViewBag.Title = "Unidad";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     
@@ -12,43 +12,35 @@
     sessionStorage.setItem("numAccion", @(ViewBag.numAccion));
 </script>
 
-<div id="contenedor" style="z-index:10;">
+<div id="contenedor" style="z-index:10;" class="marginBottom50">
     
-    @if(Model.Preguntas != null && Model.Preguntas.Count > 0)
-    {
-        <div id="pregunta" style="z-index:5; position: fixed; width:100%; margin-top: -12px; visibility:hidden;">
-            @{
-                string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
-            }
-            <iframe id="addIframe" onload="autofitIframe(this)" src="@Url.Action("PL2_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe> 
-        </div>
-        
-        <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;">PREGUNTAS</button></div>
-    }
-    else
-    {
-        <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
-    }
+    
     
     <div style="position: relative;">           
         @foreach (Pagina pag in Model.Paginas)
         {
-            <div class="paginas" style="padding: 0px 50px; position: absolute;">@Html.Raw(Model.Paginas.First().Contenido)</div>
+            <div class="paginas" style="padding: 10px;">@Html.Raw(Model.Paginas.First().Contenido)</div>
         }
     </div>
 
-    <div id="feedAvatar" style="float: left; z-index:100; margin: 0 auto; text-align: left; position:fixed; top:50%; left:50%; margin-top:-100px; margin-left:-375px;">
-        <div style="float: left;">
-            <img id="ramiro" width="200" src="~/Content/images/Ramiro.png" style="margin-top: 15px; margin-right: 8px;" />
-            <img id="lue" width="200" src="~/Content/images/Lue.png" style="margin-top: 15px; margin-right: 8px;" />
-        </div>
-        <div class="speech_bubble" style="float: left;">
-            <textarea readonly="readonly" id="tbAvatar" style="background-color:#eee"></textarea>
-            <div class="arrow_border_left"></div>
-        </div>
-        <button class="btnCerrarFDBK">X</button>
-    </div>
     
+    @if (Model.Preguntas != null && Model.Preguntas.Count > 0)
+{
+    <div id="preguntaAligner">
+        <div id="pregunta" style="z-index:5; width:100%;" class="hiddenDebug">
+            @{
+    string datetimeclient = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK");
+            }
+            <iframe id="addIframe" onload="//autofitIframe(this)" src="@Url.Action("PL1_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, moment = datetimeclient })" style="width:100%; height:0;"></iframe>
+        </div>
+
+        <div id="divBoton" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPregunta" style="width: 100%;height:50px">PREGUNTAS</button></div>
+    </div>
+}
+else
+{
+    <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
+}
     <div id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">        
         <h2 id="mensaje" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
         <button class="btnCerrarFDBK">X</button>
@@ -62,11 +54,16 @@
         var flag_LecIni = false;
         var ini_PregActual = 0;
         var ini_LecFDBK = 0;
-        var flag_blur = false;
-        var flag_busqueda = false;
+        var flag_blur = true;
+        var flag_busqueda = true;
         var flag_revision = false;
 
         $(document).ready(function () {
+            $("#ramiro").hide();
+            $("#lue").hide();
+            $("#feedAvatar").hide();
+            $("#feedback").hide();
+
             $('reg').addClass("difuminado");
 
             $(document).on("click", "reg", function () {
@@ -161,10 +158,7 @@
                 }
             });
             
-            $("#ramiro").hide();
-            $("#lue").hide();
-            $("#feedAvatar").hide();
-            $("#feedback").hide();
+            
 
             $("#btnPregunta").click(function () {
                 
@@ -185,6 +179,9 @@
                 if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                     datosRaw = {};
                 }
+                //guirisan/secuencias CODEOP 5 (tiempo lec ini)
+                
+                
                 $.ajax({
                     url: "RegistrarAccion",
                     type: 'POST',
@@ -205,7 +202,7 @@
                 });
                 
                 
-                //guirisan/secuencias
+                //guirisan/secuencias CODEOP 6 (vel lec ini)
                 //no necesitamos recalcular datetime, numAcc, o añadir a datosRaw, ya que las dos llamadas ajax se corresponden con una sola acción del usuario
 
                 $.ajax({
@@ -227,11 +224,15 @@
                     }
                 });
 
-                flag_LecIni = true;
-                flag_busqueda = true;
 
                 $("#divBoton").hide();
-                $("#pregunta").css("visibility", "visible");
+                $("#pregunta").removeClass("hiddenDebug")
+
+                
+                flag_LecIni = true;
+                flag_busqueda = true;
+                
+                /*
 
                 if (flag_blur) {
                     $('.paginas').css("-webkit-filter", "blur(5px)");
@@ -243,6 +244,7 @@
                     $('.paginas').css("filter", "");
                     $('reg').removeClass("difuminado").addClass("no_difuminado");
                 }
+                */
 
                 var id = document.getElementById("addIframe");
 
@@ -273,7 +275,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "PL2_Texto_Cambiar",
+                    url: "PL1_Texto_Cambiar",
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID' , moment: datetimeclient, numAccion:numAcc},
                     //guirisan/secuencias
@@ -603,7 +605,7 @@
                     id.style.height = id.contentDocument.body.scrollHeight + "px";
                 }
 
-                $('.paginas').css("padding", id.style.height + " 50px 0px 50px");
+                $('.paginas').css("padding", "10px 1px "+ id.style.height +  +" 10px");
             }
         }
 

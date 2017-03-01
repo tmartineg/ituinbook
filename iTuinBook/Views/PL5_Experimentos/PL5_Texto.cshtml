@@ -2,7 +2,7 @@
 @model ReadAndLearn.Models.Texto
 
 @{
-    ViewBag.Title = "Texto";
+    ViewBag.Title = "Unidad";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     bool segundoIntento = ViewBag.SegundoIntento;
@@ -51,7 +51,10 @@
             content = content.Replace("_grupoid_", du.GrupoID.ToString());
             content = content.Replace("_textoid_", du.TextoID.ToString());
             
-            <div class="pagina100width" style="padding: 0px 50px; position: absolute;">@Html.Raw(content)</div>
+            <div class="pagina100width" style="padding: 0px 50px; position: absolute;">
+                @Html.Raw(content)
+                <span id="btnSalir" class="btnClass spanBtnDisabled" style="padding: 6px 20px;position: absolute; margin-top: 40px">Salir</span>
+            </div>
         }
     </div>
 
@@ -60,7 +63,9 @@
     <div class="hiddenDebug" id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">        
         <h2 id="mensaje" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
         <button class="btnCerrarFDBK">X</button>
-    </div>    
+    </div>
+
+    
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -89,12 +94,12 @@
                 if (parametrizacionHecha === true) {
                     return true;
                 }
-                
+
                 //parametrizacion del enlace
                 var oldhref = $("a",$(this)).attr("href");
                 var datetimeclient = new Date().toISOString();
                 $("a",$(this)).attr("href", oldhref + "&moment=" + datetimeclient);
-                
+
 
                 parametrizacionHecha = true;
                 $(this).unbind('click');
@@ -113,19 +118,19 @@
                     //HAY UNA PREGUNTA ABIERTA (abierta aka mostrada en pantalla, no pregunta tipo abierta
                     //capturar id de pregunta que estaba abierta
                     var idPreguntaAbierta = $(".rlpregunta").not(".hiddenDebug").attr("pregInsertada");
-                    
-                    
+
+
                     //ver 1.0
                     //de momento solo queremos excluir las preguntas entre si, con las siguientes lineas
                     $(this).addClass("hiddenDebug");                                                                //escondemos el boton pulsado
                     $(".rlpregunta").not(".hiddenDebug").addClass("hiddenDebug");
-                    $("span.btnPreguntaInsertadaHide[pregInsertada="+idPreguntaAbierta+"]").addClass("hiddenDebug"); 
+                    $("span.btnPreguntaInsertadaHide[pregInsertada="+idPreguntaAbierta+"]").addClass("hiddenDebug");
                     $("span.btnPreguntaInsertada[pregInsertada="+idPreguntaAbierta+"]").removeClass("hiddenDebug");
-                    
+
                     $("span.btnPreguntaInsertadaHide[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");    //mostramos el botón para ocultar la pregunta mostrada
                     $(".rlpregunta[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");                      //mostramos div con el iframe de la pregunta
                     var id = document.getElementById("addIframe"+idPregunta);                                       //obtenemos el id para ajustar el cuadro a la página
-                    autofitIframe(id);                                                      
+                    autofitIframe(id);
 
 
                     //si la preguntaAbierta está respondida, la escondemos y mostramos la pulsada
@@ -134,9 +139,9 @@
                     //si la pregunta a abrir está respondida, generamos datosimple verPregunta
 
                     //si la pregunta a abrir no está respondida, generamos datosimple inicioPregunta (datosimple existente)
-                    //y la 
+                    //y la
 
-                    //si 
+                    //si
                 }else{
                     //NO HAY NINGUNA PREGUNTA YA ABIERTA
                     //to-do. registrar acceso a pregunta
@@ -146,9 +151,10 @@
                     var id = document.getElementById("addIframe"+idPregunta);                                       //obtenemos el id para ajustar el cuadro a la página
                     autofitIframe(id);
                 }
-                
+
             });
 
+            //click sobre "Ocultar pregunta X"
             //oculta el iframe de la pregunta
             $("span.btnPreguntaInsertadaHide").click(function(){
                 var idPregunta = $(this).attr("pregInsertada");
@@ -157,6 +163,75 @@
                 $(".rlpregunta[pregInsertada="+idPregunta+"]").addClass("hiddenDebug");
             });
 
+            $("#btnSalir").click(function(){
+                $(this).attr("disabled","disabled");
+
+                //generar datosimple de fin de experimento
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+                //registrar codeop3 (fin de texto)
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID',PreguntaID: '@du.PreguntaID', TextoID: '@Model.TextoID', CodeOP: 3, moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    }
+                });
+
+                //registrar codeop 102 (fin de modulo)
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID',PreguntaID: '@du.PreguntaID', TextoID: '@Model.TextoID', CodeOP: 102, moment: datetimeclient, numAccion: numAcc},
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        alert("Error: Hubo un problema con tu última acción.");
+                    },
+                    success: function() {
+                        window.location.replace("http://lectura.uv.es/ReadAndLearn/Alumno/Tareas"); //si, lo se, sucio y mal, pero si funciona no es (tan) estúpido...
+                    }
+                });
+
+                
+                //reenviar al usuario a la página de tareas
+
+            });
             //guirisan/issue https://github.com/guirisan/ituinbook/issues/56
             if ('@inicioTexto' == 'True'){
                 //peticion ajax para registrar accion con codeop = 2
@@ -207,12 +282,12 @@
                 if (parametrizacionHecha === true) {
                     return true;
                 }
-                
+
                 //parametrizacion del enlace
                 var oldhref = $("#btnGotoPreguntas a").attr("href");
                 var datetimeclient = new Date().toISOString();
                 $("#btnGotoPreguntas a").attr("href", oldhref + "&moment=" + datetimeclient);
-                
+
 
                 parametrizacionHecha = true;
                 $("#btnGotoPreguntas").unbind('click');
@@ -225,7 +300,7 @@
 
             $(document).on("click", "reg", function () {
                 if (flag_LecIni) {
-                    if (flag_blur || !flag_busqueda) {                        
+                    if (flag_blur || !flag_busqueda) {
                         $('reg').removeClass("no_difuminado").addClass("difuminado");
 
                         $(this).removeClass("difuminado").addClass("no_difuminado");
@@ -233,7 +308,7 @@
                     else {
                         $(this).removeClass("difuminado").addClass("no_difuminado");
                     }
-                    
+
                     //guirisan/secuencias
                     //datetime set in client
                     var datetimeclient = new Date().toISOString();
@@ -251,7 +326,7 @@
                     if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                         datosRaw = {};
                     }
-                    
+
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
@@ -271,11 +346,11 @@
                         }
                     });
                 }
-                else {                    
+                else {
                     $('reg').removeClass("no_difuminado").addClass("difuminado");
 
                     $(this).removeClass("difuminado").addClass("no_difuminado");
-                    
+
                     //guirisan/secuencias
                     //datetime set in client
                     var datetimeclient = new Date().toISOString();
@@ -314,14 +389,14 @@
                     });
                 }
             });
-            
+
             $("#ramiro").hide();
             $("#lue").hide();
             $("#feedAvatar").hide();
             $("#feedback").hide();
 
             $("#btnPregunta").click(function () {
-                
+
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -357,8 +432,8 @@
                         alert("Error: Hubo un problema con tu última acción.");
                     }
                 });
-                
-                
+
+
                 //guirisan/secuencias
                 //no necesitamos recalcular datetime, numAcc, o añadir a datosRaw, ya que las dos llamadas ajax se corresponden con una sola acción del usuario
 
@@ -387,16 +462,16 @@
                 $("#divBoton").hide();
                 $("#pregunta").css("visibility", "visible");
 
-                if (flag_blur) {
+                /*if (flag_blur) {
                     $('.paginas').css("-webkit-filter", "blur(5px)");
                     $('.paginas').css("filter", "url(#example-one)");
                     $('reg').removeClass("no_difuminado").addClass("difuminado");
                 }
-                else {                    
+                else {
                     $('.paginas').css("-webkit-filter", "");
                     $('.paginas').css("filter", "");
                     $('reg').removeClass("difuminado").addClass("no_difuminado");
-                }
+                }*/
 
                 var id = document.getElementById("addIframe");
 
@@ -407,21 +482,21 @@
                 ini_PregActual = $.now();
             });
 
-            
+
         });
 
-        
+
         $('.paginas').click(function () {
             //if (document.getElementById("addIframe").contentWindow.ClickPagina())
             //    document.getElementById("addIframe").contentWindow.ClickPagina();
-            
+
             if ($('.paginas').css("-webkit-filter") == "blur(5px)") {
                 $.ajax({
                     url: "GetPreguntaID",
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID' },
                     success: function (result) {
-                        
+
                         //guirisan/secuencias
                         //datetime set in client
                         var datetimeclient = new Date().toISOString();
@@ -465,10 +540,10 @@
                 });
 
                 $('.paginas').css("-webkit-filter", "");
-                $('.paginas').css("filter", "");                
+                $('.paginas').css("filter", "");
             }
         });
-        
+
         function IniciarBlur()
         {
             if (valor == "True") {
@@ -488,13 +563,13 @@
         function BlurPagina(valor)
         {
             if (valor == "True") {
-                flag_blur = true;                
+                flag_blur = true;
             }
             else {
-                flag_blur = false;                
+                flag_blur = false;
             }
         }
-        
+
         function BlurRevision(valor) {
             if (valor == "True") {
                 flag_blur = true;
@@ -511,7 +586,7 @@
 
         //codigo sin usar?
         function FinalizarTiempoPregunta() {
-            
+
             //guirisan/secuencias
             //datetime set in client
             var datetimeclient = new Date().toISOString();
@@ -554,7 +629,7 @@
             if (sms != null)
             {
                 ini_LecFDBK = $.now();
-                
+
                 if (avatar == "True") {
                     $("#ramiro").show();
                     $("#lue").hide();
@@ -573,7 +648,7 @@
                 $('.paginas').css("filter", "url(#example-one)");
 
 
-                
+
                 $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
                 $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
                 $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
@@ -581,7 +656,7 @@
         }
 
         function feedbackVentana(sms)
-        {   
+        {
             if (sms != null)
             {
                 ini_LecFDBK = $.now();
@@ -599,35 +674,35 @@
                 $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
                 $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
                 $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
-            }            
+            }
         }
 
         //Ajusta el tamaño de un iframe al de su contenido interior para evitar scroll
-        function autofitIframe(id) {            
-            
-                id.style.height = "0px";
+        function autofitIframe(id) {
 
-                if (!window.opera && document.all && document.getElementById) {
-                    id.style.height = id.contentWindow.document.body.scrollHeight;
-                } else if (document.getElementById) {
-                    id.style.height = id.contentDocument.body.scrollHeight + "px";
-                }
-                id.style.width="100%";
-                
+            id.style.height = "0px";
+
+            if (!window.opera && document.all && document.getElementById) {
+                id.style.height = id.contentWindow.document.body.scrollHeight;
+            } else if (document.getElementById) {
+                id.style.height = id.contentDocument.body.scrollHeight + "px";
+            }
+            id.style.width="100%";
+
 
         }
 
         $("#addIframe").load(function () {
             console.log("#addIframe.load(function)");
             var id = document.getElementById("addIframe");
-                
+
 
             if (!window.opera && document.all && document.getElementById) {
                 id.style.height = id.contentWindow.document.body.scrollHeight;
             } else if (document.getElementById) {
                 id.style.height = id.contentDocument.body.scrollHeight + "px";
-            }     
-            
+            }
+
             id.style.width="100%";
         });
     </script>        

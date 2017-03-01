@@ -162,6 +162,11 @@
                         this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
                     },
                     success: function (result) {
+                        //habilitamos el botón de la siguiente pregunta
+                        var idPreguntaAbierta = $(".rlpregunta", window.parent.document).not(".hiddenDebug").attr("pregInsertada");
+                        $("span.btnPreguntaInsertada[pregInsertada=" + parseInt(parseInt(idPreguntaAbierta) + 1) + "]", window.parent.document).removeClass("spanBtnDisabled");
+
+
                         window.location.href = result.redirect;
 
                         if (!(result.mensaje == null || result.mensaje == "")) {

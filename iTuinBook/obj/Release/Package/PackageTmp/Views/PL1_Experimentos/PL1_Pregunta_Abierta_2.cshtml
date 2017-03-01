@@ -2,7 +2,7 @@
 @model ReadAndLearn.Models.Pregunta
 
 @{
-    ViewBag.Title = "PL2_Pregunta";
+    ViewBag.Title = "PL1_Pregunta";
     Layout = "~/Views/Shared/_LayoutNada.cshtml";
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
@@ -115,7 +115,7 @@
                     datosRaw = {};
                 }
                 $.ajax({
-                    url: "PL2_Pregunta_Abierta_2_Validar", //url: 'Validar',
+                    url: "PL1_Pregunta_Abierta_2_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('textarea#respuesta').val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias

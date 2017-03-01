@@ -7,7 +7,6 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
-    DatoSimple dsel = (DatoSimple)ViewBag.Seleccion;
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
@@ -16,21 +15,16 @@
         <span style="padding-left: 5px;" id="puntos">@du.Puntos</span>
     </div>
 
-    <div id=enunciado style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+    <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)    
         @if (Model.Ayuda != null)
         {
             <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
         }
     </div>
-    
+     
     <div style="padding-left: 20px; padding-right: 20px;">
-        <b>Primera selección:</b> 
-        <p>@dsel.Info</p>
-    </div>
-
-    <div style="padding-left: 20px; padding-right: 20px;">
-        <b>Intenta realizar una selección mejor que la anterior:</b> 
+        <b>Selecciona el texto pertinente para responder a la pregunta:</b> 
         <textarea id="seleccion" style="width: 100%;"></textarea>
         <button id="btnValidarSeleccion">Validar</button>    
         <button id="btnBorrarSeleccion">Borrar</button>
@@ -120,7 +114,6 @@
 
             $("#btnValidarSeleccion").click(function () {
                 $("#btnValidarSeleccion").attr("disabled", "disabled");
-
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -140,7 +133,7 @@
                 }
 
                 $.ajax({
-                    url: "PL2_Pregunta_Abierta_Seleccion_2_Validar", //url: 'Validar',
+                    url: "PL1_Pregunta_Abierta_Seleccion_Validar", //url: 'Validar',
                     type: 'POST',
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: $('#seleccion').val(), moment: datetimeclient, numAccion: numAcc},
                     //guirisan/secuencias
@@ -154,17 +147,16 @@
                         this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
                     },
                     success: function (result) {
-                        // data.redirect contains the string URL to redirect to              
-                        if (result.mensaje != null && result.mensaje != "") {
-                            @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
-                            {   
-                                @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
-                            }
-                            else
-                            {
-                                @: parent.feedbackVentana(result.mensaje);
-                            }
+                        // data.redirect contains the string URL to redirect to                        
+                        @if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
+                        {   
+                            @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");                                                
                         }
+                        else
+                        {
+                            @: parent.feedbackVentana(result.mensaje);                        
+                        }
+
                         window.location.href = result.redirect;                        
                     },
                     error: function () {
@@ -201,11 +193,10 @@
                         if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                             datosRaw = {};
                         }
-
                         $.ajax({
                             url: "RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120, moment: datetimeclient, numAccion: numAcc},
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 120 , moment: datetimeclient, numAccion: numAcc},
                             //guirisan/secuencias
                             beforeSend: function () {
                                 //set datosRaw on sessionStorage
@@ -238,7 +229,6 @@
                     <text>
                     $("#btnLupa").click(function () {
                         $("#btnLupa").attr("disabled", "disabled");
-
                         //guirisan/secuencias
                         //datetime set in client
                         var datetimeclient = new Date().toISOString();
@@ -256,10 +246,11 @@
                         if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
                             datosRaw = {};
                         }
+
                         $.ajax({
                             url: "RegistrarAccion",
                             type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient, numAccoin: numAcc },
+                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 122, moment: datetimeclient, numAccion: numAcc },
                             //guirisan/secuencias
                             beforeSend: function () {
                                 //set datosRaw on sessionStorage
@@ -293,6 +284,7 @@
                     <text>
                     $('#btnPrismaticos').click(function () {
                         $("#btnPrismaticos").attr("disabled", "disabled");
+
                         //guirisan/secuencias
                         //datetime set in client
                         var datetimeclient = new Date().toISOString();
@@ -387,7 +379,7 @@
                                 $.ajax({
                                     url: "RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
                                     beforeSend: function () {
                                         //set datosRaw on sessionStorage
@@ -428,7 +420,7 @@
                                 timeFinish = jQuery.now();
 
                                 var diff = timeFinish - timeStart;
-
+                                
                                 //guirisan/secuencias
                                 //datetime set in client
                                 var datetimeclient = new Date().toISOString();
@@ -450,7 +442,7 @@
                                 $.ajax({
                                     url: "RegistrarAccion",
                                     type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
                                     //guirisan/secuencias
                                     beforeSend: function () {
                                         //set datosRaw on sessionStorage
