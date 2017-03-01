@@ -4739,9 +4739,11 @@ namespace ReadAndLearn.Controllers
 
             tipos.Add(new TipoPregunta() { TipoPreguntaID = 1, Tipo = "Test" });
             tipos.Add(new TipoPregunta() { TipoPreguntaID = 2, Tipo = "Abierta" });
-            tipos.Add(new TipoPregunta() { TipoPreguntaID = 3, Tipo = "Seleccionar" });
-            tipos.Add(new TipoPregunta() { TipoPreguntaID = 4, Tipo = "Emparejar" });
-            tipos.Add(new TipoPregunta() { TipoPreguntaID = 5, Tipo = "Ordenar" });
+            
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/161
+            //tipos.Add(new TipoPregunta() { TipoPreguntaID = 3, Tipo = "Seleccionar" });
+            //tipos.Add(new TipoPregunta() { TipoPreguntaID = 4, Tipo = "Emparejar" });
+            //tipos.Add(new TipoPregunta() { TipoPreguntaID = 5, Tipo = "Ordenar" });
             
             return tipos;
         }
