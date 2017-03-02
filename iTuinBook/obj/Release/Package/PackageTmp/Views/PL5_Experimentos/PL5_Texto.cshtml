@@ -155,7 +155,7 @@
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 91, moment: datetimeclient, numAccion: numAcc, Dato01: idPreguntaAbierta+1},
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 91, moment: datetimeclient, numAccion: numAcc, Dato01: idPreguntaAbierta+1},
                         //guirisan/secuencias
                         beforeSend: function () {
                             //set datosRaw on sessionStorage
@@ -172,10 +172,7 @@
                     });
 
                     //y apertura de la pregunta pulsada
-                    //guirisan/secuencias
-                    //datetime set in client
-                    var datetimeclient = new Date().toISOString();
-
+                    
                     //NUMACC
 
                     //get and add+1 numAcc
@@ -194,7 +191,7 @@
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID : 0, CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
                         //guirisan/secuencias
                         beforeSend: function () {
                             //set datosRaw on sessionStorage
@@ -244,7 +241,7 @@
                     $.ajax({
                         url: "RegistrarAccion",
                         type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
                         //guirisan/secuencias
                         beforeSend: function () {
                             //set datosRaw on sessionStorage

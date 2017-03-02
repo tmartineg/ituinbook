@@ -649,7 +649,7 @@ namespace ReadAndLearn.Controllers
 
             while (pos < text.Length)
             {
-                logger.Debug("pos = " + pos);
+                //logger.Debug("pos = " + pos);
                 aux = "";//cadena a añadir al resultado
                 //System.Diagnostics.Debug.Write("MAIN while -> pos=" + pos + " - text(pos)=" + text[pos]);
 
@@ -4397,7 +4397,7 @@ namespace ReadAndLearn.Controllers
                     continue;*/
 
                 DatoSujeto suj = new DatoSujeto();
-                logger.Debug("EXTRAER DATOS: {0}", suj.Nombre);
+                //logger.Debug("EXTRAER DATOS: {0}", suj.Nombre);
                 try
                 {
                     List<DatoUnitario> datos = new List<DatoUnitario>();
@@ -4566,7 +4566,7 @@ namespace ReadAndLearn.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger.Debug("ERROR EXTRAYENDO DATOS: {0}", suj.Nombre);
+                    //logger.Debug("ERROR EXTRAYENDO DATOS: {0}", suj.Nombre);
 
                     suj.Nombre += "::ERROR";
                     arrayDatos.Add(suj);

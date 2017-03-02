@@ -21,7 +21,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult AjaxConfigPregunta(int PreguntaID)
         {
-            logger.Debug("PL0_Experimentos/AjaxConfigPRegunta");
+            //logger.Debug("PL0_Experimentos/AjaxConfigPRegunta");
             ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
 
             if (configPreg != null)
@@ -34,7 +34,7 @@ namespace ReadAndLearn.Controllers
         public void ValidarSeleccion(int ModuloID, int GrupoID, int PreguntaID, int TextoID, string respuesta, out double pert, out double noPert, bool subtarea, string moment, int numAccion = -1)
         {
             //guirisan
-            logger.Debug("PL0_Experimentos/ValidarSeleccion");
+            //logger.Debug("PL0_Experimentos/ValidarSeleccion");
             DateTime datetimeclient = DateTime.Parse(moment);
 
 
@@ -229,7 +229,7 @@ namespace ReadAndLearn.Controllers
 
         public string GetFeedbackSeleccion(DatosUsuario du, double porcPert, double porcNoPert)
         {
-            logger.Debug("PL0_Experimentos/GetFeedbackSeleccion");
+            //logger.Debug("PL0_Experimentos/GetFeedbackSeleccion");
             string mensaje = "";
 
             if (porcNoPert > 25) // SI IRRELEVANTE
@@ -285,7 +285,7 @@ namespace ReadAndLearn.Controllers
 
         private void SaveChanges()
         {
-            logger.Debug("PL0_Experimentos/SaveChanges");
+            //logger.Debug("PL0_Experimentos/SaveChanges");
             try
             {
                 ext.SaveChanges();
@@ -299,7 +299,7 @@ namespace ReadAndLearn.Controllers
 
         protected RedirectToRouteResult RouterPregunta(int GrupoID, int ModuloID, Pregunta pregunta, DatosUsuario datosUsuario, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
         {
-            logger.Debug("PL0_Experimentos/RouterPregunta");
+            //logger.Debug("PL0_Experimentos/RouterPregunta");
             DateTime datetimeclient = DateTime.Parse(moment);
 
             ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
@@ -394,7 +394,7 @@ namespace ReadAndLearn.Controllers
 
         private double CalculoPertinente(string str)
         {
-            logger.Debug("PL0_Experimentos/CalculoPertinente");
+            //logger.Debug("PL0_Experimentos/CalculoPertinente");
             string[] param = str.Substring(0, str.Length - 1).Split('/');
             List<Pertinente> lista = new List<Pertinente>();
 
@@ -414,7 +414,7 @@ namespace ReadAndLearn.Controllers
 
         private double CalculoPertinenteSobreBusqueda(string str)
         {
-            logger.Debug("PL0_Experimentos/CalculoPertinenteSobreBusqueda");
+            //logger.Debug("PL0_Experimentos/CalculoPertinenteSobreBusqueda");
             string[] param = str.Substring(0, str.Length - 1).Split('/');
             List<Pertinente> lista = new List<Pertinente>();
 
@@ -444,7 +444,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult GetPreguntaID(int ModuloID, int GrupoID)
         {
-            logger.Debug("PL0_Experimentos/GetPreguntaID");
+            //logger.Debug("PL0_Experimentos/GetPreguntaID");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             return Json(new { result = du.PreguntaID });
@@ -453,7 +453,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("PL0_Experimentos/RegistrarAccion");
+            //logger.Debug("PL0_Experimentos/RegistrarAccion");
 
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
@@ -593,7 +593,7 @@ namespace ReadAndLearn.Controllers
 
         public bool BuscarAccion(int CodeOP, int GrupoID, int ModuloID, int TextoID, int PreguntaID)
         {
-            logger.Debug("PL0_Experimentos/BuscarAccion");
+            //logger.Debug("PL0_Experimentos/BuscarAccion");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             var acciones = from d in db.DatosSimples
@@ -609,7 +609,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult Algoritmo(string Pertinente, int TextoID, string NuevaSeleccion)
         {
-            logger.Debug("PL0_Experimentos/Algoritmo");
+            //logger.Debug("PL0_Experimentos/Algoritmo");
             Pertinente = Regex.Replace(Pertinente, "\\/+", "/");
 
             if (Pertinente != "" && Pertinente.First() == ' ')
@@ -1006,7 +1006,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Texto(int GrupoID, int ModuloID, int textoActual, string moment = "", int numAccion = -1, bool SegundoIntento = false, bool preguntaResuelta = false, bool inicioTexto = false)
         {
-            logger.Debug("PL0_Experimentos/PL0_Texto");
+            //logger.Debug("PL0_Experimentos/PL0_Texto");
             try
             {
                 DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1046,7 +1046,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL0_Texto_Cambiar(int GrupoID, int ModuloID, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("PL0_Experimentos/PL0_Texto_Cambiar");
+            //logger.Debug("PL0_Experimentos/PL0_Texto_Cambiar");
 
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
@@ -1133,7 +1133,7 @@ namespace ReadAndLearn.Controllers
         public ActionResult PL0_Pregunta(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1, bool segundoIntento = false, bool preguntaResuelta = false)
         {
 
-            logger.Debug("PL0_Experimentos/PL0_Pregunta");
+            //logger.Debug("PL0_Experimentos/PL0_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -1149,7 +1149,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Siguiente_Pregunta(int GrupoID, int ModuloID, int TextoID, string moment, int PreguntaID = 0, int numAccion = -1, string dataRow = "", bool greetingsPage = false, bool preguntaResuelta = false)
         {
-            logger.Debug("PL0_Siguiente_Pregunta");
+            //logger.Debug("PL0_Siguiente_Pregunta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             //guirisan/secuencias
@@ -1317,7 +1317,7 @@ namespace ReadAndLearn.Controllers
         #region Pregunta TEST
         public ActionResult PL0_Pregunta_Test(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1)
         {
-            logger.Debug("PL0_Experimentos/PL0_Pregunta_Test");
+            //logger.Debug("PL0_Experimentos/PL0_Pregunta_Test");
             DateTime datetimeclient = DateTime.Parse(moment);
 
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1363,7 +1363,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Test_2(int GrupoID, int ModuloID, int PreguntaID, string feedbackText)
         {
-            logger.Debug("PL0_Experimentos/PL0_pregunta_test_2");
+            //logger.Debug("PL0_Experimentos/PL0_pregunta_test_2");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
@@ -1413,7 +1413,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Test_Seleccion(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
-            logger.Debug("PL0_Experimentos/PL0_pregunta_test_seleccion");
+            //logger.Debug("PL0_Experimentos/PL0_pregunta_test_seleccion");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -1688,7 +1688,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion, string dataRow)
         {
-            logger.Debug("PL0_Pregunta_Test_Validar");
+            //logger.Debug("PL0_Pregunta_Test_Validar");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             bool flag_fallo = false;
             float valor = 0;
@@ -1923,7 +1923,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("PL0_Pregunta_Test_2_Validar");
+            //logger.Debug("PL0_Pregunta_Test_2_Validar");
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -2013,7 +2013,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText)
         {
-            logger.Debug("PL0_Pregunta_Test_Resuelta");
+            //logger.Debug("PL0_Pregunta_Test_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = new Pregunta();
 
@@ -2187,7 +2187,7 @@ namespace ReadAndLearn.Controllers
         #region PreguntaAbierta
         public ActionResult PL0_Pregunta_Abierta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
-            logger.Debug("PL0_Pregunta_Abierta");
+            //logger.Debug("PL0_Pregunta_Abierta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
             Texto texto = ext.GetTexto(textoID);
@@ -2376,7 +2376,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Abierta_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("PL0_Pregunta_Abierta_Validar");
+            //logger.Debug("PL0_Pregunta_Abierta_Validar");
             //guirisan/secuencias
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
@@ -2531,7 +2531,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PL0_Pregunta_Abierta_Resuelta(int GrupoID, int ModuloID, int preguntaID)
         {
-            logger.Debug("PL0_Pregunta_Abierta_Resuelta");
+            //logger.Debug("PL0_Pregunta_Abierta_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = new Pregunta();
 

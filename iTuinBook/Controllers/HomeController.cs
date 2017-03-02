@@ -16,7 +16,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Index()
         {
-            logger.Debug("Index");
+            //logger.Debug("Index");
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
             if (User.Identity.IsAuthenticated)
@@ -48,7 +48,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult About()
         {
-            logger.Debug("About");
+            //logger.Debug("About");
             ViewBag.Message = "Your app description page.";
 
             return View();
@@ -56,7 +56,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Contact()
         {
-            logger.Debug("Contact");
+            //logger.Debug("Contact");
             ViewBag.Message = "Your contact page.";
 
             return View();

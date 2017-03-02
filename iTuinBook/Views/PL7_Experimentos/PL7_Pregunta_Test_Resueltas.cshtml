@@ -16,7 +16,7 @@
 <div style="margin: 15px 20px;" id="areaPregunta">
    @foreach (Pregunta preg in Model)
 {
-
+ 
     DatoSimple ds = ViewBag.DatosSimples[i];
     i++;
 
@@ -27,10 +27,10 @@
 
             </div>
         </reg>
-
-        <div id=alternativas style="padding-left: 20px; padding-right: 20px;" class="largerFont">
-            <ul>
-                @if (preg.ConfigPregunta != null && preg.ConfigPregunta.MarcarCorrecto)
+        <reg rlpregunta="@preg.Orden" rlsection="alternativas">
+            <div id=alternativas style="padding-left: 20px; padding-right: 20px;" class="largerFont">
+                <ul>
+                    @if (preg.ConfigPregunta != null && preg.ConfigPregunta.MarcarCorrecto)
                 {
 
                     foreach (Alternativa alt in preg.Alternativas)
@@ -113,9 +113,9 @@
 
                     }
                 }
-            </ul>
-        </div>
-
+                </ul>
+            </div>
+        </reg>
 
         <div id="fdbkDialog" class="hiddenDebug largerFont">
             @ViewBag.feedbackText
@@ -132,9 +132,11 @@
         string divId = "explicacionDialog" + preg.PreguntaID;
             }
             <button id="@btnId" preguntaid="@preg.PreguntaID">Ver explicación</button>
-            <div id="@divId" class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-                @preg.Explicacion
-            </div>
+            <reg rlpregunta="@preg.Orden" rlsection="explicacion">
+                <div id="@divId" class="hiddenDebug backgroundVerde" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+                    @preg.Explicacion
+                </div>
+            </reg>
         </div>
     }
     </div> //end div.classPregunta
@@ -150,8 +152,57 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
-    $(document).ready(function () {
+        $(document).ready(function () {
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/174
+            $("reg").addClass("difuminado");
 
+            $("reg").click(function () {
+                $("reg").removeClass("no_difuminado").addClass("difuminado");
+                $(this).removeClass("difuminado").addClass("no_difuminado");
+                
+                //get info about clicked region
+                var rlsection = $(this).attr("rlsection");
+                var rlpregunta = $(this).attr("rlpregunta");
+
+                //guirisan/secuencias
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+
+
+                // cambio de CodeOP para lectura de explicacion
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', PreguntaID : 0, ModuloID: '@du.ModuloID', TextoID: '@Model.First().Texto.TextoID', Param: rlsection.toString(), ParamInt: rlpregunta.toString(), CodeOP: 92, moment: datetimeclient, numAccion: numAcc },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    },
+                    error: function () {
+                        //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                    }
+                });
+            });
 
 
 
@@ -163,9 +214,12 @@
         /*show feedback on dialog*/
         var dialog = $("#fdbkDialog");
         $("[id^='btnVerExplicacion'").click(function () {
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/174
+            //difuminamos por si hubiese abierto algo antes de pulsar en "Ver explicacion"
+            $("reg").removeClass("no_difuminado").addClass("difuminado");
 
-
-            $(this).addClass("hiddenDebug").next("[id^='explicacionDialog']").removeClass("hiddenDebug").addClass("backgroundVerde");
+            $(this).addClass("hiddenDebug").next().children("[id^='explicacionDialog']").removeClass("hiddenDebug");
+            $(this).siblings("reg").removeClass("difuminado").addClass("no_difuminado");
             if ($("[id^='btnVerExplicacion'").not(".hiddenDebug").length == 0) {
                 $('#btnSiguientePregunta').removeAttr("disabled");
             }

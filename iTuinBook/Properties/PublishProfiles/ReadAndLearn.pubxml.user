@@ -46,7 +46,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>03/02/2017 10:02:36</publishTime>
+      <publishTime>03/02/2017 18:09:26</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -166,13 +166,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/NLog.config">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="bin/NLog.dll">
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>03/02/2017 10:02:36</publishTime>
+      <publishTime>03/02/2017 18:09:26</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -3016,7 +3016,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/21/2013 11:53:11</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>01/03/2017 12:03:21</publishTime>
+      <publishTime>03/01/2017 12:03:21</publishTime>
     </File>
     <File Include="Content/spanish_function_words.txt">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -3352,7 +3352,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="NLog.config">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4657,19 +4657,19 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/Manage.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/Register.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/_ChangePasswordPartial.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_ExternalLoginsListPartial.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Account/_RemoveExternalLoginsPartial.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Account/_SetPasswordPartial.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4684,7 +4684,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Alumno/Tareas.cshtml">
-      <publishTime>07/12/2016 11:26:38</publishTime>
+      <publishTime>12/07/2016 11:26:38</publishTime>
     </File>
     <File Include="Views/Alumno/View1.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4714,7 +4714,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AgregarCriterioCorreccion.cshtml">
-      <publishTime>11/09/2015 13:55:16</publishTime>
+      <publishTime>09/11/2015 13:55:16</publishTime>
     </File>
     <File Include="Views/Docente/AgregarEmparejados.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4738,7 +4738,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaCompleja.cshtml">
-      <publishTime>11/02/2016 12:01:02</publishTime>
+      <publishTime>02/11/2016 12:01:02</publishTime>
     </File>
     <File Include="Views/Docente/AgregarReglaSimple.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4768,7 +4768,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarModulo.cshtml">
-      <publishTime>02/07/2017 11:04:03</publishTime>
+      <publishTime>03/02/2017 11:11:22</publishTime>
     </File>
     <File Include="Views/Docente/ConfigurarPregunta.cshtml">
       <publishTime>01/18/2017 13:59:45</publishTime>
@@ -4798,10 +4798,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/20/2016 11:06:51</publishTime>
     </File>
     <File Include="Views/Docente/CrearPagina.cshtml">
-      <publishTime>01/03/2017 12:09:33</publishTime>
+      <publishTime>03/01/2017 12:09:33</publishTime>
     </File>
     <File Include="Views/Docente/CrearPregunta.cshtml">
-      <publishTime>09/12/2016 11:53:07</publishTime>
+      <publishTime>12/09/2016 11:53:07</publishTime>
     </File>
     <File Include="Views/Docente/CrearTarea.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4852,7 +4852,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/Feedback.cshtml">
-      <publishTime>11/01/2016 15:14:36</publishTime>
+      <publishTime>01/11/2016 15:14:36</publishTime>
     </File>
     <File Include="Views/Docente/GetSecuencia.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4864,13 +4864,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/Modulos.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/SacarSecuencias.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/Secuencia.cshtml">
-      <publishTime>11/09/2015 13:55:17</publishTime>
+      <publishTime>09/11/2015 13:55:17</publishTime>
     </File>
     <File Include="Views/Docente/Seguimientos.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -4903,13 +4903,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/Docente/VisualizarPagina.cshtml">
-      <publishTime>04/07/2016 05:02:59</publishTime>
+      <publishTime>07/04/2016 05:02:59</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>11/16/2016 12:23:12</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
-      <publishTime>09/11/2015 23:54:17</publishTime>
+      <publishTime>11/09/2015 23:54:17</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -5017,10 +5017,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/29/2016 11:24:48</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_2.cshtml">
-      <publishTime>12/09/2016 14:47:37</publishTime>
+      <publishTime>09/12/2016 14:47:37</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>09/12/2016 14:33:37</publishTime>
+      <publishTime>12/09/2016 14:33:37</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Test_Seleccion.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -5047,13 +5047,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/31/2017 13:15:05</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Abierta.cshtml">
-      <publishTime>01/03/2017 13:54:11</publishTime>
+      <publishTime>03/01/2017 13:54:11</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Abierta_2.cshtml">
       <publishTime>02/02/2017 13:55:58</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Abierta_Resuelta.cshtml">
-      <publishTime>01/03/2017 13:55:18</publishTime>
+      <publishTime>03/01/2017 13:55:18</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Pregunta_Abierta_Seleccion.cshtml">
       <publishTime>02/02/2017 13:55:58</publishTime>
@@ -5095,7 +5095,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/02/2017 13:55:58</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/PL1_Texto.cshtml">
-      <publishTime>03/01/2017 19:07:26</publishTime>
+      <publishTime>01/03/2017 19:07:26</publishTime>
     </File>
     <File Include="Views/PL1_Experimentos/Pregunta.cshtml">
       <publishTime>01/12/2016 13:16:17</publishTime>
@@ -5161,13 +5161,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:17</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta.cshtml">
-      <publishTime>01/03/2017 13:53:04</publishTime>
+      <publishTime>03/01/2017 13:53:04</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_2.cshtml">
       <publishTime>02/16/2016 11:55:19</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Resuelta.cshtml">
-      <publishTime>01/03/2017 13:47:47</publishTime>
+      <publishTime>03/01/2017 13:47:47</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Pregunta_Abierta_Seleccion.cshtml">
       <publishTime>02/16/2016 11:55:20</publishTime>
@@ -5209,7 +5209,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/16/2016 11:53:32</publishTime>
     </File>
     <File Include="Views/PL2_Experimentos/PL2_Texto.cshtml">
-      <publishTime>03/01/2017 19:07:40</publishTime>
+      <publishTime>01/03/2017 19:07:40</publishTime>
     </File>
     <File Include="Views/PL3_Experimentos/Agradecimiento.cshtml">
       <publishTime>03/09/2016 14:59:25</publishTime>
@@ -5344,61 +5344,61 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/28/2017 20:04:06</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/Agradecimiento.cshtml">
-      <publishTime>11/01/2016 14:15:35</publishTime>
+      <publishTime>01/11/2016 14:15:35</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/Error.cshtml">
       <publishTime>10/26/2016 12:44:12</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta.cshtml">
-      <publishTime>03/01/2017 18:38:45</publishTime>
+      <publishTime>01/03/2017 18:38:45</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta_2.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta_Resuelta.cshtml">
       <publishTime>02/28/2017 10:47:24</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta_Seleccion.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta_Seleccion_2.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Ordenar.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Ordenar_Resuelta.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Seleccion.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Seleccion_2.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Seleccion_Resuelta.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test.cshtml">
-      <publishTime>03/01/2017 18:29:24</publishTime>
+      <publishTime>01/03/2017 18:29:24</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test_2.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test_Resuelta.cshtml">
-      <publishTime>03/01/2017 18:06:48</publishTime>
+      <publishTime>01/03/2017 18:06:48</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test_Seleccion.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test_Seleccion_2.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Test_Seleccion_Simultaneo.cshtml">
-      <publishTime>11/01/2016 14:15:34</publishTime>
+      <publishTime>01/11/2016 14:15:34</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Texto.cshtml">
-      <publishTime>03/01/2017 20:39:17</publishTime>
+      <publishTime>03/02/2017 18:08:25</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Texto_Busca.cshtml">
       <publishTime>02/28/2017 20:04:06</publishTime>
@@ -5521,7 +5521,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>02/24/2017 13:34:48</publishTime>
     </File>
     <File Include="Views/PL7_Experimentos/PL7_Pregunta_Test_Resueltas.cshtml">
-      <publishTime>02/24/2017 13:34:47</publishTime>
+      <publishTime>03/02/2017 18:05:25</publishTime>
     </File>
     <File Include="Views/PL7_Experimentos/PL7_Pregunta_Test_Resuelta_Directa.cshtml">
       <publishTime>01/23/2017 17:09:28</publishTime>

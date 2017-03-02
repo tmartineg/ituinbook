@@ -40,7 +40,7 @@ namespace ReadAndLearn.Controllers
             }
             
 
-            logger.Debug("ReadAndLearnController/Iniciar");
+            //logger.Debug("ReadAndLearnController/Iniciar");
             var user = (from u in db.UserProfiles
                         where User.Identity.Name == u.UserName
                         select u).Single();
@@ -146,7 +146,7 @@ namespace ReadAndLearn.Controllers
                     switch (configModulo.Plantilla)
                     { 
                         case 0:
-                            logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 0, redirect to PL0_experimentos/PL0_Texto");
+                            //logger.Debug("modulo.condicion: 1 (iTextBook) , configModulo.Plantilla : 0, redirect to PL0_experimentos/PL0_Texto");
                             return RedirectToAction("PL0_Texto", "PL0_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, db, NumAccion = numAccion, inicioTexto = true });
                         case 1:
                             return RedirectToAction("PL1_Texto", "PL1_Experimentos", new { GrupoID = GrupoID, ModuloID = ModuloID, textoActual = datUser.TextoActual, NumAccion = numAccion });
@@ -224,7 +224,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Area(int GrupoID, int ModuloID, int accActual, int escActual, int numAccion)
         {
-            logger.Debug("ReadAndLearnController/Area");
+            //logger.Debug("ReadAndLearnController/Area");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
             var user = (from u in db.UserProfiles
@@ -267,7 +267,7 @@ namespace ReadAndLearn.Controllers
             //guirisan/secuencias
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
-            logger.Debug("ReadAndLearnController/CambiarAccion");
+            //logger.Debug("ReadAndLearnController/CambiarAccion");
             string mensaje = "";
 
             var user = (from u in db.UserProfiles
@@ -342,14 +342,14 @@ namespace ReadAndLearn.Controllers
 
         string RemoveBetween(string s, char begin, char end)
         {
-            logger.Debug("ReadAndLearnController/RemoveBetween");
+            //logger.Debug("ReadAndLearnController/RemoveBetween");
             Regex regex = new Regex(string.Format("\\{0}.*?\\{1}", begin, end));
             return regex.Replace(s, string.Empty);
         }
 
         public ActionResult SeleccionPertinente(int PreguntaID, string Seleccion)
         {
-            logger.Debug("ReadAndLearnController/SeleccionPertinente");
+            //logger.Debug("ReadAndLearnController/SeleccionPertinente");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Pagina pagina = pregunta.Texto.Paginas.First();
             string respuesta = Seleccion;
@@ -476,7 +476,7 @@ namespace ReadAndLearn.Controllers
 
         public string AlgoritmoSeleccion(string Contenido, string respuesta, int PreguntaID)
         {
-            logger.Debug("ReadAndLearnController/AlgoritmoSeleccion");
+            //logger.Debug("ReadAndLearnController/AlgoritmoSeleccion");
             // SELECCION PERTINENTE //
             int CharPertPregunta = 0;
             string contenido = "";
@@ -625,7 +625,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPreguntaSeleccion(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("ReadAndLearnController/ValidarPreguntaSeleccion");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaSeleccion");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             Pagina pagina = pregunta.Texto.Paginas.First();
             string respOriginal = respuesta;
@@ -853,7 +853,7 @@ namespace ReadAndLearn.Controllers
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
             
-            logger.Debug("ReadAndLearnController/ValidarPreguntaParejas");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaParejas");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             ConfigPregunta configPreg = db.ConfigPregunta.Single(c => c.PreguntaID == PreguntaID);
 
@@ -961,7 +961,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntasPajeraCorregida(int PreguntaID, string Respuesta)
         {
-            logger.Debug("ReadAndLearnController/PreguntasPajeraCorregida");
+            //logger.Debug("ReadAndLearnController/PreguntasPajeraCorregida");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             ViewBag.Pagina = preg.Texto.Paginas.First();
             ConfigPregunta configPreg = db.ConfigPregunta.Single(c => c.PreguntaID == PreguntaID);
@@ -1057,7 +1057,7 @@ namespace ReadAndLearn.Controllers
             DateTime datetimeclient = DateTime.Parse(moment);
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow); 
             
-            logger.Debug("ReadAndLearnController/ValidarPreguntaClaves");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaClaves");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             string Mensaje = "";
             string results = "";
@@ -1209,7 +1209,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPreguntaTest(int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow ="")
         {
-            logger.Debug("ReadAndLearnController/ValidarPreguntaTest");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaTest");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
             //guirisan/secuencias
@@ -1283,7 +1283,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaSimpleCorregida(int PreguntaID, bool? Repetido)
         {
-            logger.Debug("ReadAndLearnController/PreguntaSimpleCorregida");
+            //logger.Debug("ReadAndLearnController/PreguntaSimpleCorregida");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
 
             var user = (from u in db.UserProfiles
@@ -1395,7 +1395,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaSimpleSimulada(int PreguntaID)
         {
-            logger.Debug("ReadAndLearnController/PreguntaSimpleSimulada");
+            //logger.Debug("ReadAndLearnController/PreguntaSimpleSimulada");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             ViewBag.Pagina = preg.Texto.Paginas.First();
             ConfigPregunta config = new ConfigPregunta();
@@ -1473,7 +1473,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaSimple(int PreguntaID)
         {
-            logger.Debug("ReadAndLearnController/PreguntaSimple");
+            //logger.Debug("ReadAndLearnController/PreguntaSimple");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
             DatoSimple ds = new DatoSimple();
             Boolean flag_repetido = false;
@@ -1653,7 +1653,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Texto(int GrupoID, int ModuloID, int textoActual, string moment, int numAccion = -1 )
         {
-            logger.Debug("ReadAndLearnController/Texto");
+            //logger.Debug("ReadAndLearnController/Texto");
             
             try
             {
@@ -1704,7 +1704,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult TextoCompleto(int TextoID, string moment, int numAccion = -1)
         {
-            logger.Debug("ReadAndLearnController/TextoCompleto");
+            //logger.Debug("ReadAndLearnController/TextoCompleto");
             DatosUsuario du = GetDatosUsuario();
             DateTime datetimeclient = DateTime.Parse(moment);
 
@@ -1718,7 +1718,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaCompleta(int pregActual, int pregTotal, int TextoID)
         {
-            logger.Debug("ReadAndLearnController/PreguntaCompleta");
+            //logger.Debug("ReadAndLearnController/PreguntaCompleta");
             Pregunta preg = db.Textos.Find(TextoID).Preguntas.ElementAt(pregActual);
 
             ViewBag.pregActual = pregActual;
@@ -1731,7 +1731,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPreguntaCompleta(int PreguntaID, string respuesta, int pregActual, int pregTotal, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("ReadAndLearnController/ValidarPreguntaCompleta");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaCompleta");
             DatosUsuario du = GetDatosUsuario();
 
             //guirisan/secuencias/pending
@@ -1840,7 +1840,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaCompletaCorregida(int PreguntaID, int pregActual, int pregTotal, int TextoID, string Respuesta)
         {
-            logger.Debug("ReadAndLearnController/PreguntaCompletaCorregida");
+            //logger.Debug("ReadAndLearnController/PreguntaCompletaCorregida");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
 
             ConfigPregunta config = new ConfigPregunta();
@@ -1865,7 +1865,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaIndependienteCorregida(int PreguntaID, int pregActual, int pregTotal, int TextoID, string Respuesta, string Seleccion)
         {
-            logger.Debug("ReadAndLearnController/PreguntaIndependienteCorregida");
+            //logger.Debug("ReadAndLearnController/PreguntaIndependienteCorregida");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             DatosUsuario du = new DatosUsuario();
 
@@ -1946,7 +1946,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult SiguientePregunta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, string dataRow ="", int numAccion = -1)
         {
-            logger.Debug("ReadAndLearnController/SiguientePregunta");
+            //logger.Debug("ReadAndLearnController/SiguientePregunta");
 
             
             
@@ -2038,7 +2038,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult SiguientePreguntaCompleta(int PreguntaID, int pregActual, int pregTotal, int TextoID, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("ReadAndLearnController/SiguientePreguntaCompleta");
+            //logger.Debug("ReadAndLearnController/SiguientePreguntaCompleta");
 
             DatosUsuario du = GetDatosUsuario();
 
@@ -2077,7 +2077,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult PreguntaIndependiente(int pregActual, int pregTotal, int TextoID, int? EstadoPregunta)
         {
-            logger.Debug("ReadAndLearnController/PreguntaIndependiente");
+            //logger.Debug("ReadAndLearnController/PreguntaIndependiente");
             DatosUsuario du = GetDatosUsuario();
 
             pregActual = du.PreguntaActual;
@@ -2133,7 +2133,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Pregunta(int PreguntaID, int ModuloID, int escActual, int accActual, int GrupoID)
         {
-            logger.Debug("ReadAndLearnController/Pregunta");
+            //logger.Debug("ReadAndLearnController/Pregunta");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             List<string> derecha = new List<string>();
             string[] parejas;
@@ -2176,7 +2176,7 @@ namespace ReadAndLearn.Controllers
 
         public int GetCodeOP_Feedback(ConfigPregunta config)
         {
-            logger.Debug("ReadAndLearnController/GetCodeOP_Feedback");
+            //logger.Debug("ReadAndLearnController/GetCodeOP_Feedback");
             if (config.FeedbackProfesor) 
             {
                 if (config.FeedbackAlumno) // 1 1 - Conversación profesor y alumno
@@ -2206,7 +2206,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPrimeraSeleccion(int PreguntaID, int pregActual, int pregTotal, int TextoID, string respuesta)
         {
-            logger.Debug("ReadAndLearnController/ValidarPrimeraSeleccion");
+            //logger.Debug("ReadAndLearnController/ValidarPrimeraSeleccion");
             int cont = 0;
             int inicio = 0;
 
@@ -2451,7 +2451,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarSegundaSeleccion(int PreguntaID, int pregActual, int pregTotal, int TextoID, string respuesta)
         {
-            logger.Debug("ReadAndLearnController/ValidarSegundaSeleccion");
+            //logger.Debug("ReadAndLearnController/ValidarSegundaSeleccion");
             int cont = 0;
             int inicio = 0;
 
@@ -2688,7 +2688,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void UsoAyudasIndependiente(int Ayuda, string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("ReadAndLearnController/UsoAyudasIndependiente");
+            //logger.Debug("ReadAndLearnController/UsoAyudasIndependiente");
             DatosUsuario du = GetDatosUsuario();
 
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), du.GrupoID, du.ModuloID, dataRow);
@@ -2853,7 +2853,7 @@ namespace ReadAndLearn.Controllers
         public void RevisaIndependiente(string moment, int numAccion = -1, string dataRow = "" )
         {
 
-            logger.Debug("ReadAndLearnController/RevisaIndependiente");
+            //logger.Debug("ReadAndLearnController/RevisaIndependiente");
             DatosUsuario du = GetDatosUsuario();
 
             //guirisan/secuencias
@@ -2875,7 +2875,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void UsoAyudas()
         {
-            logger.Debug("ReadAndLearnController/UsoAyudas");
+            //logger.Debug("ReadAndLearnController/UsoAyudas");
             DatosUsuario du = GetDatosUsuario();
 
             if (du.PreguntaActual >= (du.AyudaPos + du.AyudaNeg))
@@ -2889,7 +2889,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult GetPertinente(int pregActual, string TextoID)
         {
-            logger.Debug("ReadAndLearnController/GetPertinente");
+            //logger.Debug("ReadAndLearnController/GetPertinente");
             int tmp = Convert.ToInt32(TextoID);
 
             var pregunta = from p in db.Preguntas
@@ -2905,7 +2905,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void BuscaIndependiente(string moment, int numAccion = -1, string dataRow = "")
         {
-            logger.Debug("ReadAndLearnController/BuscaIndependiente");
+            //logger.Debug("ReadAndLearnController/BuscaIndependiente");
 
             DatosUsuario du = GetDatosUsuario();
 
@@ -2929,7 +2929,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void Busca()
         {
-            logger.Debug("ReadAndLearnController/Busca");
+            //logger.Debug("ReadAndLearnController/Busca");
             DatosUsuario du = GetDatosUsuario();
 
             if (du.PreguntaActual >= (du.BuscaPos + du.BuscaNeg))
@@ -2948,7 +2948,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public void PertinenteEncontrado()
         {
-            logger.Debug("ReadAndLearnController/PertinenteEncontrado");
+            //logger.Debug("ReadAndLearnController/PertinenteEncontrado");
             //guirisan: create datoSimple ?
             DatosUsuario du = GetDatosUsuario();
 
@@ -2958,7 +2958,7 @@ namespace ReadAndLearn.Controllers
 
         private String CalcularFDBK()
         {
-            logger.Debug("ReadAndLearnController/CalcularFDBK - TODO: RETURN ''");
+            //logger.Debug("ReadAndLearnController/CalcularFDBK - TODO: RETURN ''");
             DatosUsuario du = GetDatosUsuario();
 
 
@@ -2970,7 +2970,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPreguntaIndependiente(int PreguntaID, int pregActual, int pregTotal, int TextoID, string respuesta, string Seleccion, string moment, int numAccion = -1, string dataRow ="")
         {
-            logger.Debug("ReadAndLearnController/ValidarPreguntaIndependiente");
+            //logger.Debug("ReadAndLearnController/ValidarPreguntaIndependiente");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
@@ -3237,7 +3237,7 @@ namespace ReadAndLearn.Controllers
 
         private String GeneradorFeedback(bool Acierto) // Version 2014_04_03:13_19
         {
-            logger.Debug("ReadAndLearnController/GeneradorFeedback");
+            //logger.Debug("ReadAndLearnController/GeneradorFeedback");
             DatosUsuario du = db.DatosUsuario.Find(Session["DatosUsuarioID"]);
 
             string mensaje = "";
@@ -10907,7 +10907,7 @@ namespace ReadAndLearn.Controllers
 
         private Boolean CorregirRespuesta(int PreguntaID, string Respuesta)
         {
-            logger.Debug("ReadAndLearnController/CorregirRespuesta");
+            //logger.Debug("ReadAndLearnController/CorregirRespuesta");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
            
             foreach (Alternativa alt in pregunta.Alternativas) {
@@ -10920,7 +10920,7 @@ namespace ReadAndLearn.Controllers
 
         private Boolean CorregirSeleccion(int PreguntaID, string Seleccion)
         {
-            logger.Debug("ReadAndLearnController/CorregirSeleccion");
+            //logger.Debug("ReadAndLearnController/CorregirSeleccion");
             Pregunta pregunta = db.Preguntas.Find(PreguntaID);
             string Pertinente = "";
             Double Porcentaje = 0.0;
@@ -10956,7 +10956,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult ValidarPregunta(int PreguntaID, string respuesta)
         {
-            logger.Debug("ReadAndLearnController/ValidarPregunta");
+            //logger.Debug("ReadAndLearnController/ValidarPregunta");
             Pregunta preg = db.Preguntas.Find(PreguntaID);
             ConfigPregunta configPreg = db.ConfigPregunta.Find(5);
 
@@ -10997,13 +10997,13 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Pagina(int TextoID)
         {
-            logger.Debug("ReadAndLearnController/Pagina");
+            //logger.Debug("ReadAndLearnController/Pagina");
             return View(db.Textos.Find(TextoID).Paginas.First());
         }
 
         public ActionResult Escena(int GrupoID, int ModuloID, int escActual, int? accActual)
         {
-            logger.Debug("ReadAndLearnController/Escena");
+            //logger.Debug("ReadAndLearnController/Escena");
             /*
             foreach (Accion acc in db.Acciones)
             {
@@ -11057,7 +11057,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult EscenaFeedbackCompleta(int PreguntaID, int codeOP, string mensaje, int accTotalFeedback, int ModuloID, int escActual, int accActual, int GrupoID)
         {
-            logger.Debug("ReadAndLearnController/EscenaFeedbackCompleta");
+            //logger.Debug("ReadAndLearnController/EscenaFeedbackCompleta");
             foreach (Accion acc in db.Acciones)
             {
                 continue;
@@ -11080,7 +11080,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult EscenaFeedback(int PreguntaID, int codeOP, string mensaje, int accTotalFeedback, int ModuloID, int escActual, int accActual, int GrupoID)
         {
-            logger.Debug("ReadAndLearnController/EscenaFeedback");
+            //logger.Debug("ReadAndLearnController/EscenaFeedback");
             foreach (Accion acc in db.Acciones)
             {
                 continue;
@@ -11103,7 +11103,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult FinFeedbackContenido(int GrupoID, int ModuloID, int escActual, int accActual)
         {
-            logger.Debug("ReadAndLearnController/FinFeedbackContenido");
+            //logger.Debug("ReadAndLearnController/FinFeedbackContenido");
             int nuevaAccion = accActual + 1;
             
             return Json(new { redirect = Url.Action("Escena", new { GrupoID = GrupoID, ModuloID = ModuloID, escActual = escActual, accActual = nuevaAccion }) });             
@@ -11112,7 +11112,7 @@ namespace ReadAndLearn.Controllers
         
         public ActionResult SiguienteAccionFeedback(int GrupoID, int ModuloID, int escActual, int? accActual)
         {
-            logger.Debug("ReadAndLearnController/SiguienteAccionFeedback");
+            //logger.Debug("ReadAndLearnController/SiguienteAccionFeedback");
             foreach (Accion acc in db.Acciones)
             {
                 continue;
@@ -11143,7 +11143,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult SiguienteAccion(int GrupoID, int ModuloID, int escActual, int? accActual)
         {
-            logger.Debug("ReadAndLearnController/SiguienteAccion");
+            //logger.Debug("ReadAndLearnController/SiguienteAccion");
             string mensaje = "";
 
             var user = (from u in db.UserProfiles
@@ -11183,7 +11183,7 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Workspace(int GrupoID, int ModuloID, int escActual)
         {
-            logger.Debug("ReadAndLearnController/Workspace");
+            //logger.Debug("ReadAndLearnController/Workspace");
             ViewBag.GrupoID = GrupoID;
             ViewBag.ModuloID = ModuloID;
             ViewBag.esActual = escActual;
@@ -11193,14 +11193,14 @@ namespace ReadAndLearn.Controllers
 
         public ActionResult Escritorio()
         {
-            logger.Debug("ReadAndLearnController/Escritorio");
+            //logger.Debug("ReadAndLearnController/Escritorio");
             return View();
         }
 
         #region Levenshtein
         public double Corrector(string[,] CriterioCorrecion, string respuesta)
         {
-            logger.Debug("ReadAndLearnController/Corrector");
+            //logger.Debug("ReadAndLearnController/Corrector");
             double MaximoPositivo = 0;
             double MaximoNegativo = 0;
             double[] Correccion = new double[CriterioCorrecion.GetLength(0)];
@@ -11247,7 +11247,7 @@ namespace ReadAndLearn.Controllers
 
         static int FilterStrings(string str1, string str2)
         {
-            logger.Debug("ReadAndLearnController/FilterStrings");
+            //logger.Debug("ReadAndLearnController/FilterStrings");
             List<char> FCar = new List<char>() { '.', ',', ';', ':', '-', '_', '¿', '?', '!', '¡', '*', '+', '\'', '\"', '&', '(', ')', '=', '$', '/', '#', '%', 'º', 'ª' };
             List<string> FWords = new List<string>() { "a", "acá", "ahí", "algo", "alguien", "algún", "alguna", "parte", "allí", "allá", "aquí", "bastante", "cerca", "de", "demasiado", "demasiado", "demasiada", "demasiados", 
                                                        "demasiadas", "él", "el", "la", "ella", "ellos", "ellas", "entonces", "eso", "es", "está", "este", "esta", "estos", "estas", "esto", "hay", "lejos", "los", "las", "más", 
@@ -11493,7 +11493,7 @@ namespace ReadAndLearn.Controllers
 
         static int LevenshteinDistance(string s, string t, out double porcentaje)
         {
-            logger.Debug("ReadAndLearnController/LevenshteinDistance");
+            //logger.Debug("ReadAndLearnController/LevenshteinDistance");
             porcentaje = 0;
 
             // d es una tabla con m+1 renglones y n+1 columnas
@@ -11537,7 +11537,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult Algoritmo(string Pertinente, int TextoID, string NuevaSeleccion, int? PreguntaID)
         {
-            logger.Debug("ReadAndLearnController/Algoritmo");
+            //logger.Debug("ReadAndLearnController/Algoritmo");
             if (NuevaSeleccion.Length > 15)
             {
                 ConfigPregunta config = new ConfigPregunta();
@@ -12239,7 +12239,7 @@ namespace ReadAndLearn.Controllers
         [HttpPost]
         public ActionResult Algoritmo_Original(string Pertinente, int TextoID, string NuevaSeleccion)
         {
-            logger.Debug("ReadAndLearnController/Algoritmo_Original TODO: must not be here!");
+            //logger.Debug("ReadAndLearnController/Algoritmo_Original TODO: must not be here!");
             Pertinente = Regex.Replace(Pertinente, "\\/+", "/");
 
             if (Pertinente != "" && Pertinente.First() == ' ')
@@ -12492,7 +12492,7 @@ namespace ReadAndLearn.Controllers
 
         private DatosUsuario GetDatosUsuario()
         {
-            logger.Debug("ReadAndLearnController/GetDatosUsuario");
+            //logger.Debug("ReadAndLearnController/GetDatosUsuario");
             return db.DatosUsuario.Find(Session["DatosUsuarioID"]);
         }
         
