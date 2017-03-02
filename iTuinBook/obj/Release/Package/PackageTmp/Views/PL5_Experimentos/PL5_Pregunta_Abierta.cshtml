@@ -119,10 +119,18 @@
                         //mostrar algo como "recibido"
                         $("#btnValidarAbierta").html("Guardado");
 
-                        //habilitamos el botón de la siguiente pregunta
-                        var idPreguntaAbierta = $(".rlpregunta", window.parent.document).not(".hiddenDebug").attr("pregInsertada");
-                        $("span.btnPreguntaInsertada[pregInsertada=" + parseInt(parseInt(idPreguntaAbierta) + 1) + "]", window.parent.document).removeClass("spanBtnDisabled");
-
+                        //si existe el botón de la siguiente pregunta, lo habilitamos
+                        //sino, es la última pregunta y habilitamos el botón de salir
+                        var idPreguntaAbierta = $(".rlpregunta", window.parent.document).not(".hiddenDebug").attr("pregInsertada"); //primero obtenemos el ID de la pregunta abierta
+                        var aux = $("span.btnPreguntaInsertada[pregInsertada=" + parseInt(parseInt(idPreguntaAbierta) + 1) + "]", window.parent.document);
+                        if (aux.length > 0) {
+                            //hay siguiente pregunta, habilitamos el botón para verla
+                            
+                            $("span.btnPreguntaInsertada[pregInsertada=" + parseInt(parseInt(idPreguntaAbierta) + 1) + "]", window.parent.document).removeClass("spanBtnDisabled");
+                        } else {
+                            //era la última pregunta, habilitamos botón salir
+                            $("#btnSalir", window.parent.document).removeClass("spanBtnDisabled");
+                        }
                     }
                 });
 

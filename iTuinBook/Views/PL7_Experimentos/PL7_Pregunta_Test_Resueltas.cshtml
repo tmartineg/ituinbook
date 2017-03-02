@@ -21,120 +21,122 @@
     i++;
 
     <div class="classPregunta">
-    <div id=enunciado style="padding-left: 20px; padding-right: 20px;" class="largerFont">
-        @Html.Raw(preg.Enunciado)
+        <reg rlpregunta="@preg.Orden" rlsection="enunciado">
+            <div id=enunciado style="padding-left: 20px; padding-right: 20px;" class="largerFont">
+                @Html.Raw(preg.Enunciado)
 
-    </div>
+            </div>
+        </reg>
 
-    <div id=alternativas style="padding-left: 20px; padding-right: 20px;" class="largerFont">
-        <ul>
-            @if (preg.ConfigPregunta != null && preg.ConfigPregunta.MarcarCorrecto)
-            {
-
-                foreach (Alternativa alt in preg.Alternativas)
+        <div id=alternativas style="padding-left: 20px; padding-right: 20px;" class="largerFont">
+            <ul>
+                @if (preg.ConfigPregunta != null && preg.ConfigPregunta.MarcarCorrecto)
                 {
 
-                    if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info))
+                    foreach (Alternativa alt in preg.Alternativas)
                     {
-                        if (alt.Valor)
-                        {
-                            <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
-                        }
-                        else
-                        {
-                            <img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
-                        }
 
-                        if (alt.Opcion != null)
+                        if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info))
                         {
-                            if (alt.Opcion == ds.Info)
+                            if (alt.Valor)
                             {
-                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
                             }
                             else
                             {
-                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                <img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
                             }
-                        }
-                        else
-                        {
-                            if (alt.Opcion == ds.Info)
+
+                            if (alt.Opcion != null)
                             {
-                                @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                if (alt.Opcion == ds.Info)
+                                {
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
                             }
                             else
                             {
-                                @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                if (alt.Opcion == ds.Info)
+                                {
+                                    @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                foreach (Alternativa alt in preg.Alternativas)
+                else
                 {
-                    //if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info)) {
-                    if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info))
+                    foreach (Alternativa alt in preg.Alternativas)
                     {
-                        if (alt.Opcion != null)
+                        //if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info)) {
+                        if (preg.ConfigPregunta.SeñalarClaves && (alt.Valor || alt.Opcion == ds.Info))
                         {
-                            if (alt.Opcion == ds.Info)
+                            if (alt.Opcion != null)
                             {
-                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                if (alt.Opcion == ds.Info)
+                                {
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
                             }
                             else
                             {
-                                @Html.RadioButtonFor(r => alt, alt.Opcion, new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
-                                <br />
+                                if (alt.Opcion == ds.Info)
+                                {
+                                    @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                                    <br />
+                                }
                             }
                         }
-                        else
-                        {
-                            if (alt.Opcion == ds.Info)
-                            {
-                                @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
-                                <br />
-                            }
-                            else
-                            {
-                                @Html.RadioButtonFor(r => alt, "null", new { @Name = preg.PreguntaID, @style = "width:20px", disabled = "disabled" }) @alt.Opcion
-                                <br />
-                            }
-                        }
+
                     }
-
                 }
-            }
-        </ul>
-    </div>
+            </ul>
+        </div>
 
 
-    <div id="fdbkDialog" class="hiddenDebug largerFont">
-        @ViewBag.feedbackText
-    </div>
+        <div id="fdbkDialog" class="hiddenDebug largerFont">
+            @ViewBag.feedbackText
+        </div>
 
     
-    @if (preg.Explicacion != null && preg.Explicacion != "")
-{
+        @if (preg.Explicacion != null && preg.Explicacion != "")
+    {
 
-    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;" class="largerFont">
+        <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;" class="largerFont">
 
-        @{
-    string btnId = "btnVerExplicacion" + preg.PreguntaID;
-    string divId = "explicacionDialog" + preg.PreguntaID;
-        }
-        <button id="@btnId" preguntaid="@preg.PreguntaID">Ver explicación</button>
-        <div id="@divId" class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-            @preg.Explicacion
+            @{
+        string btnId = "btnVerExplicacion" + preg.PreguntaID;
+        string divId = "explicacionDialog" + preg.PreguntaID;
+            }
+            <button id="@btnId" preguntaid="@preg.PreguntaID">Ver explicación</button>
+            <div id="@divId" class="hiddenDebug" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+                @preg.Explicacion
+            </div>
         </div>
-    </div>
-}
+    }
     </div> //end div.classPregunta
    } 
     

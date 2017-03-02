@@ -123,33 +123,142 @@
                     //ver 1.0
                     //de momento solo queremos excluir las preguntas entre si, con las siguientes lineas
                     $(this).addClass("hiddenDebug");                                                                //escondemos el boton pulsado
-                    $(".rlpregunta").not(".hiddenDebug").addClass("hiddenDebug");
-                    $("span.btnPreguntaInsertadaHide[pregInsertada="+idPreguntaAbierta+"]").addClass("hiddenDebug");
-                    $("span.btnPreguntaInsertada[pregInsertada="+idPreguntaAbierta+"]").removeClass("hiddenDebug");
+                    $(".rlpregunta").not(".hiddenDebug").addClass("hiddenDebug");                                   //escondemos la pregunta abierta
+                    $("span.btnPreguntaInsertadaHide[pregInsertada="+idPreguntaAbierta+"]").addClass("hiddenDebug");//escondemos el botón de "Ocultar pregunta" abierta
+                    $("span.btnPreguntaInsertada[pregInsertada="+idPreguntaAbierta+"]").removeClass("hiddenDebug"); //mostramos el botón de "Pregunta" para la abierta que acabamos e ocultar
 
                     $("span.btnPreguntaInsertadaHide[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");    //mostramos el botón para ocultar la pregunta mostrada
                     $(".rlpregunta[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");                      //mostramos div con el iframe de la pregunta
                     var id = document.getElementById("addIframe"+idPregunta);                                       //obtenemos el id para ajustar el cuadro a la página
                     autofitIframe(id);
 
+                    //registrar cierre de la pregunta que había
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
 
-                    //si la preguntaAbierta está respondida, la escondemos y mostramos la pulsada
-                    //además de registrar en el servidor la acción de finVerPregunta (datosimples nuevo)
+                    //NUMACC
 
-                    //si la pregunta a abrir está respondida, generamos datosimple verPregunta
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
 
-                    //si la pregunta a abrir no está respondida, generamos datosimple inicioPregunta (datosimple existente)
-                    //y la
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
 
-                    //si
+                    //registrar codeop91 (ocultarPregunta)
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 91, moment: datetimeclient, numAccion: numAcc, Dato01: idPreguntaAbierta+1},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción. 91 cerrar pregunta al pinchar sobre otra");
+                        }
+                    });
+
+                    //y apertura de la pregunta pulsada
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+                    //registrar codeop90 (mostrarPregunta)
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción. 90 mostrar pregunta después de cerrar");
+                        }
+                    });
+
+
                 }else{
                     //NO HAY NINGUNA PREGUNTA YA ABIERTA
-                    //to-do. registrar acceso a pregunta
+                    //to-do. registrar acceso a pregunta pulsada
+                    
                     $(this).addClass("hiddenDebug");                                                                //escondemos el boton pulsado
                     $("span.btnPreguntaInsertadaHide[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");    //mostramos el botón para ocultar la pregunta mostrada
                     $(".rlpregunta[pregInsertada="+idPregunta+"]").removeClass("hiddenDebug");                      //mostramos div con el iframe de la pregunta
                     var id = document.getElementById("addIframe"+idPregunta);                                       //obtenemos el id para ajustar el cuadro a la página
                     autofitIframe(id);
+
+                    //registrar mostrar pregunta
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
+
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+                    //registrar codeop90 (mostrarPregunta)
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', CodeOP: 90, moment: datetimeclient, numAccion: numAcc, Dato01: idPregunta+1},
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            alert("Error: Hubo un problema con tu última acción. codeop90 (mostrar pregunta sin haber abiertas)");
+                        }
+                    });
                 }
 
             });
