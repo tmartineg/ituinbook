@@ -469,7 +469,7 @@ namespace ReadAndLearn.Controllers
         }
 
         [HttpPost]
-        public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = -1, string dataRow = "")
+        public void RegistrarAccion(int DatosUsuarioID, int GrupoID, int TextoID, int ModuloID, int PreguntaID, int CodeOP, string Param, string moment, int numAccion = -1, string dataRow = "", int ParamInt = 0)
         {
             //logger.Debug("PL6_Experimentos/RegistrarAccion");
 
@@ -529,8 +529,11 @@ namespace ReadAndLearn.Controllers
 
                         ds = new DatoSimple() { CodeOP = CodeOP, DatosUsuarioID = DatosUsuarioID, TextoID = TextoID, PreguntaID = PreguntaID, Info = Param, Momento = datetimeclient, NumAccion = numAccion };
                         break;
+                    case 92:
+                        ds = new DatoSimple() { CodeOP = CodeOP, DatosUsuarioID = DatosUsuarioID, TextoID = TextoID, PreguntaID = PreguntaID, Info = Param, Dato01 = ParamInt, Momento = datetimeclient, NumAccion = numAccion };
+                        break;
                     default:
-                        ds = new DatoSimple() { CodeOP = CodeOP, DatosUsuarioID = DatosUsuarioID, TextoID = TextoID, PreguntaID = PreguntaID, Info = Param, Momento = datetimeclient, NumAccion = numAccion };
+                        ds = new DatoSimple() { CodeOP = CodeOP, DatosUsuarioID = DatosUsuarioID, TextoID = TextoID, PreguntaID = PreguntaID, Info = Param, Dato01 = pregunta.Orden, Momento = datetimeclient, NumAccion = numAccion };
                         break;
                 }
 

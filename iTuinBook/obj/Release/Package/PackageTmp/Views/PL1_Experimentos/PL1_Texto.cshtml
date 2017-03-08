@@ -41,9 +41,8 @@ else
 {
     <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
 }
-    <div id="feedback" style="z-index:5; left: 1%; border: solid 3px; margin: 20px 40px; border-style:solid; border-color:#b0c4de; background-color:#0B3861; width:90%; bottom: 0px; position: fixed; overflow-x: hidden; overflow-y: auto;">        
-        <h2 id="mensaje" style="color:white; padding: 0px 20px 20px 20px; font-family: sans-serif;"></h2>
-        <button class="btnCerrarFDBK">X</button>
+    <div id="feedback" >        
+       
     </div>    
 </div>
 @section Scripts {
@@ -161,7 +160,8 @@ else
             
 
             $("#btnPregunta").click(function () {
-                
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -299,10 +299,7 @@ else
         });
 
         $(".btnCerrarFDBK").click(function () {
-            $("#ramiro").hide();
-            $("#lue").hide();
-            $("#feedAvatar").hide();
-            $("#feedback").hide();
+            
             
             var tmpNow = $.now();
             
@@ -324,53 +321,6 @@ else
                 datosRaw = {};
             }
 
-            if ($("#tbAvatar").text() != "") {
-
-                $.ajax({
-                    url: "RegistrarAccion",
-                    type: 'POST',
-                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#tbAvatar").text().split(' ').length).toString() , moment: datetimeclient, numAccion: numAcc},
-                    //guirisan/secuencias
-                    beforeSend: function () {
-                        //set datosRaw on sessionStorage
-                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                        datosRaw[numAcc] = cadena;
-                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                        //set datosRaw on ajax petition
-                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                    },
-                    error: function () {
-                        alert("Error: Hubo un problema con tu última acción.");
-                    }
-                });
-            }
-            else {
-                if ($("#mensaje").text() != "") {
-                                        
-
-                    $.ajax({
-                        url: "RegistrarAccion",
-                        type: 'POST',
-                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@ViewBag.ModuloID', TextoID: '@Model.TextoID', PreguntaID: 0, CodeOP: 45, Param: (((tmpNow - ini_LecFDBK) / 1000) / $("#mensaje").text().split(' ').length).toString() , moment: datetimeclient, numAccion: numAcc},
-                        //guirisan/secuencias
-                        beforeSend: function () {
-                            //set datosRaw on sessionStorage
-                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                            datosRaw[numAcc] = cadena;
-                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                            //set datosRaw on ajax petition
-                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                        },
-                        error: function () {
-                            alert("Error: Hubo un problema con tu última acción.");
-                        }
-                    });
-                }
-            }
-
-            $("#tbAvatar").text("");
             $("#mensaje").text("");
 
             // Fin lectura Feedback
@@ -577,16 +527,108 @@ else
             if (sms != null)
             {
                 ini_LecFDBK = $.now();
+                /*show feedback on dialog*/
+                var dialog = $("#feedback");
+                dialog.html(sms);
+                //modificado en PL5 para que no saque dialog
+                if ($.trim(dialog.html()) != "") {
 
-                $("#ramiro").hide();
-                $("#lue").hide();
-                $("#feedAvatar").hide();
-                $("#feedback").show();
-                $("#feedback").css("visibility", "visible")
+                    //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
+                    //generamos el datosimple de que se ha empezado a leer el feedback
+                    //guirisan/secuencias
+                    //datetime set in client
+                    var datetimeclient = new Date().toISOString();
 
-                $("#mensaje").html(sms);
-                $('.paginas').css("-webkit-filter", "blur(5px)");
-                $('.paginas').css("filter", "url(#example-one)");
+                    //NUMACC
+
+                    //get and add+1 numAcc
+                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                    numAcc++;
+                    sessionStorage.setItem("numAccion", numAcc);
+
+                    //DATOSRAW
+                    //get datosRaw to add row in ajax.beforeSend
+                    var datosRaw;
+                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                        datosRaw = {};
+                    }
+
+                    //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                    // cambio de CodeOP para lectura de fdbk
+                    $.ajax({
+                        url: "RegistrarAccion",
+                        type: 'POST',
+                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@du.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 128, moment: datetimeclient, numAccion: numAcc },
+                        //guirisan/secuencias
+                        beforeSend: function () {
+                            //set datosRaw on sessionStorage
+                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                            datosRaw[numAcc] = cadena;
+                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                            //set datosRaw on ajax petition
+                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                        },
+                        error: function () {
+                            //alert("Error: Hubo un error con tu última acción. Codeop:128");
+                        }
+                    });
+
+                    dialog.dialog({
+                        modal: true,
+                        dialogClass: "noclose",
+                        buttons: [
+                            {
+                                text: "Cerrar",
+                                click: function () {
+
+                                    var datetimeclient = new Date().toISOString();
+
+                                    //NUMACC
+                                    //get and add+1 numAcc
+                                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                    numAcc++;
+                                    sessionStorage.setItem("numAccion", numAcc);
+
+                                    //DATOSRAW
+                                    //get datosRaw to add row in ajax.beforeSend
+                                    var datosRaw;
+                                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                        datosRaw = {};
+                                    }
+
+                                    //guirisan/issues https://github.com/guirisan/ituinbook/issues/40
+                                    // cambio de CodeOP para lectura de fdbk 
+                                    $.ajax({
+                                        url: "RegistrarAccion",
+                                        type: 'POST',
+                                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@du.TextoID', PreguntaID: '@du.PreguntaID', CodeOP: 129, moment: datetimeclient, numAccion: numAcc },
+                                        //guirisan/secuencias
+                                        beforeSend: function () {
+                                            //set datosRaw on sessionStorage
+                                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                            datosRaw[numAcc] = cadena;
+                                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                            //set datosRaw on ajax petition
+                                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                        },
+                                        error: function () {
+                                            alert("Error: Hubo un error con tu última acción.");
+                                        }
+                                    });
+
+                                    $(this).dialog("close");
+                                    $('#addIframe').contents().find('#btnSiguientePregunta').removeAttr("disabled");
+
+
+                                    //return false;
+                                }
+                            }]
+                    });
+                }
+
+
 
                 $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
                 $('#addIframe').contents().find(':radio').attr("disabled", "disabled");

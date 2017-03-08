@@ -80,10 +80,14 @@
                 } else {
                     $("button#btnValidarAbierta").attr("disabled", "disabled");
                 }
+
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
             });
 
             $("#btnValidarAbierta").click(function () {
                 $("#btnValidarAbierta").attr("disabled", "disabled");
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
                 //guirisan: datetime set in client
                 var datetimeclient = new Date();
                 datetimeclient = datetimeclient.toISOString();
@@ -221,7 +225,9 @@
                 <text>
                 $('#enunciado').addClass("difuminado");
                 
-                $('#enunciado').click(function () {                    
+                $('#enunciado').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                     if ($('#enunciado').hasClass("difuminado")) {
                         $(":radio").attr("disabled", false);
 
@@ -290,6 +296,8 @@
                 $('#alternativas').addClass("difuminado");
 
                 $('#alternativas').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                     if ($('#alternativas').hasClass("difuminado")) {
                         $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
 

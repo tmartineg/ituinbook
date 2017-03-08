@@ -124,7 +124,7 @@
 
     </div>
     
-    <div id="fdbkDialog" class="backgroundVerde">
+    <div id="fdbkDialog" class="">
         @ViewBag.feedbackText
     </div>
    
@@ -286,7 +286,7 @@
             /*show feedback on dialog*/
             var dialog = $("#fdbkDialog");
             //modificado en PL5 para que no saque dialog
-            if (false && $.trim(dialog.html()) != "") {
+            if ($.trim(dialog.html()) != "") {
 
                 //guirisan/issue https://github.com/guirisan/ituinbook/issues/36
                 //generamos el datosimple de que se ha empezado a leer el feedback

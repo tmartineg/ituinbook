@@ -115,6 +115,7 @@
 
             $("#btnValidarTest").click(function () {
                 $("#btnValidarTest").attr("disabled", "disabled");
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
 
                 var alter = "";
 
@@ -165,6 +166,7 @@
                         window.location.href = result.redirect;
 
                         if (!(result.mensaje == null || result.mensaje == "")) {
+                            
                             @if(configPregunta != null)
                             {
                                 if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
@@ -371,7 +373,13 @@
                 $('#enunciado').addClass("difuminado");
 
                 $('#enunciado').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                     if ($('#enunciado').hasClass("difuminado")) {
+
+                        
+
+
                         @if (configPregunta != null && configPregunta.EnmascararTexto)
                         {
                             <text>
@@ -487,7 +495,9 @@
                 $('#alternativas').addClass("difuminado");
 
                 $('#alternativas').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
                     if ($('#alternativas').hasClass("difuminado")) {
+
                         @if (configPregunta != null && configPregunta.EnmascararTexto)
                         {
                             <text>
@@ -547,46 +557,7 @@
                             }
                             else {
                                 $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
-                                // Calcular tiempo de alternativa y enviar al servidor
-                                timeFinish = jQuery.now();
-
-                                var diff = timeFinish - timeStart;
-
-                                //guirisan/secuencias
-                                //datetime set in client
-                                var datetimeclient = new Date().toISOString();
-
-                                //NUMACC
-
-                                //get and add+1 numAcc
-                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                                numAcc++;
-                                sessionStorage.setItem("numAccion", numAcc);
-
-                                //DATOSRAW
-                                //get datosRaw to add row in ajax.beforeSend
-                                var datosRaw;
-                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                                    datosRaw = {};
-                                }
-                                $.ajax({
-                                    url: "RegistrarAccion",
-                                    type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
-                                    //guirisan/secuencias
-                                    beforeSend: function () {
-                                        //set datosRaw on sessionStorage
-                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                                        datosRaw[numAcc] = cadena;
-                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                                        //set datosRaw on ajax petition
-                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                                    },
-                                    error: function () {
-                                        alert("Error: Hubo un problema con tu última acción.");
-                                    }
-                                });
+                                
                             }
                         }
 

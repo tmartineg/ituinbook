@@ -101,23 +101,7 @@
         </ul>
     </div>
     
-    @if (ViewBag.TareaSel)
-    {
-        if(configPregunta != null && configPregunta.CorregirSeleccion)
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
-            </div>
-        }
-        else
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
-            </div>
-        }
-    }
+    
 
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
@@ -257,6 +241,7 @@
                 $('#enunciado').click(function () {
                     if ($('#enunciado').hasClass("difuminado")) {
                         $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+                        $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
 
                         @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
                         {
