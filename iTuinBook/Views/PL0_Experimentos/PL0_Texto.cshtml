@@ -17,10 +17,22 @@
 <div id="contenedor" style="z-index:10;">
     <!--guirisan / preguntas button-->
     <div id="tools">
+        
+        
+        @if (Model.Preguntas != null && Model.Preguntas.Count > 0)
+        {
         <div id="btnGotoPreguntas" class="fixed">
             
             @Html.ActionLink("Preguntas", "PL0_Pregunta", new { GrupoID = du.GrupoID, ModuloID = du.ModuloID, preguntaActual = du.PreguntaActual, textoID = Model.TextoID, id = "btnPreguntas", segundoIntento = ViewBag.SegundoIntento, preguntaResuelta = ViewBag.preguntaResuelta}, new { @style = "padding: 6px 8px; margin: 2px; color: white; text-decoration: none; font-family: Tahoma; font-size: 15px; background-color: #DB5C04;" })
         </div>
+        }
+        else
+        {
+            <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
+        }
+
+
+        
     </div>
     <!--guirisan / preguntas button-->
 
