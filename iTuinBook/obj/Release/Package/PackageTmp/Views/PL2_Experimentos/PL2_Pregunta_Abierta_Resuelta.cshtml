@@ -22,68 +22,68 @@
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
         @Html.Raw(Model.Enunciado)
         @if (Model.Ayuda != null)
-        {  
-            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>                
+        {
+            <div id="ayuFlotador" hidden="hidden" ; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
         }
     </div>
-     
+
     <div style="padding-left: 20px; padding-right: 20px;">
         @if (configPregunta != null && configPregunta.MarcarCorrecto)
         {
             if (ds.Dato01 > 0)
             {
-                <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds.Info</p>  
+                <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds.Info</p>
             }
             else
-            { 
+            {
                 <p><img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds.Info</p>
             }
         }
         else
         {
-            <p class="backgroundVerde">@ds.Info</p>
+            <p class="backgroundGris">@ds.Info</p>
         }
     </div>
-    
+
     @if (ds2 != null)
-        //guirisan
-        //la línea if (ds2 != null) comprueba si existe el ds2 (es decir, si se ha respondido una segunda vez a la pregunta)
-        //sin ella, siempre (que se cumpla la condición de configPregunta.marcarCorrecto) se intenta leer la variable fallando
-        //cuando no se ha hecho el segundo intento.
-        //esto ayuda a cerrar https://github.com/guirisan/readandlearn/issues/16
+    //guirisan
+    //la línea if (ds2 != null) comprueba si existe el ds2 (es decir, si se ha respondido una segunda vez a la pregunta)
+    //sin ella, siempre (que se cumpla la condición de configPregunta.marcarCorrecto) se intenta leer la variable fallando
+    //cuando no se ha hecho el segundo intento.
+    //esto ayuda a cerrar https://github.com/guirisan/readandlearn/issues/16
     {
         <div style="padding-left: 20px; padding-right: 20px;">
-        @if (configPregunta != null && configPregunta.MarcarCorrecto)
-        {
-            if (ds2.Dato01 > 0)
+            @if (configPregunta != null && configPregunta.MarcarCorrecto)
             {
-                <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>  
+                if (ds2.Dato01 > 0)
+                {
+                    <p><img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>
+                }
+                else
+                {
+                    <p><img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>
+                }
             }
             else
-            { 
-                <p><img src="~/Content/aspa.png" style="width: 15px; height: 15px;  margin-left: -19px;" /> @ds2.Info</p>
+            {
+                <p>@ds2.Info</p>
             }
-        }
-        else
-        {
-            <p>@ds2.Info</p>
-        }
-    </div>
+        </div>
     }
-    
-    
+
+
 
     @if (ViewBag.TareaSel)
     {
         <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
             <b>Selección:</b>
-            <p>@Html.Raw(dsel.Info2)</p>            
+            <p>@Html.Raw(dsel.Info2)</p>
         </div>
     }
 
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
-    </div> 
+        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>
+    </div>
 </div>
 
 @section Scripts {
@@ -91,10 +91,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#btnSiguientePregunta").click(function () {
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
-                 
+
                 //NUMACC
 
                 //get and add+1 numAcc
@@ -129,7 +131,7 @@
                             $(this).html($(this).html().replace(/<\/lupa>/g, ""));
                             $(this).html($(this).html().replace(/<prismaticos style=\"border:1px solid red;\">/g, ""));
                             $(this).html($(this).html().replace(/<\/prismaticos>/g, ""));
-                        });                
+                        });
 
                         window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
                         window.parent.$('.paginas').css("filter", "url(#example-one)");
@@ -138,16 +140,16 @@
                         window.parent.$('#fdbkSMS').text("");
 
                         if (result.Parent)
-                        {   
+                        {
                             // data.redirect contains the string URL to redirect to
-                            window.parent.window.location.href = result.redirect;                        
+                            window.parent.window.location.href = result.redirect;
                         }
                         else
-                        {  
+                        {
                             // data.redirect contains the string URL to redirect to
-                            window.location.href = result.redirect;                                                    
+                            window.location.href = result.redirect;
                         }
-                        
+
                     },
                     error: function () {
                         alert("error");
@@ -156,6 +158,80 @@
                 return false;
             });
 
+            /**************************************/
+            /**************************************/
+            /******* CONFIGURACIÓN PREGUNTA *******/
+            /**************************************/
+            /**************************************/
+            @if (configPregunta != null && configPregunta.EnmascararEnunciado == true) {
+                <text>
+                $('#enunciado').addClass("difuminado");
+
+                $('#enunciado').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
+                    if ($('#enunciado').hasClass("difuminado")) {
+                        $(":radio").attr("disabled", false);
+
+                        $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararAlternativas' == 'True') {
+                            if ($('#alternativas').hasClass("difuminado")) {
+
+                            }
+                            else {
+                                $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
+
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
+                                    error: function () {
+                                        alert("Error: Hubo un error con tu última acción.");
+                                    }
+                                });
+                            }
+
+                        }
+
+                        timeStart = jQuery.now();
+                    }
+                });
+                </text>
+            }
 
             @if ((bool)ViewBag.AyudaFlota)
             {

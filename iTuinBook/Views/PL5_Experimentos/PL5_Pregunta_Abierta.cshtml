@@ -80,6 +80,10 @@
                 } else {
                     $("button#btnValidarAbierta").attr("disabled", "disabled");
                 }
+
+                //enmascaramos enunciado
+                $("div#enunciado", document).removeClass("no_difuminado").addClass("difuminado");
+
             });
 
 
@@ -115,7 +119,7 @@
                     data: { GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', PreguntaID: '@Model.PreguntaID', respuesta: textarea.val(), moment: datetimeclient },
                     success: function (result) {
                         //aplicar clase textareaEnviado
-                        textarea.addClass("backgroundVerde");
+                        textarea.addClass("backgroundGris");
                         //mostrar algo como "recibido"
                         $("#btnValidarAbierta").html("Guardado");
 

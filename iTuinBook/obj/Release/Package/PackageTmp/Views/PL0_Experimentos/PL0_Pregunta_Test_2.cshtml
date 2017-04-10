@@ -90,23 +90,7 @@
     </div>
 
     
-    @if (ViewBag.TareaSel)
-    {
-        if (configPregunta != null && configPregunta.CorregirSeleccion)
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
-            </div>
-        }
-        else
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
-            </div>
-        }
-    }
+    
 
     <div id="ayudas" style="float:right; visibility: hidden;">     
         @if (Model.Ayuda != null)

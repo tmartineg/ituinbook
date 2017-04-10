@@ -142,6 +142,7 @@
             }
 
             $("#btnSiguientePregunta").click(function () {
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
                 $("#btnSiguientePregunta").attr("disabled", "disabled");
 
                 parent.FinalizarTiempoPregunta();
@@ -320,6 +321,8 @@
                 $('#alternativas').click(function () {
                     if ($('#alternativas').hasClass("difuminado")) {
                         $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
+                        $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
 
                         @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
                         {

@@ -24,13 +24,13 @@
     }
 
     <div id=enunciado style="padding-left: 20px; padding-right: 20px;">
-        @Html.Raw(Model.Enunciado)      
+        @Html.Raw(Model.Enunciado)
         @if (Model.Ayuda != null)
-        {  
-            <div id="ayuFlotador" hidden="hidden"; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>                
+        {
+            <div id="ayuFlotador" hidden="hidden" ; style="border-style:solid; border-color:#b0c4de; background-color:#e0ffff; width:50%;"><img width="12" height="12" style="padding-left: 5px; padding-right: 5px;" src="~/Content/Ayudas/ayuda_flotador.jpg" /><b>@Model.Ayuda.ParafraseoN1</b></div>
         }
     </div>
-     
+
     <div id=alternativas style="padding-left: 20px; padding-right: 20px;">
         <ul>
             @if (configPregunta != null && configPregunta.MarcarCorrecto)
@@ -39,7 +39,7 @@
                 {
                     if (alt.Valor)
                     {
-                        <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />   
+                        <img src="~/Content/tick.png" style="width: 15px; height: 15px;  margin-left: -19px;" />
                     }
                     else
                     {
@@ -49,23 +49,27 @@
                     if (alt.Opcion != null)
                     {
                         if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                        {
+                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                     }
                     else
                     {
                         if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                        {
+                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                     }
                 }
@@ -77,51 +81,39 @@
                     if (alt.Opcion != null)
                     {
                         if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                        {
+                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            @Html.RadioButtonFor(r => alt, alt.Opcion, new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                     }
                     else
                     {
                         if (alt.Opcion == ds.Info)
-                        { 
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion <br />
+                        {
+                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", @checked = "checked", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                         else
                         {
-                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion <br />
+                            @Html.RadioButtonFor(r => alt, "null", new { @style = "width:20px", disabled = "disabled" }) @alt.Opcion
+                            <br />
                         }
                     }
                 }
             }
         </ul>
     </div>
-    
-    @if (ViewBag.TareaSel)
-    {
-        if(configPregunta != null && configPregunta.CorregirSeleccion)
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p style="color:red;">@Html.Raw(dsel.Info2)</p>            
-            </div>
-        }
-        else
-        {
-            <div style="padding-left: 20px; padding-right: 20px;">
-                <b>Selección:</b>
-                <p>@Html.Raw(regex.Replace(dsel.Info2, string.Empty))</p>            
-            </div>
-        }
-    }
+
+
 
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>                       
-    </div> 
+        <button id="btnSiguientePregunta" style="float:left;">Siguiente</button>
+    </div>
 </div>
 
 @section Scripts {
@@ -134,9 +126,9 @@
             @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
             {
                 <text>
-                parent.BlurRevision("True");            
+                parent.BlurRevision("True");
                 window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-                window.parent.$('.paginas').css("filter", "url(#example-one)");                
+                window.parent.$('.paginas').css("filter", "url(#example-one)");
                 </text>
             }
             else
@@ -144,7 +136,7 @@
                 <text>
                 parent.BlurRevision("False");
                 window.parent.$('.paginas').css("-webkit-filter", "");
-                window.parent.$('.paginas').css("filter", "");                
+                window.parent.$('.paginas').css("filter", "");
                 </text>
             }
 
@@ -158,6 +150,7 @@
             }
 
             $("#btnSiguientePregunta").click(function () {
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
                 $("#btnSiguientePregunta").attr("disabled", "disabled");
 
                 parent.FinalizarTiempoPregunta();
@@ -199,7 +192,7 @@
                             $(this).html($(this).html().replace(/<\/lupa>/g, ""));
                             $(this).html($(this).html().replace(/<prismaticos style=\"border:1px solid red;\">/g, ""));
                             $(this).html($(this).html().replace(/<\/prismaticos>/g, ""));
-                        });                
+                        });
 
                         window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
                         window.parent.$('.paginas').css("filter", "url(#example-one)");
@@ -208,16 +201,16 @@
                         window.parent.$('#fdbkSMS').text("");
 
                         if (result.Parent)
-                        {   
+                        {
                             // data.redirect contains the string URL to redirect to
-                            window.parent.window.location.href = result.redirect;                        
+                            window.parent.window.location.href = result.redirect;
                         }
                         else
-                        {  
+                        {
                             // data.redirect contains the string URL to redirect to
-                            window.location.href = result.redirect;                                                    
+                            window.location.href = result.redirect;
                         }
-                        
+
                     },
                     error: function () {
                         alert("error");
@@ -237,7 +230,7 @@
                 <text>
                 $('.paginas', window.parent.document).each(function () {
                 var param = '@Html.Raw(@Model.Pertinente)'.split('/');
-                
+
                 for (var i = 0; i < param.length; i++) {
 
                         $(this).html($(this).html().replace(param[i], "<lupa style=\"background-color:yellow;\">" + param[i] + "</lupa>"));
@@ -257,6 +250,7 @@
                 $('#enunciado').click(function () {
                     if ($('#enunciado').hasClass("difuminado")) {
                         $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+                        $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
 
                         @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
                         {
@@ -335,6 +329,8 @@
                 $('#alternativas').click(function () {
                     if ($('#alternativas').hasClass("difuminado")) {
                         $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
+                        $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
 
                         @if (configPregunta != null && configPregunta.EnmascararTextoRevisa)
                         {

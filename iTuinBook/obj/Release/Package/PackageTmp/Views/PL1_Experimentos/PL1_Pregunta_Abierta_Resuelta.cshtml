@@ -41,7 +41,7 @@
         }
         else
         {
-            <p class="backgroundVerde">@ds.Info</p>
+            <p class="backgroundGris">@ds.Info</p>
         }
     </div>
     
@@ -91,6 +91,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#btnSiguientePregunta").click(function () {
+                $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
+
                 //guirisan/secuencias
                 //datetime set in client
                 var datetimeclient = new Date().toISOString();
@@ -156,7 +158,81 @@
                 return false;
             });
 
+            /**************************************/
+            /**************************************/
+            /******* CONFIGURACIÓN PREGUNTA *******/
+            /**************************************/
+            /**************************************/
+            @if (configPregunta != null && configPregunta.EnmascararEnunciado == true) {
+                <text>
+                $('#enunciado').addClass("difuminado");
+                
+                $('#enunciado').click(function () {
+                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
 
+                    if ($('#enunciado').hasClass("difuminado")) {
+                        $(":radio").attr("disabled", false);
+
+                        $('#enunciado').removeClass("difuminado").addClass("no_difuminado");
+
+                        if ('@configPregunta.EnmascararAlternativas' == 'True') {
+                            if ($('#alternativas').hasClass("difuminado")) {
+                                
+                            }
+                            else {
+                                $('#alternativas').removeClass("no_difuminado").addClass("difuminado");
+
+                                // Calcular tiempo de alternativa y enviar al servidor
+                                timeFinish = jQuery.now();
+
+                                var diff = timeFinish - timeStart;
+                                //guirisan/secuencias
+                                //datetime set in client
+                                var datetimeclient = new Date().toISOString();
+
+                                //NUMACC
+
+                                //get and add+1 numAcc
+                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                numAcc++;
+                                sessionStorage.setItem("numAccion", numAcc);
+
+                                //DATOSRAW
+                                //get datosRaw to add row in ajax.beforeSend
+                                var datosRaw;
+                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                    datosRaw = {};
+                                }
+
+
+                                $.ajax({
+                                    url: "RegistrarAccion",
+                                    type: 'POST',
+                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 19, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc},
+                                    //guirisan/secuencias
+                                    beforeSend: function () {
+                                        //set datosRaw on sessionStorage
+                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                        datosRaw[numAcc] = cadena;
+                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                                        //set datosRaw on ajax petition
+                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                    },
+                                    error: function () {
+                                        alert("Error: Hubo un error con tu última acción.");
+                                    }
+                                });
+                            }
+
+                        }
+                              
+                        timeStart = jQuery.now();                        
+                    }
+                });     
+                </text>
+            }
+            
             @if ((bool)ViewBag.AyudaFlota)
             {
                 @: $('#ayuFlotador').show();

@@ -169,14 +169,7 @@
                             
                             @if(configPregunta != null)
                             {
-                                if (configPregunta.FeedbackProfesor || configPregunta.FeedbackAlumno)
-                                {
-                                    @: parent.feedbackAvatar(result.mensaje, "@configPregunta.FeedbackProfesor");
-                                }
-                                else
-                                {
-                                    @: parent.feedbackVentana(result.mensaje);
-                                }
+                                @: parent.feedbackVentana(result.mensaje);
                             }
                             else
                             {

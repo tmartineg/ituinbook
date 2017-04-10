@@ -291,71 +291,7 @@
                 </text>
             }
 
-            @if (configPregunta != null && configPregunta.EnmascararAlternativas == true) {
-                <text>            
-                $('#alternativas').addClass("difuminado");
-
-                $('#alternativas').click(function () {
-                    $("reg.no_difuminado", window.parent.document).removeClass("no_difuminado").addClass("difuminado");
-
-                    if ($('#alternativas').hasClass("difuminado")) {
-                        $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
-
-                        if ('@configPregunta.EnmascararEnunciado' == 'True') {
-                            if ($('#enunciado').hasClass("difuminado")) {
-
-                            }
-                            else {
-                                $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
-                                // Calcular tiempo de alternativa y enviar al servidor
-                                timeFinish = jQuery.now();
-
-                                var diff = timeFinish - timeStart;
-                                //guirisan/secuencias
-                                //datetime set in client
-                                var datetimeclient = new Date().toISOString();
-
-                                //NUMACC
-
-                                //get and add+1 numAcc
-                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                                numAcc++;
-                                sessionStorage.setItem("numAccion", numAcc);
-
-                                //DATOSRAW
-                                //get datosRaw to add row in ajax.beforeSend
-                                var datosRaw;
-                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                                    datosRaw = {};
-                                }
-
-
-                                $.ajax({
-                                    url: "RegistrarAccion",
-                                    type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@configModulo.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString() , moment: datetimeclient, numAccion: numAcc},
-                                    //guirisan/secuencias
-                                    beforeSend: function () {
-                                        //set datosRaw on sessionStorage
-                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                                        datosRaw[numAcc] = cadena;
-                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
-
-                                        //set datosRaw on ajax petition
-                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                                    },
-                                    error: function () {
-                                        alert("Error: Hubo un problema con tu última acción.");
-                                    }
-                                });
-                            }
-                        }
-
-                        timeStart = jQuery.now();
-                    }
-                });
-                </text>
-            }
+            
 
             @if (configPregunta != null && configModulo.Ayudas)
             {   
@@ -387,5 +323,12 @@
             
             
         });
+        function ClickPagina() {
+            if ('@configPregunta.EnmascararEnunciadoRevision' == 'True') {
+                $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+            }
+
+        }
     </script>
+
 }

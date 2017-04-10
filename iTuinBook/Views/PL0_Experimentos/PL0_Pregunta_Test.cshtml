@@ -483,115 +483,124 @@
                 });
             }
 
+
+
             if ('@configPregunta.EnmascararAlternativas' == 'True') {
                 $('#alternativas').addClass("difuminado");
 
+
+                //http://stackoverflow.com/questions/9424752/jquery-change-with-delay
+                var wto;
                 $('#alternativas').click(function () {
-                    if ($('#alternativas').hasClass("difuminado")) {
-                        @if (configPregunta != null && configPregunta.EnmascararTexto)
-                        {
-                            <text>
-                        window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
-                        window.parent.$('.paginas').css("filter", "url(#example-one)");
-                            </text>
-                        }
-                        else
-                        {
-                            <text>
-                        window.parent.$('.paginas').css("-webkit-filter", "");
-                        window.parent.$('.paginas').css("filter", "");
-                            </text>
-                        }
+                    clearTimeout(wto);    
+                    wto = setTimeout(function (radio) {
+                        if ($('#alternativas').hasClass("difuminado")) {
+                            @if (configPregunta != null && configPregunta.EnmascararTexto)
+                            {
+                                <text>
+                            window.parent.$('.paginas').css("-webkit-filter", "blur(5px)");
+                            window.parent.$('.paginas').css("filter", "url(#example-one)");
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                            window.parent.$('.paginas').css("-webkit-filter", "");
+                            window.parent.$('.paginas').css("filter", "");
+                                </text>
+                            }
 
-                        //guirisan/secuencias
-                        //datetime set in client
-                        var datetimeclient = new Date().toISOString();
-
-                        //NUMACC
-
-                        //get and add+1 numAcc
-                        var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                        numAcc++;
-                        sessionStorage.setItem("numAccion", numAcc);
-
-                        //DATOSRAW
-                        //get datosRaw to add row in ajax.beforeSend
-                        var datosRaw;
-                        if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                            datosRaw = {};
-                        }
-                        $.ajax({
-                            url: "RegistrarAccion",
-                            type: 'POST',
-                            data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient, numAccion: numAcc },
                             //guirisan/secuencias
-                            beforeSend: function () {
-                                //set datosRaw on sessionStorage
-                                var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                                datosRaw[numAcc] = cadena;
-                                sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+                            //datetime set in client
+                            var datetimeclient = new Date().toISOString();
 
-                                //set datosRaw on ajax petition
-                                this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                            },
-                            error: function () {
-                                alert("Error: Hubo un error con tu última acción.");
+                            //NUMACC
+
+                            //get and add+1 numAcc
+                            var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                            numAcc++;
+                            sessionStorage.setItem("numAccion", numAcc);
+
+                            //DATOSRAW
+                            //get datosRaw to add row in ajax.beforeSend
+                            var datosRaw;
+                            if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                datosRaw = {};
                             }
-                        });
-
-                        $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
-
-                        if ('@configPregunta.EnmascararEnunciado' == 'True') {
-                            if ($('#enunciado').hasClass("difuminado")) {
-
-                            }
-                            else {
-                                $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
-                                // Calcular tiempo de alternativa y enviar al servidor
-                                timeFinish = jQuery.now();
-
-                                var diff = timeFinish - timeStart;
-
+                            $.ajax({
+                                url: "RegistrarAccion",
+                                type: 'POST',
+                                data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 17, moment: datetimeclient, numAccion: numAcc },
                                 //guirisan/secuencias
-                                //datetime set in client
-                                var datetimeclient = new Date().toISOString();
+                                beforeSend: function () {
+                                    //set datosRaw on sessionStorage
+                                    var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                    datosRaw[numAcc] = cadena;
+                                    sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
 
-                                //NUMACC
-
-                                //get and add+1 numAcc
-                                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
-                                numAcc++;
-                                sessionStorage.setItem("numAccion", numAcc);
-
-                                //DATOSRAW
-                                //get datosRaw to add row in ajax.beforeSend
-                                var datosRaw;
-                                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
-                                    datosRaw = {};
+                                    //set datosRaw on ajax petition
+                                    this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                },
+                                error: function () {
+                                    alert("Error: Hubo un error con tu última acción.");
                                 }
-                                $.ajax({
-                                    url: "RegistrarAccion",
-                                    type: 'POST',
-                                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
+                            });
+
+                            $('#alternativas').removeClass("difuminado").addClass("no_difuminado");
+
+                            if ('@configPregunta.EnmascararEnunciado' == 'True') {
+                                if ($('#enunciado').hasClass("difuminado")) {
+
+                                }
+                                else {
+                                    $('#enunciado').removeClass("no_difuminado").addClass("difuminado");
+                                    // Calcular tiempo de alternativa y enviar al servidor
+                                    timeFinish = jQuery.now();
+
+                                    var diff = timeFinish - timeStart;
+
                                     //guirisan/secuencias
-                                    beforeSend: function () {
-                                        //set datosRaw on sessionStorage
-                                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
-                                        datosRaw[numAcc] = cadena;
-                                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+                                    //datetime set in client
+                                    var datetimeclient = new Date().toISOString();
 
-                                        //set datosRaw on ajax petition
-                                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
-                                    },
-                                    error: function () {
-                                        alert("Error: Hubo un problema con tu última acción.");
+                                    //NUMACC
+
+                                    //get and add+1 numAcc
+                                    var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                                    numAcc++;
+                                    sessionStorage.setItem("numAccion", numAcc);
+
+                                    //DATOSRAW
+                                    //get datosRaw to add row in ajax.beforeSend
+                                    var datosRaw;
+                                    if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                                        datosRaw = {};
                                     }
-                                });
-                            }
-                        }
+                                    $.ajax({
+                                        url: "RegistrarAccion",
+                                        type: 'POST',
+                                        data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 18, Param: diff.toString(), moment: datetimeclient, numAccion: numAcc },
+                                        //guirisan/secuencias
+                                        beforeSend: function () {
+                                            //set datosRaw on sessionStorage
+                                            var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                                            datosRaw[numAcc] = cadena;
+                                            sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
 
-                        timeStart = jQuery.now();
-                    }
+                                            //set datosRaw on ajax petition
+                                            this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                                        },
+                                        error: function () {
+                                            alert("Error: Hubo un problema con tu última acción.");
+                                        }
+                                    });
+                                }
+                            }
+
+                            timeStart = jQuery.now();
+                        }
+                    }, 50);
+
                 });
             }
             </text>
@@ -624,7 +633,9 @@
                             @: $('#ayudas').css("visibility", "hidden")
             }
 
+
             $(":radio").change(function () {
+
                 $("#btnValidarTest").removeAttr("disabled");
 
                 //guirisan/secuencias

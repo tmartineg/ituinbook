@@ -1071,6 +1071,10 @@ img.imgEnunciadoDerecha{
     background-color: #dbf2de;
 }
 
+.backgroundGris {
+    background-color: #dcdcdc;
+}
+
 .pagina100width {
     width: 90%
 }
@@ -1083,7 +1087,7 @@ img.imgEnunciadoDerecha{
 #preguntaAligner{
     position:fixed;
     height:auto;
-    bottom:20px;
+    top:20px;
     left:0px;
     right:0px;
     margin-bottom:0px;

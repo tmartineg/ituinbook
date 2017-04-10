@@ -40,7 +40,9 @@
 else
 {
     <div id="divEmpezar" style="margin-left: auto; margin-right: auto; width: 70%;"><button id="btnPasar" style="width: 100%;">EMPEZAR TAREA</button></div>
-}
+}   
+
+
     <div id="feedback" >        
        
     </div>    
@@ -491,36 +493,6 @@ else
             });
         }
 
-        function feedbackAvatar(sms, avatar) // avatar: true = Ramiro ; false = Lue
-        {
-            if (sms != null)
-            {
-                ini_LecFDBK = $.now();
-                
-                if (avatar == "True") {
-                    $("#ramiro").show();
-                    $("#lue").hide();
-                    $("#feedAvatar").show();
-                    $("#feedback").hide();
-                }
-                else {
-                    $("#ramiro").hide();
-                    $("#lue").show();
-                    $("#feedAvatar").show();
-                    $("#feedback").hide();
-                }
-
-                $("#tbAvatar").text(sms);
-                $('.paginas').css("-webkit-filter", "blur(5px)");
-                $('.paginas').css("filter", "url(#example-one)");
-
-
-                
-                $('#addIframe').contents().find('#btnValidarTest').attr("disabled", "disabled");
-                $('#addIframe').contents().find(':radio').attr("disabled", "disabled");
-                $('#addIframe').contents().find('#btnSiguientePregunta').attr("disabled", "disabled");
-            }
-        }
 
         function feedbackVentana(sms)
         {   
