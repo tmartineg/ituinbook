@@ -51,8 +51,8 @@
                         @Html.DisplayFor(modelItem => num)
                     </td>                            
                     <td>
-                        <b>@Html.ActionLink("Administrar", "AdministrarModulo", "Docente", new { ModuloID = mod.ModuloID }, null)</b>
-                        <b>@Html.ActionLink("Eliminar", "EliminarModulo", "Docente", new { ModuloID = mod.ModuloID, id = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar el módulo?');"})</b>  
+                        <b>@Html.ActionLink("<!-- edit -->", "AdministrarModulo", "Docente", new { ModuloID = mod.ModuloID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left"})</b>
+                        <b>@Html.ActionLink("<!-- remove -->", "EliminarModulo", "Docente", new { ModuloID = mod.ModuloID, id = mod.ModuloID }, new { @title ="Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de eliminar el módulo?');" })</b>  
                     </td>      
                 </tr>
             }
@@ -80,7 +80,8 @@
                     </td>                            
                     <td>
                         <b>No eres propietario</b>
-                        <b>@Html.ActionLink("Desvincularme", "DesvincularmeDeModulo", "Docente", new { ModuloID = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincularte de este módulo?');"})</b>  
+
+                        <b>@Html.ActionLink("<!-- desvincular -->", "DesvincularmeDeModulo", "Docente", new { ModuloID = mod.ModuloID }, new {@title = "Desvincular", @class = "ui-icon ui-icon-close", @style = "float:left",  onclick = "return confirm('¿Estás seguro de desvincularte de este módulo?');"})</b>  
                     </td>      
                 </tr>
             }
@@ -133,8 +134,9 @@
                         @Html.DisplayFor(modelItem => num)
                     </td>                            
                     <td>
-                        <b>@Html.ActionLink("Adquirir", "AdquirirModulo", "Docente", new { ModuloID = mod.ModuloID }, new { onclick = "return confirm('¿Estás seguro de querer adquirir este módulo?');"})</b>
-                        <b>@Html.ActionLink("Ver", "VerModulo", "Docente", new { ModuloID = mod.ModuloID }, null)</b>
+
+                        <b>@Html.ActionLink("<!-- adquirir -->", "AdquirirModulo", "Docente", new { ModuloID = mod.ModuloID }, new { @title = "Adquirir", @class = "ui-icon ui-icon-cart", @style = "float:left", onclick = "return confirm('¿Estás seguro de querer adquirir este módulo?');" })</b>
+                        
                     </td>      
                 </tr>
             }

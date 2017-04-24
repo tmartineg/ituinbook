@@ -73,6 +73,10 @@
                     
                                 <tr>
                                     <td>            
+                                        <b>@Html.ActionLink("<!-- editar -->", "EditarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, new { @title = "Editar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+                                        <b>@Html.ActionLink("<!-- eliminar-->", "EliminarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left" })</b>
+
+
                                         <b>@Html.ActionLink("Editar", "EditarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, null)</b>                              
                                         <b>@Html.ActionLink("Eliminar", "EliminarAlternativa", "Docente", new { AlternativaID = alt.AlternativaID, PreguntaID = Model.PreguntaID }, null)</b>                              
                                     </td>                  
@@ -124,8 +128,9 @@
                         i = i + 1;
                     
                             <tr>
-                                <td>            
-                                    <b>@Html.ActionLink("Eliminar", "EliminarCriterioCorreccion", "Docente", new { TextoID = @Model.Texto.TextoID, PreguntaID = Model.PreguntaID, CriterioID = cri.CriterioID }, null)</b>                              
+                                <td>
+                                                
+                                    <b>@Html.ActionLink("<!-- remove -->", "EliminarCriterioCorreccion", "Docente", new { TextoID = @Model.Texto.TextoID, PreguntaID = Model.PreguntaID, CriterioID = cri.CriterioID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de eliminar el módulo?');"})</b>                              
                                 </td>                  
                                 <td>
                                     @cri.Opcion                   

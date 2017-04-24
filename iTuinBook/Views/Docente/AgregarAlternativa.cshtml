@@ -66,8 +66,8 @@
                     
                             <tr>
                                 <td>            
-                                    <b>@Html.ActionLink("Editar", "EditarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID }, null)</b>                              
-                                    <b>@Html.ActionLink("Eliminar", "EliminarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID }, null)</b>                              
+                                    <b>@Html.ActionLink("<!-- edit -->", "EditarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID, AlternativaID = alt.AlternativaID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>                           
+                                    <b>@Html.ActionLink("<!-- remove -->", "EliminarAlternativa", "Docente", new { PreguntaID = preg.PreguntaID, AlternativaID = alt.AlternativaID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left" })</b>  
                                 </td>                  
                                 <td>
                                     @Html.Raw(alt.Opcion)

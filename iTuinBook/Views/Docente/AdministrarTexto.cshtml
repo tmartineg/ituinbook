@@ -50,10 +50,11 @@
                     i = i + 1;
                     
                     <tr>
-                        <td>            
-                            <b>@Html.ActionLink("Editar", "EditarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, null)</b>
-                            <b>@Html.ActionLink("Ver", "VerPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, null)</b>   
-                            <b>@Html.ActionLink("Eliminar", "EliminarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, new { onclick = "return confirm('¿Estás seguro de eliminar la página?');"})</b>   
+                        <td>     
+                            <b>@Html.ActionLink("<!-- edit -->", "EditarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+                            <b>@Html.ActionLink("<!-- ver -->", "VerPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, new { @title = "Ver", @class = "ui-icon ui-icon-search", @style = "float:left" })</b>
+                            <b>@Html.ActionLink("<!-- remove -->", "EliminarPagina", "Docente", new { TextoID = Model.TextoID, PaginaID = pag.PaginaID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de eliminar la página?');" })</b>   
+
                         </td>
                         <td>
                             Página @i                   
@@ -104,9 +105,9 @@
                     
                     <tr>
                         <td>            
-                            <b>@Html.ActionLink("Editar", "EditarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, null)</b>                           
-                            <b>@Html.ActionLink("Ver", "AdministrarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, null)</b>                           
-                            <b>@Html.ActionLink("Eliminar", "EliminarPregunta", "Docente", new { TextoID = Model.TextoID, PreguntaID = preg.PreguntaID }, new { onclick = "return confirm('¿Estás seguro de eliminar la pregunta?');"})</b>   
+                            <b>@Html.ActionLink("<!-- edit -->", "EditarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+                            <b>@Html.ActionLink("<!-- ver -->", "AdministrarPregunta", "Docente", new { PreguntaID = preg.PreguntaID, TextoID = Model.TextoID }, new { @title = "Ver", @class = "ui-icon ui-icon-search", @style = "float:left" })</b>
+                            <b>@Html.ActionLink("<!-- remove -->", "EliminarPregunta", "Docente", new { TextoID = Model.TextoID, PreguntaID = preg.PreguntaID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de eliminar la pregunta?');" })</b>
                         </td>
                         <td>
                             Pregunta @i                   

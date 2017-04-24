@@ -67,8 +67,9 @@
                     @Html.DisplayFor(modelItem => text.Descripcion)
                 </td>                         
                 <td>            
-                    <b>@Html.ActionLink("Administrar", "AdministrarTexto", "Docente", new { TextoID = text.TextoID, GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID }, null)</b>
-                    <b>@Html.ActionLink("Eliminar", "EliminarTexto", "Docente", new { TextoID = text.TextoID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de eliminar el texto?');"})</b>   
+                    <b>@Html.ActionLink("<!-- administrar -->", "AdministrarTexto", "Docente", new { TextoID = text.TextoID, GrupoID = ViewBag.GrupoID, ModuloID = Model.ModuloID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+
+                    <b>@Html.ActionLink("<!-- eliminar -->", "EliminarTexto", "Docente", new { TextoID = text.TextoID, ModuloID = Model.ModuloID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left",  onclick = "return confirm('¿Estás seguro de eliminar el texto?');" })</b>   
                 </td>
             </tr>
             } 
@@ -157,8 +158,10 @@
                     @Html.DisplayFor(modelItem => reg.Feedback)
                 </td>     
                 <td>            
-                    <b>@Html.ActionLink("Editar", "EditarReglaCompleja", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID }, null)</b>
-                    <b>@Html.ActionLink("Desvincular", "DesvincularRegla", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincular el Timing?');"})</b>   
+
+                    <b>@Html.ActionLink("<!-- editar -->", "EditarReglaCompleja", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID }, new { @title = "Editar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+
+                    <b>@Html.ActionLink("<!-- desvincular -->", "DesvincularRegla", "Docente", new { ReglaComplejaID = reg.ReglaComplejaID, ModuloID = Model.ModuloID }, new { @title = "Desvincular", @class = "ui-icon ui-icon-closethick", @style = "float:left",  onclick = "return confirm('¿Estás seguro de desvincular el Timing?');" })</b>   
                 </td>                    
             </tr>
             } 
@@ -202,8 +205,8 @@
                     @TipoTimings.Find(m => m.Value == tm.Tipo.ToString()).Text
                 </td>                                     
                 <td>
-                    <b> @Html.ActionLink("Editar", "EditarTiming", "Docente", new { TimingID = tm.TimingID }, null)</b>                                
-                    <b> @Html.ActionLink("Desvincular", "DesvincularTiming", "Docente", new { TimingID = tm.TimingID, ModuloID = Model.ModuloID }, new { onclick = "return confirm('¿Estás seguro de desvincular el Timing?');"})</b>                                
+                    <b> @Html.ActionLink("<!-- editar -->", "EditarTiming", "Docente", new { TimingID = tm.TimingID }, new { @title = "Editar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>                          
+                    <b> @Html.ActionLink("<!-- desvincular -->", "DesvincularTiming", "Docente", new { TimingID = tm.TimingID, ModuloID = Model.ModuloID }, new { @title = "Desvincular", @class = "ui-icon ui-icon-closethick", @style = "float:left",  onclick = "return confirm('¿Estás seguro de desvincular el Timing?');" })</b>                                
                 </td>      
             </tr>
         } 
