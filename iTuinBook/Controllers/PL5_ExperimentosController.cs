@@ -211,7 +211,8 @@ namespace ReadAndLearn.Controllers
             //comentamos la línea por duplicidad de información
             if (!segundoIntento && !preguntaResuelta)
             {
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
+                //guirisan/issues https://github.com/guirisan/ituinbook/issues/188
+                //db.DatosSimples.Add(new DatoSimple() { CodeOP = 10, DatosUsuarioID = datosUsuario.DatosUsuarioID, Momento = datetimeclient, PreguntaID = pregunta.PreguntaID, NumAccion = numAccion });
             }
             else if (segundoIntento)
             {
@@ -1244,12 +1245,12 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.ConfigPregunta = config;
 
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/188
+            /* 
             DatoSimple dsR = new DatoSimple() { CodeOP = 52, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = pregunta.PreguntaID, Momento = datetimeclient, NumAccion = numAccion };
-
             db.DatosSimples.Add(dsR);
-
             SaveChanges();
-
+            */
             var seleccion = from ds in db.DatosSimples
                             where ds.PreguntaID == pregunta.PreguntaID &&
                             ds.TextoID == textoID &&
