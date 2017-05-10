@@ -7,7 +7,7 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
-    DatoSimple ds = (DatoSimple)ViewBag.ds;
+
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
@@ -28,33 +28,6 @@
         <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" class="textarea100w" ondragstart="return false;" ondrop="return false;"></textarea>
     </div>
 
-    @if(ViewBag.TareaSel)
-    {
-        <div id=seleccion style="padding-left: 20px; padding-right: 20px;">
-            <b>Selección:</b>
-            <p style="color: red;">@Html.Raw(ds.Info2)</p>
-        </div>
-    }
-
-    <div id="ayudas" style="float:right; visibility: hidden;">    
-        @if (Model.Ayuda != null)
-        {
-            if (Model.Ayuda.ParafraseoN1 != null)
-            {
-                <img id="btnFlotador" width="50" height="50" src="~/Content/Ayudas/ayuda_flotador.jpg" />
-            }
-
-            if (Model.Ayuda.Prismaticos != null)
-            {
-                <img id="btnPrismaticos" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_1.png" />
-            }
-
-            if (Model.Ayuda.Lupa != null)
-            {
-                <img id="btnLupa" width="50" height="50" src="~/Content/Ayudas/ayuda_texto_2.png" />
-            }
-        } 
-    </div>
     
     <div style="padding-left: 20px; padding-right: 20px;">
         <button disabled="disabled" id="btnValidarAbierta">Validar</button>                       
@@ -152,18 +125,6 @@
                 });
             });
 
-
-
-            //cargar si hay lo que había escrito antes
-            @if (ds != null)
-            {
-                <text>  
-                $("#placeholder").addClass("hiddenDebug");
-                $("#respuesta").val("@ds.Info");
-                $("#respuesta").attr('placeholder', '');
-                </text>                              
-            }
-            
 
 
             var timeStart = new Date();

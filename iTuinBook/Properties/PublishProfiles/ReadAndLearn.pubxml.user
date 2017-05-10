@@ -46,7 +46,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/28/2015 11:48:35</publishTime>
     </File>
     <File Include="bin/en/Read&amp;Learn.resources.dll">
-      <publishTime>05/10/2017 05:58:06</publishTime>
+      <publishTime>05/10/2017 13:48:03</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -172,7 +172,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:19</publishTime>
     </File>
     <File Include="bin/Read&amp;Learn.dll">
-      <publishTime>05/10/2017 05:58:06</publishTime>
+      <publishTime>05/10/2017 13:48:03</publishTime>
     </File>
     <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
       <publishTime>01/12/2016 13:16:18</publishTime>
@@ -4981,7 +4981,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/12/2016 13:16:16</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta.cshtml">
-      <publishTime>05/10/2017 04:47:49</publishTime>
+      <publishTime>05/10/2017 13:28:45</publishTime>
     </File>
     <File Include="Views/PL0_Experimentos/PL0_Pregunta_Abierta_2.cshtml">
       <publishTime>01/12/2016 13:16:16</publishTime>
@@ -5350,7 +5350,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>10/26/2016 12:44:12</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta.cshtml">
-      <publishTime>05/10/2017 05:49:04</publishTime>
+      <publishTime>05/10/2017 13:47:41</publishTime>
     </File>
     <File Include="Views/PL5_Experimentos/PL5_Pregunta_Abierta_2.cshtml">
       <publishTime>11/01/2016 14:15:34</publishTime>

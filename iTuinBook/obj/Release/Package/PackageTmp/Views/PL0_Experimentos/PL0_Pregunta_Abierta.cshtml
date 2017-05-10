@@ -210,6 +210,16 @@
             });
             *******************************************************/
 
+
+            //guirisan/issues 
+            var respuesta = $("#respuesta___livespell_proxy");
+            /* no se puede hacer un placeholder para el div#respuesta___livespell_proxy*/
+
+            if (($.trim(respuesta.html())).split(' ').length > 1) {
+                $("button#btnValidarAbierta").removeAttr("disabled");
+                $("#placeholder").addClass("hiddenDebug");
+            }
+
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/120
             //al usar el as-you-type spellcheck se desactiva el textarea y ya no sirve
             //la comprobación de numero de palabras hecha arriba. hay que trabajar sobre div#respuesta__livespell_proxy.livespell_textarea

@@ -2094,21 +2094,6 @@ namespace ReadAndLearn.Controllers
             //logger.Debug("PL5_Pregunta_Abierta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
 
-
-            try
-            {
-                DatoSimple ds = du.DatoSimple.Last(p => p.CodeOP == 82);
-                if (ds.Info != null)
-                {
-                    ViewBag.ds = ds;
-                }
-            }
-            catch (Exception)
-            {
-
-            } 
-
-
             Texto texto = ext.GetTexto(textoID);
             Pregunta pregunta = ext.GetPreguntaActual(texto, preguntaActual);
 

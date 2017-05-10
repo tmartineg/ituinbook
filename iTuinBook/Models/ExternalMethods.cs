@@ -32,29 +32,7 @@ namespace ReadAndLearn.Models
         public bool AddDataRow(string UserName, int UserID, int GrupoID, int ModuloID, string dataRow)
         {   
             string path = @"C:\inetpub\wwwroot\datosRawReadAndLearn\" + UserName + "_U" + UserID + "_G" + GrupoID + "_M" + ModuloID + ".txt";
-            /*
-             * da fallo tanto al crear un nuevo archivo como al intentar añadir líneas.
-             * para más inri, solo con algunos usuarios (con user alu1 funciona OK, con alu21 falla en el if y en el else
-             * diciendo "El archivo ... está siendo utilizado por otro proceso"
-             */
-            /*  
-            try
-            {
-                if (!System.IO.File.Exists(path))
-                {
-                    System.IO.File.Create(path);
-                    System.IO.TextWriter tw = new System.IO.StreamWriter(path);
-                    tw.WriteLine(dataRow);
-                    tw.Close();
-                }
-                else if (System.IO.File.Exists(path))
-                {
-                    System.IO.TextWriter tw = new System.IO.StreamWriter(path, true);
-                    tw.WriteLine(dataRow);
-                    tw.Close();
-                }
-            }
-              */
+            
             try
             {
                 System.IO.File.AppendAllLines(path, new[] { dataRow });
