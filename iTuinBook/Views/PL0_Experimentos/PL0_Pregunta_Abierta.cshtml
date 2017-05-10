@@ -29,7 +29,7 @@
         mySpell.CheckGrammar = false;  //no corregir gramatica (palabras repetidas, mayuscula de frase...)
         mySpell.IgnoreAllCaps = true;  //ignorar palabras en mayúsculas
         mySpell.IgnoreNumeric = true;  //ignorar palabras que contengan números
-        //mySpell.AddWordsToDictionary = new Enum ('2') ; //deshabilita la inserción en diccionario //puta mierda de opcion, no acepta 0-1-2 como parametros com o hace myspellbutton
+        mySpell.DeferScripts = true;
         
         /*comentado por descartar corrección mediante popup 23/11/2016*/
         /*
@@ -65,7 +65,7 @@
         </div>
 
         <div style="padding-left: 20px; padding-right: 20px;">
-            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" cols="100" rows="10" ondragstart="return false;" ondrop="return false;"></textarea>
+            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" cols="100" rows="10" ondrop="return false;"></textarea>
         </div>
         
        
@@ -91,9 +91,12 @@
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/186
             // add to <textarea> ondragstart="return false;" ondrop="return false;"
-            $('textarea').bind('copy paste', function (e) {
-                e.preventDefault();
-            });
+            setTimeout(function () {
+                $('#respuesta___livespell_proxy').bind('cut copy paste', function (e) {
+                    e.preventDefault();
+                }).attr('ondrop', 'return false;');
+            }, 500);
+    
 
             $('#respuesta').focus(function () {
                 //guardar valor del textarea
