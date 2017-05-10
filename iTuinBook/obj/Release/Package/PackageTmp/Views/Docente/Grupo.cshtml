@@ -41,8 +41,8 @@
                     @Html.DisplayFor(modelItem => gr.Inscripciones.Count)
                 </td> 
                 <td>
-                    <b> @Html.ActionLink("Administrar", "AdministrarGrupo", "Docente", new { GrupoID = gr.GrupoID }, null)</b>
-                    <b>@Html.ActionLink("Eliminar", "EliminarGrupo", "Docente", new { GrupoID = gr.GrupoID }, null)</b>  
+                    <b>@Html.ActionLink("<!-- edit -->", "AdministrarGrupo", "Docente", new { GrupoID = gr.GrupoID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
+                    <b>@Html.ActionLink("<!-- remove -->", "EliminarGrupo", "Docente", new { GrupoID = gr.GrupoID, id = gr.GrupoID }, new { @title = "Eliminar", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de eliminar el grupo?');" })</b>  
                 </td>      
             </tr>
             } 

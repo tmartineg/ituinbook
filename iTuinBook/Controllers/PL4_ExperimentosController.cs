@@ -130,12 +130,6 @@ namespace ReadAndLearn.Controllers
             DatoSimple dsNoPertSel = new DatoSimple { CodeOP = 56, DatosUsuarioID = du.DatosUsuarioID, Momento = datetimeclient, TextoID = TextoID, PreguntaID = PreguntaID, Info = respuesta, Dato01 = porcNoPertSel };
             db.DatosSimples.Add(dsNoPertSel);
 
-        //dsTest01
-            //OJO CUIDAO: este dato debe generarse y guardarse donde se corrige la alternativa.
-        //generar dsSelSobreTotal
-            //guirisan/issues https://github.com/guirisan/ituinbook/issues/104
-            // que sentido tiene eso? habria que calcular el % sobre el total que es la seleccion ideal...
-
             
 
             pert = porcPert;

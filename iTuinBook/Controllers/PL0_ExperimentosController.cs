@@ -1315,6 +1315,10 @@ namespace ReadAndLearn.Controllers
         }
 
         #region Pregunta TEST
+
+        /**
+         * Carga la página para realizar una pregunta de test
+         */
         public ActionResult PL0_Pregunta_Test(int GrupoID, int ModuloID, int preguntaActual, int textoID, string moment, int numAccion = -1)
         {
             //logger.Debug("PL0_Experimentos/PL0_Pregunta_Test");
@@ -1361,6 +1365,9 @@ namespace ReadAndLearn.Controllers
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
 
+        /** 
+         * Carga la página para realizar el 2º intento de una pregunta de test
+         */
         public ActionResult PL0_Pregunta_Test_2(int GrupoID, int ModuloID, int PreguntaID, string feedbackText)
         {
             //logger.Debug("PL0_Experimentos/PL0_pregunta_test_2");
@@ -1529,6 +1536,9 @@ namespace ReadAndLearn.Controllers
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
 
+        /**
+         * Carga la página para realizar una pregunta de test con tarea de selección simultánea
+         */
         public ActionResult PL0_Pregunta_Test_Seleccion_Simultaneo(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
@@ -1549,6 +1559,11 @@ namespace ReadAndLearn.Controllers
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
 
+
+        /**
+         * Recibe la petición para validar una pregunta de test con tarea de seleccion simultanea.
+         * Devuelve una redirección a la página de pregunta_test_resuelta
+         */
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_Seleccion_Simultaneo_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuestaTest, string respuestaSel, string moment, int numAccion = -1, string dataRow = "")
         {
@@ -1685,6 +1700,10 @@ namespace ReadAndLearn.Controllers
             }
         }
 
+        /**
+         * Recibe la petición para validar una pregunta de test.
+         * Devuelve una redirección al segundo intento, o a la página de pregunta_test_resuelta
+         */
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion, string dataRow)
         {
@@ -1698,25 +1717,6 @@ namespace ReadAndLearn.Controllers
 
             ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
 
-            /*
-            //add dataRow to user file
-            string path = @"C:\inetpub\wwwroot\datosRawReadAndLearn\" + User.Identity.Name + "_U" + ext.GetUsuarioID(User.Identity.Name) + "_G" + du.GrupoID + "_M" + du.ModuloID + ".txt";
-
-            if (!System.IO.File.Exists(path))
-            {
-                System.IO.File.Create(path);
-                System.IO.TextWriter tw = new System.IO.StreamWriter(path);
-                tw.WriteLine(dataRow);
-                tw.Close();
-            }
-            else if (System.IO.File.Exists(path))
-            {
-                System.IO.TextWriter tw = new System.IO.StreamWriter(path,true);
-                tw.WriteLine(dataRow);
-                tw.Close();
-            }
-            //end guirisan/secuencias
-            */
 
             Pregunta pregunta = ext.GetPregunta(PreguntaID);
 
@@ -1920,6 +1920,10 @@ namespace ReadAndLearn.Controllers
             return sms;
         }
 
+        /**
+         * Recibe la petición para validar el 2º intento de la pregunta de test
+         * Devuelve una redirección a pregunta_test_resuelta       
+         */
         [HttpPost]
         public ActionResult PL0_Pregunta_Test_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
@@ -2011,6 +2015,11 @@ namespace ReadAndLearn.Controllers
             return Json(new { redirect = Url.Action("PL0_Pregunta_Test_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID, feedbackText = mensaje }), Puntos = du.Puntos, PreguntaID = pregunta.PreguntaID });
         }
 
+        /**
+         * Carga la página dónde se muestra la respuesta y el fdbk (si lo hay) de la pregunta
+         * LLamado desde PL0_Pregunta_Test_validar
+         * * LLamado desde PL0_Pregunta_Test_2_validar
+         */
         public ActionResult PL0_Pregunta_Test_Resuelta(int GrupoID, int ModuloID, int preguntaID, string feedbackText)
         {
             //logger.Debug("PL0_Pregunta_Test_Resuelta");
@@ -2185,10 +2194,28 @@ namespace ReadAndLearn.Controllers
         #endregion
 
         #region PreguntaAbierta
+
+        /**
+         * Carga la página para realizar una pregunta abierta
+         */
         public ActionResult PL0_Pregunta_Abierta(int GrupoID, int ModuloID, int preguntaActual, int textoID)
         {
             //logger.Debug("PL0_Pregunta_Abierta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
+            try
+            {
+                DatoSimple ds = du.DatoSimple.Last(p => p.CodeOP == 82);
+                if (ds.Info != null)
+                {
+                    ViewBag.ds = ds;
+                }
+            }
+            catch (Exception)
+            {
+                
+            } 
+            
+            
 
             Texto texto = ext.GetTexto(textoID);
             Pregunta pregunta = ext.GetPreguntaActual(texto, preguntaActual);
@@ -2203,177 +2230,14 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.ConfigPregunta = config;
 
-            var seleccion = from ds in db.DatosSimples
-                            where ds.PreguntaID == pregunta.PreguntaID &&
-                            ds.TextoID == textoID &&
-                            ds.CodeOP == 123 &&
-                            du.DatosUsuarioID == du.DatosUsuarioID
-                            select ds;
-
-
-            if (seleccion != null && seleccion.Count() > 0)
-            {
-                ViewBag.TareaSel = true;
-                ViewBag.Seleccion = seleccion.AsEnumerable().Last();
-            }
-            else
-            {
-                ViewBag.TareaSel = false;
-            }
+           
 
             return View(ext.GetPreguntaActual(texto, preguntaActual));
         }
 
-        public ActionResult PL0_Pregunta_Abierta_2(int GrupoID, int ModuloID, int PreguntaID)
-        {
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            Pregunta pregunta = ext.GetPregunta(PreguntaID);
-
-            ViewBag.DatosUsuario = du;
-            ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
-
-            ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
-
-            db.SaveChanges();
-
-            ViewBag.ConfigPregunta = config;
-
-            var seleccion = from ds in db.DatosSimples
-                            where ds.PreguntaID == pregunta.PreguntaID &&
-                            ds.TextoID == pregunta.Texto.TextoID &&
-                            ds.CodeOP == 123 &&
-                            ds.DatosUsuarioID == du.DatosUsuarioID
-                            select ds;
-
-            var respuesta = from ds in db.DatosSimples
-                            where ds.PreguntaID == pregunta.PreguntaID &&
-                            ds.TextoID == pregunta.Texto.TextoID &&
-                            ds.CodeOP == 13 &&
-                            ds.DatosUsuarioID == du.DatosUsuarioID
-                            select ds;
-
-            if (respuesta != null && respuesta.Count() > 0)
-            {
-                ViewBag.Respuesta = respuesta.AsEnumerable().Last();
-            }
-
-            if (seleccion != null && seleccion.Count() > 0)
-            {
-                ViewBag.TareaSel = true;
-                ViewBag.Seleccion = seleccion.AsEnumerable().Last();
-            }
-            else
-            {
-                ViewBag.TareaSel = false;
-            }
-
-            return View(pregunta);
-        }
-
-        public ActionResult PL0_Pregunta_Abierta_Seleccion(int GrupoID, int ModuloID, int preguntaActual, int textoID)
-        {
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            Texto texto = ext.GetTexto(textoID);
-            Pregunta pregunta = ext.GetPreguntaActual(texto, preguntaActual);
-
-            ViewBag.DatosUsuario = du;
-            ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
-
-            ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
-
-            db.SaveChanges();
-
-            ViewBag.ConfigPregunta = config;
-
-            return View(ext.GetPreguntaActual(texto, preguntaActual));
-        }
-
-        public ActionResult PL0_Pregunta_Abierta_Seleccion_2(int GrupoID, int ModuloID, int preguntaActual, int textoID)
-        {
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            Texto texto = ext.GetTexto(textoID);
-            Pregunta pregunta = ext.GetPreguntaActual(texto, preguntaActual);
-
-            ViewBag.DatosUsuario = du;
-            ViewBag.ConfigModulo = ext.GetConfigModulo(ModuloID);
-
-            ConfigPregunta config = ext.GetConfigPregunta(pregunta.PreguntaID);
-
-            var seleccion = from ds in db.DatosSimples
-                            where ds.PreguntaID == pregunta.PreguntaID &&
-                            ds.TextoID == textoID &&
-                            ds.CodeOP == 123 &&
-                            du.DatosUsuarioID == du.DatosUsuarioID
-                            select ds;
-
-
-            if (seleccion != null && seleccion.Count() > 0)
-            {
-                ViewBag.TareaSel = true;
-                ViewBag.Seleccion = seleccion.AsEnumerable().Last();
-            }
-            else
-            {
-                ViewBag.TareaSel = false;
-            }
-
-            db.SaveChanges();
-
-            ViewBag.ConfigPregunta = config;
-
-            return View(ext.GetPreguntaActual(texto, preguntaActual));
-        }
-
-        [HttpPost]
-        public ActionResult PL0_Pregunta_Abierta_Seleccion_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
-        {
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            //guirisan/secuencias
-            DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
-
-            Double pert = 0, noPert = 0;
-            Pregunta pregunta = ext.GetPregunta(PreguntaID);
-
-            ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
-
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment, numAccion);
-
-            if (pert > 70 && noPert < 35)
-            {
-                return Json(new { redirect = Url.Action("PL0_Pregunta_Abierta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, TextoID = pregunta.Texto.TextoID }), Puntos = du.Puntos, mensaje = GetFeedbackSeleccion(du = du, pert, noPert), PreguntaID = pregunta.PreguntaID });
-            }
-            else
-            {
-                return Json(new { redirect = Url.Action("PL0_Pregunta_Abierta_Seleccion_2", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, TextoID = pregunta.Texto.TextoID }), Puntos = du.Puntos, mensaje = GetFeedbackSeleccion(du = du, pert, noPert), PreguntaID = pregunta.PreguntaID });
-            }
-        }
-
-
-
-        [HttpPost]
-        public ActionResult PL0_Pregunta_Abierta_Seleccion_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
-        {
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            //guirisan/secuencias
-            DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
-
-            Double pert = 0, noPert = 0;
-            Pregunta pregunta = ext.GetPregunta(PreguntaID);
-
-            ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
-
-            ValidarSeleccion(ModuloID, GrupoID, PreguntaID, pregunta.Texto.TextoID, respuesta, out pert, out noPert, true, moment, numAccion);
-
-            return Json(new { redirect = Url.Action("PL0_Pregunta_Abierta", new { GrupoID = GrupoID, ModuloID = ModuloID, preguntaActual = du.PreguntaActual, TextoID = pregunta.Texto.TextoID }), Puntos = du.Puntos, mensaje = GetFeedbackSeleccion(du = du, pert, noPert), PreguntaID = pregunta.PreguntaID });
-        }
-
+        /**
+         * Valida la pregunta abierta y redirecciona a pregunta_abierta_resuelta
+         */
         public ActionResult PL0_Pregunta_Abierta_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
         {
             //logger.Debug("PL0_Pregunta_Abierta_Validar");
@@ -2454,97 +2318,16 @@ namespace ReadAndLearn.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult PL0_Pregunta_Abierta_2_Validar(int GrupoID, int ModuloID, int PreguntaID, string respuesta, string moment, int numAccion = -1, string dataRow = "")
-        {
-
-            DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
-
-            //guirisan/secuencias
-            DateTime datetimeclient = DateTime.Parse(moment);
-            ext.AddDataRow(User.Identity.Name, ext.GetUsuarioID(User.Identity.Name), GrupoID, ModuloID, dataRow);
-
-            Pregunta pregunta = ext.GetPregunta(PreguntaID);
-
-            ConfigPregunta configPreg = ext.GetConfigPregunta(PreguntaID);
-
-            string mensaje = "";
-
-            if (du.PertinenteOrden != null && du.PertinenteOrden != "")
-            {
-                double porc = CalculoPertinente(du.PertinenteOrden);
-
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 49, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc, Momento = datetimeclient, NumAccion = numAccion });
-
-                double porc2 = CalculoPertinenteSobreBusqueda(du.PertinenteOrden);
-
-                db.DatosSimples.Add(new DatoSimple() { CodeOP = 50, DatosUsuarioID = du.DatosUsuarioID, TextoID = du.TextoID, PreguntaID = PreguntaID, Dato01 = (float)porc2, Momento = datetimeclient, NumAccion = numAccion });
-            }
-
-            string[,] Criterios = new string[pregunta.Criterios.Count(), 2];
-
-            int i = 0;
-            foreach (Criterio cri in pregunta.Criterios)
-            {
-                Criterios[i, 0] = cri.Opcion.ToLower();
-                Criterios[i, 1] = cri.Valor.ToString();
-                i++;
-            }
-
-            DatoSimple ds = new DatoSimple();
-
-            if (respuesta != null && respuesta != "")
-            {
-                ds.Dato01 = (float)ext.Corrector(Criterios, respuesta.ToLower());
-                du.Puntos += 100;
-                // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                mensaje = (pregunta.FDBK_Correcto == null ? null : pregunta.FDBK_Correcto);
-            }
-            else
-            {
-                // Comprueba si hay Feedback de Contenido o de pregunta en esa prioridad.
-                mensaje = (pregunta.FDBK_Incorrecto == null ? null : pregunta.FDBK_Incorrecto);
-            }
-
-            // Registrar respuesta
-            ds.CodeOP = 13;
-            ds.Info = respuesta;
-            //guirisan/secuencias
-            ds.Momento = datetimeclient;
-            ds.NumAccion = numAccion;
-
-            ds.PreguntaID = PreguntaID;
-            ds.TextoID = pregunta.Texto.TextoID;
-            ds.DatosUsuarioID = du.DatosUsuarioID;
-            ds.Info = respuesta;
-            ds.Dato03 = 2; // Indica intento
-            db.DatosSimples.Add(ds);
-            du.DatoSimple.Add(ds);
-
-            SaveChanges();
-
-            // Genera un feedback si no hay feedback de contenido ni de pregunta.            
-            mensaje = ext.GetFeedback(du);
-
-            return Json(new { redirect = Url.Action("PL0_Pregunta_Abierta_Resuelta", new { GrupoID = GrupoID, ModuloID = ModuloID, PreguntaID = PreguntaID }), Puntos = du.Puntos, mensaje = mensaje, PreguntaID = pregunta.PreguntaID });
-        }
-
+       
         public ActionResult PL0_Pregunta_Abierta_Resuelta(int GrupoID, int ModuloID, int preguntaID)
         {
             //logger.Debug("PL0_Pregunta_Abierta_Resuelta");
             DatosUsuario du = ext.GetDatosUsuarios(ModuloID, GrupoID, ext.GetUsuarioID(User.Identity.Name));
             Pregunta pregunta = new Pregunta();
 
-            DatoSimple ds1 = du.DatoSimple.Last(p => p.CodeOP == 13 && p.Dato03 == 1);
+            
 
-            var dato = from d in du.DatoSimple
-                       where d.CodeOP == 13 && d.Dato03 == 2
-                       select d;
 
-            /*
-             (from ds in db.DatosSimples
-            where ds.DatosUsuarioID == du.DatosUsuarioID
-            select ds).ToList().Last().Momento.ToString();*/
 
             pregunta = ext.GetPregunta((int)preguntaID);
 
@@ -2553,15 +2336,6 @@ namespace ReadAndLearn.Controllers
 
             ViewBag.DatosUsuario = du;
 
-            if (ds1 != null)
-            {
-                ViewBag.DatoSimple = ds1;
-            }
-
-            if (dato != null)
-            {
-                ViewBag.DatoSimple2 = dato.ToList().LastOrDefault();
-            }
 
             ViewBag.AyudaFlota = BuscarAccion(120, GrupoID, ModuloID, pregunta.Texto.TextoID, pregunta.PreguntaID);
             // Buscar en el registro la respuesta dada a esta pregunta

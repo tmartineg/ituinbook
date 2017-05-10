@@ -85,6 +85,7 @@
                         <b>@Html.ActionLink("<!-- administrar -->", "AdministrarModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
                     }
                    
+                    <b>@Html.ActionLink("<!-- desvincular -->", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, new { @title = "Desvincular", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de desvinclar el módulo?');" })</b>  
                 </td>                      
             </tr>
             }

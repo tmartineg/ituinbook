@@ -7,7 +7,7 @@
     DatosUsuario du = (DatosUsuario)ViewBag.DatosUsuario;
     ConfigModulo configModulo = (ConfigModulo)ViewBag.ConfigModulo;
     ConfigPregunta configPregunta = (ConfigPregunta)ViewBag.ConfigPregunta;
-    DatoSimple ds = (DatoSimple)ViewBag.Seleccion;
+    DatoSimple ds = (DatoSimple)ViewBag.ds;
 }
 
 <div style="margin: 15px 20px;" id="areaPregunta">
@@ -65,7 +65,7 @@
         </div>
 
         <div style="padding-left: 20px; padding-right: 20px;">
-            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" cols="100" rows="10"></textarea>
+            <textarea id="respuesta" placeholder="Debes escribir al menos 2 palabras" cols="100" rows="10" ondragstart="return false;" ondrop="return false;"></textarea>
         </div>
         
        
@@ -88,8 +88,108 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/186
+            // add to <textarea> ondragstart="return false;" ondrop="return false;"
+            $('textarea').bind('copy paste', function (e) {
+                e.preventDefault();
+            });
+
+            $('#respuesta').focus(function () {
+                //guardar valor del textarea
+                var respuesta = $('textarea').val();
+                //generar dato simple 81 inicioFocus
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 81, moment: datetimeclient, numAccion: numAcc, Param: respuesta },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    }
+                });
+            });
+
+
+
+            $('#respuesta').focusout(function () {
+                //guardar valor del textarea
+                var respuesta = $('textarea').val();
+                //generar dato simple 81 inicioFocus
+                //datetime set in client
+                var datetimeclient = new Date().toISOString();
+
+                //NUMACC
+
+                //get and add+1 numAcc
+                var numAcc = parseInt(sessionStorage.getItem("numAccion"));
+                numAcc++;
+                sessionStorage.setItem("numAccion", numAcc);
+
+                //DATOSRAW
+                //get datosRaw to add row in ajax.beforeSend
+                var datosRaw;
+                if ((datosRaw = JSON.parse(sessionStorage.getItem("datosRaw"))) == null) {
+                    datosRaw = {};
+                }
+                $.ajax({
+                    url: "RegistrarAccion",
+                    type: 'POST',
+                    data: { DatosUsuarioID: '@du.DatosUsuarioID', GrupoID: '@du.GrupoID', ModuloID: '@du.ModuloID', TextoID: '@Model.Texto.TextoID', PreguntaID: '@Model.PreguntaID', CodeOP: 82, moment: datetimeclient, numAccion: numAcc, Param: respuesta },
+                    //guirisan/secuencias
+                    beforeSend: function () {
+                        //set datosRaw on sessionStorage
+                        var cadena = "url:[" + this.url + "]__data:[" + this.data.replace(/&/g, "_") + "]";
+                        datosRaw[numAcc] = cadena;
+                        sessionStorage.setItem("datosRaw", JSON.stringify(datosRaw));
+
+                        //set datosRaw on ajax petition
+                        this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
+                    }
+                });
+            });
+
+
+
+            //cargar si hay lo que había escrito antes
+            @if (ds != null)
+            {
+                <text>  
+                $("#placeholder").addClass("hiddenDebug")
+                $("#respuesta").val("@ds.Info");
+                </text>                              
+            }
+
+
+
+
+
             var timeStart = new Date();
             var timeFinish = new Date();
+
+
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/41
             //exige un mínimo de 5 palabras para activar el botón de validar
@@ -155,12 +255,12 @@
                                     this.data = this.data + "&dataRow=" + numAcc + "__" + cadena;
                                 }
                             });
+                        }
+
+                        $("button#btnValidarAbierta").attr("disabled", "disabled");
+                        $("#placeholder").removeClass("hiddenDebug");
+
                     }
-
-                    $("button#btnValidarAbierta").attr("disabled", "disabled");
-                    $("#placeholder").removeClass("hiddenDebug");
-
-                }
             });
 
 
@@ -425,20 +525,20 @@
             @if (configPregunta != null && configModulo.Ayudas)
             {
                 @: $('#ayudas').show();
-                            @: $('#ayudas').css("visibility", "visible")
-                        }
+                                        @: $('#ayudas').css("visibility", "visible")
+                                    }
             else
             {
                 if (configPregunta != null && configPregunta.Ayuda)
                 {
                     @: $('#ayudas').show();
-                                @: $('#ayudas').css("visibility", "visible")
-                            }
+                                            @: $('#ayudas').css("visibility", "visible")
+                                        }
                 else
                 {
                     @: $('#ayudas').hide();
-                                @: $('#ayudas').css("visibility", "hidden")
-                            }
+                                            @: $('#ayudas').css("visibility", "hidden")
+                                        }
             }
 
             $(":radio").change(function () {

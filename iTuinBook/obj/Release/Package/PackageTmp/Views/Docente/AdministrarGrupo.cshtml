@@ -80,16 +80,12 @@
                     @Html.DisplayFor(modelItem => mod.Descripcion)
                 </td>   
                 <td>   
-                    @if(mod.Propiedad == ViewBag.User)  
-                    {       
-                    <b>@Html.ActionLink("Administrar", "AdministrarModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>
-                    <b>@Html.ActionLink("Desvincular", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>   
-                    }
-                    else
+                    @if (mod.Propiedad == ViewBag.User)
                     {
-                    <b>No eres propietario</b>
-                    <b>@Html.ActionLink("Desvincular", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, null)</b>   
+                        <b>@Html.ActionLink("<!-- administrar -->", "AdministrarModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, new { @title = "Administrar", @class = "ui-icon ui-icon-pencil", @style = "float:left" })</b>
                     }
+                   
+                    <b>@Html.ActionLink("<!-- desvincular -->", "DesvincularModulo", "Docente", new { GrupoID = Model.GrupoID, ModuloID = mod.ModuloID }, new { @title = "Desvincular", @class = "ui-icon ui-icon-closethick", @style = "float:left", onclick = "return confirm('¿Estás seguro de desvinclar el módulo?');" })</b>  
                 </td>                      
             </tr>
             }
