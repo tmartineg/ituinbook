@@ -88,6 +88,28 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            
+
+            //guirisan/issues https://github.com/guirisan/ituinbook/issues/38
+            //parametrizar el enlace que permite volver al texto para que incluya el tiempo de cliente
+            //EN el segundo intento permitimos al usuario volver a consultar el texto antes de responder
+            var parametrizacionHecha = false;
+            $("#btnBackToTexto").click(function (e) {
+                if (parametrizacionHecha === true) {
+                    return true;
+                }
+
+                //parametrizacion del enlace
+                var oldhref = $("#btnBackToTexto a").attr("href");
+                var datetimeclient = new Date().toISOString();
+                $("#btnBackToTexto a").attr("href", oldhref + "&moment=" + datetimeclient);
+
+
+                parametrizacionHecha = true;
+                $("#btnBackToTexto").unbind('click');
+                $(this).trigger('click');
+            });
+
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/186
             // add to <textarea> ondragstart="return false;" ondrop="return false;"
@@ -212,10 +234,11 @@
 
 
             //guirisan/issues https://github.com/guirisan/ituinbook/issues/190
-            var respuesta = $("#respuesta___livespell_proxy");
+            //var respuesta = $("#respuesta___livespell_proxy");
+            
             /* no se puede hacer un placeholder para el div#respuesta___livespell_proxy*/
 
-            if (($.trim(respuesta.html())).split(' ').length > 1) {
+            if (($.trim($("#respuesta").val())).split(' ').length > 1) {
                 $("button#btnValidarAbierta").removeAttr("disabled");
                 $("#placeholder").addClass("hiddenDebug");
             }
